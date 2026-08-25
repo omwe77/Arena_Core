@@ -620,6 +620,7 @@
     activeSimulationClock.isPaused = false;
     activeSimulationClock.currentSimMinute = 0;
     activeSimulationClock.activeMatches = [];
+    activeSimulationClock.stageKey = null; // Clear stale stageKey so Skip/Restart don't reference old stages
 
     const minText = document.getElementById('clock-minute-text');
     const progressFill = document.getElementById('clock-progress-fill');
@@ -4367,51 +4368,172 @@ enterBtn.addEventListener('click', () => {
       instantBtn.classList.add('active-full-sim');
     }
 
-    function runNextMatchday(mdIdx) {
-      if (!leagueAutoSimActive) return;
-      if (!state.matchdays[mdIdx] || state.matchdays[mdIdx].every(m => m.isSimulated)) {
-        // Skip already-done matchdays
-        const nextPending = state.matchdays.findIndex((md, i) => i >= mdIdx && md.some(m => !m.isSimulated));
-        if (nextPending === -1) {
-          leagueAutoSimActive = false;
-          if (instantBtn) {
-            instantBtn.textContent = '🏆 FULL SIM';
-            instantBtn.classList.remove('active-full-sim');
-          }
-          renderActiveTournament();
-          if (state.champion) triggerChampionCelebration(state.champion);
-          return;
-        }
-        runNextMatchday(nextPending);
-        return;
-      }
-      simulateLeagueMatchdayWithClock(mdIdx, () => {
-        if (!leagueAutoSimActive) return;
-        const next = state.matchdays.findIndex((md, i) => i > mdIdx && md.some(m => !m.isSimulated));
-        if (next === -1) {
-          leagueAutoSimActive = false;
-          if (instantBtn) {
-            instantBtn.textContent = '🏆 FULL SIM';
-            instantBtn.classList.remove('active-full-sim');
-          }
-          if (state.champion) triggerChampionCelebration(state.champion);
-          return;
-        }
-        // 1.5s pause between matchdays so user can see standings update
-        setTimeout(() => { if (leagueAutoSimActive) runNextMatchday(next); }, 1500);
-      });
+    // Collect all pending matchday indices
+    const pendingMdIndices = [];
+    for (let i = Math.max(0, startMdIdx); i < state.matchdays.length; i++) {
+      if (state.matchdays[i].some(m => !m.isSimulated)) pendingMdIndices.push(i);
     }
 
-    const firstPending = state.matchdays.findIndex(md => md.some(m => !m.isSimulated));
-    if (firstPending === -1) {
+    if (pendingMdIndices.length === 0) {
       leagueAutoSimActive = false;
-      if (instantBtn) {
-        instantBtn.textContent = '🏆 FULL SIM';
-        instantBtn.classList.remove('active-full-sim');
-      }
+      if (instantBtn) { instantBtn.textContent = '🏆 FULL SIM'; instantBtn.classList.remove('active-full-sim'); }
       return;
     }
-    runNextMatchday(Math.max(firstPending, startMdIdx));
+
+    const totalMd = pendingMdIndices.length;
+    let currentMdPos = 0; // position within pendingMdIndices
+
+    // Show HUD / live control bar
+    const clockHud = document.getElementById('sim-clock-hud');
+    const liveControlBar = document.getElementById('live-control-bar');
+    const stageLabel = document.getElementById('clock-stage-label');
+    const minText = document.getElementById('clock-minute-text');
+    const progressFill = document.getElementById('clock-progress-fill');
+    const pauseBtn = document.getElementById('sim-pause-btn');
+    const resumeBtn = document.getElementById('sim-resume-btn');
+    const stageActionBtn = document.getElementById('sim-stage-action-btn');
+
+    if (clockHud) clockHud.hidden = false;
+    if (liveControlBar) liveControlBar.hidden = false;
+    if (pauseBtn) pauseBtn.hidden = false;
+    if (resumeBtn) resumeBtn.hidden = true;
+    if (stageActionBtn) { stageActionBtn.textContent = '🔴 FULL SIM RUNNING…'; stageActionBtn.disabled = true; }
+
+    // activeSimulationClock flags for pause/skip support
+    activeSimulationClock.isRunning = true;
+    activeSimulationClock.isPaused = false;
+
+    function finishFullSim() {
+      leagueAutoSimActive = false;
+      cancelAllActiveSimulationTimers();
+      if (instantBtn) { instantBtn.textContent = '🏆 FULL SIM'; instantBtn.classList.remove('active-full-sim'); }
+      renderActiveTournament();
+      if (state.champion) triggerChampionCelebration(state.champion);
+    }
+
+    function runMatchday(mdIdx) {
+      if (!leagueAutoSimActive) return;
+
+      const matches = state.matchdays[mdIdx];
+
+      // Pre-compute outcomes for any unresolved matches
+      matches.forEach(m => {
+        if (!m.isSimulated) {
+          const outcome = precomputeMatchResult(m.home, m.away, false);
+          m.scoreHome = outcome.regHome;
+          m.scoreAway = outcome.regAway;
+          m.events = outcome.events || [];
+          m.isLive = true;
+          m.isSimulated = false;
+          m.currentSimMinute = 0;
+          m.currentDisplayScoreHome = 0;
+          m.currentDisplayScoreAway = 0;
+        }
+      });
+
+      // Update HUD label
+      activeSimulationClock.stageKey = `md_${mdIdx}`;
+      activeSimulationClock.currentSimMinute = 0;
+      const roundLabel = `${TOURNAMENTS_CONFIG[activeTournKey].name} • MATCHDAY ${mdIdx + 1} / ${state.totalMatchdays}`;
+      if (stageLabel) { stageLabel.textContent = roundLabel; stageLabel.dataset.stageKey = `md_${mdIdx}`; }
+      if (minText) minText.textContent = "0' (KICKOFF)";
+      if (progressFill) progressFill.style.width = '0%';
+
+      state.selectedMatchday = mdIdx;
+      renderStageViewport();
+
+      // Fast clock: 100ms interval, 8 sim-minutes per tick → 90' in 12 ticks ≈ 1.2 seconds per matchday
+      const TICK_MS = 100;
+      const SIM_STEP = 8;
+      let curMin = 0;
+
+      const iv = setInterval(() => {
+        if (!leagueAutoSimActive) { clearInterval(iv); return; }
+        if (activeSimulationClock.isPaused) return;
+
+        curMin = Math.min(curMin + SIM_STEP, 90);
+        activeSimulationClock.currentSimMinute = curMin;
+
+        // Update live display scores & fire goals minute by minute
+        matches.forEach(m => {
+          if (m.isLive) {
+            m.currentSimMinute = curMin;
+            m.currentDisplayScoreHome = (m.events || []).filter(e => e.team === 'home' && e.minute <= curMin).length;
+            m.currentDisplayScoreAway = (m.events || []).filter(e => e.team === 'away' && e.minute <= curMin).length;
+
+            // Finalize individual match when it hits 90'
+            if (curMin >= 90 && !m.isSimulated) {
+              m.isLive = false;
+              m.isSimulated = true;
+              m.currentDisplayScoreHome = m.scoreHome;
+              m.currentDisplayScoreAway = m.scoreAway;
+
+              // Update standings immediately as each match finalizes
+              recalculateLeagueStandings(state);
+            }
+          }
+        });
+
+        // HUD clock update
+        let halfLabel = curMin < 45 ? 'FIRST HALF' : curMin < 90 ? 'SECOND HALF' : 'FULL TIME';
+        if (minText) minText.textContent = `${curMin}' (${halfLabel})`;
+        if (progressFill) progressFill.style.width = `${Math.round((curMin / 90) * 100)}%`;
+
+        // Update ticker with most recent goal
+        const allGoals = [];
+        matches.forEach(m => {
+          const ev = (m.events || []).find(e => e.minute >= curMin - SIM_STEP && e.minute <= curMin);
+          if (ev) allGoals.push(`⚽ ${ev.teamName}: ${ev.player} (${ev.minute}')`);
+        });
+        if (allGoals.length > 0) {
+          const tickerEl = document.getElementById('bracket-ticker-text');
+          if (tickerEl) tickerEl.textContent = `MD${mdIdx + 1}: ${allGoals.join(' | ')} // `;
+        }
+
+        // Render live table on every tick so standings update in real time
+        renderStageViewport();
+
+        if (curMin >= 90) {
+          clearInterval(iv);
+          activeSimulationInterval = null;
+
+          // Ensure all matches in matchday are finalized
+          matches.forEach(m => {
+            if (!m.isSimulated) {
+              m.isLive = false;
+              m.isSimulated = true;
+              m.currentDisplayScoreHome = m.scoreHome;
+              m.currentDisplayScoreAway = m.scoreAway;
+            }
+          });
+          recalculateLeagueStandings(state);
+          state.currentMatchday = Math.max(state.currentMatchday, mdIdx + 1);
+          if (state.selectedMatchday < state.totalMatchdays - 1) state.selectedMatchday = mdIdx + 1;
+
+          const progressBar = document.getElementById('matchday-progress-bar');
+          if (progressBar) progressBar.remove();
+
+          renderStageViewport();
+
+          // Check if season is done or move to next matchday
+          currentMdPos++;
+          if (!leagueAutoSimActive) { finishFullSim(); return; }
+
+          if (currentMdPos >= totalMd || state.champion) {
+            finishFullSim();
+          } else {
+            // Short pause between matchdays so user can visually register the table shift
+            setTimeout(() => {
+              if (leagueAutoSimActive) runMatchday(pendingMdIndices[currentMdPos]);
+            }, 400);
+          }
+        }
+      }, TICK_MS);
+
+      activeSimulationInterval = iv;
+    }
+
+    runMatchday(pendingMdIndices[currentMdPos]);
   }
 
   function simulateSingleLeagueMatch(mdIdx, matchIdx) {
@@ -5089,8 +5211,11 @@ enterBtn.addEventListener('click', () => {
 
     if (skipBtn) {
       skipBtn.addEventListener('click', () => {
+        // Only allow skip when a simulation is actually running
+        if (!activeSimulationClock.isRunning && !leagueAutoSimActive) return;
+
         leagueAutoSimActive = false;
-        const stageKey = getValidStageKey(document.getElementById('clock-stage-label')?.textContent);
+        const stageKey = activeSimulationClock.stageKey; // Use direct stageKey, not the text-based fallback
         if (stageKey && stageKey.startsWith('md_')) {
           // Skip: finalize current league matchday immediately
           const mdIdx = parseInt(stageKey.replace('md_', ''), 10);
@@ -5111,7 +5236,7 @@ enterBtn.addEventListener('click', () => {
           }
           renderActiveTournament();
           if (state.champion) triggerChampionCelebration(state.champion);
-        } else {
+        } else if (stageKey) {
           finalizeStageSimulation(stageKey);
         }
       });
@@ -5136,106 +5261,111 @@ enterBtn.addEventListener('click', () => {
             return;
           }
           // Start chained 1-min clock simulation for all matchdays
+          cancelAllActiveSimulationTimers(); // Stop any running clock before resetting
           initTournamentState(activeTournKey);
           tournamentState[activeTournKey].subView = 'sim';
           renderActiveTournament();
           setTimeout(() => simulateAllLeagueMatchdaysWithClock(0), 300);
           return;
-        } else {
-          initTournamentState(activeTournKey);
-          const state = tournamentState[activeTournKey];
-          // Instant resolution across all tournament stages
-          if (state.groups) {
-            Object.keys(state.groups).forEach(letter => {
-              const teams = state.groups[letter];
-              teams.forEach((t, idx) => {
-                t.mp = 3;
-                t.w = Math.max(0, 3 - idx);
-                t.d = idx === 1 ? 1 : 0;
-                t.l = 3 - t.w - t.d;
-                t.gf = t.w * 2 + (idx === 1 ? 1 : 0);
-                t.ga = t.l * 2;
-                t.gd = t.gf - t.ga;
-                t.pts = t.w * 3 + t.d;
-              });
-              teams.sort((a, b) => b.pts - a.pts || b.gd - a.gd);
+        }
+
+        // --- Knockout / Cup Format: Instant Full Resolution ---
+        cancelAllActiveSimulationTimers(); // Stop any running clock before resetting
+        initTournamentState(activeTournKey);
+        const state = tournamentState[activeTournKey]; // Declare state here — accessible for champion check below
+
+        // Instant resolution across all tournament stages
+        if (state.groups) {
+          Object.keys(state.groups).forEach(letter => {
+            const teams = state.groups[letter];
+            teams.forEach((t, idx) => {
+              t.mp = 3;
+              t.w = Math.max(0, 3 - idx);
+              t.d = idx === 1 ? 1 : 0;
+              t.l = 3 - t.w - t.d;
+              t.gf = t.w * 2 + (idx === 1 ? 1 : 0);
+              t.ga = t.l * 2;
+              t.gd = t.gf - t.ga;
+              t.pts = t.w * 3 + t.d;
             });
-            state.groupsPlayed = true;
+            teams.sort((a, b) => b.pts - a.pts || b.gd - a.gd);
+          });
+          state.groupsPlayed = true;
+        }
+
+        const qualified = [];
+        if (state.groups) {
+          Object.keys(state.groups).forEach(letter => {
+            qualified.push(state.groups[letter][0].name, state.groups[letter][1].name);
+          });
+        }
+
+        if (config.format === 'worldcup48') {
+          const thirdBest = [];
+          Object.keys(state.groups).forEach(letter => thirdBest.push(state.groups[letter][2]));
+          thirdBest.sort((a, b) => b.pts - a.pts || b.gd - a.gd).slice(0, 8).forEach(t => qualified.push(t.name));
+          const shuffled = [...qualified].sort(() => Math.random() - 0.5);
+
+          // Simulate R32
+          state.r32 = [];
+          for (let i = 0; i < 16; i++) {
+            const m = precomputeMatchResult(shuffled[i * 2], shuffled[i * 2 + 1], true);
+            m.isSimulated = true;
+            state.r32.push(m);
           }
 
-          const qualified = [];
-          if (state.groups) {
-            Object.keys(state.groups).forEach(letter => {
-              qualified.push(state.groups[letter][0].name, state.groups[letter][1].name);
-            });
+          // Simulate R16
+          const r32Winners = state.r32.map(m => m.winner);
+          state.r16 = [];
+          for (let i = 0; i < 8; i++) {
+            const m = precomputeMatchResult(r32Winners[i * 2], r32Winners[i * 2 + 1], true);
+            m.isSimulated = true;
+            state.r16.push(m);
           }
-
-          if (config.format === 'worldcup48') {
+        } else if (config.format === 'euro24' || config.format === 'uclLeaguePhase') {
+          const pool = config.format === 'euro24' ? (function() {
             const thirdBest = [];
             Object.keys(state.groups).forEach(letter => thirdBest.push(state.groups[letter][2]));
-            thirdBest.sort((a, b) => b.pts - a.pts || b.gd - a.gd).slice(0, 8).forEach(t => qualified.push(t.name));
-            const shuffled = [...qualified].sort(() => Math.random() - 0.5);
-
-            // Simulate R32
-            state.r32 = [];
-            for (let i = 0; i < 16; i++) {
-              const m = precomputeMatchResult(shuffled[i * 2], shuffled[i * 2 + 1], true);
-              m.isSimulated = true;
-              state.r32.push(m);
-            }
-
-            // Simulate R16
-            const r32Winners = state.r32.map(m => m.winner);
-            state.r16 = [];
-            for (let i = 0; i < 8; i++) {
-              const m = precomputeMatchResult(r32Winners[i * 2], r32Winners[i * 2 + 1], true);
-              m.isSimulated = true;
-              state.r16.push(m);
-            }
-          } else if (config.format === 'euro24' || config.format === 'uclLeaguePhase') {
-            const pool = config.format === 'euro24' ? (function() {
-              const thirdBest = [];
-              Object.keys(state.groups).forEach(letter => thirdBest.push(state.groups[letter][2]));
-              thirdBest.sort((a, b) => b.pts - a.pts).slice(0, 4).forEach(t => qualified.push(t.name));
-              return qualified;
-            })() : qualified;
-            const shuffled = [...pool].sort(() => Math.random() - 0.5);
-            state.r16 = [];
-            for (let i = 0; i < 8; i++) {
-              const m = precomputeMatchResult(shuffled[i * 2], shuffled[i * 2 + 1], true);
-              m.isSimulated = true;
-              state.r16.push(m);
-            }
-          }
-
-          // Simulate QF
-          const r16Winners = (state.r16 && state.r16.length > 0)
-            ? state.r16.map(m => m.winner)
-            : [...qualified].sort(() => Math.random() - 0.5).slice(0, 8);
-
-          state.qf = [];
-          for (let i = 0; i < 4; i++) {
-            const m = precomputeMatchResult(r16Winners[i * 2], r16Winners[i * 2 + 1], true);
+            thirdBest.sort((a, b) => b.pts - a.pts).slice(0, 4).forEach(t => qualified.push(t.name));
+            return qualified;
+          })() : qualified;
+          const shuffled = [...pool].sort(() => Math.random() - 0.5);
+          state.r16 = [];
+          for (let i = 0; i < 8; i++) {
+            const m = precomputeMatchResult(shuffled[i * 2], shuffled[i * 2 + 1], true);
             m.isSimulated = true;
-            state.qf.push(m);
+            state.r16.push(m);
           }
-
-          // Simulate SF
-          const qfWinners = state.qf.map(m => m.winner);
-          state.sf = [];
-          for (let i = 0; i < 2; i++) {
-            const m = precomputeMatchResult(qfWinners[i * 2], qfWinners[i * 2 + 1], true);
-            m.isSimulated = true;
-            state.sf.push(m);
-          }
-
-          // Simulate GF
-          const sfWinners = state.sf.map(m => m.winner);
-          const finalMatch = precomputeMatchResult(sfWinners[0], sfWinners[1], true);
-          finalMatch.isSimulated = true;
-          state.gf = [finalMatch];
-          state.champion = finalMatch.winner;
         }
+
+        // Simulate QF
+        const r16Winners = (state.r16 && state.r16.length > 0)
+          ? state.r16.map(m => m.winner)
+          : [...qualified].sort(() => Math.random() - 0.5).slice(0, 8);
+
+        state.qf = [];
+        for (let i = 0; i < 4; i++) {
+          const m = precomputeMatchResult(r16Winners[i * 2], r16Winners[i * 2 + 1], true);
+          m.isSimulated = true;
+          state.qf.push(m);
+        }
+
+        // Simulate SF
+        const qfWinners = state.qf.map(m => m.winner);
+        state.sf = [];
+        for (let i = 0; i < 2; i++) {
+          const m = precomputeMatchResult(qfWinners[i * 2], qfWinners[i * 2 + 1], true);
+          m.isSimulated = true;
+          state.sf.push(m);
+        }
+
+        // Simulate GF
+        const sfWinners = state.sf.map(m => m.winner);
+        const finalMatch = precomputeMatchResult(sfWinners[0], sfWinners[1], true);
+        finalMatch.isSimulated = true;
+        state.gf = [finalMatch];
+        state.champion = finalMatch.winner;
+
         renderActiveTournament();
         if (state.champion) {
           triggerChampionCelebration(state.champion);
