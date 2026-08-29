@@ -765,6 +765,221 @@
     </div>
   </div>
 
+  <!-- ============================================================
+       PRO TACTICAL MATCH TRACKING BOARD (KINEXON / FIFA PRO RADAR)
+       ============================================================ -->
+  <div id="tactical-tracker-modal" class="modal tactical-tracker-modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="tac-header-brand">
+    <div class="modal-backdrop tac-backdrop" id="tac-modal-backdrop"></div>
+    <div class="modal-dialog tac-dialog">
+      
+      <!-- Top Tactical HUD Navigation Bar -->
+      <div class="tac-top-navbar">
+        <div class="tac-nav-left">
+          <span class="tac-window-dots">
+            <span class="tac-dot red"></span>
+            <span class="tac-dot yellow"></span>
+            <span class="tac-dot green"></span>
+          </span>
+          <span class="tac-brand-title" id="tac-header-brand">KINEXON <span>PRO TRACKER</span></span>
+          <div class="tac-nav-tabs">
+            <button type="button" class="tac-nav-tab active">STATISTICS</button>
+            <button type="button" class="tac-nav-tab">POST</button>
+            <button type="button" class="tac-nav-tab">DEVELOP</button>
+          </div>
+        </div>
+        <div class="tac-nav-right">
+          <div class="tac-session-pill">
+            <span class="tac-status-dot"></span>
+            <span id="tac-session-status">SESSION ACTIVE: MATCH LIVE</span>
+          </div>
+          <button type="button" class="tac-back-btn" id="tac-modal-close" aria-label="Close Tactical Tracker">
+            ❮ Back to tournament
+          </button>
+        </div>
+      </div>
+
+      <!-- Top Tactical Filter / Option Bar -->
+      <div class="tac-controls-bar">
+        <div class="tac-ctrl-left">
+          <div class="tac-select-players-badge">
+            <span class="tac-badge-icon">👥 11</span>
+            <span id="tac-tactic-name">Tactics 1 (4-3-3)</span>
+          </div>
+          <div class="tac-dropdown-item">⚙ Options</div>
+          <div class="tac-dropdown-item">Formations <span class="tac-arrow">▼</span></div>
+        </div>
+        <div class="tac-ctrl-right">
+          <div class="tac-replay-badge">
+            <span>🎥 SESSION IS REPLAYING</span>
+            <span class="tac-phase-tag" id="tac-phase-tag">Phase 1 (First Half)</span>
+          </div>
+          <div class="tac-dropdown-item">Phases <span class="tac-arrow">▼</span></div>
+        </div>
+      </div>
+
+      <!-- Main Tactical Workspace: Left Roster, Center Pitch, Right Roster -->
+      <div class="tac-workspace-body">
+        
+        <!-- LEFT PANEL: TEAM 1 (Home - Coral / Red) -->
+        <aside class="tac-team-panel team-1">
+          <div class="tac-team-header home-header">
+            <span class="tac-team-badge-icon">👥</span>
+            <span class="tac-team-header-name" id="tac-team1-name">TEAM 1</span>
+          </div>
+
+          <div class="tac-roster-group">
+            <div class="tac-pos-heading">TORWART</div>
+            <div class="tac-player-list" id="tac-t1-gk">
+              <!-- Dynamically injected -->
+            </div>
+          </div>
+
+          <div class="tac-roster-group">
+            <div class="tac-pos-heading">ABWEHR</div>
+            <div class="tac-player-list" id="tac-t1-def">
+              <!-- Dynamically injected -->
+            </div>
+          </div>
+
+          <div class="tac-roster-group">
+            <div class="tac-pos-heading">MITTELFELD</div>
+            <div class="tac-player-list" id="tac-t1-mid">
+              <!-- Dynamically injected -->
+            </div>
+          </div>
+
+          <div class="tac-roster-group">
+            <div class="tac-pos-heading">STURM</div>
+            <div class="tac-player-list" id="tac-t1-fwd">
+              <!-- Dynamically injected -->
+            </div>
+          </div>
+        </aside>
+
+        <!-- CENTER PANEL: TACTICAL PITCH WITH LIVE 22 PLAYERS + POLYGON MESH + BALL -->
+        <main class="tac-pitch-container">
+          <div class="tac-pitch-board" id="tac-pitch-board">
+            
+            <!-- Pitch Markings SVG -->
+            <svg class="tac-pitch-svg" viewBox="0 0 800 520" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Turf background -->
+              <rect x="0" y="0" width="800" height="520" fill="#1e7e34" />
+              <!-- Border line -->
+              <rect x="25" y="20" width="750" height="480" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2.5" />
+              <!-- Halfway line -->
+              <line x1="400" y1="20" x2="400" y2="500" stroke="rgba(255,255,255,0.75)" stroke-width="2.5" />
+              <!-- Center circle -->
+              <circle cx="400" cy="260" r="65" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2.5" />
+              <circle cx="400" cy="260" r="3.5" fill="#ffffff" />
+              <!-- Penalty Areas Left & Right -->
+              <rect x="25" y="125" width="130" height="270" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2.5" />
+              <rect x="25" y="195" width="45" height="130" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2.5" />
+              <rect x="645" y="125" width="130" height="270" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2.5" />
+              <rect x="730" y="195" width="45" height="130" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2.5" />
+              <!-- Penalty spots -->
+              <circle cx="115" cy="260" r="3" fill="#ffffff" />
+              <circle cx="685" cy="260" r="3" fill="#ffffff" />
+              <!-- Penalty Arcs -->
+              <path d="M 155 215 A 65 65 0 0 1 155 305" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2.5" />
+              <path d="M 645 215 A 65 65 0 0 0 645 305" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2.5" />
+
+              <!-- Tactical Shape Connecting Polygon Mesh & Distances -->
+              <g id="tac-mesh-group" class="tac-mesh-group"></g>
+            </svg>
+
+            <!-- Dynamic Player Tracking Nodes Layer -->
+            <div class="tac-nodes-layer" id="tac-nodes-layer">
+              <!-- 22 Player tracking nodes injected here -->
+            </div>
+
+            <!-- Dynamic Tactical Soccer Ball Node -->
+            <div class="tac-ball-node" id="tac-ball-node" style="left: 50%; top: 50%;">
+              <div class="tac-ball-dot"></div>
+              <div class="tac-ball-shadow"></div>
+              <div class="tac-ball-pulse"></div>
+            </div>
+
+            <!-- Floating Goal Action Banner -->
+            <div class="tac-goal-banner" id="tac-goal-banner" hidden>
+              <span class="tac-goal-icon">⚽</span>
+              <span class="tac-goal-text" id="tac-goal-text">GOAL! L. Messi 34'</span>
+            </div>
+
+          </div>
+
+          <!-- Bottom Live Match Match Score & Playback Action Toolbar -->
+          <div class="tac-live-action-hud">
+            <div class="tac-score-box">
+              <span class="tac-team1-label" id="tac-hud-t1">ARGENTINA</span>
+              <span class="tac-live-score" id="tac-hud-score">0 - 0</span>
+              <span class="tac-team2-label" id="tac-hud-t2">FRANCE</span>
+              <span class="tac-clock-pill" id="tac-hud-clock">⏱ 0'</span>
+            </div>
+
+            <div class="tac-action-feed" id="tac-hud-action">
+              📍 Match in progress • KINEXON Real-time player vector tracking active
+            </div>
+
+            <div class="tac-playback-btns">
+              <button type="button" class="tac-btn-playback" id="tac-btn-pause">⏸ PAUSE</button>
+              <button type="button" class="tac-btn-playback" id="tac-btn-speed">⚡ 1x SPEED</button>
+              <button type="button" class="tac-btn-playback primary" id="tac-btn-skip">⏩ INSTANT RESULT</button>
+            </div>
+          </div>
+        </main>
+
+        <!-- RIGHT PANEL: TEAM 2 (Away - Cyan / Blue) & BALL STATUS -->
+        <aside class="tac-team-panel team-2">
+          <div class="tac-team-header away-header">
+            <span class="tac-team-badge-icon">👥</span>
+            <span class="tac-team-header-name" id="tac-team2-name">TEAM 2</span>
+          </div>
+
+          <div class="tac-roster-group">
+            <div class="tac-pos-heading">TORWART</div>
+            <div class="tac-player-list" id="tac-t2-gk">
+              <!-- Dynamically injected -->
+            </div>
+          </div>
+
+          <div class="tac-roster-group">
+            <div class="tac-pos-heading">ABWEHR</div>
+            <div class="tac-player-list" id="tac-t2-def">
+              <!-- Dynamically injected -->
+            </div>
+          </div>
+
+          <div class="tac-roster-group">
+            <div class="tac-pos-heading">MITTELFELD</div>
+            <div class="tac-player-list" id="tac-t2-mid">
+              <!-- Dynamically injected -->
+            </div>
+          </div>
+
+          <div class="tac-roster-group">
+            <div class="tac-pos-heading">STURM</div>
+            <div class="tac-player-list" id="tac-t2-fwd">
+              <!-- Dynamically injected -->
+            </div>
+          </div>
+
+          <!-- Bottom Ball Status Box (From Image) -->
+          <div class="tac-ball-box">
+            <div class="tac-ball-box-header">
+              <span>👥 Ball</span>
+            </div>
+            <div class="tac-ball-status-row">
+              <span class="tac-ball-status-num">99</span>
+              <span class="tac-ball-status-text" id="tac-ball-status-text">Ball (Live tracking 84 km/h)</span>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+
+    </div>
+  </div>
+
   <!-- Majestic Grand Championship Celebration Modal -->
   <div id="champion-modal" class="modal celebration-modal" hidden tabindex="-1" role="dialog" aria-modal="true"
     aria-labelledby="champ-modal-name">

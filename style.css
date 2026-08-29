@@ -10025,4 +10025,548 @@ html, body {
   .holo-score-digit { font-size: 1.6rem; }
 }
 
+/* ==========================================================================
+   17. KINEXON PRO TACTICAL MATCH TRACKER (EXACT REFERENCE DESIGN)
+   ========================================================================== */
+.tactical-tracker-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 10000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 12px !important;
+}
+
+.tactical-tracker-modal[hidden] {
+  display: none !important;
+}
+
+.tac-backdrop {
+  position: absolute !important;
+  inset: 0 !important;
+  background: rgba(10, 14, 18, 0.94) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+.tac-dialog {
+  position: relative !important;
+  z-index: 10 !important;
+  width: min(98vw, 1140px) !important;
+  max-height: 96vh !important;
+  background: #23272d !important;
+  border: 1px solid #3a3f47 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  animation: holoModalPop 0.3s ease-out forwards;
+}
+
+/* Top App Window Navbar */
+.tac-top-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #181b20;
+  padding: 8px 16px;
+  border-bottom: 1px solid #32373e;
+}
+
+.tac-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.tac-window-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.tac-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.tac-dot.red { background: #ff5f56; }
+.tac-dot.yellow { background: #ffbd2e; }
+.tac-dot.green { background: #27c93f; }
+
+.tac-brand-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tac-brand-title span {
+  font-size: 0.75rem;
+  color: #3897f0;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.tac-nav-tabs {
+  display: flex;
+  gap: 4px;
+  margin-left: 10px;
+}
+
+.tac-nav-tab {
+  background: transparent;
+  border: none;
+  color: #8c96a3;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tac-nav-tab.active, .tac-nav-tab:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.tac-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.tac-session-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #1c538a;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 4px;
+}
+
+.tac-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4cd964;
+  box-shadow: 0 0 6px #4cd964;
+  animation: pulse 1.2s infinite;
+}
+
+.tac-back-btn {
+  background: #3b424c;
+  border: 1px solid #4a525f;
+  color: #d1d8e0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tac-back-btn:hover {
+  background: #4a5360;
+  color: #ffffff;
+}
+
+/* Secondary Controls / Options Bar */
+.tac-controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1e2227;
+  padding: 10px 16px;
+  border-bottom: 1px solid #2e333b;
+}
+
+.tac-ctrl-left, .tac-ctrl-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tac-select-players-badge {
+  background: #2a68a5;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tac-dropdown-item {
+  color: #c2c9d2;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tac-dropdown-item .tac-arrow {
+  font-size: 0.6rem;
+  opacity: 0.7;
+}
+
+.tac-replay-badge {
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tac-phase-tag {
+  background: #3a424e;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  color: #64b5f6;
+}
+
+/* Main Workspace Body */
+.tac-workspace-body {
+  display: flex;
+  flex: 1;
+  min-height: 480px;
+  background: #181b20;
+  overflow: hidden;
+}
+
+/* Side Rosters */
+.tac-team-panel {
+  width: 170px;
+  background: #1e2227;
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  border-right: 1px solid #2e333b;
+  flex-shrink: 0;
+}
+
+.tac-team-panel.team-2 {
+  border-right: none;
+  border-left: 1px solid #2e333b;
+}
+
+.tac-team-header {
+  padding: 7px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tac-team-header.home-header {
+  background: #eb5757;
+}
+
+.tac-team-header.away-header {
+  background: #2f80ed;
+}
+
+.tac-roster-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tac-pos-heading {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #7b8897;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tac-player-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 4px;
+  font-size: 0.74rem;
+  color: #d1d8e0;
+  border-radius: 3px;
+  transition: background 0.15s ease;
+}
+
+.tac-player-row:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tac-player-num {
+  font-weight: 800;
+  color: #8c96a3;
+  min-width: 16px;
+}
+
+.tac-player-name {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Ball Status Box */
+.tac-ball-box {
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid #2e333b;
+}
+
+.tac-ball-box-header {
+  background: #a8df8e;
+  color: #1b4317;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.tac-ball-status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  color: #a0aec0;
+}
+
+.tac-ball-status-num {
+  font-weight: 800;
+  color: #ffffff;
+}
+
+/* Center Pitch Container */
+.tac-pitch-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #14171a;
+  padding: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tac-pitch-board {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  background: #1e7e34;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.tac-pitch-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Node Elements */
+.tac-nodes-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.tac-node {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  margin-left: -11px;
+  margin-top: -11px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+  transition: left 0.25s linear, top 0.25s linear;
+  user-select: none;
+}
+
+.tac-node.team-1-node {
+  background: #eb5757;
+  border: 1.5px solid #ffffff;
+}
+
+.tac-node.team-2-node {
+  background: #2f80ed;
+  border: 1.5px solid #ffffff;
+}
+
+/* Tactical Mesh Distance Label */
+.tac-dist-label {
+  fill: rgba(255, 255, 255, 0.75);
+  font-size: 9px;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+/* Soccer Ball Node */
+.tac-ball-node {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  margin-top: -7px;
+  transform-style: preserve-3d;
+  transition: left 0.18s linear, top 0.18s linear;
+  z-index: 25;
+}
+
+.tac-ball-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 10px #ffffff, 0 2px 5px rgba(0, 0, 0, 0.8);
+}
+
+.tac-ball-shadow {
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  width: 12px;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  transform: translateX(-50%);
+}
+
+.tac-goal-banner {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #ffd700, #ff9800);
+  color: #000000;
+  font-size: 0.82rem;
+  font-weight: 900;
+  padding: 4px 14px;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.7);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 30;
+  animation: bubbleBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Bottom Toolbar */
+.tac-live-action-hud {
+  margin-top: 10px;
+  background: #1e2227;
+  border-radius: 6px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tac-score-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+}
+
+.tac-team1-label { color: #eb5757; font-size: 0.85rem; }
+.tac-team2-label { color: #2f80ed; font-size: 0.85rem; }
+.tac-live-score { color: #ffffff; font-size: 1.1rem; }
+.tac-clock-pill {
+  background: rgba(46, 204, 113, 0.15);
+  color: var(--pitch-green);
+  border: 1px solid var(--pitch-green);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+}
+
+.tac-action-feed {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.tac-playback-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.tac-btn-playback {
+  background: #2d333b;
+  border: 1px solid #444c56;
+  color: #c9d1d9;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tac-btn-playback:hover {
+  background: #373e47;
+  color: #ffffff;
+}
+
+.tac-btn-playback.primary {
+  background: var(--pitch-green);
+  color: #000000;
+  border-color: var(--pitch-green);
+  font-weight: 900;
+}
+
+.tac-btn-playback.primary:hover {
+  background: var(--pitch-green-light);
+}
+
+@media (max-width: 860px) {
+  .tac-team-panel { width: 120px; font-size: 0.65rem; }
+  .tac-live-action-hud { flex-direction: column; align-items: stretch; }
+  .tac-playback-btns { justify-content: flex-end; }
+}
+
+
 

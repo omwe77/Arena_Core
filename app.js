@@ -6685,6 +6685,295 @@ enterBtn.addEventListener('click', () => {
     }
   }
 
+  // ---------------------------------------------------------------------------
+  // 12. KINEXON PRO TACTICAL MATCH TRACKER CONTROLLER (REFERENCE THEME)
+  // ---------------------------------------------------------------------------
+  let activeTacInterval = null;
+  let tacSpeed = 1;
+  let tacPaused = false;
+
+  function getTacticalRoster(teamName) {
+    const stars = (window.TEAM_STAR_PLAYERS && window.TEAM_STAR_PLAYERS[teamName]) || [];
+    return {
+      gk: [stars[0] || '1 Keeper'],
+      def: [stars[1] || '4 Defender A', stars[2] || '6 Defender B', stars[3] || '12 Defender C', stars[4] || '13 Defender D'],
+      mid: [stars[5] || '3 Midfielder A', stars[6] || '5 Midfielder B', stars[7] || '7 Midfielder C', stars[8] || '12 Midfielder D'],
+      fwd: [stars[9] || '9 Striker A', stars[10] || '16 Striker B']
+    };
+  }
+
+  function openProTacticalTracker(homeTeam, awayTeam, matchObj = null, stageKey = null, matchIdx = null) {
+    const modal = document.getElementById('tactical-tracker-modal');
+    if (!modal) return;
+
+    if (activeTacInterval) {
+      clearInterval(activeTacInterval);
+      activeTacInterval = null;
+    }
+    tacSpeed = 1;
+    tacPaused = false;
+
+    // Elements
+    const t1Name = document.getElementById('tac-team1-name');
+    const t2Name = document.getElementById('tac-team2-name');
+    const hudT1 = document.getElementById('tac-hud-t1');
+    const hudT2 = document.getElementById('tac-hud-t2');
+    const hudScore = document.getElementById('tac-hud-score');
+    const hudClock = document.getElementById('tac-hud-clock');
+    const hudAction = document.getElementById('tac-hud-action');
+    const ballStatus = document.getElementById('tac-ball-status-text');
+    const goalBanner = document.getElementById('tac-goal-banner');
+    const goalText = document.getElementById('tac-goal-text');
+    const phaseTag = document.getElementById('tac-phase-tag');
+    const pauseBtn = document.getElementById('tac-btn-pause');
+    const speedBtn = document.getElementById('tac-btn-speed');
+    const skipBtn = document.getElementById('tac-btn-skip');
+    const nodesLayer = document.getElementById('tac-nodes-layer');
+    const meshGroup = document.getElementById('tac-mesh-group');
+    const ballNode = document.getElementById('tac-ball-node');
+
+    if (t1Name) t1Name.textContent = homeTeam.toUpperCase();
+    if (t2Name) t2Name.textContent = awayTeam.toUpperCase();
+    if (hudT1) hudT1.textContent = homeTeam.toUpperCase();
+    if (hudT2) hudT2.textContent = awayTeam.toUpperCase();
+    if (pauseBtn) pauseBtn.textContent = '⏸ PAUSE';
+    if (speedBtn) speedBtn.textContent = '⚡ 1x SPEED';
+    if (goalBanner) goalBanner.hidden = true;
+
+    // Inject Rosters into sidebars
+    const r1 = getTacticalRoster(homeTeam);
+    const r2 = getTacticalRoster(awayTeam);
+
+    function renderRosterSection(elId, players) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      el.innerHTML = players.map(p => {
+        const parts = p.split(' ');
+        const num = parts[0].replace(/\D/g, '') || '7';
+        const name = parts.slice(1).join(' ') || p;
+        return `
+          <div class="tac-player-row">
+            <span class="tac-player-num">${num}</span>
+            <span class="tac-player-name">${name}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    renderRosterSection('tac-t1-gk', r1.gk);
+    renderRosterSection('tac-t1-def', r1.def);
+    renderRosterSection('tac-t1-mid', r1.mid);
+    renderRosterSection('tac-t1-fwd', r1.fwd);
+
+    renderRosterSection('tac-t2-gk', r2.gk);
+    renderRosterSection('tac-t2-def', r2.def);
+    renderRosterSection('tac-t2-mid', r2.mid);
+    renderRosterSection('tac-t2-fwd', r2.fwd);
+
+    modal.hidden = false;
+
+    if (!matchObj) {
+      matchObj = { home: homeTeam, away: awayTeam, isSimulated: false };
+    }
+
+    // Precompute outcome if needed
+    if (!matchObj.winner && !matchObj.isSimulated) {
+      const outcome = precomputeMatchResult(homeTeam, awayTeam, true);
+      Object.assign(matchObj, outcome);
+    }
+
+    let curMin = 0;
+    const maxMin = matchObj.hadExtraTime ? 120 : 90;
+    const events = matchObj.events || [];
+
+    // Define 22 Player Base Tactical Coordinates (Percentages 0..100)
+    const t1BaseCoords = [
+      { num: 1, x: 8, y: 50 },  // GK
+      { num: 4, x: 22, y: 35 }, // CB
+      { num: 6, x: 22, y: 65 }, // CB
+      { num: 12, x: 26, y: 18 },// LB
+      { num: 13, x: 26, y: 82 },// RB
+      { num: 5, x: 38, y: 50 }, // CDM
+      { num: 3, x: 46, y: 30 }, // CM
+      { num: 7, x: 46, y: 70 }, // CM
+      { num: 12, x: 55, y: 50 },// CAM
+      { num: 9, x: 68, y: 40 }, // ST
+      { num: 16, x: 68, y: 60 } // ST
+    ];
+
+    const t2BaseCoords = [
+      { num: 1, x: 92, y: 50 }, // GK
+      { num: 4, x: 78, y: 35 }, // CB
+      { num: 6, x: 78, y: 65 }, // CB
+      { num: 12, x: 74, y: 18 },// LB
+      { num: 13, x: 74, y: 82 },// RB
+      { num: 5, x: 62, y: 50 }, // CDM
+      { num: 3, x: 54, y: 30 }, // CM
+      { num: 7, x: 54, y: 70 }, // CM
+      { num: 12, x: 45, y: 50 },// CAM
+      { num: 9, x: 32, y: 40 }, // ST
+      { num: 16, x: 32, y: 60 } // ST
+    ];
+
+    function updateTacFrame() {
+      const homeCount = events.filter(e => e.team === 'home' && e.minute <= curMin).length;
+      const awayCount = events.filter(e => e.team === 'away' && e.minute <= curMin).length;
+
+      if (hudScore) hudScore.textContent = `${matchObj.isSimulated ? matchObj.scoreHome : homeCount} - ${matchObj.isSimulated ? matchObj.scoreAway : awayCount}`;
+      if (hudClock) hudClock.textContent = `⏱ ${Math.min(maxMin, curMin)}'`;
+
+      if (phaseTag) {
+        phaseTag.textContent = curMin < 45 ? 'Phase 1 (First Half)' : curMin < 90 ? 'Phase 2 (Second Half)' : 'Phase 3 (Extra Time)';
+      }
+
+      // Check for goal event near this minute
+      const goal = events.find(e => Math.abs(e.minute - curMin) <= 4);
+      let ballX = 50;
+      let ballY = 50;
+      let ballSpeed = 70 + Math.round(Math.sin(curMin) * 25);
+      let actionText = 'Midfield tactical duel • Zonal shape compactness synchronized';
+
+      const shiftX = Math.sin(curMin * 0.25) * 8;
+      const shiftY = Math.cos(curMin * 0.25) * 6;
+
+      const t1Current = t1BaseCoords.map((p, i) => {
+        let px = p.x + (i > 0 ? shiftX : 0);
+        let py = p.y + (i > 0 ? shiftY * 0.5 : 0);
+        return { ...p, x: px, y: py };
+      });
+
+      const t2Current = t2BaseCoords.map((p, i) => {
+        let px = p.x + (i > 0 ? shiftX : 0);
+        let py = p.y + (i > 0 ? -shiftY * 0.5 : 0);
+        return { ...p, x: px, y: py };
+      });
+
+      // Render 22 Player Nodes
+      if (nodesLayer) {
+        let nodesHtml = '';
+        t1Current.forEach((p) => {
+          nodesHtml += `<div class="tac-node team-1-node" style="left:${p.x.toFixed(1)}%;top:${p.y.toFixed(1)}%;">${p.num}</div>`;
+        });
+        t2Current.forEach((p) => {
+          nodesHtml += `<div class="tac-node team-2-node" style="left:${p.x.toFixed(1)}%;top:${p.y.toFixed(1)}%;">${p.num}</div>`;
+        });
+        nodesLayer.innerHTML = nodesHtml;
+      }
+
+      // Render Tactical Mesh Polygons & Distances (Reference Image Style)
+      if (meshGroup) {
+        const polyPoints = [
+          `${t1Current[1].x * 8},${t1Current[1].y * 5.2}`,
+          `${t1Current[3].x * 8},${t1Current[3].y * 5.2}`,
+          `${t1Current[6].x * 8},${t1Current[6].y * 5.2}`,
+          `${t1Current[8].x * 8},${t1Current[8].y * 5.2}`,
+          `${t1Current[7].x * 8},${t1Current[7].y * 5.2}`,
+          `${t1Current[2].x * 8},${t1Current[2].y * 5.2}`
+        ].join(' ');
+
+        meshGroup.innerHTML = `
+          <polygon points="${polyPoints}" fill="rgba(255, 255, 255, 0.08)" stroke="rgba(255, 255, 255, 0.4)" stroke-width="1.5" stroke-dasharray="3,3" />
+          <text x="${(t1Current[6].x * 8 + t1Current[8].x * 8) / 2}" y="${(t1Current[6].y * 5.2 + t1Current[8].y * 5.2) / 2}" class="tac-dist-label">14 m</text>
+          <text x="${(t1Current[3].x * 8 + t1Current[6].x * 8) / 2}" y="${(t1Current[3].y * 5.2 + t1Current[6].y * 5.2) / 2}" class="tac-dist-label">21 m</text>
+          <text x="${(t1Current[8].x * 8 + t1Current[7].x * 8) / 2}" y="${(t1Current[8].y * 5.2 + t1Current[7].y * 5.2) / 2}" class="tac-dist-label">15 m</text>
+          <text x="${(t1Current[7].x * 8 + t1Current[2].x * 8) / 2}" y="${(t1Current[7].y * 5.2 + t1Current[2].y * 5.2) / 2}" class="tac-dist-label">22 m</text>
+        `;
+      }
+
+      // Ball Trajectory & Goals
+      if (goal) {
+        if (goal.team === 'home') {
+          ballX = 94; ballY = 48;
+          actionText = `⚡ GOAL! ${homeTeam} scores! Powerful strike by ${goal.player} (${goal.minute}')`;
+        } else {
+          ballX = 6; ballY = 48;
+          actionText = `⚡ GOAL! ${awayTeam} scores! Spectacular finish by ${goal.player} (${goal.minute}')`;
+        }
+        ballSpeed = 104;
+        if (goalBanner) {
+          goalBanner.hidden = false;
+          if (goalText) goalText.textContent = `GOAL! ${goal.player} ${goal.minute}' (${goal.teamName})`;
+        }
+      } else {
+        if (goalBanner) goalBanner.hidden = true;
+        if (curMin < 10) {
+          ballX = 50 + Math.sin(curMin * 1.2) * 8;
+          ballY = 50 + Math.cos(curMin * 1.2) * 10;
+          actionText = `Opening exchanges • Both sides testing defensive compactness`;
+        } else if (curMin % 20 < 10) {
+          const targetNode = t1Current[8];
+          ballX = targetNode.x + Math.sin(curMin * 1.5) * 6;
+          ballY = targetNode.y + Math.cos(curMin * 1.5) * 6;
+          actionText = `${homeTeam} building up through central channels with high pressing`;
+        } else {
+          const targetNode = t2Current[8];
+          ballX = targetNode.x - Math.sin(curMin * 1.5) * 6;
+          ballY = targetNode.y + Math.cos(curMin * 1.5) * 6;
+          actionText = `${awayTeam} executing rapid counter-attack transition`;
+        }
+      }
+
+      if (ballNode) {
+        ballNode.style.left = `${ballX.toFixed(1)}%`;
+        ballNode.style.top = `${ballY.toFixed(1)}%`;
+      }
+
+      if (ballStatus) {
+        ballStatus.textContent = `Ball (${goal ? 'Goal Strike ' : 'In Play '} · ${ballSpeed} km/h)`;
+      }
+
+      if (hudAction) hudAction.textContent = `📍 ${actionText}`;
+    }
+
+    updateTacFrame();
+
+    activeTacInterval = setInterval(() => {
+      if (tacPaused) return;
+      curMin += 4 * tacSpeed;
+      updateTacFrame();
+
+      if (curMin >= maxMin) {
+        clearInterval(activeTacInterval);
+        activeTacInterval = null;
+        if (matchObj) {
+          matchObj.isLive = false;
+          matchObj.isSimulated = true;
+        }
+        renderStageViewport();
+        if (stageKey) showStageAdvancementToast(stageKey);
+      }
+    }, 150);
+
+    if (pauseBtn) {
+      pauseBtn.onclick = () => {
+        tacPaused = !tacPaused;
+        pauseBtn.textContent = tacPaused ? '▶ RESUME' : '⏸ PAUSE';
+      };
+    }
+    if (speedBtn) {
+      speedBtn.onclick = () => {
+        tacSpeed = tacSpeed === 1 ? 2 : (tacSpeed === 2 ? 4 : 1);
+        speedBtn.textContent = `⚡ ${tacSpeed}x SPEED`;
+      };
+    }
+    if (skipBtn) {
+      skipBtn.onclick = () => {
+        curMin = maxMin;
+        updateTacFrame();
+        if (activeTacInterval) {
+          clearInterval(activeTacInterval);
+          activeTacInterval = null;
+        }
+        if (matchObj) {
+          matchObj.isLive = false;
+          matchObj.isSimulated = true;
+        }
+        renderStageViewport();
+        if (stageKey) showStageAdvancementToast(stageKey);
+      };
+    }
+  }
+
   function setupModalHandlers() {
     const closeBtn = document.getElementById('modal-close');
     const backdrop = document.getElementById('modal-backdrop');
@@ -6705,26 +6994,54 @@ enterBtn.addEventListener('click', () => {
     if (holoCloseBtn) holoCloseBtn.addEventListener('click', closeHoloModal);
     if (holoBackdrop) holoBackdrop.addEventListener('click', closeHoloModal);
 
+    // KINEXON Pro Tactical Tracker Close Handlers
+    const tacCloseBtn = document.getElementById('tac-modal-close');
+    const tacBackdrop = document.getElementById('tac-modal-backdrop');
+    function closeTacModal() {
+      const tacModal = document.getElementById('tactical-tracker-modal');
+      if (tacModal) tacModal.hidden = true;
+      if (activeTacInterval) {
+        clearInterval(activeTacInterval);
+        activeTacInterval = null;
+      }
+    }
+    if (tacCloseBtn) tacCloseBtn.addEventListener('click', closeTacModal);
+    if (tacBackdrop) tacBackdrop.addEventListener('click', closeTacModal);
+
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         const detailModal = document.getElementById('match-detail-modal');
         if (detailModal) detailModal.hidden = true;
         closeHoloModal();
+        closeTacModal();
       }
     });
 
-    // Global delegation for single match simulation buttons to trigger 3D broadcast
+    // Global delegation for single match simulation buttons across all tournaments & leagues
     document.addEventListener('click', (e) => {
-      const simBtn = e.target.closest('.btn-sim-single');
+      const simBtn = e.target.closest('.btn-sim-single, .btn-sim-league-match');
       if (simBtn) {
         e.preventDefault();
         const stageKey = simBtn.dataset.stage;
-        const matchIdx = parseInt(simBtn.dataset.idx, 10);
+        const matchIdx = simBtn.dataset.idx !== undefined ? parseInt(simBtn.dataset.idx, 10) : undefined;
+        const mdIdx = simBtn.dataset.md !== undefined ? parseInt(simBtn.dataset.md, 10) : undefined;
+        const midx = simBtn.dataset.midx !== undefined ? parseInt(simBtn.dataset.midx, 10) : undefined;
+
         const state = tournamentState[activeTournKey];
-        const match = state?.[stageKey]?.[matchIdx];
-        if (match) {
-          open3DHolographicBroadcast(match.home, match.away, match, stageKey, matchIdx);
-          simulateSingleMatch(stageKey, matchIdx);
+        let match = null;
+
+        if (stageKey && matchIdx !== undefined) {
+          match = state?.[stageKey]?.[matchIdx];
+          if (match) {
+            openProTacticalTracker(match.home, match.away, match, stageKey, matchIdx);
+            simulateSingleMatch(stageKey, matchIdx);
+          }
+        } else if (mdIdx !== undefined && midx !== undefined) {
+          match = state?.matchdays?.[mdIdx]?.[midx];
+          if (match) {
+            openProTacticalTracker(match.home, match.away, match, `md_${mdIdx}`, midx);
+            simulateSingleLeagueMatch(mdIdx, midx);
+          }
         }
       }
     });
@@ -7248,6 +7565,7 @@ enterBtn.addEventListener('click', () => {
   // 15. DOM BOOTSTRAP
   // ---------------------------------------------------------------------------
   window.open3DHolographicBroadcast = open3DHolographicBroadcast;
+  window.openProTacticalTracker = openProTacticalTracker;
 
   document.addEventListener('DOMContentLoaded', () => {
     buildLogoCache();
