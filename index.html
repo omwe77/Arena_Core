@@ -655,6 +655,116 @@
     </div>
   </div>
 
+  <!-- ============================================================
+       CINEMATIC 3D HOLOGRAPHIC STADIUM BROADCAST STUDIO
+       ============================================================ -->
+  <div id="broadcast-hologram-modal" class="modal broadcast-modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="holo-broadcast-title">
+    <div class="modal-backdrop holo-backdrop" id="holo-modal-backdrop"></div>
+    <div class="modal-dialog holo-dialog">
+      <button type="button" id="holo-modal-close" class="holo-close-btn" aria-label="Close 3D Broadcast">✕</button>
+
+      <!-- Broadcast Live Header HUD -->
+      <div class="holo-header-hud">
+        <div class="holo-badge-group">
+          <span class="holo-live-tag"><span class="holo-pulse-dot"></span> 3D LIVE BROADCAST</span>
+          <span class="holo-tourn-tag" id="holo-tourn-tag">FIFA WORLD CUP 2026</span>
+        </div>
+        <h2 class="holo-title" id="holo-broadcast-title">3D HOLOGRAPHIC MATCH ARENA</h2>
+      </div>
+
+      <!-- Match Scoreboard Ribbon -->
+      <div class="holo-scoreboard-ribbon">
+        <div class="holo-team home">
+          <span class="holo-team-logo" id="holo-home-logo">🇦🇷</span>
+          <span class="holo-team-name" id="holo-home-name">ARGENTINA</span>
+        </div>
+        <div class="holo-score-center">
+          <span class="holo-score-digit" id="holo-home-score">0</span>
+          <span class="holo-score-sep">:</span>
+          <span class="holo-score-digit" id="holo-away-score">0</span>
+          <div class="holo-clock-badge" id="holo-clock-badge">⏱ 0' (KICKOFF)</div>
+        </div>
+        <div class="holo-team away">
+          <span class="holo-team-name" id="holo-away-name">FRANCE</span>
+          <span class="holo-team-logo" id="holo-away-logo">🇫🇷</span>
+        </div>
+      </div>
+
+      <!-- The 3D Holographic Stadium Stage (Reference Architecture) -->
+      <div class="holo-stage-viewport" id="holo-stage-viewport">
+        <!-- Ambient Atmospheric Spotlights -->
+        <div class="holo-spotlight-top"></div>
+        <div class="holo-ambient-glow"></div>
+
+        <div class="holo-3d-scene">
+          
+          <!-- Layer 1: Giant Levitating 3D Soccer Ball -->
+          <div class="holo-3d-ball-track" id="holo-ball-track">
+            <div class="holo-3d-ball-sphere" id="holo-3d-ball">
+              <div class="holo-ball-pentagons"></div>
+            </div>
+            <div class="holo-ball-ground-shadow" id="holo-ball-shadow"></div>
+            <div class="holo-ball-action-bubble" id="holo-action-bubble">KICKOFF ⚽</div>
+          </div>
+
+          <!-- Layer 2: Floating 3D Stadium Grass Pitch Turf -->
+          <div class="holo-floating-turf-wrapper">
+            <div class="holo-floating-turf">
+              <div class="holo-turf-stripes"></div>
+              <div class="holo-pitch-lines">
+                <div class="holo-pitch-center-circle"></div>
+                <div class="holo-pitch-center-spot"></div>
+                <div class="holo-pitch-halfway"></div>
+                <div class="holo-pitch-box left"></div>
+                <div class="holo-pitch-box right"></div>
+                <div class="holo-goal-box left"></div>
+                <div class="holo-goal-box right"></div>
+                <!-- 3D Goal Posts -->
+                <div class="holo-3d-goalpost left"></div>
+                <div class="holo-3d-goalpost right"></div>
+                <!-- Corner Flags -->
+                <div class="holo-corner-flag f-tl">🚩</div>
+                <div class="holo-corner-flag f-tr">🚩</div>
+                <div class="holo-corner-flag f-bl">🚩</div>
+                <div class="holo-corner-flag f-br">🚩</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Layer 3: Sleek White Digital Tablet Base with Holographic Projections -->
+          <div class="holo-device-tablet">
+            <div class="holo-tablet-bezel">
+              <div class="holo-digital-grid">
+                <div class="holo-grid-lines"></div>
+                <div class="holo-projection-beam"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Live Tactical Feed & Match Timeline -->
+      <div class="holo-tactical-footer">
+        <div class="holo-status-stream">
+          <span class="holo-status-icon">📍</span>
+          <span class="holo-status-text" id="holo-status-text">Match in progress • Real-time 3D ball tracking synchronized</span>
+        </div>
+        
+        <div class="holo-events-ticker" id="holo-events-ticker">
+          <!-- Injected goal scorer events -->
+        </div>
+
+        <div class="holo-controls-bar">
+          <button type="button" class="holo-ctrl-btn" id="holo-btn-pause">⏸ PAUSE</button>
+          <button type="button" class="holo-ctrl-btn" id="holo-btn-speed">⚡ 2x SPEED</button>
+          <button type="button" class="holo-ctrl-btn primary" id="holo-btn-skip">⏩ INSTANT RESULT</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Majestic Grand Championship Celebration Modal -->
   <div id="champion-modal" class="modal celebration-modal" hidden tabindex="-1" role="dialog" aria-modal="true"
     aria-labelledby="champ-modal-name">

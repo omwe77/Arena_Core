@@ -9459,3 +9459,570 @@ html, body {
   font-weight: 700;
 }
 
+/* ==========================================================================
+   16. CINEMATIC 3D HOLOGRAPHIC STADIUM BROADCAST STUDIO (REFERENCE THEME)
+   ========================================================================== */
+.broadcast-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 10000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px !important;
+}
+
+.broadcast-modal[hidden] {
+  display: none !important;
+}
+
+.holo-backdrop {
+  position: absolute !important;
+  inset: 0 !important;
+  background: rgba(3, 8, 5, 0.92) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+.holo-dialog {
+  position: relative !important;
+  z-index: 10 !important;
+  width: min(96vw, 920px) !important;
+  max-height: 94vh !important;
+  background: linear-gradient(180deg, #07100b 0%, #030805 100%) !important;
+  border: 1.5px solid rgba(46, 204, 113, 0.4) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.95), 0 0 35px rgba(46, 204, 113, 0.25) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  animation: holoModalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes holoModalPop {
+  0% { transform: scale(0.88) translateY(20px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.holo-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 25;
+}
+
+.holo-close-btn:hover {
+  background: #e74c3c;
+  border-color: #e74c3c;
+  transform: rotate(90deg) scale(1.1);
+}
+
+/* Header HUD */
+.holo-header-hud {
+  padding: 18px 24px 10px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.holo-badge-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.holo-live-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(231, 76, 60, 0.18);
+  border: 1px solid #e74c3c;
+  color: #ff6b6b;
+  font-family: var(--font-hud);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+.holo-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #e74c3c;
+  box-shadow: 0 0 8px #e74c3c;
+  animation: pulse 1.2s infinite;
+}
+
+.holo-tourn-tag {
+  font-family: var(--font-hud);
+  font-size: 0.65rem;
+  color: var(--champions-gold);
+  letter-spacing: 1.5px;
+  font-weight: 700;
+}
+
+.holo-title {
+  font-family: var(--font-title);
+  font-size: 1.2rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #fff;
+  margin: 0;
+  text-shadow: 0 0 16px rgba(46, 204, 113, 0.4);
+}
+
+/* Scoreboard Ribbon */
+.holo-scoreboard-ribbon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: rgba(10, 22, 14, 0.9);
+  border-bottom: 1px solid rgba(46, 204, 113, 0.2);
+}
+
+.holo-team {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.holo-team.away {
+  justify-content: flex-end;
+}
+
+.holo-team-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.holo-team-name {
+  font-family: var(--font-title);
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.holo-score-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 0 20px;
+}
+
+.holo-score-digit {
+  font-family: var(--font-title);
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--champions-gold);
+  text-shadow: 0 0 20px rgba(255, 201, 74, 0.8);
+  line-height: 1;
+}
+
+.holo-score-sep {
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0 4px;
+}
+
+.holo-clock-badge {
+  font-family: var(--font-hud);
+  font-size: 0.72rem;
+  color: var(--pitch-green);
+  font-weight: 800;
+  letter-spacing: 1px;
+  background: rgba(46, 204, 113, 0.12);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(46, 204, 113, 0.3);
+}
+
+/* --------------------------------------------------------------------------
+   THE 3D HOLOGRAPHIC STAGE VIEWPORT (MATCHES USER IMAGE ARCHITECTURE)
+   -------------------------------------------------------------------------- */
+.holo-stage-viewport {
+  position: relative;
+  height: 380px;
+  background: #010402;
+  overflow: hidden;
+  perspective: 1000px;
+  perspective-origin: 50% 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.95);
+}
+
+.holo-spotlight-top {
+  position: absolute;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 250px;
+  background: radial-gradient(ellipse at center, rgba(46, 204, 113, 0.35) 0%, rgba(0, 229, 255, 0.12) 40%, transparent 75%);
+  pointer-events: none;
+}
+
+.holo-3d-scene {
+  position: relative;
+  width: 600px;
+  height: 300px;
+  transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Layer 3: Sleek White Digital Tablet Base --- */
+.holo-device-tablet {
+  position: absolute;
+  bottom: 12px;
+  width: 540px;
+  height: 260px;
+  background: #e8ece9;
+  border-radius: 28px;
+  transform: rotateX(54deg) translateZ(0px);
+  transform-style: preserve-3d;
+  box-shadow: 0 35px 70px rgba(0, 0, 0, 0.95), 0 0 40px rgba(0, 229, 255, 0.25), inset 0 2px 4px #ffffff;
+  border: 4px solid #ffffff;
+  padding: 12px;
+}
+
+.holo-tablet-bezel {
+  width: 100%;
+  height: 100%;
+  background: #020905;
+  border-radius: 18px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 25px rgba(0, 229, 255, 0.4);
+}
+
+.holo-digital-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(0, 229, 255, 0.25) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.25) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.85;
+}
+
+.holo-projection-beam {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(46, 204, 113, 0.3) 0%, transparent 70%);
+  animation: beamPulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes beamPulse {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* --- Layer 2: Floating 3D Stadium Grass Turf --- */
+.holo-floating-turf-wrapper {
+  position: absolute;
+  bottom: 75px;
+  width: 480px;
+  height: 220px;
+  transform: rotateX(54deg) translateZ(45px);
+  transform-style: preserve-3d;
+  animation: floatTurf 4.5s ease-in-out infinite alternate;
+}
+
+@keyframes floatTurf {
+  0% { transform: rotateX(54deg) translateZ(42px); }
+  100% { transform: rotateX(54deg) translateZ(54px); }
+}
+
+.holo-floating-turf {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #1b5e20 0%, #2e7d32 15%, #1b5e20 30%, #2e7d32 45%, #1b5e20 60%, #2e7d32 75%, #1b5e20 90%, #2e7d32 100%);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 6px;
+  position: relative;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), 0 0 20px rgba(46, 204, 113, 0.4);
+}
+
+.holo-pitch-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.holo-pitch-center-circle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 60px;
+  height: 60px;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.holo-pitch-center-spot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  background: #ffffff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.holo-pitch-halfway {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1.5px;
+  background: rgba(255, 255, 255, 0.85);
+  transform: translateX(-50%);
+}
+
+.holo-pitch-box.left {
+  position: absolute;
+  left: 0;
+  top: 20%;
+  width: 22%;
+  height: 60%;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  border-left: none;
+}
+
+.holo-pitch-box.right {
+  position: absolute;
+  right: 0;
+  top: 20%;
+  width: 22%;
+  height: 60%;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  border-right: none;
+}
+
+.holo-3d-goalpost.left {
+  position: absolute;
+  left: -12px;
+  top: 30%;
+  width: 12px;
+  height: 40%;
+  border: 2px solid #ffffff;
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+}
+
+.holo-3d-goalpost.right {
+  position: absolute;
+  right: -12px;
+  top: 30%;
+  width: 12px;
+  height: 40%;
+  border: 2px solid #ffffff;
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+}
+
+.holo-corner-flag {
+  position: absolute;
+  font-size: 0.9rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+}
+.holo-corner-flag.f-tl { top: -8px; left: -4px; }
+.holo-corner-flag.f-tr { top: -8px; right: -4px; }
+.holo-corner-flag.f-bl { bottom: -8px; left: -4px; }
+.holo-corner-flag.f-br { bottom: -8px; right: -4px; }
+
+/* --- Layer 1: Giant Levitating 3D Soccer Ball --- */
+.holo-3d-ball-track {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  margin-left: -40px;
+  transform-style: preserve-3d;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), left 0.25s ease-out, top 0.25s ease-out;
+  z-index: 30;
+}
+
+.holo-3d-ball-sphere {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 28%, #ffffff 0%, #f2f2f2 35%, #999999 75%, #222222 100%);
+  box-shadow: inset -8px -8px 18px rgba(0, 0, 0, 0.85), inset 4px 4px 10px rgba(255, 255, 255, 0.9), 0 20px 35px rgba(0, 0, 0, 0.9), 0 0 35px rgba(255, 255, 255, 0.4);
+  transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  animation: ballFloatingOrbit 5s ease-in-out infinite alternate;
+}
+
+@keyframes ballFloatingOrbit {
+  0% { transform: translateY(0px) scale(1) rotate(0deg); }
+  50% { transform: translateY(-14px) scale(1.04) rotate(180deg); }
+  100% { transform: translateY(0px) scale(1) rotate(360deg); }
+}
+
+.holo-ball-pentagons {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-image: 
+    radial-gradient(circle at 50% 50%, #111111 20%, transparent 22%),
+    radial-gradient(circle at 22% 32%, #222222 16%, transparent 18%),
+    radial-gradient(circle at 78% 32%, #222222 16%, transparent 18%),
+    radial-gradient(circle at 35% 78%, #222222 16%, transparent 18%),
+    radial-gradient(circle at 65% 78%, #222222 16%, transparent 18%);
+  mix-blend-mode: multiply;
+  opacity: 0.9;
+  animation: ball3dRoll 4s linear infinite;
+}
+
+.holo-ball-ground-shadow {
+  position: absolute;
+  bottom: -45px;
+  left: 50%;
+  width: 90px;
+  height: 24px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.85) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+.holo-ball-action-bubble {
+  position: absolute;
+  top: -34px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #ffd700, #ff9800);
+  color: #000;
+  font-family: var(--font-title);
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  padding: 4px 12px;
+  border-radius: 14px;
+  box-shadow: 0 0 16px rgba(255, 215, 0, 0.9), 0 4px 10px rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
+  animation: bubbleBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 40;
+}
+
+/* Tactical Footer & Controls */
+.holo-tactical-footer {
+  padding: 12px 24px 16px 24px;
+  background: #040905;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.holo-status-stream {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-hud);
+  font-size: 0.78rem;
+  color: var(--floodlight-cyan);
+  font-weight: 700;
+}
+
+.holo-events-ticker {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  min-height: 24px;
+}
+
+.holo-event-chip {
+  background: rgba(46, 204, 113, 0.15);
+  border: 1px solid var(--pitch-green);
+  color: #fff;
+  font-family: var(--font-hud);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  animation: fadeIn 0.3s ease;
+}
+
+.holo-controls-bar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.holo-ctrl-btn {
+  padding: 8px 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-family: var(--font-title);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.holo-ctrl-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.holo-ctrl-btn.primary {
+  background: var(--pitch-green);
+  border-color: var(--pitch-green);
+  color: #000;
+  box-shadow: 0 0 14px var(--pitch-green-glow);
+}
+
+.holo-ctrl-btn.primary:hover {
+  background: var(--pitch-green-light);
+  transform: translateY(-1px) scale(1.02);
+}
+
+@media (max-width: 768px) {
+  .holo-stage-viewport { height: 300px; }
+  .holo-3d-scene { width: 340px; height: 200px; }
+  .holo-device-tablet { width: 320px; height: 160px; }
+  .holo-floating-turf-wrapper { width: 280px; height: 130px; bottom: 50px; }
+  .holo-3d-ball-track { width: 55px; height: 55px; margin-left: -27px; }
+  .holo-3d-ball-sphere { width: 55px; height: 55px; }
+  .holo-scoreboard-ribbon { padding: 8px 14px; }
+  .holo-team-name { font-size: 0.85rem; }
+  .holo-score-digit { font-size: 1.6rem; }
+}
+
+

@@ -6505,13 +6505,228 @@ enterBtn.addEventListener('click', () => {
     modal.hidden = false;
   }
 
+  // ---------------------------------------------------------------------------
+  // 11. 3D HOLOGRAPHIC STADIUM BROADCAST STUDIO CONTROLLER
+  // ---------------------------------------------------------------------------
+  let activeHoloInterval = null;
+  let holoSpeed = 1;
+  let holoPaused = false;
+
+  function open3DHolographicBroadcast(homeTeam, awayTeam, matchObj = null, stageKey = null, matchIdx = null) {
+    const modal = document.getElementById('broadcast-hologram-modal');
+    if (!modal) return;
+
+    if (activeHoloInterval) {
+      clearInterval(activeHoloInterval);
+      activeHoloInterval = null;
+    }
+    holoSpeed = 1;
+    holoPaused = false;
+
+    // Elements
+    const tournTag = document.getElementById('holo-tourn-tag');
+    const homeLogo = document.getElementById('holo-home-logo');
+    const homeName = document.getElementById('holo-home-name');
+    const awayLogo = document.getElementById('holo-away-logo');
+    const awayName = document.getElementById('holo-away-name');
+    const homeScoreEl = document.getElementById('holo-home-score');
+    const awayScoreEl = document.getElementById('holo-away-score');
+    const clockBadge = document.getElementById('holo-clock-badge');
+    const statusText = document.getElementById('holo-status-text');
+    const eventsTicker = document.getElementById('holo-events-ticker');
+    const ballTrack = document.getElementById('holo-ball-track');
+    const ballSphere = document.getElementById('holo-3d-ball');
+    const actionBubble = document.getElementById('holo-action-bubble');
+    const pauseBtn = document.getElementById('holo-btn-pause');
+    const speedBtn = document.getElementById('holo-btn-speed');
+    const skipBtn = document.getElementById('holo-btn-skip');
+
+    if (tournTag) tournTag.textContent = (TOURNAMENTS_CONFIG[activeTournKey]?.name || 'FIFA WORLD CUP 2026').toUpperCase();
+    if (homeLogo) homeLogo.innerHTML = getTeamLogoHtml(homeTeam);
+    if (homeName) homeName.textContent = homeTeam.toUpperCase();
+    if (awayLogo) awayLogo.innerHTML = getTeamLogoHtml(awayTeam);
+    if (awayName) awayName.textContent = awayTeam.toUpperCase();
+    if (eventsTicker) eventsTicker.innerHTML = '';
+    if (pauseBtn) pauseBtn.textContent = '⏸ PAUSE';
+    if (speedBtn) speedBtn.textContent = '⚡ 1x SPEED';
+
+    modal.hidden = false;
+
+    if (!matchObj) {
+      matchObj = { home: homeTeam, away: awayTeam, isSimulated: false };
+    }
+
+    // Ensure outcome is precomputed
+    if (!matchObj.winner && !matchObj.isSimulated) {
+      const outcome = precomputeMatchResult(homeTeam, awayTeam, true);
+      Object.assign(matchObj, outcome);
+    }
+
+    let curMin = 0;
+    const maxMin = matchObj.hadExtraTime ? 120 : 90;
+    const events = matchObj.events || [];
+
+    function updateHoloFrame() {
+      const homeCount = events.filter(e => e.team === 'home' && e.minute <= curMin).length;
+      const awayCount = events.filter(e => e.team === 'away' && e.minute <= curMin).length;
+
+      if (homeScoreEl) homeScoreEl.textContent = matchObj.isSimulated ? matchObj.scoreHome : homeCount;
+      if (awayScoreEl) awayScoreEl.textContent = matchObj.isSimulated ? matchObj.scoreAway : awayCount;
+
+      let phase = curMin < 45 ? 'FIRST HALF' : curMin < 90 ? 'SECOND HALF' : 'EXTRA TIME';
+      if (curMin >= maxMin) phase = matchObj.hadPenalties ? `PENS (${matchObj.penHome}-${matchObj.penAway})` : 'FULL TIME';
+      if (clockBadge) clockBadge.textContent = `⏱ ${Math.min(maxMin, curMin)}' (${phase})`;
+
+      // 3D Ball physics and trajectories in holographic stage
+      const goal = events.find(e => Math.abs(e.minute - curMin) <= 5);
+      let posX = 50;
+      let posY = 50;
+      let posZ = 12;
+      let bubbleText = 'POSSESSION ⚽';
+      let statusStr = 'Midfield battle • Dynamic 3D ball tracking active';
+
+      if (goal) {
+        if (goal.team === 'home') {
+          posX = 86; posY = 46; posZ = 42;
+          bubbleText = `⚽ GOLAZO! ${goal.player} ${goal.minute}'`;
+          statusStr = `⚡ GOAL! ${homeTeam} scores! Spectacular strike by ${goal.player}!`;
+        } else {
+          posX = 14; posY = 46; posZ = 42;
+          bubbleText = `⚽ GOLAZO! ${goal.player} ${goal.minute}'`;
+          statusStr = `⚡ GOAL! ${awayTeam} scores! Masterclass finish by ${goal.player}!`;
+        }
+        if (ballSphere) ballSphere.classList.add('goal-strike');
+
+        if (eventsTicker && !eventsTicker.querySelector(`[data-min="${goal.minute}"]`)) {
+          const chip = document.createElement('div');
+          chip.className = 'holo-event-chip';
+          chip.dataset.min = goal.minute;
+          chip.textContent = `⚽ ${goal.minute}' ${goal.teamName}: ${goal.player}`;
+          eventsTicker.appendChild(chip);
+        }
+      } else {
+        if (ballSphere) ballSphere.classList.remove('goal-strike');
+        if (curMin < 10) {
+          posX = 50 + Math.sin(curMin) * 8;
+          posY = 50 + Math.cos(curMin) * 6;
+          posZ = 10;
+          bubbleText = 'KICKOFF ⚽';
+          statusStr = 'Kickoff • Opening minutes tactical feeling-out';
+        } else if (curMin % 20 < 10) {
+          posX = 65 + Math.sin(curMin * 0.8) * 16;
+          posY = 42 + Math.cos(curMin * 0.6) * 18;
+          posZ = 18;
+          bubbleText = `ATTACK 🔥 · ${homeTeam}`;
+          statusStr = `${homeTeam} pressing high into the attacking final third`;
+        } else {
+          posX = 35 - Math.sin(curMin * 0.8) * 16;
+          posY = 42 + Math.sin(curMin * 0.6) * 18;
+          posZ = 18;
+          bubbleText = `COUNTER ⚡ · ${awayTeam}`;
+          statusStr = `${awayTeam} surging forward with rapid counter-attacking pace`;
+        }
+      }
+
+      if (ballTrack) {
+        ballTrack.style.left = `${posX}%`;
+        ballTrack.style.top = `${posY}%`;
+        ballTrack.style.transform = `translate3d(0, 0, ${posZ}px)`;
+      }
+      if (actionBubble) actionBubble.textContent = bubbleText;
+      if (statusText) statusText.textContent = statusStr;
+    }
+
+    updateHoloFrame();
+
+    activeHoloInterval = setInterval(() => {
+      if (holoPaused) return;
+      curMin += 4 * holoSpeed;
+      updateHoloFrame();
+
+      if (curMin >= maxMin) {
+        clearInterval(activeHoloInterval);
+        activeHoloInterval = null;
+        if (matchObj) {
+          matchObj.isLive = false;
+          matchObj.isSimulated = true;
+        }
+        renderStageViewport();
+        if (stageKey) showStageAdvancementToast(stageKey);
+      }
+    }, 150);
+
+    if (pauseBtn) {
+      pauseBtn.onclick = () => {
+        holoPaused = !holoPaused;
+        pauseBtn.textContent = holoPaused ? '▶ RESUME' : '⏸ PAUSE';
+      };
+    }
+    if (speedBtn) {
+      speedBtn.onclick = () => {
+        holoSpeed = holoSpeed === 1 ? 2 : (holoSpeed === 2 ? 4 : 1);
+        speedBtn.textContent = `⚡ ${holoSpeed}x SPEED`;
+      };
+    }
+    if (skipBtn) {
+      skipBtn.onclick = () => {
+        curMin = maxMin;
+        updateHoloFrame();
+        if (activeHoloInterval) {
+          clearInterval(activeHoloInterval);
+          activeHoloInterval = null;
+        }
+        if (matchObj) {
+          matchObj.isLive = false;
+          matchObj.isSimulated = true;
+        }
+        renderStageViewport();
+        if (stageKey) showStageAdvancementToast(stageKey);
+      };
+    }
+  }
+
   function setupModalHandlers() {
     const closeBtn = document.getElementById('modal-close');
     const backdrop = document.getElementById('modal-backdrop');
     if (closeBtn) closeBtn.addEventListener('click', () => { document.getElementById('match-detail-modal').hidden = true; });
     if (backdrop) backdrop.addEventListener('click', () => { document.getElementById('match-detail-modal').hidden = true; });
+
+    // 3D Holographic Broadcast Modal Close Handlers
+    const holoCloseBtn = document.getElementById('holo-modal-close');
+    const holoBackdrop = document.getElementById('holo-modal-backdrop');
+    function closeHoloModal() {
+      const holoModal = document.getElementById('broadcast-hologram-modal');
+      if (holoModal) holoModal.hidden = true;
+      if (activeHoloInterval) {
+        clearInterval(activeHoloInterval);
+        activeHoloInterval = null;
+      }
+    }
+    if (holoCloseBtn) holoCloseBtn.addEventListener('click', closeHoloModal);
+    if (holoBackdrop) holoBackdrop.addEventListener('click', closeHoloModal);
+
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') document.getElementById('match-detail-modal').hidden = true;
+      if (e.key === 'Escape') {
+        const detailModal = document.getElementById('match-detail-modal');
+        if (detailModal) detailModal.hidden = true;
+        closeHoloModal();
+      }
+    });
+
+    // Global delegation for single match simulation buttons to trigger 3D broadcast
+    document.addEventListener('click', (e) => {
+      const simBtn = e.target.closest('.btn-sim-single');
+      if (simBtn) {
+        e.preventDefault();
+        const stageKey = simBtn.dataset.stage;
+        const matchIdx = parseInt(simBtn.dataset.idx, 10);
+        const state = tournamentState[activeTournKey];
+        const match = state?.[stageKey]?.[matchIdx];
+        if (match) {
+          open3DHolographicBroadcast(match.home, match.away, match, stageKey, matchIdx);
+          simulateSingleMatch(stageKey, matchIdx);
+        }
+      }
     });
 
     document.querySelectorAll('.chip').forEach(chip => {
@@ -7032,6 +7247,8 @@ enterBtn.addEventListener('click', () => {
   // ---------------------------------------------------------------------------
   // 15. DOM BOOTSTRAP
   // ---------------------------------------------------------------------------
+  window.open3DHolographicBroadcast = open3DHolographicBroadcast;
+
   document.addEventListener('DOMContentLoaded', () => {
     buildLogoCache();
     setupNavigation();
