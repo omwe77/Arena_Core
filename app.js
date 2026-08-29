@@ -1361,7 +1361,16 @@
   // ---------------------------------------------------------------------------
   // 6. UI VIEW SWITCHING & NAVIGATION
   // ---------------------------------------------------------------------------
-function switchView(targetViewId) {
+  function switchView(targetViewId) {
+    if (targetViewId === 'tactical-tracker') {
+      const state = tournamentState[activeTournKey];
+      const match = (state?.gf?.[0]) || (state?.sf?.[0]) || (state?.r16?.[0]) || (state?.groupMatches?.[0]) || (state?.matchdays?.[0]?.[0]);
+      const hTeam = match?.home || (activeTournKey === 'wc' ? 'ARGENTINA' : 'REAL MADRID');
+      const aTeam = match?.away || (activeTournKey === 'wc' ? 'FRANCE' : 'MAN CITY');
+      openProTacticalTracker(hTeam, aTeam, match);
+      return;
+    }
+
     // Make the tournament-sim panel visible for home/sim views
     const simPanel = document.getElementById('view-tournament-sim');
     const standingsPanel = document.getElementById('view-standings-view');
@@ -4642,10 +4651,19 @@ enterBtn.addEventListener('click', () => {
         ${pitch3dRadarHtml}
         ${eventsHtml}
 
-        <div class="match-card-actions">
-          ${!m.isSimulated && !m.isLive ? `<button type="button" class="btn-sim-single btn-3d-click" data-stage="${stage}" data-idx="${idx}">▶ SIMULATE MATCH</button>` : ''}
+        <div class="match-card-actions" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+          ${!m.isSimulated && !m.isLive ? `
+            <button type="button" class="btn-sim-single btn-3d-click" data-stage="${stage}" data-idx="${idx}">
+              <i class="fa-solid fa-crosshairs"></i> 🎯 TACTICAL TRACKER
+            </button>
+          ` : ''}
           ${m.isLive ? `<span class="live-pill">🔴 LIVE IN-PROGRESS</span>` : ''}
-          ${m.isSimulated ? `<span class="ft-pill">${ftBadgeText}</span>` : ''}
+          ${m.isSimulated ? `
+            <span class="ft-pill">${ftBadgeText}</span>
+            <button type="button" class="btn-reopen-tactical btn-3d-click" data-stage="${stage}" data-idx="${idx}" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:4px 8px;border-radius:4px;font-size:0.68rem;cursor:pointer;">
+              🎯 REPLAY TACTICS
+            </button>
+          ` : ''}
         </div>
       </div>
     `;
@@ -7042,6 +7060,18 @@ enterBtn.addEventListener('click', () => {
             openProTacticalTracker(match.home, match.away, match, `md_${mdIdx}`, midx);
             simulateSingleLeagueMatch(mdIdx, midx);
           }
+        }
+      }
+
+      const replayBtn = e.target.closest('.btn-reopen-tactical');
+      if (replayBtn) {
+        e.preventDefault();
+        const stageKey = replayBtn.dataset.stage;
+        const matchIdx = parseInt(replayBtn.dataset.idx, 10);
+        const state = tournamentState[activeTournKey];
+        const match = state?.[stageKey]?.[matchIdx];
+        if (match) {
+          openProTacticalTracker(match.home, match.away, match, stageKey, matchIdx);
         }
       }
     });
