@@ -6867,7 +6867,97 @@ enterBtn.addEventListener('click', () => {
   }
 
   // ---------------------------------------------------------------------------
-  // 13. DOM BOOTSTRAP
+  // 14. 3D INTERACTIVE CARD PARALLAX & SPECULAR GLOSS ENGINE
+  // ---------------------------------------------------------------------------
+  function init3DCardParallaxEngine() {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let activeCard = null;
+    let cardRect = null;
+    let glareEl = null;
+
+    function apply3DTilt(e) {
+      if (!activeCard || !cardRect) return;
+
+      const clientX = e.clientX;
+      const clientY = e.clientY;
+
+      const x = clientX - cardRect.left;
+      const y = clientY - cardRect.top;
+
+      const relX = Math.max(0, Math.min(1, x / cardRect.width));
+      const relY = Math.max(0, Math.min(1, y / cardRect.height));
+
+      // Calculate 3D tilt angles (smooth ±18 degrees)
+      const rotX = ((relY - 0.5) * -20).toFixed(2);
+      const rotY = ((relX - 0.5) * 20).toFixed(2);
+
+      activeCard.style.transform = `perspective(850px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.035, 1.035, 1.035)`;
+
+      if (glareEl) {
+        glareEl.style.background = `radial-gradient(circle at ${relX * 100}% ${relY * 100}%, rgba(255, 255, 255, 0.40) 0%, rgba(255, 255, 255, 0.08) 42%, transparent 78%)`;
+        glareEl.style.opacity = '1';
+      }
+    }
+
+    function reset3DTilt() {
+      if (!activeCard) return;
+      activeCard.style.transition = 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease';
+      activeCard.style.transform = 'perspective(850px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+
+      if (glareEl) {
+        glareEl.style.opacity = '0';
+      }
+
+      const cardToClear = activeCard;
+      setTimeout(() => {
+        if (cardToClear && cardToClear !== activeCard) {
+          cardToClear.style.transform = '';
+          cardToClear.style.transition = '';
+        }
+      }, 350);
+
+      activeCard = null;
+      cardRect = null;
+      glareEl = null;
+    }
+
+    // Global delegation for all interactive card elements
+    document.addEventListener('mouseover', (e) => {
+      const card = e.target.closest('.wc-nation-card, .single-stage-match-card, .fixture-card, .media-card, .champ-team-card, .champ-hero-stat-badge, .showcase-stat-card, .leader-item, .trophy-3d-stage');
+      if (!card) return;
+
+      activeCard = card;
+      cardRect = card.getBoundingClientRect();
+      activeCard.classList.add('card-3d-interactive');
+      activeCard.style.transition = 'transform 0.08s ease-out';
+
+      // Ensure specular glare element exists
+      glareEl = activeCard.querySelector('.card-3d-glare');
+      if (!glareEl && !activeCard.classList.contains('trophy-3d-stage')) {
+        glareEl = document.createElement('div');
+        glareEl.className = 'card-3d-glare';
+        activeCard.appendChild(glareEl);
+      }
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (activeCard) {
+        requestAnimationFrame(() => apply3DTilt(e));
+      }
+    });
+
+    document.addEventListener('mouseout', (e) => {
+      if (!activeCard) return;
+      const related = e.relatedTarget;
+      if (!related || !activeCard.contains(related)) {
+        reset3DTilt();
+      }
+    });
+  }
+
+  // ---------------------------------------------------------------------------
+  // 15. DOM BOOTSTRAP
   // ---------------------------------------------------------------------------
   document.addEventListener('DOMContentLoaded', () => {
     buildLogoCache();
@@ -6876,10 +6966,12 @@ enterBtn.addEventListener('click', () => {
     setupModalHandlers();
     setupCustomDrawModalHandlers();
     initMarioStrikerEngine();
+    init3DCardParallaxEngine();
     // Start on HOME view — selectTournament will set subView='home' via initTournamentState
     selectTournament('wc');
     switchView('tournament-home');
   });
 
 })();
+
 
