@@ -4509,6 +4509,7 @@ enterBtn.addEventListener('click', () => {
     }
 
     let liveTimerHtml = '';
+    let pitch3dRadarHtml = '';
     if (m.isLive) {
       const maxMin = m.hadExtraTime ? 120 : 90;
       const simMin = Math.min(maxMin, m.currentSimMinute || 0);
@@ -4525,6 +4526,77 @@ enterBtn.addEventListener('click', () => {
           </div>
           <div class="card-live-progress">
             <div class="card-live-progress-fill" style="width: ${pct}%"></div>
+          </div>
+        </div>
+      `;
+
+      // Calculate 3D Ball Coordinates (X, Y, Z) and Tactical Radar Action
+      const goalEvent = (m.events || []).find(e => Math.abs(e.minute - simMin) <= 6);
+      const isGoalNow = !!goalEvent;
+
+      let ballX = 50;
+      let ballY = 50;
+      let ballZ = 4;
+      let actionLabel = '📍 Midfield Possession Battle';
+
+      if (goalEvent) {
+        if (goalEvent.team === 'home') {
+          // Home goal: ball curves into away net on right
+          ballX = 93;
+          ballY = 46;
+          ballZ = 22;
+          actionLabel = `⚽ GOAL! ${goalEvent.player} (${goalEvent.minute}') — ${m.home}`;
+        } else {
+          // Away goal: ball curves into home net on left
+          ballX = 7;
+          ballY = 46;
+          ballZ = 22;
+          actionLabel = `⚽ GOAL! ${goalEvent.player} (${goalEvent.minute}') — ${m.away}`;
+        }
+      } else if (simMin < 10) {
+        ballX = 50 + Math.sin(simMin * 0.8) * 8;
+        ballY = 50 + Math.cos(simMin * 0.8) * 12;
+        ballZ = 3;
+        actionLabel = '📍 Kickoff & Midfield Opening Exchanges';
+      } else if (simMin % 24 < 12) {
+        // Home attacking towards right
+        const prog = (simMin % 12) / 12;
+        ballX = 55 + prog * 30 + Math.sin(simMin * 1.2) * 5;
+        ballY = 32 + Math.cos(simMin * 0.9) * 36;
+        ballZ = 8 + Math.sin(simMin * 1.5) * 6;
+        actionLabel = `⚡ Attacking Build-up into Final Third · ${m.home}`;
+      } else {
+        // Away attacking towards left
+        const prog = ((simMin - 12) % 12) / 12;
+        ballX = 45 - prog * 30 - Math.sin(simMin * 1.2) * 5;
+        ballY = 32 + Math.sin(simMin * 0.9) * 36;
+        ballZ = 8 + Math.cos(simMin * 1.5) * 6;
+        actionLabel = `⚡ Counter Attack & Wing Penetration · ${m.away}`;
+      }
+
+      pitch3dRadarHtml = `
+        <div class="card-3d-pitch-radar" aria-label="3D Match Ball Radar">
+          <div class="pitch-3d-turf">
+            <div class="pitch-3d-lines">
+              <div class="pitch-3d-center-circle"></div>
+              <div class="pitch-3d-center-spot"></div>
+              <div class="pitch-3d-halfway"></div>
+              <div class="pitch-3d-box-left"></div>
+              <div class="pitch-3d-box-right"></div>
+              <div class="pitch-3d-goal-left"></div>
+              <div class="pitch-3d-goal-right"></div>
+            </div>
+            <div class="pitch-3d-ball-wrapper" style="left: ${ballX.toFixed(1)}%; top: ${ballY.toFixed(1)}%; transform: translate3d(0, 0, ${ballZ.toFixed(1)}px);">
+              <div class="pitch-3d-ball-element ${isGoalNow ? 'goal-strike' : ''}">
+                <div class="ball-pentagons"></div>
+              </div>
+              <div class="pitch-3d-ball-shadow"></div>
+              ${isGoalNow ? `<div class="pitch-3d-goal-flash">⚽ GOLAZO!</div>` : ''}
+            </div>
+          </div>
+          <div class="pitch-3d-tactical-banner">
+            <span class="pitch-3d-live-dot"></span>
+            <span class="pitch-3d-tactical-text">${actionLabel}</span>
           </div>
         </div>
       `;
@@ -4567,10 +4639,11 @@ enterBtn.addEventListener('click', () => {
           <span class="b-team-score">${awayScore}</span>
         </div>
         ${liveTimerHtml}
+        ${pitch3dRadarHtml}
         ${eventsHtml}
 
         <div class="match-card-actions">
-          ${!m.isSimulated && !m.isLive ? `<button type="button" class="btn-sim-single" data-stage="${stage}" data-idx="${idx}">▶ SIMULATE MATCH</button>` : ''}
+          ${!m.isSimulated && !m.isLive ? `<button type="button" class="btn-sim-single btn-3d-click" data-stage="${stage}" data-idx="${idx}">▶ SIMULATE MATCH</button>` : ''}
           ${m.isLive ? `<span class="live-pill">🔴 LIVE IN-PROGRESS</span>` : ''}
           ${m.isSimulated ? `<span class="ft-pill">${ftBadgeText}</span>` : ''}
         </div>
