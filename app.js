@@ -283,6 +283,115 @@
     'south korea': 'https://flagcdn.com/w40/kr.png'
   };
 
+  // Master list of 105+ global nations across all 6 FIFA confederations
+  const WC_ALL_NATIONS = [
+    // UEFA (Europe) — 34 nations
+    { name: 'ARGENTINA',    conf: 'CONMEBOL', flag: 'ar', str: 95 },
+    { name: 'FRANCE',       conf: 'UEFA',     flag: 'fr', str: 93 },
+    { name: 'BRAZIL',       conf: 'CONMEBOL', flag: 'br', str: 94 },
+    { name: 'ENGLAND',      conf: 'UEFA',     flag: 'gb-eng', str: 88 },
+    { name: 'SPAIN',        conf: 'UEFA',     flag: 'es', str: 90 },
+    { name: 'GERMANY',      conf: 'UEFA',     flag: 'de', str: 87 },
+    { name: 'PORTUGAL',     conf: 'UEFA',     flag: 'pt', str: 89 },
+    { name: 'NETHERLANDS',  conf: 'UEFA',     flag: 'nl', str: 86 },
+    { name: 'ITALY',        conf: 'UEFA',     flag: 'it', str: 85 },
+    { name: 'BELGIUM',      conf: 'UEFA',     flag: 'be', str: 83 },
+    { name: 'CROATIA',      conf: 'UEFA',     flag: 'hr', str: 82 },
+    { name: 'DENMARK',      conf: 'UEFA',     flag: 'dk', str: 80 },
+    { name: 'SWITZERLAND',  conf: 'UEFA',     flag: 'ch', str: 81 },
+    { name: 'AUSTRIA',      conf: 'UEFA',     flag: 'at', str: 79 },
+    { name: 'POLAND',       conf: 'UEFA',     flag: 'pl', str: 77 },
+    { name: 'TURKEY',       conf: 'UEFA',     flag: 'tr', str: 78 },
+    { name: 'UKRAINE',      conf: 'UEFA',     flag: 'ua', str: 76 },
+    { name: 'SERBIA',       conf: 'UEFA',     flag: 'rs', str: 75 },
+    { name: 'SCOTLAND',     conf: 'UEFA',     flag: 'gb-sct', str: 73 },
+    { name: 'CZECHIA',      conf: 'UEFA',     flag: 'cz', str: 74 },
+    { name: 'HUNGARY',      conf: 'UEFA',     flag: 'hu', str: 72 },
+    { name: 'SLOVAKIA',     conf: 'UEFA',     flag: 'sk', str: 70 },
+    { name: 'ROMANIA',      conf: 'UEFA',     flag: 'ro', str: 69 },
+    { name: 'NORWAY',       conf: 'UEFA',     flag: 'no', str: 74 },
+    { name: 'SWEDEN',       conf: 'UEFA',     flag: 'se', str: 75 },
+    { name: 'WALES',        conf: 'UEFA',     flag: 'gb-wls', str: 69 },
+    { name: 'SLOVENIA',     conf: 'UEFA',     flag: 'si', str: 67 },
+    { name: 'ALBANIA',      conf: 'UEFA',     flag: 'al', str: 64 },
+    { name: 'GEORGIA',      conf: 'UEFA',     flag: 'ge', str: 65 },
+    { name: 'GREECE',       conf: 'UEFA',     flag: 'gr', str: 71 },
+    { name: 'IRELAND',      conf: 'UEFA',     flag: 'ie', str: 68 },
+    { name: 'FINLAND',      conf: 'UEFA',     flag: 'fi', str: 66 },
+    { name: 'ICELAND',      conf: 'UEFA',     flag: 'is', str: 63 },
+    { name: 'BOSNIA',       conf: 'UEFA',     flag: 'ba', str: 66 },
+
+    // CONMEBOL (South America) — 10 nations
+    { name: 'URUGUAY',      conf: 'CONMEBOL', flag: 'uy', str: 82 },
+    { name: 'COLOMBIA',     conf: 'CONMEBOL', flag: 'co', str: 81 },
+    { name: 'ECUADOR',      conf: 'CONMEBOL', flag: 'ec', str: 76 },
+    { name: 'CHILE',        conf: 'CONMEBOL', flag: 'cl', str: 74 },
+    { name: 'PERU',         conf: 'CONMEBOL', flag: 'pe', str: 72 },
+    { name: 'VENEZUELA',    conf: 'CONMEBOL', flag: 've', str: 71 },
+    { name: 'PARAGUAY',     conf: 'CONMEBOL', flag: 'py', str: 70 },
+    { name: 'BOLIVIA',      conf: 'CONMEBOL', flag: 'bo', str: 62 },
+
+    // CONCACAF (North/Central America) — 13 nations
+    { name: 'USA',          conf: 'CONCACAF', flag: 'us', str: 83 },
+    { name: 'MEXICO',       conf: 'CONCACAF', flag: 'mx', str: 81 },
+    { name: 'CANADA',       conf: 'CONCACAF', flag: 'ca', str: 79 },
+    { name: 'JAMAICA',      conf: 'CONCACAF', flag: 'jm', str: 67 },
+    { name: 'COSTA RICA',   conf: 'CONCACAF', flag: 'cr', str: 70 },
+    { name: 'PANAMA',       conf: 'CONCACAF', flag: 'pa', str: 69 },
+    { name: 'HONDURAS',     conf: 'CONCACAF', flag: 'hn', str: 64 },
+    { name: 'EL SALVADOR',  conf: 'CONCACAF', flag: 'sv', str: 62 },
+    { name: 'HAITI',        conf: 'CONCACAF', flag: 'ht', str: 60 },
+    { name: 'TRINIDAD & TOBAGO', conf: 'CONCACAF', flag: 'tt', str: 59 },
+    { name: 'GUATEMALA',    conf: 'CONCACAF', flag: 'gt', str: 58 },
+    { name: 'CURACAO',      conf: 'CONCACAF', flag: 'cw', str: 57 },
+    { name: 'CUBA',         conf: 'CONCACAF', flag: 'cu', str: 55 },
+
+    // CAF (Africa) — 18 nations
+    { name: 'MOROCCO',      conf: 'CAF',      flag: 'ma', str: 85 },
+    { name: 'SENEGAL',      conf: 'CAF',      flag: 'sn', str: 82 },
+    { name: 'NIGERIA',      conf: 'CAF',      flag: 'ng', str: 80 },
+    { name: 'EGYPT',        conf: 'CAF',      flag: 'eg', str: 79 },
+    { name: 'CAMEROON',     conf: 'CAF',      flag: 'cm', str: 77 },
+    { name: 'IVORY COAST',  conf: 'CAF',      flag: 'ci', str: 78 },
+    { name: 'GHANA',        conf: 'CAF',      flag: 'gh', str: 75 },
+    { name: 'TUNISIA',      conf: 'CAF',      flag: 'tn', str: 74 },
+    { name: 'ALGERIA',      conf: 'CAF',      flag: 'dz', str: 76 },
+    { name: 'MALI',         conf: 'CAF',      flag: 'ml', str: 70 },
+    { name: 'SOUTH AFRICA', conf: 'CAF',      flag: 'za', str: 69 },
+    { name: 'DR CONGO',     conf: 'CAF',      flag: 'cd', str: 67 },
+    { name: 'BURKINA FASO', conf: 'CAF',      flag: 'bf', str: 68 },
+    { name: 'GUINEA',       conf: 'CAF',      flag: 'gn', str: 66 },
+    { name: 'CAPE VERDE',   conf: 'CAF',      flag: 'cv', str: 67 },
+    { name: 'ZAMBIA',       conf: 'CAF',      flag: 'zm', str: 64 },
+    { name: 'ANGOLA',       conf: 'CAF',      flag: 'ao', str: 63 },
+
+    // AFC (Asia) — 17 nations
+    { name: 'JAPAN',        conf: 'AFC',      flag: 'jp', str: 84 },
+    { name: 'SOUTH KOREA',  conf: 'AFC',      flag: 'kr', str: 82 },
+    { name: 'SAUDI ARABIA', conf: 'AFC',      flag: 'sa', str: 76 },
+    { name: 'AUSTRALIA',    conf: 'AFC',      flag: 'au', str: 75 },
+    { name: 'IRAN',         conf: 'AFC',      flag: 'ir', str: 76 },
+    { name: 'QATAR',        conf: 'AFC',      flag: 'qa', str: 71 },
+    { name: 'IRAQ',         conf: 'AFC',      flag: 'iq', str: 69 },
+    { name: 'UZBEKISTAN',   conf: 'AFC',      flag: 'uz', str: 68 },
+    { name: 'JORDAN',       conf: 'AFC',      flag: 'jo', str: 66 },
+    { name: 'UAE',          conf: 'AFC',      flag: 'ae', str: 68 },
+    { name: 'BAHRAIN',      conf: 'AFC',      flag: 'bh', str: 64 },
+    { name: 'OMAN',         conf: 'AFC',      flag: 'om', str: 65 },
+    { name: 'CHINA',        conf: 'AFC',      flag: 'cn', str: 66 },
+    { name: 'INDONESIA',    conf: 'AFC',      flag: 'id', str: 64 },
+    { name: 'THAILAND',     conf: 'AFC',      flag: 'th', str: 63 },
+    { name: 'VIETNAM',      conf: 'AFC',      flag: 'vn', str: 62 },
+    { name: 'INDIA',        conf: 'AFC',      flag: 'in', str: 60 },
+
+    // OFC (Oceania) — 5 nations
+    { name: 'NEW ZEALAND',  conf: 'OFC',      flag: 'nz', str: 64 },
+    { name: 'FIJI',         conf: 'OFC',      flag: 'fj', str: 52 },
+    { name: 'TAHITI',       conf: 'OFC',      flag: 'pf', str: 48 },
+    { name: 'NEW CALEDONIA',conf: 'OFC',      flag: 'nc', str: 50 },
+    { name: 'SOLOMON ISLANDS', conf: 'OFC',   flag: 'sb', str: 47 }
+  ];
+
   const TEAM_LOGO_CACHE = {};
   function buildLogoCache() {
     function registerLogo(key, logoUrl) {
@@ -298,6 +407,14 @@
     Object.keys(OFFICIAL_LOGOS).forEach(k => {
       registerLogo(k, OFFICIAL_LOGOS[k]);
     });
+
+    if (typeof WC_ALL_NATIONS !== 'undefined' && Array.isArray(WC_ALL_NATIONS)) {
+      WC_ALL_NATIONS.forEach(n => {
+        if (n.name && n.flag) {
+          registerLogo(n.name, `https://flagcdn.com/w40/${n.flag}.png`);
+        }
+      });
+    }
 
     if (typeof window !== 'undefined' && window.REAL_TOURNAMENTS_DATA) {
       Object.keys(window.REAL_TOURNAMENTS_DATA).forEach(tKey => {
@@ -584,6 +701,7 @@
   let activeTournKey = 'wc';
   let activeStageFilter = 'all';
   const tournamentState = {};
+  let wcCustomTeams = null;
 
   // Global Simulation Timers & Animation Registry
   let activeSimulationTimer = null;
@@ -646,6 +764,7 @@
   }
 
   const TEAM_STAR_PLAYERS = {
+    // --- NATIONAL TEAMS (WORLD CUP, EURO 2024, COPA AMÉRICA) ---
     'ARGENTINA': ['L. Messi', 'J. Álvarez', 'L. Martínez', 'A. Di María', 'R. De Paul', 'E. Fernández', 'A. Mac Allister'],
     'FRANCE': ['K. Mbappé', 'A. Griezmann', 'O. Giroud', 'O. Dembélé', 'E. Camavinga', 'A. Tchouaméni', 'R. Kolo Muani', 'M. Thuram'],
     'BRAZIL': ['Vinícius Jr.', 'Rodrygo', 'Neymar Jr.', 'Richarlison', 'Raphinha', 'Casemiro', 'Lucas Paquetá', 'Endrick'],
@@ -665,6 +784,7 @@
     'COLOMBIA': ['L. Díaz', 'J. Rodríguez', 'J. Arias', 'R. Borré', 'J. Córdoba', 'R. Rios'],
     'SENEGAL': ['S. Mané', 'N. Jackson', 'I. Sarr', 'K. Diatta', 'P. Gueye'],
     'KOREA REPUBLIC': ['Son Heung-min', 'Lee Kang-in', 'Hwang Hee-chan', 'Cho Gue-sung'],
+    'SOUTH KOREA': ['Son Heung-min', 'Lee Kang-in', 'Hwang Hee-chan', 'Cho Gue-sung'],
     'SWITZERLAND': ['G. Xhaka', 'B. Embolo', 'X. Shaqiri', 'M. Akanji', 'R. Vargas'],
     'DENMARK': ['C. Eriksen', 'R. Højlund', 'J. Wind', 'P. Højbjerg', 'M. Damsgaard'],
     'SERBIA': ['A. Mitrović', 'D. Vlahović', 'D. Tadić', 'S. Milinković-Savić', 'F. Kostić'],
@@ -672,57 +792,216 @@
     'AUSTRIA': ['M. Sabitzer', 'M. Arnautović', 'C. Baumgartner', 'K. Laimer', 'P. Wimmer'],
     'UKRAINE': ['A. Dovbyk', 'M. Mudryk', 'V. Tsygankov', 'R. Yaremchuk', 'O. Zinchenko'],
     'POLAND': ['R. Lewandowski', 'P. Zieliński', 'K. Świderski', 'N. Zalewski', 'K. Piątek'],
-    'CHILE': ['A. Sánchez', 'E. Vargas', 'B. Brereton', 'A. Vidal'],
-    'ECUADOR': ['E. Valencia', 'M. Caicedo', 'K. Rodríguez', 'P. Estupiñán'],
-    'CANADA': ['J. David', 'A. Davies', 'C. Larin', 'T. Buchanan'],
+    'CHILE': ['A. Sánchez', 'E. Vargas', 'B. Brereton', 'A. Vidal', 'D. Osorio'],
+    'ECUADOR': ['E. Valencia', 'M. Caicedo', 'K. Rodríguez', 'P. Estupiñán', 'K. Páez'],
+    'CANADA': ['J. David', 'A. Davies', 'C. Larin', 'T. Buchanan', 'I. Koné'],
     'NIGERIA': ['V. Osimhen', 'A. Lookman', 'V. Boniface', 'S. Chukwueze', 'A. Iwobi'],
-    'GHANA': ['M. Kudus', 'I. Williams', 'J. Ayew', 'T. Partey'],
+    'GHANA': ['M. Kudus', 'I. Williams', 'J. Ayew', 'T. Partey', 'A. Semenyo'],
     'EGYPT': ['M. Salah', 'Trézéguet', 'Mostafa Mohamed', 'O. Marmoush'],
-    'ALGERIA': ['R. Mahrez', 'B. Bounedjah', 'A. Gouiri', 'H. Aouar'],
-    'IVORY COAST': ['S. Haller', 'F. Kessié', 'S. Adingra', 'N. Pépé'],
+    'ALGERIA': ['R. Mahrez', 'B. Bounedjah', 'A. Gouiri', 'H. Aouar', 'I. Bennacer'],
+    'IVORY COAST': ['S. Haller', 'F. Kessié', 'S. Adingra', 'N. Pépé', 'O. Diakité'],
     'CAMEROON': ['V. Aboubakar', 'B. Mbeumo', 'K. Toko Ekambi', 'A. Zambo Anguissa'],
-    'AUSTRALIA': ['M. Duke', 'C. Goodwin', 'J. Irvine', 'M. Boyle'],
-    'SAUDI ARABIA': ['S. Al-Dawsari', 'S. Al-Shehri', 'F. Al-Buraikan'],
-    'IRAN': ['M. Taremi', 'S. Azmoun', 'A. Jahanbakhsh'],
-    'PARAGUAY': ['M. Almirón', 'A. Sanabria', 'J. Enciso'],
-    'PERU': ['G. Lapadula', 'P. Guerrero', 'E. Flores'],
-    'VENEZUELA': ['S. Rondón', 'Y. Soteldo', 'D. Machís'],
-    'SCOTLAND': ['S. McTominay', 'J. McGinn', 'C. Adams', 'A. Robertson'],
-    'WALES': ['B. Johnson', 'D. James', 'H. Wilson', 'K. Moore'],
-    'NORWAY': ['E. Haaland', 'M. Ødegaard', 'A. Sørloth', 'A. Nusa'],
-    'SWEDEN': ['A. Isak', 'V. Gyökeres', 'D. Kulusevski', 'E. Forsberg'],
-    'HUNGARY': ['D. Szoboszlai', 'B. Varga', 'R. Sallai'],
-    'CZECH REPUBLIC': ['P. Schick', 'T. Souček', 'L. Provod'],
-    'GEORGIA': ['K. Kvaratskhelia', 'G. Mikautadze', 'O. Kiteishvili'],
-    'SLOVENIA': ['B. Šeško', 'A. Šporar', 'J. Oblak'],
-    'SLOVAKIA': ['L. Haraslín', 'I. Schranz', 'S. Lobotka'],
-    'ROMANIA': ['R. Marin', 'D. Man', 'N. Stanciu'],
-    'REAL MADRID': ['Vinícius Jr.', 'K. Mbappé', 'J. Bellingham', 'Rodrygo', 'L. Modrić', 'F. Valverde', 'Brahim'],
-    'BARCELONA': ['R. Lewandowski', 'L. Yamal', 'Raphinha', 'Pedri', 'Gavi', 'F. Torres', 'Dani Olmo'],
-    'GIRONA': ['A. Dovbyk', 'V. Tsygankov', 'Sávio', 'Iván Martín', 'C. Stuani', 'Y. Herrera'],
-    'ATLETICO MADRID': ['A. Griezmann', 'J. Álvarez', 'A. Sørloth', 'R. De Paul', 'M. Llorente', 'Á. Correa'],
+    'AUSTRALIA': ['M. Duke', 'C. Goodwin', 'J. Irvine', 'M. Boyle', 'K. Baccus'],
+    'SAUDI ARABIA': ['S. Al-Dawsari', 'S. Al-Shehri', 'F. Al-Buraikan', 'A. Ghareeb'],
+    'IRAN': ['M. Taremi', 'S. Azmoun', 'A. Jahanbakhsh', 'M. Mohebi'],
+    'PARAGUAY': ['M. Almirón', 'A. Sanabria', 'J. Enciso', 'R. Sosa', 'D. Gómez'],
+    'PERU': ['G. Lapadula', 'P. Guerrero', 'E. Flores', 'P. Quispe'],
+    'VENEZUELA': ['S. Rondón', 'Y. Soteldo', 'D. Machís', 'J. Savarino', 'E. Bello'],
+    'BOLIVIA': ['R. Vaca', 'C. Algarañaz', 'M. Terceros', 'H. Vaca'],
+    'PANAMA': ['E. Bárcenas', 'J. Fajardo', 'I. Díaz', 'C. Blackman'],
+    'JAMAICA': ['M. Antonio', 'L. Bailey', 'S. Nicholson', 'D. Gray'],
+    'COSTA RICA': ['J. Campbell', 'M. Ugalde', 'A. Contreras', 'J. Vargas'],
+    'ALBANIA': ['N. Bajrami', 'A. Broja', 'K. Asllani', 'J. Asani'],
+    'GEORGIA': ['K. Kvaratskhelia', 'G. Mikautadze', 'O. Kiteishvili', 'G. Chakvetadze'],
+    'SLOVENIA': ['B. Šeško', 'A. Šporar', 'J. Oblak', 'P. Stojanović'],
+    'SLOVAKIA': ['L. Haraslín', 'I. Schranz', 'S. Lobotka', 'O. Duda'],
+    'ROMANIA': ['R. Marin', 'D. Man', 'N. Stanciu', 'D. Drăguș'],
+    'CZECHIA': ['P. Schick', 'T. Souček', 'L. Provod', 'A. Hložek'],
+    'CZECH REPUBLIC': ['P. Schick', 'T. Souček', 'L. Provod', 'A. Hložek'],
+    'SCOTLAND': ['S. McTominay', 'J. McGinn', 'C. Adams', 'A. Robertson', 'L. Shankland'],
+    'HUNGARY': ['D. Szoboszlai', 'B. Varga', 'R. Sallai', 'M. Kerkez'],
+
+    // --- PREMIER LEAGUE ---
+    'MAN CITY': ['E. Haaland', 'K. De Bruyne', 'P. Foden', 'Bernardo Silva', 'Rodri', 'J. Doku', 'J. Grealish'],
+    'MANCHESTER CITY': ['E. Haaland', 'K. De Bruyne', 'P. Foden', 'Bernardo Silva', 'Rodri', 'J. Doku', 'J. Grealish'],
+    'ARSENAL': ['B. Saka', 'K. Havertz', 'M. Ødegaard', 'G. Martinelli', 'D. Rice', 'L. Trossard', 'Gabriel Jesus'],
+    'LIVERPOOL': ['M. Salah', 'L. Díaz', 'D. Núñez', 'C. Gakpo', 'D. Szoboszlai', 'Diogo Jota', 'A. Mac Allister'],
+    'ASTON VILLA': ['O. Watkins', 'L. Bailey', 'J. McGinn', 'M. Diaby', 'Douglas Luiz', 'Y. Tielemans', 'J. Durán'],
+    'TOTTENHAM': ['Son Heung-min', 'Richarlison', 'D. Kulusevski', 'J. Maddison', 'B. Johnson', 'P. Sarr'],
+    'CHELSEA': ['C. Palmer', 'N. Jackson', 'R. Sterling', 'M. Mudryk', 'E. Fernández', 'M. Caicedo', 'C. Nkunku'],
+    'NEWCASTLE': ['A. Isak', 'A. Gordon', 'Callum Wilson', 'Bruno Guimarães', 'J. Murphy', 'Joelinton'],
+    'MAN UNITED': ['Bruno Fernandes', 'R. Højlund', 'A. Garnacho', 'M. Rashford', 'Casemiro', 'Antony', 'Kobbie Mainoo'],
+    'MANCHESTER UNITED': ['Bruno Fernandes', 'R. Højlund', 'A. Garnacho', 'M. Rashford', 'Casemiro', 'Antony', 'Kobbie Mainoo'],
+    'WEST HAM': ['J. Bowen', 'M. Kudus', 'Lucas Paquetá', 'M. Antonio', 'T. Souček', 'J. Ward-Prowse'],
+    'BRIGHTON': ['J. Pedro', 'S. Adingra', 'K. Mitoma', 'D. Welbeck', 'E. Ferguson', 'P. Groß'],
+    'BOURNEMOUTH': ['D. Solanke', 'A. Semenyo', 'J. Kluivert', 'M. Tavernier', 'E. Ünal'],
+    'CRYSTAL PALACE': ['E. Eze', 'M. Olise', 'J. Mateta', 'J. Ayew', 'A. Wharton'],
+    'WOLVES': ['M. Cunha', 'Hwang Hee-chan', 'P. Neto', 'P. Sarabia', 'J. Gomes'],
+    'FULHAM': ['Rodrigo Muniz', 'R. Jiménez', 'Willian', 'Alex Iwobi', 'A. Pereira', 'H. Wilson'],
+    'EVERTON': ['D. Calvert-Lewin', 'A. Doucouré', 'J. Harrison', 'Dwight McNeil', 'I. Ndiaye'],
+    'BRENTFORD': ['I. Toney', 'B. Mbeumo', 'Y. Wissa', 'K. Schade', 'M. Jensen'],
+    'NOTTINGHAM FOREST': ['C. Wood', 'T. Awoniyi', 'M. Gibbs-White', 'A. Elanga', 'Callum Hudson-Odoi'],
+    'LEICESTER CITY': ['J. Vardy', 'P. Daka', 'S. Mavididi', 'K. Dewsbury-Hall', 'A. Fatawu'],
+    'IPSWICH TOWN': ['C. Chaplin', 'G. Hirst', 'N. Broadhead', 'O. Hutchinson', 'L. Davis'],
+    'SOUTHAMPTON': ['A. Armstrong', 'C. Adams', 'R. Fraser', 'S. Edozie', 'W. Smallbone'],
+
+    // --- LA LIGA ---
+    'REAL MADRID': ['Vinícius Jr.', 'K. Mbappé', 'J. Bellingham', 'Rodrygo', 'L. Modrić', 'F. Valverde', 'Brahim Díaz', 'Arda Güler'],
+    'BARCELONA': ['R. Lewandowski', 'L. Yamal', 'Raphinha', 'Pedri', 'Dani Olmo', 'Gavi', 'F. Torres', 'F. de Jong'],
+    'GIRONA': ['A. Dovbyk', 'V. Tsygankov', 'Sávio', 'Iván Martín', 'C. Stuani', 'Y. Herrera', 'Portu'],
+    'ATLETICO MADRID': ['A. Griezmann', 'J. Álvarez', 'A. Sørloth', 'R. De Paul', 'M. Llorente', 'Á. Correa', 'Koke'],
     'ATHLETIC CLUB': ['Nico Williams', 'Iñaki Williams', 'O. Sancet', 'G. Guruzeta', 'A. Berenguer', 'Dani Vivian'],
-    'REAL SOCIEDAD': ['T. Kubo', 'M. Oyarzabal', 'B. Méndez', 'M. Zubimendi', 'A. Barrenetxea'],
-    'REAL BETIS': ['Isco', 'Ayoze Pérez', 'N. Fekir', 'P. Fornals', 'Willian José'],
-    'VILLARREAL': ['G. Moreno', 'Á. Baena', 'Y. Pino', 'Gonçalo Guedes', 'D. Parejo'],
-    'SEVILLA': ['Y. En-Nesyri', 'L. Ocampos', 'I. Romero', 'D. Lukebakio', 'Suso'],
-    'VALENCIA': ['H. Duro', 'J. Guerra', 'D. López', 'Pepelu', 'S. Canós'],
-    'MANCHESTER CITY': ['E. Haaland', 'K. De Bruyne', 'P. Foden', 'B. Silva', 'Rodri', 'J. Doku'],
-    'BAYERN MUNICH': ['H. Kane', 'J. Musiala', 'L. Sané', 'S. Gnabry', 'T. Müller', 'K. Coman'],
-    'PARIS SAINT-GERMAIN': ['O. Dembélé', 'B. Barcola', 'R. Kolo Muani', 'Vitinha', 'Warren Zaïre-Emery'],
-    'ARSENAL': ['B. Saka', 'K. Havertz', 'M. Ødegaard', 'G. Martinelli', 'D. Rice', 'L. Trossard'],
-    'LIVERPOOL': ['M. Salah', 'L. Díaz', 'D. Núñez', 'C. Gakpo', 'D. Szoboszlai', 'Diogo Jota'],
-    'INTER': ['L. Martínez', 'M. Thuram', 'N. Barella', 'H. Çalhanoğlu', 'F. Dimarco'],
-    'JUVENTUS': ['D. Vlahović', 'F. Chiesa', 'K. Yildiz', 'T. Koopmeiners', 'D. Luiz'],
-    'BAYER LEVERKUSEN': ['F. Wirtz', 'V. Boniface', 'A. Grimaldo', 'J. Frimpong', 'G. Xhaka']
+    'REAL SOCIEDAD': ['T. Kubo', 'M. Oyarzabal', 'B. Méndez', 'M. Zubimendi', 'A. Barrenetxea', 'U. Sadiq'],
+    'REAL BETIS': ['Isco', 'Ayoze Pérez', 'N. Fekir', 'P. Fornals', 'Willian José', 'Vitor Roque'],
+    'VILLARREAL': ['G. Moreno', 'Á. Baena', 'Y. Pino', 'Gonçalo Guedes', 'D. Parejo', 'A. Pérez'],
+    'VALENCIA': ['H. Duro', 'J. Guerra', 'D. López', 'Pepelu', 'S. Canós', 'R. Yaremchuk'],
+    'ALAVES': ['Samu Omorodion', 'Kike García', 'Luis Rioja', 'C. Benavídez', 'A. Guevara'],
+    'OSASUNA': ['A. Budimir', 'Moi Gómez', 'Rubén García', 'Raúl García', 'Aimar Oroz'],
+    'GETAFE': ['Borja Mayoral', 'Mason Greenwood', 'N. Maksimović', 'J. Mata', 'Óscar Rodríguez'],
+    'CELTA VIGO': ['Iago Aspas', 'J. Strand Larsen', 'J. Bamba', 'F. Beltrán', 'W. Swedberg'],
+    'SEVILLA': ['Y. En-Nesyri', 'L. Ocampos', 'I. Romero', 'D. Lukebakio', 'Suso', 'Saúl'],
+    'MALLORCA': ['V. Muriqi', 'C. Larin', 'Dani Rodríguez', 'Antonio Sánchez', 'A. Prats'],
+    'LAS PALMAS': ['Kirian Rodríguez', 'Munir', 'S. Sandro', 'Moleiro', 'Javi Muñoz'],
+    'RAYO VALLECANO': ['Á. García', 'R. Falcao', 'I. Palazón', 'R. Nteka', 'S. Camello'],
+    'LEGANES': ['D. Raba', 'M. de la Fuente', 'J. Cruz', 'S. Cissé'],
+    'VALLADOLID': ['M. Sylla', 'M. André', 'Raúl Moro', 'Kike Pérez'],
+    'ESPANYOL': ['Javi Puado', 'M. Braithwaite', 'Pere Milla', 'K. Bare'],
+
+    // --- SERIE A ---
+    'INTER': ['L. Martínez', 'M. Thuram', 'N. Barella', 'H. Çalhanoğlu', 'F. Dimarco', 'D. Dumfries', 'M. Taremi'],
+    'INTER MILAN': ['L. Martínez', 'M. Thuram', 'N. Barella', 'H. Çalhanoğlu', 'F. Dimarco', 'D. Dumfries', 'M. Taremi'],
+    'AC MILAN': ['R. Leão', 'C. Pulisic', 'Á. Morata', 'T. Reijnders', 'T. Hernández', 'S. Chukwueze', 'R. Loftus-Cheek'],
+    'JUVENTUS': ['D. Vlahović', 'K. Yildiz', 'T. Koopmeiners', 'D. Luiz', 'F. Conceição', 'N. González', 'M. Locatelli'],
+    'ATALANTA': ['G. Scamacca', 'A. Lookman', 'C. De Ketelaere', 'M. Retegui', 'Éderson', 'M. Pašalić'],
+    'BOLOGNA': ['J. Zirkzee', 'R. Orsolini', 'L. Ferguson', 'A. Saelemaekers', 'D. Ndoye'],
+    'AS ROMA': ['P. Dybala', 'A. Dovbyk', 'M. Soulé', 'L. Pellegrini', 'S. El Shaarawy', 'B. Cristante'],
+    'ROMA': ['P. Dybala', 'A. Dovbyk', 'M. Soulé', 'L. Pellegrini', 'S. El Shaarawy', 'B. Cristante'],
+    'LAZIO': ['C. Immobile', 'M. Zaccagni', 'T. Castellanos', 'F. Anderson', 'G. Isaksen'],
+    'FIORENTINA': ['N. González', 'M. Kean', 'L. Beltrán', 'A. Guðmundsson', 'A. Colpani'],
+    'TORINO': ['D. Zapata', 'A. Sanabria', 'N. Vlašić', 'R. Bellanova', 'C. Adams'],
+    'NAPOLI': ['K. Kvaratskhelia', 'R. Lukaku', 'V. Osimhen', 'M. Politano', 'G. Raspadori', 'A. McTominay'],
+    'GENOA': ['A. Guðmundsson', 'M. Retegui', 'Vitinha', 'R. Malinovskyi'],
+    'MONZA': ['M. Đurić', 'A. Colpani', 'D. Maldini', 'M. Pessina'],
+    'HELLAS VERONA': ['T. Noslin', 'M. Folorunsho', 'D. Lazović', 'T. Suslov'],
+    'LECCE': ['N. Krstović', 'R. Piccoli', 'L. Banda', 'P. Almqvist'],
+    'UDINESE': ['L. Lucca', 'F. Thauvin', 'K. Davis', 'L. Samardžić'],
+    'CAGLIARI': ['G. Lapadula', 'Z. Luvumbo', 'N. Nández', 'N. Viola'],
+    'EMPOLI': ['M. Cancellieri', 'S. Żurkowski', 'F. Caputo', 'E. Gyasi'],
+    'PARMA': ['D. Man', 'V. Mihăilă', 'A. Bonny', 'Adrián Bernabé'],
+    'COMO': ['A. Belotti', 'P. Cutrone', 'Gabriel Strefezza', 'N. Paz'],
+    'VENEZIA': ['J. Pohjanpalo', 'C. Gytkjær', 'G. Busio', 'G. Oristanio'],
+
+    // --- BUNDESLIGA ---
+    'BAYER LEVERKUSEN': ['F. Wirtz', 'V. Boniface', 'A. Grimaldo', 'J. Frimpong', 'G. Xhaka', 'P. Schick', 'J. Hofmann'],
+    'STUTTGART': ['S. Guirassy', 'D. Undav', 'E. Demirović', 'C. Führich', 'E. Millot'],
+    'BAYERN MUNICH': ['H. Kane', 'J. Musiala', 'M. Olise', 'L. Sané', 'S. Gnabry', 'T. Müller', 'K. Coman'],
+    'RB LEIPZIG': ['L. Openda', 'B. Šeško', 'X. Simons', 'D. Olmo', 'C. Baumgartner'],
+    'LEIPZIG': ['L. Openda', 'B. Šeško', 'X. Simons', 'D. Olmo', 'C. Baumgartner'],
+    'DORTMUND': ['N. Füllkrug', 'S. Guirassy', 'J. Brandt', 'D. Malen', 'K. Adeyemi', 'M. Sabitzer', 'J. Sancho'],
+    'BORUSSIA DORTMUND': ['N. Füllkrug', 'S. Guirassy', 'J. Brandt', 'D. Malen', 'K. Adeyemi', 'M. Sabitzer', 'J. Sancho'],
+    'EINTRACHT FRANKFURT': ['O. Marmoush', 'H. Ekitiké', 'F. Chaïbi', 'M. Götze', 'Junior Dina Ebimbe'],
+    'HOFFENHEIM': ['M. Beier', 'A. Kramarić', 'W. Weghorst', 'I. Bebou'],
+    'HEIDENHEIM': ['E. Dinkçi', 'T. Kleindienst', 'J. Beste', 'M. Pieringer'],
+    'WERDER BREMEN': ['M. Ducksch', 'J. Njinmah', 'M. Weiser', 'L. Bittencourt'],
+    'FREIBURG': ['V. Grifo', 'M. Gregoritsch', 'L. Höler', 'R. Dōan'],
+    'AUGSBURG': ['E. Demirović', 'P. Tietz', 'A. Maier', 'R. Vargas'],
+    'WOLFSBURG': ['J. Wind', 'L. Majer', 'M. Amoura', 'R. Baku'],
+    'MAINZ 05': ['J. Burkardt', 'B. Gruda', 'L. Ajorque', 'J. Lee'],
+    'BORUSSIA MONCHENGLADBACH': ['A. Pléa', 'R. Hack', 'T. Čvančara', 'F. Honorat'],
+    'UNION BERLIN': ['R. Gosens', 'K. Volland', 'B. Hollerbach', 'Y. Vertessen'],
+    'BOCHUM': ['K. Stöger', 'P. Hofmann', 'M. Bero', 'T. Asano'],
+    'ST PAULI': ['M. Eggestein', 'J. Irvine', 'E. Saad', 'D. Sinani'],
+    'HOLSTEIN KIEL': ['S. Machino', 'B. Pichler', 'A. Bernhardsson', 'F. Porath'],
+
+    // --- LIGUE 1 ---
+    'PSG': ['O. Dembélé', 'B. Barcola', 'R. Kolo Muani', 'Vitinha', 'Warren Zaïre-Emery', 'Gonçalo Ramos', 'M. Asensio'],
+    'PARIS SAINT-GERMAIN': ['O. Dembélé', 'B. Barcola', 'R. Kolo Muani', 'Vitinha', 'Warren Zaïre-Emery', 'Gonçalo Ramos', 'M. Asensio'],
+    'MONACO': ['W. Ben Yedder', 'T. Minamino', 'A. Golovin', 'F. Balogun', 'M. Akliouche', 'B. Embolo'],
+    'BREST': ['R. Del Castillo', 'M. Camara', 'S. Mounié', 'J. Le Douaron'],
+    'LILLE': ['J. David', 'E. Zhegrova', 'B. André', 'R. Cabella', 'T. Santos'],
+    'NICE': ['T. Moffi', 'G. Laborde', 'J. Boga', 'K. Thuram', 'E. Guessand'],
+    'LYON': ['A. Lacazette', 'G. Mikautadze', 'E. Nuamah', 'M. Fofana', 'R. Cherki', 'C. Tolisso'],
+    'LENS': ['E. Wahi', 'F. Sotoca', 'W. Saïd', 'P. Frankowski', 'A. Thomasson'],
+    'MARSEILLE': ['P. Aubameyang', 'M. Greenwood', 'I. Sarr', 'A. Harit', 'A. Sanchez', 'E. Wahi'],
+    'REIMS': ['Teddy Teuma', 'O. Diakité', 'K. Nakamura', 'J. Ito'],
+    'RENNES': ['A. Kalimuendo', 'L. Blas', 'A. Gouiri', 'B. Bourigeaud'],
+    'TOULOUSE': ['T. Dallinga', 'F. Magri', 'V. Sierro', 'Y. Gboho'],
+    'MONTPELLIER': ['T. Savanier', 'A. Adams', 'M. Al-Taamari', 'A. Nordin'],
+    'STRASBOURG': ['E. Emegha', 'H. Diarra', 'K. Gameiro', 'D. Bakwa'],
+    'NANTES': ['Mostafa Mohamed', 'M. Simon', 'F. Mollet', 'T. Kadewere'],
+    'LE HAVRE': ['M. Bayo', 'N. Alioui', 'A. Ayew', 'Y. Kechta'],
+    'ANGERS': ['L. Diony', 'F. El Melali', 'H. Abdelli', 'J. Lepaul'],
+    'AUXERRE': ['G. Hein', 'A. Onaiwu', 'Florian Ayé', 'G. Perrin'],
+    'SAINT-ÉTIENNE': ['I. Sissoko', 'M. Cardona', 'M. Cafaro', 'Z. Davitashvili'],
+
+    // --- OTHER EUROPEAN GIANTS (PORTUGAL, NETHERLANDS, TURKEY, SCOTLAND) ---
+    'BENFICA': ['Á. Di María', 'Rafa Silva', 'Arthur Cabral', 'Orkun Kökçü', 'João Neves', 'Vangelis Pavlidis'],
+    'SPORTING CP': ['V. Gyökeres', 'P. Gonçalves', 'Trincão', 'M. Edwards', 'M. Hjulmand', 'G. Catamo'],
+    'PORTO': ['Evanilson', 'Galeno', 'Pepê', 'Francisco Conceição', 'Samu Omorodion', 'Nico González'],
+    'FC PORTO': ['Evanilson', 'Galeno', 'Pepê', 'Francisco Conceição', 'Samu Omorodion', 'Nico González'],
+    'BRAGA': ['Simon Banza', 'Ricardo Horta', 'Bruma', 'Álvaro Djaló', 'Rodrigo Zalazar'],
+    'PSV': ['L. de Jong', 'J. Bakayoko', 'G. Til', 'M. Tillman', 'I. Saibari', 'Joey Veerman'],
+    'FEYENOORD': ['S. Giménez', 'I. Paixão', 'Q. Timber', 'C. Stengs', 'L. Ueda'],
+    'AJAX': ['B. Brobbey', 'S. Bergwijn', 'C. Akpom', 'K. Taylor', 'W. Weghorst'],
+    'GALATASARAY': ['M. Icardi', 'V. Osimhen', 'D. Mertens', 'B. Yılmaz', 'K. Aktürkoğlu', 'H. Ziyech'],
+    'FENERBAHCE': ['E. Džeko', 'D. Tadić', 'Y. En-Nesyri', 'İ. Kahveci', 'Fred', 'S. Szymański'],
+    'BESIKTAS': ['C. Immobile', 'Rafa Silva', 'Semih Kılıçsoy', 'M. Rashica', 'Ernest Muçi'],
+    'CELTIC': ['K. Furuhashi', 'M. O\'Riley', 'D. Maeda', 'Reo Hatate', 'N. Kühn', 'A. Idah'],
+    'RANGERS': ['J. Tavernier', 'Cyriel Dessers', 'Danilo', 'Todd Cantwell', 'T. Lawrence']
   };
 
   function getRandomPlayerForTeam(teamName) {
     const key = (teamName || '').trim().toUpperCase();
-    const list = TEAM_STAR_PLAYERS[key];
-    if (list && list.length > 0) {
-      return list[Math.floor(Math.random() * list.length)];
+    let candidateList = null;
+
+    // Direct match
+    if (TEAM_STAR_PLAYERS[key] && TEAM_STAR_PLAYERS[key].length > 0) {
+      candidateList = [...TEAM_STAR_PLAYERS[key]];
+    } else {
+      // Normalized lookup (remove special chars/dots)
+      const stripped = key.replace(/[^A-Z0-9]/g, '');
+      for (const k of Object.keys(TEAM_STAR_PLAYERS)) {
+        if (k.replace(/[^A-Z0-9]/g, '') === stripped) {
+          candidateList = [...TEAM_STAR_PLAYERS[k]];
+          break;
+        }
+      }
     }
+
+    // Partial search inside team names
+    if (!candidateList || candidateList.length === 0) {
+      for (const [k, list] of Object.entries(TEAM_STAR_PLAYERS)) {
+        if (key.includes(k) || k.includes(key)) {
+          candidateList = [...list];
+          break;
+        }
+      }
+    }
+
+    if (candidateList && candidateList.length > 0) {
+      // Check real tournament top scorers to boost authentic golden boot contenders
+      const realScorers = window.REAL_TOURNAMENTS_DATA?.[activeTournKey]?.topScorers || [];
+      const weightedPool = [];
+      candidateList.forEach(player => {
+        const cleanPlayer = player.toLowerCase().replace(/^[a-z]\.\s*/i, '');
+        const isOfficialTopScorer = realScorers.some(s => 
+          s.name && (s.name.toLowerCase().includes(cleanPlayer) || cleanPlayer.includes(s.name.toLowerCase()))
+        );
+        // Boost official golden boot candidates so league scoring emerges naturally and realistically
+        const weight = isOfficialTopScorer ? 4 : 1;
+        for (let w = 0; w < weight; w++) weightedPool.push(player);
+      });
+      return weightedPool[Math.floor(Math.random() * weightedPool.length)];
+    }
+
+    // Check if team exists in window.REAL_TOURNAMENTS_DATA top scorers
+    for (const tKey of Object.keys(window.REAL_TOURNAMENTS_DATA || {})) {
+      const scorers = window.REAL_TOURNAMENTS_DATA[tKey]?.topScorers || [];
+      const matchScorer = scorers.find(s => s.team && (s.team.toUpperCase() === key || key.includes(s.team.toUpperCase())));
+      if (matchScorer) return matchScorer.name;
+    }
+
+    // Authentic fallback surnames per nation / region
     const defaultSurnames = ['Silva', 'Santos', 'Johnson', 'Smith', 'Müller', 'García', 'Martínez', 'Kovács', 'Popescu', 'Novak', 'Tanaka', 'Kim', 'Ali', 'Diallo', 'Mendoza', 'Rossi', 'Larsson', 'Jensen', 'Nielsen'];
     const initials = ['A.', 'M.', 'J.', 'D.', 'C.', 'K.', 'R.', 'L.', 'S.', 'E.'];
     const init = initials[Math.floor(Math.random() * initials.length)];
@@ -733,27 +1012,67 @@
   function clamp(value, min, max) { return Math.min(Math.max(value, min), max); }
 
   function getStrength(teamName, key = activeTournKey) {
+    const norm = (teamName || '').toLowerCase().trim();
+
+    function computeFromStandings(entry, totalTeams) {
+      if (!entry) return null;
+      if (entry.pts !== undefined && entry.mp && entry.mp > 0) {
+        const ptsRatio = entry.pts / (entry.mp * 3); // 0.0 to 1.0 based on points earned vs max possible
+        const winRate = entry.w / entry.mp; // 0.0 to 1.0 pure win rate
+        const gdPerMatch = (entry.gd || 0) / entry.mp; // goal differential per match
+        const normalizedGd = clamp((gdPerMatch + 2) / 4, 0, 1);
+        const strength = ptsRatio * 0.5 + winRate * 0.3 + normalizedGd * 0.2;
+        return clamp(0.30 + strength * 0.70, 0.30, 1.0);
+      }
+      if (entry.pos && totalTeams) {
+        return clamp(1 - ((entry.pos - 1) / Math.max(totalTeams - 1, 1)) * 0.65, 0.35, 1.0);
+      }
+      return null;
+    }
+
+    // 1. Check in active tournament real standings & team list
     if (key && window.REAL_TOURNAMENTS_DATA?.[key]) {
-      const teams = window.REAL_TOURNAMENTS_DATA[key]?.teams || [];
-      const idx = teams.findIndex(t => t.name.toLowerCase() === (teamName || '').toLowerCase());
-      if (idx !== -1) {
-        return 1 - (idx / Math.max(teams.length - 1, 1)) * 0.65;
+      const data = window.REAL_TOURNAMENTS_DATA[key];
+      if (data.standings && Array.isArray(data.standings)) {
+        const entry = data.standings.find(s => (s.club || '').toLowerCase().trim() === norm);
+        if (entry) {
+          const s = computeFromStandings(entry, data.standings.length);
+          if (s !== null) return s;
+        }
+      }
+      if (data.teams && Array.isArray(data.teams)) {
+        const idx = data.teams.findIndex(t => (t.name || '').toLowerCase().trim() === norm);
+        if (idx !== -1) {
+          return clamp(1 - (idx / Math.max(data.teams.length - 1, 1)) * 0.65, 0.35, 1.0);
+        }
       }
     }
-    // Search all tournaments to find the team's ranking
+
+    // 2. Search all tournaments to find the team's standing or ranking
     for (const tKey of Object.keys(window.REAL_TOURNAMENTS_DATA || {})) {
-      const teams = window.REAL_TOURNAMENTS_DATA[tKey]?.teams || [];
-      const idx = teams.findIndex(t => t.name.toLowerCase() === (teamName || '').toLowerCase());
-      if (idx !== -1) {
-        return 1 - (idx / Math.max(teams.length - 1, 1)) * 0.65;
+      const data = window.REAL_TOURNAMENTS_DATA[tKey];
+      if (data.standings && Array.isArray(data.standings)) {
+        const entry = data.standings.find(s => (s.club || '').toLowerCase().trim() === norm);
+        if (entry) {
+          const s = computeFromStandings(entry, data.standings.length);
+          if (s !== null) return s;
+        }
+      }
+      if (data.teams && Array.isArray(data.teams)) {
+        const idx = data.teams.findIndex(t => (t.name || '').toLowerCase().trim() === norm);
+        if (idx !== -1) {
+          return clamp(1 - (idx / Math.max(data.teams.length - 1, 1)) * 0.65, 0.35, 1.0);
+        }
       }
     }
     return 0.75;
   }
 
   function expectedGoals(teamStrength, oppStrength, isHome) {
-    const lambda = 1.35 * (0.6 + teamStrength) / (0.6 + oppStrength) * (isHome ? 1.15 : 0.95);
-    return clamp(lambda, 0.3, 3.5);
+    const ratio = (0.6 + teamStrength) / (0.6 + oppStrength);
+    const homeAdvantage = isHome ? 1.15 : 0.90;
+    const lambda = 1.35 * ratio * homeAdvantage;
+    return clamp(lambda, 0.25, 4.0);
   }
 
   // Precomputes full match outcome with 2nd-half weighted goal minutes, authentic player scorers, extra time, and penalties
@@ -943,7 +1262,16 @@
     const teamList = (realData?.teams || []).map(t => t.name);
 
     if (config.format === 'worldcup48') {
-      const pool = [...teamList].sort(() => Math.random() - 0.5);
+      // Use custom draw teams if set, otherwise fall back to real data pool (random draw)
+      let pool;
+      if (wcCustomTeams && wcCustomTeams.length === 48) {
+        pool = [...wcCustomTeams].map(t => t.toUpperCase().trim()).sort(() => Math.random() - 0.5);
+      } else {
+        pool = [...teamList].map(t => t.toUpperCase().trim()).sort(() => Math.random() - 0.5);
+        // Pad or trim to exactly 48 so group draw always works
+        while (pool.length < 48) pool.push(`Nation ${pool.length + 1}`);
+        pool = pool.slice(0, 48);
+      }
       const groups = {};
       const groupLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
       groupLetters.forEach((letter, idx) => {
@@ -1083,6 +1411,45 @@ function switchView(targetViewId) {
   }
 
 function setupNavigation() {
+    // Scroll chevrons & indicator for competition selector bar
+    const compInner = document.getElementById('comp-bar-inner');
+    const compLeft = document.getElementById('comp-nav-left');
+    const compRight = document.getElementById('comp-nav-right');
+
+    function updateCompNavArrows() {
+      if (!compInner) return;
+      const atStart = compInner.scrollLeft <= 4;
+      const atEnd = compInner.scrollLeft + compInner.clientWidth >= compInner.scrollWidth - 4;
+      if (compLeft) {
+        compLeft.disabled = atStart;
+        compLeft.classList.toggle('disabled', atStart);
+      }
+      if (compRight) {
+        compRight.disabled = atEnd;
+        compRight.classList.toggle('disabled', atEnd);
+      }
+    }
+
+    if (compLeft && compInner) {
+      compLeft.addEventListener('click', () => {
+        compInner.scrollBy({ left: -260, behavior: 'smooth' });
+        setTimeout(updateCompNavArrows, 320);
+      });
+    }
+
+    if (compRight && compInner) {
+      compRight.addEventListener('click', () => {
+        compInner.scrollBy({ left: 260, behavior: 'smooth' });
+        setTimeout(updateCompNavArrows, 320);
+      });
+    }
+
+    if (compInner) {
+      compInner.addEventListener('scroll', updateCompNavArrows, { passive: true });
+      window.addEventListener('resize', updateCompNavArrows);
+      setTimeout(updateCompNavArrows, 150);
+    }
+
     document.querySelectorAll('.side-item').forEach(btn => {
       btn.addEventListener('click', () => { if (btn.dataset.target) switchView(btn.dataset.target); });
     });
@@ -1104,9 +1471,9 @@ function setupNavigation() {
         }
       }
 
-      // Number keys 1-10: switch tournaments (wc=1, ucl=2, pl=3, etc.)
+      // Number keys: switch tournaments (wc=1, euro=2, copa=3, ucl=4, pl=5, laliga=6, serieA=7, bundesliga=8, ligue1=9)
       if (e.key >= '1' && e.key <= '9') {
-        const tournamentKeys = ['wc', 'ucl', 'pl', 'laliga', 'serieA', 'bundesliga', 'ligue1', 'ligaPortugal', 'eredivisie'];
+        const tournamentKeys = ['wc', 'euro', 'copa', 'ucl', 'pl', 'laliga', 'serieA', 'bundesliga', 'ligue1'];
         const keyIndex = parseInt(e.key, 10) - 1;
         if (tournamentKeys[keyIndex]) {
           e.preventDefault();
@@ -1140,7 +1507,7 @@ function setupNavigation() {
   // ---------------------------------------------------------------------------
   // 7. TOURNAMENT SELECTION & RENDER PIPELINE
   // ---------------------------------------------------------------------------
-function selectTournament(key) {
+  function selectTournament(key) {
     if (!TOURNAMENTS_CONFIG[key]) return;
     cancelAllActiveSimulationTimers();
     activeTournKey = key;
@@ -1155,11 +1522,15 @@ function selectTournament(key) {
       document.documentElement.classList.remove('theme-transition');
     }, 2000);
 
-    // Update competition tabs in header
+    // Update competition tabs in header & auto-scroll active tab into view
+    const compInner = document.getElementById('comp-bar-inner');
     document.querySelectorAll('.comp-tab').forEach(t => {
       const isMatch = t.dataset.tourn === activeTournKey;
       t.classList.toggle('active', isMatch);
       t.setAttribute('aria-selected', String(isMatch));
+      if (isMatch && compInner && typeof t.scrollIntoView === 'function') {
+        t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      }
     });
 
     // Initialize/reset tournament state for fresh simulation
@@ -1811,12 +2182,13 @@ function selectTournament(key) {
             <!-- Action CTAs -->
             <div class="wc-hero-actions">
               <button type="button" class="wc-btn-primary" id="btn-wc-explore">
-                <span>EXPLORE TOURNAMENT</span>
-                <i class="fa-solid fa-chevron-right"></i>
-              </button>
-              <button type="button" class="wc-btn-secondary" id="btn-wc-fixtures">
+                <i class="fa-solid fa-play"></i>
                 <span>GO TO SIMULATION</span>
                 <i class="fa-solid fa-chevron-right"></i>
+              </button>
+              <button type="button" class="wc-btn-custom-draw" id="btn-wc-custom-draw" onclick="window.openCustomDrawModal &amp;&amp; window.openCustomDrawModal()">
+                <i class="fa-solid fa-sliders"></i>
+                <span>CUSTOM DRAW</span>
               </button>
             </div>
           </div>
@@ -1884,13 +2256,12 @@ function selectTournament(key) {
       });
     }
 
-    const fixturesBtn = container.querySelector('#btn-wc-fixtures');
-    if (fixturesBtn) {
-fixturesBtn.addEventListener('click', () => {
-        initTournamentState(activeTournKey);
-        state.subView = 'sim';
-        activeStageFilter = 'groups';
-        renderActiveTournament();
+    const customDrawBtn = container.querySelector('#btn-wc-custom-draw');
+    if (customDrawBtn) {
+      customDrawBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openCustomDrawModal();
       });
     }
 
@@ -4350,7 +4721,7 @@ enterBtn.addEventListener('click', () => {
         renderActiveTournament();
         if (onComplete) onComplete();
         if (state.champion) {
-          showCelebrationModal(state.champion);
+          triggerChampionCelebration(state.champion);
         }
       }
     }, 1000);
@@ -4590,7 +4961,7 @@ enterBtn.addEventListener('click', () => {
 
         renderActiveTournament();
         if (state.champion) {
-          showCelebrationModal(state.champion);
+          triggerChampionCelebration(state.champion);
         }
       }
     }, 300);
@@ -4628,7 +4999,7 @@ enterBtn.addEventListener('click', () => {
 
     renderActiveTournament();
     if (state.champion) {
-      showCelebrationModal(state.champion);
+      triggerChampionCelebration(state.champion);
     }
   }
 
@@ -4642,6 +5013,24 @@ enterBtn.addEventListener('click', () => {
     if (txt.includes('FINAL') || txt === 'GF') return 'gf';
     return 'r16';
   }
+
+  // Label-only parser for skip/restart fallback — returns null instead of a default
+  // so we never accidentally skip a stage that isn't running
+  function getValidStageKeyFromLabel(rawLabel) {
+    const txt = (rawLabel || '').trim().toUpperCase();
+    if (txt.includes('MATCHDAY')) {
+      // e.g. "LA LIGA • MATCHDAY 3 / 38" or "MATCHDAY 3"
+      const m = txt.match(/MATCHDAY\s+(\d+)/);
+      if (m) return `md_${parseInt(m[1], 10) - 1}`;
+    }
+    if (txt.includes('ROUND OF 32') || txt === 'R32') return 'r32';
+    if (txt.includes('ROUND OF 16') || txt === 'R16') return 'r16';
+    if (txt.includes('QUARTER') || txt === 'QF') return 'qf';
+    if (txt.includes('SEMI') || txt === 'SF') return 'sf';
+    if (txt.includes('FINAL') || txt === 'GF') return 'gf';
+    return null; // Nothing recognizable → don't skip anything
+  }
+
 
   function simulateStageWithClock(stageKey) {
     cancelAllActiveSimulationTimers();
@@ -4928,9 +5317,12 @@ enterBtn.addEventListener('click', () => {
     const nameEl = document.getElementById('champ-modal-name');
     const flagEl = document.getElementById('champ-modal-flag');
     const tournEl = document.getElementById('champ-modal-tourn');
+    const headlineEl = document.getElementById('champ-modal-headline');
+    const taglineEl = document.getElementById('champ-modal-tagline');
+    const trophyEl = document.getElementById('champ-modal-trophy');
     const statsRow = document.getElementById('champ-stats-row');
-    const config = TOURNAMENTS_CONFIG[activeTournKey];
-    const state = tournamentState[activeTournKey];
+    const config = TOURNAMENTS_CONFIG[activeTournKey] || { name: 'TOURNAMENT' };
+    const state = tournamentState[activeTournKey] || {};
 
     if (!modal) return;
 
@@ -4940,44 +5332,215 @@ enterBtn.addEventListener('click', () => {
       flagEl.innerHTML = getTeamLogoHtml(champTeam);
     }
 
-    // Calculate tournament statistics
-    let totalGoals = 0;
-    const scorerGoals = {};
-    const stages = ['r32', 'r16', 'qf', 'sf', 'gf'];
-    stages.forEach(st => {
-      (state[st] || []).forEach(m => {
-        if (m.isSimulated) {
-          totalGoals += (m.scoreHome || 0) + (m.scoreAway || 0);
-          (m.events || []).forEach(ev => {
-            if (ev.player) {
-              scorerGoals[ev.player] = (scorerGoals[ev.player] || 0) + 1;
-            }
-          });
-        }
-      });
-    });
+    // Dynamic Context-Aware Headlines and Taglines per Competition
+    const isLeague = config.type === 'league' || config.format === 'leagueSeason';
+    const isInternational = config.strengthType === 'national' || activeTournKey === 'wc' || activeTournKey === 'euro' || activeTournKey === 'copa';
 
-    let topScorerName = 'L. Messi';
-    let topScorerGoals = 6;
-    const sortedScorers = Object.entries(scorerGoals).sort((a, b) => b[1] - a[1]);
-    if (sortedScorers.length > 0) {
-      topScorerName = sortedScorers[0][0];
-      topScorerGoals = sortedScorers[0][1];
+    if (headlineEl) {
+      if (activeTournKey === 'wc') {
+        headlineEl.textContent = 'WORLD CHAMPIONS CROWNED!';
+      } else if (activeTournKey === 'euro') {
+        headlineEl.textContent = 'CHAMPIONS OF EUROPE CROWNED!';
+      } else if (activeTournKey === 'copa') {
+        headlineEl.textContent = 'COPA AMÉRICA CHAMPIONS CROWNED!';
+      } else if (activeTournKey === 'ucl') {
+        headlineEl.textContent = 'KINGS OF EUROPE CROWNED!';
+      } else if (activeTournKey === 'pl') {
+        headlineEl.textContent = 'PREMIER LEAGUE CHAMPIONS CROWNED!';
+      } else if (activeTournKey === 'laliga') {
+        headlineEl.textContent = 'CAMPEONES DE ESPAÑA!';
+      } else if (activeTournKey === 'serieA') {
+        headlineEl.textContent = 'SCUDETTO CHAMPIONS CROWNED!';
+      } else if (activeTournKey === 'bundesliga') {
+        headlineEl.textContent = 'DEUTSCHER MEISTER GEKRÖNT!';
+      } else if (activeTournKey === 'ligue1') {
+        headlineEl.textContent = 'CHAMPIONS DE FRANCE!';
+      } else {
+        headlineEl.textContent = `${config.name} CHAMPIONS!`;
+      }
     }
 
+    if (taglineEl) {
+      if (activeTournKey === 'wc') {
+        taglineEl.textContent = 'GLORIOUS CHAMPIONS OF THE WORLD';
+      } else if (activeTournKey === 'euro') {
+        taglineEl.textContent = 'GLORIOUS CHAMPIONS OF EUROPE';
+      } else if (activeTournKey === 'copa') {
+        taglineEl.textContent = 'SUPREME KINGS OF THE AMÉRICAS';
+      } else if (activeTournKey === 'ucl') {
+        taglineEl.textContent = 'UEFA CHAMPIONS LEAGUE TITANS';
+      } else if (activeTournKey === 'pl') {
+        taglineEl.textContent = 'SUPREME CHAMPIONS OF ENGLISH FOOTBALL';
+      } else if (activeTournKey === 'laliga') {
+        taglineEl.textContent = 'GLORIOUS WINNERS OF LA LIGA';
+      } else if (activeTournKey === 'serieA') {
+        taglineEl.textContent = 'OFFICIAL SCUDETTO WINNERS';
+      } else if (activeTournKey === 'bundesliga') {
+        taglineEl.textContent = 'MEISTERSCHALE TITLE WINNERS';
+      } else {
+        taglineEl.textContent = `GLORIOUS CHAMPIONS OF ${config.name}`;
+      }
+    }
+
+    if (trophyEl) {
+      trophyEl.textContent = activeTournKey === 'ucl' ? '⭐' : '🏆';
+    }
+
+    // Comprehensive goal and scorer statistics across all formats
+    let totalGoals = 0;
+    const tournamentScorers = {};
+    let champTotalGoals = 0;
+    let champMatchesCount = 0;
+    const champScorers = {};
+    const champNorm = (champTeam || '').trim().toUpperCase();
+
+    function processMatch(m) {
+      if (!m || !m.isSimulated) return;
+      const hScore = typeof m.scoreHome === 'number' ? m.scoreHome : parseInt(m.scoreHome, 10) || 0;
+      const aScore = typeof m.scoreAway === 'number' ? m.scoreAway : parseInt(m.scoreAway, 10) || 0;
+      totalGoals += hScore + aScore;
+
+      const homeNorm = (m.home || '').trim().toUpperCase();
+      const awayNorm = (m.away || '').trim().toUpperCase();
+      const isChampHome = homeNorm === champNorm || (homeNorm && champNorm && (homeNorm.includes(champNorm) || champNorm.includes(homeNorm)));
+      const isChampAway = awayNorm === champNorm || (awayNorm && champNorm && (awayNorm.includes(champNorm) || champNorm.includes(awayNorm)));
+
+      if (isChampHome) {
+        champMatchesCount++;
+        champTotalGoals += hScore;
+      } else if (isChampAway) {
+        champMatchesCount++;
+        champTotalGoals += aScore;
+      }
+
+      if (m.events && Array.isArray(m.events)) {
+        m.events.forEach(ev => {
+          if (ev.player) {
+            tournamentScorers[ev.player] = (tournamentScorers[ev.player] || 0) + 1;
+
+            const evTeamNorm = (ev.teamName || '').trim().toUpperCase();
+            const isChampEvent = evTeamNorm === champNorm ||
+                                 (ev.team === 'home' && isChampHome) ||
+                                 (ev.team === 'away' && isChampAway) ||
+                                 (evTeamNorm && champNorm && (evTeamNorm.includes(champNorm) || champNorm.includes(evTeamNorm)));
+
+            if (isChampEvent) {
+              champScorers[ev.player] = (champScorers[ev.player] || 0) + 1;
+            }
+          }
+        });
+      }
+    }
+
+    // 1. League Season format (38 / 34 matchdays)
+    if (state.matchdays && Array.isArray(state.matchdays)) {
+      state.matchdays.forEach(round => {
+        if (Array.isArray(round)) round.forEach(processMatch);
+      });
+    }
+
+    // Check league table for exact stats if matchdays array isn't fully expanded
+    if (state.leagueTable && Array.isArray(state.leagueTable)) {
+      const champRow = state.leagueTable.find(r => (r.club || '').trim().toUpperCase() === champNorm || champNorm.includes((r.club || '').trim().toUpperCase()));
+      if (champRow) {
+        if (champRow.gf && champRow.gf > champTotalGoals) champTotalGoals = champRow.gf;
+        if (champRow.mp && champRow.mp > champMatchesCount) champMatchesCount = champRow.mp;
+      }
+    }
+
+    // 2. Group stage format
+    if (state.groupMatches && Array.isArray(state.groupMatches) && state.groupMatches.length > 0) {
+      state.groupMatches.forEach(processMatch);
+    } else if (state.groups && typeof state.groups === 'object') {
+      Object.keys(state.groups).forEach(letter => {
+        const teams = state.groups[letter] || [];
+        teams.forEach(t => {
+          totalGoals += (t.gf || 0);
+          const tNorm = (t.name || '').trim().toUpperCase();
+          if (tNorm === champNorm || champNorm.includes(tNorm)) {
+            champTotalGoals += (t.gf || 0);
+            champMatchesCount += (t.mp || 3);
+          }
+        });
+      });
+    }
+
+    // 3. Knockout stages (R32, R16, QF, SF, GF)
+    const stages = ['r32', 'playoffs', 'r16', 'qf', 'sf', 'gf'];
+    stages.forEach(st => {
+      if (state[st] && Array.isArray(state[st])) {
+        state[st].forEach(processMatch);
+      }
+    });
+
+    // 4. Calculate Average Goals Per Match for Champion
+    const safeMatches = Math.max(champMatchesCount, 1);
+    const avgGoalsPerMatch = (champTotalGoals / safeMatches).toFixed(2);
+
+    // 5. Determine Champion's Top Scorer (Team Top Scorer)
+    let champTopScorerName = '';
+    let champTopScorerGoals = 0;
+    const sortedChampScorers = Object.entries(champScorers).sort((a, b) => b[1] - a[1]);
+
+    if (sortedChampScorers.length > 0) {
+      champTopScorerName = sortedChampScorers[0][0];
+      champTopScorerGoals = sortedChampScorers[0][1];
+    } else {
+      // Randomized authentic team player fallback
+      champTopScorerName = getRandomPlayerForTeam(champTeam);
+      champTopScorerGoals = isLeague ? Math.max(12, Math.round(champTotalGoals * 0.28)) : Math.max(3, Math.round(champTotalGoals * 0.40));
+    }
+
+    // 6. Determine Tournament Top Scorer (Golden Boot)
+    let tournTopScorerName = '';
+    let tournTopScorerGoals = 0;
+    const sortedTournScorers = Object.entries(tournamentScorers).sort((a, b) => b[1] - a[1]);
+
+    if (sortedTournScorers.length > 0) {
+      tournTopScorerName = sortedTournScorers[0][0];
+      tournTopScorerGoals = sortedTournScorers[0][1];
+    } else {
+      const realTopScorers = window.REAL_TOURNAMENTS_DATA?.[activeTournKey]?.topScorers || [];
+      if (realTopScorers.length > 0) {
+        tournTopScorerName = realTopScorers[0].name;
+        tournTopScorerGoals = realTopScorers[0].goals || (isLeague ? 24 : 6);
+      } else {
+        tournTopScorerName = champTopScorerName;
+        tournTopScorerGoals = champTopScorerGoals;
+      }
+    }
+
+    // Inject champion-specific stats inside the hero logo container
+    const heroStatsEl = document.getElementById('champ-hero-stats');
+    if (heroStatsEl) {
+      heroStatsEl.innerHTML = `
+        <div class="champ-hero-stat-badge">
+          <span class="badge-icon">⚡</span>
+          <div class="badge-info">
+            <span class="badge-val">${avgGoalsPerMatch} <span style="font-size:0.75rem; color:var(--text-muted);">(${champTotalGoals}G)</span></span>
+            <span class="badge-label">AVG GOALS / MATCH</span>
+          </div>
+        </div>
+        <div class="champ-hero-stat-badge">
+          <span class="badge-icon">⚽</span>
+          <div class="badge-info">
+            <span class="badge-val">${champTopScorerName} (${champTopScorerGoals})</span>
+            <span class="badge-label">TEAM TOP SCORER</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // Inject tournament-wide context in the row below
     if (statsRow) {
       statsRow.innerHTML = `
         <div class="champ-stat-pill">
-          <div class="champ-stat-val">${champTeam}</div>
-          <div class="champ-stat-lbl">CHAMPION</div>
+          <div class="champ-stat-val">${tournTopScorerName} (${tournTopScorerGoals})</div>
+          <div class="champ-stat-lbl">🥇 TOURNAMENT GOLDEN BOOT</div>
         </div>
         <div class="champ-stat-pill">
-          <div class="champ-stat-val">${totalGoals}</div>
-          <div class="champ-stat-lbl">TOTAL GOALS</div>
-        </div>
-        <div class="champ-stat-pill">
-          <div class="champ-stat-val">${topScorerName} (${topScorerGoals})</div>
-          <div class="champ-stat-lbl">TOP SCORER</div>
+          <div class="champ-stat-val">${totalGoals > 0 ? totalGoals : (isLeague ? '940+' : '142')}</div>
+          <div class="champ-stat-lbl">⚽ TOTAL TOURNAMENT GOALS</div>
         </div>
       `;
     }
@@ -5049,21 +5612,49 @@ enterBtn.addEventListener('click', () => {
     const drawBtn = document.getElementById('sim-draw-btn');
     if (drawBtn) {
       drawBtn.addEventListener('click', () => {
+        // Stop any running simulation and timer
         leagueAutoSimActive = false;
         cancelAllActiveSimulationTimers();
+
+        // Reset HUD and live control UI
+        const clockHud = document.getElementById('sim-clock-hud');
+        if (clockHud) clockHud.hidden = true;
+        const liveControlBar = document.getElementById('live-control-bar');
+        if (liveControlBar) liveControlBar.hidden = true;
+        const pauseBtn = document.getElementById('sim-pause-btn');
+        if (pauseBtn) pauseBtn.hidden = false;
+        const resumeBtn = document.getElementById('sim-resume-btn');
+        if (resumeBtn) resumeBtn.hidden = true;
+        const instantBtn = document.getElementById('sim-instant-btn');
+        if (instantBtn) {
+          instantBtn.textContent = '🏆 FULL SIM';
+          instantBtn.classList.remove('active-full-sim');
+        }
+
+        // Hide any modal or celebration banners
+        const champModal = document.getElementById('champion-modal');
+        if (champModal) champModal.hidden = true;
+        const champBanner = document.getElementById('champion-banner');
+        if (champBanner) champBanner.hidden = true;
+        const toast = document.getElementById('stage-advance-toast');
+        if (toast) toast.hidden = true;
+
+        // Clean state reset
         initTournamentState(activeTournKey);
         setStageTab('all', false);
-        // For league tournaments, keep sim view active and auto-start MD1
+
+        // Keep current view preference (e.g. simulator view)
         const config = TOURNAMENTS_CONFIG[activeTournKey];
         if (config.format === 'leagueSeason') {
           tournamentState[activeTournKey].subView = 'sim';
-          renderActiveTournament();
-          const freshState = tournamentState[activeTournKey];
-          if (freshState.matchdays && freshState.matchdays.length > 0) {
-            setTimeout(() => simulateLeagueMatchdayWithClock(0), 300);
-          }
-        } else {
-          renderActiveTournament();
+        }
+
+        // Render clean unsimulated state
+        renderActiveTournament();
+
+        const tickerEl = document.getElementById('bracket-ticker-text');
+        if (tickerEl) {
+          tickerEl.textContent = `TOURNAMENT RESET // Ready to simulate ${config.name}! // `;
         }
       });
     }
@@ -5084,6 +5675,7 @@ enterBtn.addEventListener('click', () => {
 
         if (state.groups && !state.groupsPlayed) {
           // Realistic Group Matches Resolution
+          state.groupMatches = [];
           Object.keys(state.groups).forEach(letter => {
             const teams = state.groups[letter];
             teams.forEach(t => { t.mp = 0; t.w = 0; t.d = 0; t.l = 0; t.gf = 0; t.ga = 0; t.gd = 0; t.pts = 0; });
@@ -5097,6 +5689,8 @@ enterBtn.addEventListener('click', () => {
 
             fixtures.forEach(([hIdx, aIdx]) => {
               const res = precomputeMatchResult(teams[hIdx].name, teams[aIdx].name, false);
+              res.isSimulated = true;
+              state.groupMatches.push(res);
               teams[hIdx].mp++;
               teams[aIdx].mp++;
               teams[hIdx].gf += res.regHome;
@@ -5199,8 +5793,10 @@ enterBtn.addEventListener('click', () => {
     if (restartBtn) {
       restartBtn.addEventListener('click', () => {
         leagueAutoSimActive = false;
-        const stageKey = getValidStageKey(document.getElementById('clock-stage-label')?.textContent);
-        if (stageKey && stageKey.startsWith('md_')) {
+        const stageKey = activeSimulationClock.stageKey
+          || getValidStageKeyFromLabel(document.getElementById('clock-stage-label')?.textContent);
+        if (!stageKey) return;
+        if (stageKey.startsWith('md_')) {
           const mdIdx = parseInt(stageKey.replace('md_', ''), 10);
           if (!isNaN(mdIdx)) simulateLeagueMatchdayWithClock(mdIdx);
         } else {
@@ -5211,32 +5807,82 @@ enterBtn.addEventListener('click', () => {
 
     if (skipBtn) {
       skipBtn.addEventListener('click', () => {
-        // Only allow skip when a simulation is actually running
-        if (!activeSimulationClock.isRunning && !leagueAutoSimActive) return;
+        // Read stageKey from the clock first, then fall back to the label text
+        const stageKey = activeSimulationClock.stageKey
+          || getValidStageKeyFromLabel(document.getElementById('clock-stage-label')?.textContent);
 
-        leagueAutoSimActive = false;
-        const stageKey = activeSimulationClock.stageKey; // Use direct stageKey, not the text-based fallback
-        if (stageKey && stageKey.startsWith('md_')) {
-          // Skip: finalize current league matchday immediately
-          const mdIdx = parseInt(stageKey.replace('md_', ''), 10);
+        // Nothing to skip if no stage is active
+        if (!stageKey && !leagueAutoSimActive) return;
+
+        if (leagueAutoSimActive || (stageKey && stageKey.startsWith('md_'))) {
+          // --- FULL SIM or single-matchday skip ---
+          // Stop everything immediately
+          const wasFullSim = leagueAutoSimActive;
+          leagueAutoSimActive = false;
           cancelAllActiveSimulationTimers();
+
           const state = tournamentState[activeTournKey];
-          if (state.matchdays && state.matchdays[mdIdx]) {
-            state.matchdays[mdIdx].forEach(m => {
-              m.isLive = false;
-              m.isSimulated = true;
-              m.currentDisplayScoreHome = m.scoreHome;
-              m.currentDisplayScoreAway = m.scoreAway;
+
+          if (wasFullSim) {
+            // Full Sim skip: instantly complete ALL remaining matchdays
+            state.matchdays.forEach((matches, idx) => {
+              matches.forEach(m => {
+                if (!m.isSimulated) {
+                  if (m.scoreHome === null || m.scoreHome === undefined) {
+                    const outcome = precomputeMatchResult(m.home, m.away, false);
+                    m.scoreHome = outcome.regHome;
+                    m.scoreAway = outcome.regAway;
+                    m.events = outcome.events || [];
+                  }
+                  m.isLive = false;
+                  m.isSimulated = true;
+                  m.currentDisplayScoreHome = m.scoreHome;
+                  m.currentDisplayScoreAway = m.scoreAway;
+                }
+              });
             });
             recalculateLeagueStandings(state);
-            state.currentMatchday = Math.max(state.currentMatchday, mdIdx + 1);
-            if (state.selectedMatchday < state.totalMatchdays - 1) state.selectedMatchday = mdIdx + 1;
-            const progressBar = document.getElementById('matchday-progress-bar');
-            if (progressBar) progressBar.remove();
+            state.currentMatchday = state.totalMatchdays;
+            state.selectedMatchday = state.totalMatchdays - 1;
+
+            // Reset Full Sim button
+            const instantBtnEl = document.getElementById('sim-instant-btn');
+            if (instantBtnEl) {
+              instantBtnEl.textContent = '🏆 FULL SIM';
+              instantBtnEl.classList.remove('active-full-sim');
+            }
+          } else {
+            // Single-matchday skip: finalize only the current matchday
+            const mdIdx = parseInt(stageKey.replace('md_', ''), 10);
+            if (state.matchdays && state.matchdays[mdIdx]) {
+              state.matchdays[mdIdx].forEach(m => {
+                if (!m.isSimulated) {
+                  if (m.scoreHome === null || m.scoreHome === undefined) {
+                    const outcome = precomputeMatchResult(m.home, m.away, false);
+                    m.scoreHome = outcome.regHome;
+                    m.scoreAway = outcome.regAway;
+                    m.events = outcome.events || [];
+                  }
+                  m.isLive = false;
+                  m.isSimulated = true;
+                  m.currentDisplayScoreHome = m.scoreHome;
+                  m.currentDisplayScoreAway = m.scoreAway;
+                }
+              });
+              recalculateLeagueStandings(state);
+              state.currentMatchday = Math.max(state.currentMatchday, mdIdx + 1);
+              if (state.selectedMatchday < state.totalMatchdays - 1) state.selectedMatchday = mdIdx + 1;
+            }
           }
+
+          const progressBar = document.getElementById('matchday-progress-bar');
+          if (progressBar) progressBar.remove();
           renderActiveTournament();
           if (state.champion) triggerChampionCelebration(state.champion);
+
         } else if (stageKey) {
+          // --- Knockout stage skip ---
+          leagueAutoSimActive = false;
           finalizeStageSimulation(stageKey);
         }
       });
@@ -5276,19 +5922,39 @@ enterBtn.addEventListener('click', () => {
 
         // Instant resolution across all tournament stages
         if (state.groups) {
+          state.groupMatches = [];
           Object.keys(state.groups).forEach(letter => {
             const teams = state.groups[letter];
-            teams.forEach((t, idx) => {
-              t.mp = 3;
-              t.w = Math.max(0, 3 - idx);
-              t.d = idx === 1 ? 1 : 0;
-              t.l = 3 - t.w - t.d;
-              t.gf = t.w * 2 + (idx === 1 ? 1 : 0);
-              t.ga = t.l * 2;
-              t.gd = t.gf - t.ga;
-              t.pts = t.w * 3 + t.d;
+            teams.forEach(t => { t.mp = 0; t.w = 0; t.d = 0; t.l = 0; t.gf = 0; t.ga = 0; t.gd = 0; t.pts = 0; });
+            const fixtures = [
+              [0, 1], [2, 3],
+              [0, 2], [1, 3],
+              [0, 3], [1, 2]
+            ];
+            fixtures.forEach(([hIdx, aIdx]) => {
+              const res = precomputeMatchResult(teams[hIdx].name, teams[aIdx].name, false);
+              res.isSimulated = true;
+              state.groupMatches.push(res);
+              teams[hIdx].mp++;
+              teams[aIdx].mp++;
+              teams[hIdx].gf += res.regHome;
+              teams[hIdx].ga += res.regAway;
+              teams[aIdx].gf += res.regAway;
+              teams[aIdx].ga += res.regHome;
+
+              if (res.regHome > res.regAway) {
+                teams[hIdx].w++; teams[hIdx].pts += 3;
+                teams[aIdx].l++;
+              } else if (res.regAway > res.regHome) {
+                teams[aIdx].w++; teams[aIdx].pts += 3;
+                teams[hIdx].l++;
+              } else {
+                teams[hIdx].d++; teams[hIdx].pts += 1;
+                teams[aIdx].d++; teams[aIdx].pts += 1;
+              }
             });
-            teams.sort((a, b) => b.pts - a.pts || b.gd - a.gd);
+            teams.forEach(t => { t.gd = t.gf - t.ga; });
+            teams.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
           });
           state.groupsPlayed = true;
         }
@@ -5380,19 +6046,39 @@ enterBtn.addEventListener('click', () => {
     const champViewBracketBtn = document.getElementById('champ-view-bracket-btn');
     const champConfettiBtn = document.getElementById('champ-confetti-btn');
 
-    function closeChampModal() {
-      if (champModal) champModal.hidden = true;
+    function closeChampModal(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const modalEl = document.getElementById('champion-modal');
+      if (modalEl) modalEl.hidden = true;
       if (confettiAnimationId) {
         cancelAnimationFrame(confettiAnimationId);
         confettiAnimationId = null;
       }
     }
 
-    if (champCloseBtn) champCloseBtn.addEventListener('click', closeChampModal);
-    if (champBackdrop) champBackdrop.addEventListener('click', closeChampModal);
-    if (champViewBracketBtn) champViewBracketBtn.addEventListener('click', closeChampModal);
-    if (champConfettiBtn) champConfettiBtn.addEventListener('click', () => {
-      startConfettiAnimation();
+    if (champCloseBtn) {
+      champCloseBtn.addEventListener('click', closeChampModal);
+      champCloseBtn.addEventListener('pointerdown', closeChampModal);
+    }
+    if (champBackdrop) {
+      champBackdrop.addEventListener('click', closeChampModal);
+      champBackdrop.addEventListener('pointerdown', closeChampModal);
+    }
+    if (champViewBracketBtn) {
+      champViewBracketBtn.addEventListener('click', closeChampModal);
+      champViewBracketBtn.addEventListener('pointerdown', closeChampModal);
+    }
+    if (champConfettiBtn) {
+      champConfettiBtn.addEventListener('click', () => {
+        startConfettiAnimation();
+      });
+    }
+
+    // Global modal close fallback listener
+    document.addEventListener('click', (e) => {
+      if (e.target && (e.target.id === 'champ-modal-close' || e.target.closest('#champ-modal-close') || e.target.id === 'champ-view-bracket-btn' || e.target.id === 'champ-modal-backdrop')) {
+        closeChampModal(e);
+      }
     });
 
     // Stage Toast Close
@@ -5769,16 +6455,431 @@ enterBtn.addEventListener('click', () => {
   }
 
   // ---------------------------------------------------------------------------
-  // 12. DOM BOOTSTRAP
+  // 12. WORLD CUP CUSTOM DRAW ENGINE
+  // ---------------------------------------------------------------------------
+
+  // In-session selected nations Set
+  let customDrawSelected = new Set();
+  let customDrawSearchQuery = '';
+  let customDrawActiveConf = 'all';
+
+  function getStrengthTier(str) {
+    if (str >= 88) return 'elite';
+    if (str >= 78) return 'strong';
+    if (str >= 66) return 'mid';
+    return 'lower';
+  }
+
+  function getStrengthLabel(str) {
+    if (str >= 90) return 'WORLD CLASS';
+    if (str >= 82) return 'ELITE';
+    if (str >= 74) return 'STRONG';
+    if (str >= 66) return 'MID';
+    return 'LOWER';
+  }
+
+  function renderCustomDrawGrid() {
+    const grid = document.getElementById('wc-draw-grid');
+    if (!grid) return;
+
+    let filtered = customDrawActiveConf === 'all'
+      ? WC_ALL_NATIONS
+      : WC_ALL_NATIONS.filter(n => n.conf === customDrawActiveConf);
+
+    if (customDrawSearchQuery) {
+      const q = customDrawSearchQuery.toLowerCase();
+      filtered = filtered.filter(n => n.name.toLowerCase().includes(q) || n.conf.toLowerCase().includes(q));
+    }
+
+    if (filtered.length === 0) {
+      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-family:var(--font-hud);font-size:0.8rem;letter-spacing:1px;">NO NATIONS FOUND</div>`;
+      return;
+    }
+
+    grid.innerHTML = filtered.map(nation => {
+      const sel = customDrawSelected.has(nation.name);
+      const tier = getStrengthTier(nation.str);
+      const strLabel = getStrengthLabel(nation.str);
+      return `
+        <div class="wc-nation-card ${sel ? 'selected' : ''} tier-${tier}" data-name="${nation.name}" title="${nation.conf} · FIFA Str: ${nation.str}">
+          <div class="wc-nation-check">✓</div>
+          <img class="wc-nation-flag" src="https://flagcdn.com/w40/${nation.flag}.png" alt="${nation.name}" loading="lazy" onerror="this.src='https://flagcdn.com/w40/un.png'">
+          <span class="wc-nation-name">${nation.name}</span>
+          <span class="wc-nation-str">${strLabel} · ${nation.str}</span>
+        </div>`;
+    }).join('');
+
+    updateConfPills();
+  }
+
+  function updateConfPills() {
+    const confKeys = ['all', 'UEFA', 'CONMEBOL', 'CONCACAF', 'CAF', 'AFC', 'OFC'];
+    const pillIds = {
+      all: 'pill-all', UEFA: 'pill-uefa', CONMEBOL: 'pill-conmebol',
+      CONCACAF: 'pill-concacaf', CAF: 'pill-caf', AFC: 'pill-afc', OFC: 'pill-ofc'
+    };
+    confKeys.forEach(conf => {
+      const pill = document.getElementById(pillIds[conf]);
+      if (!pill) return;
+      const count = conf === 'all'
+        ? [...customDrawSelected].length
+        : [...customDrawSelected].filter(name => {
+            const n = WC_ALL_NATIONS.find(x => x.name === name);
+            return n && n.conf === conf;
+          }).length;
+      pill.textContent = count;
+      pill.style.background = count > 0 ? 'rgba(46,204,113,0.3)' : 'rgba(255,255,255,0.12)';
+    });
+  }
+
+  function updateCustomDrawProgress() {
+    const countEl = document.getElementById('wc-draw-selected-count');
+    const progressFill = document.getElementById('wc-draw-progress-fill');
+    const tipEl = document.getElementById('wc-draw-tip');
+    const startBtn = document.getElementById('wc-draw-btn-start');
+    if (!countEl || !progressFill || !tipEl || !startBtn) return;
+
+    const n = customDrawSelected.size;
+    countEl.textContent = n;
+    progressFill.style.width = `${Math.min(100, (n / 48) * 100)}%`;
+
+    if (n < 48) {
+      tipEl.textContent = `${48 - n} more needed to launch`;
+      tipEl.style.color = '';
+      startBtn.disabled = true;
+      startBtn.classList.remove('ready');
+    } else {
+      tipEl.textContent = '✓ All 48 nations selected — ready!';
+      tipEl.style.color = '#2ecc71';
+      startBtn.disabled = false;
+      startBtn.classList.add('ready');
+    }
+
+    progressFill.style.background = n >= 48
+      ? 'linear-gradient(90deg, #1a6b35, #2ecc71)'
+      : n >= 32
+        ? 'linear-gradient(90deg, #d68910, #ffd700)'
+        : 'linear-gradient(90deg, #c0392b, #e74c3c)';
+
+    updateConfPills();
+  }
+
+  function openCustomDrawModal() {
+    const modal = document.getElementById('wc-draw-modal');
+    if (!modal) return;
+
+    if (wcCustomTeams && wcCustomTeams.length === 48) {
+      customDrawSelected = new Set(wcCustomTeams.map(t => t.toUpperCase().trim()));
+    } else if (customDrawSelected.size === 0) {
+      // Default: top 48 strongest nations
+      const top48 = [...WC_ALL_NATIONS].sort((a, b) => b.str - a.str).slice(0, 48);
+      customDrawSelected = new Set(top48.map(n => n.name));
+    }
+
+    customDrawActiveConf = 'all';
+    customDrawSearchQuery = '';
+    const searchInput = document.getElementById('wc-draw-search');
+    if (searchInput) searchInput.value = '';
+    const tabs = document.querySelectorAll('.wc-draw-tab');
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.conf === 'all'));
+
+    renderCustomDrawGrid();
+    updateCustomDrawProgress();
+
+    modal.hidden = false;
+    modal.removeAttribute('hidden');
+    modal.style.setProperty('display', 'flex', 'important');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => { if (searchInput) searchInput.focus(); }, 100);
+  }
+
+  function closeCustomDrawModal() {
+    const modal = document.getElementById('wc-draw-modal');
+    if (modal) {
+      modal.hidden = true;
+      modal.setAttribute('hidden', '');
+      modal.style.setProperty('display', 'none', 'important');
+      document.body.style.overflow = '';
+    }
+  }
+
+  window.openCustomDrawModal = openCustomDrawModal;
+  window.closeCustomDrawModal = closeCustomDrawModal;
+
+  function setupCustomDrawModalHandlers() {
+    const modal = document.getElementById('wc-draw-modal');
+    const grid = document.getElementById('wc-draw-grid');
+    const closeBtn = document.getElementById('wc-draw-close');
+    const backdrop = document.getElementById('wc-draw-backdrop');
+    const randomBtn = document.getElementById('wc-draw-btn-random');
+    const resetBtn = document.getElementById('wc-draw-btn-reset');
+    const startBtn = document.getElementById('wc-draw-btn-start');
+    const searchInput = document.getElementById('wc-draw-search');
+    const presetReal = document.getElementById('wc-draw-preset-real');
+    const presetElite = document.getElementById('wc-draw-preset-elite');
+    const tabs = document.querySelectorAll('.wc-draw-tab');
+
+    // Real FIFA 2026 Confederation Allocation preset
+    // UEFA:16, CONMEBOL:6, CONCACAF:6, CAF:9, AFC:8, OFC:1, Host:2 (USA/Canada/Mexico already in CONCACAF)
+    const REAL_2026_ALLOCATIONS = { UEFA: 16, CONMEBOL: 6, CONCACAF: 6, CAF: 9, AFC: 8, OFC: 1, HOST: 2 };
+
+    // Global trigger delegation
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest('#btn-wc-custom-draw, .wc-btn-custom-draw');
+      if (trigger) { e.preventDefault(); e.stopPropagation(); openCustomDrawModal(); }
+    });
+
+    if (closeBtn) closeBtn.addEventListener('click', closeCustomDrawModal);
+    if (backdrop) backdrop.addEventListener('click', closeCustomDrawModal);
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal && !modal.hidden) closeCustomDrawModal();
+    });
+
+    // Search input
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        customDrawSearchQuery = searchInput.value.trim();
+        renderCustomDrawGrid();
+      });
+    }
+
+    // Grid card clicks (event delegation)
+    if (grid) {
+      grid.addEventListener('click', (e) => {
+        const card = e.target.closest('.wc-nation-card');
+        if (!card) return;
+        const name = card.dataset.name;
+        if (!name) return;
+
+        if (customDrawSelected.has(name)) {
+          customDrawSelected.delete(name);
+          card.classList.remove('selected');
+        } else {
+          if (customDrawSelected.size >= 48) {
+            card.classList.add('shake');
+            setTimeout(() => card.classList.remove('shake'), 400);
+            return;
+          }
+          customDrawSelected.add(name);
+          card.classList.add('selected');
+        }
+        updateCustomDrawProgress();
+      });
+    }
+
+    // Confederation tabs
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        customDrawActiveConf = tab.dataset.conf || 'all';
+        renderCustomDrawGrid();
+      });
+    });
+
+    // Random 48
+    if (randomBtn) {
+      randomBtn.addEventListener('click', () => {
+        const shuffled = [...WC_ALL_NATIONS].sort(() => Math.random() - 0.5);
+        customDrawSelected = new Set(shuffled.slice(0, 48).map(n => n.name));
+        renderCustomDrawGrid();
+        updateCustomDrawProgress();
+      });
+    }
+
+    // Reset / clear all
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        customDrawSelected = new Set();
+        renderCustomDrawGrid();
+        updateCustomDrawProgress();
+      });
+    }
+
+    // REAL 2026 preset — respects confederation allocation
+    if (presetReal) {
+      presetReal.addEventListener('click', () => {
+        const confs = ['UEFA', 'CONMEBOL', 'CONCACAF', 'CAF', 'AFC', 'OFC'];
+        const allocations = { UEFA: 16, CONMEBOL: 6, CONCACAF: 6, CAF: 9, AFC: 8, OFC: 1 };
+        customDrawSelected = new Set();
+        confs.forEach(conf => {
+          const pool = WC_ALL_NATIONS.filter(n => n.conf === conf).sort((a, b) => b.str - a.str);
+          const slots = allocations[conf] || 0;
+          pool.slice(0, slots).forEach(n => customDrawSelected.add(n.name));
+        });
+        // Fill remaining 2 spots with top remaining teams
+        if (customDrawSelected.size < 48) {
+          const remaining = WC_ALL_NATIONS
+            .filter(n => !customDrawSelected.has(n.name))
+            .sort((a, b) => b.str - a.str);
+          remaining.slice(0, 48 - customDrawSelected.size).forEach(n => customDrawSelected.add(n.name));
+        }
+        renderCustomDrawGrid();
+        updateCustomDrawProgress();
+      });
+    }
+
+    // TOP 48 ELITE preset — pure strength rating
+    if (presetElite) {
+      presetElite.addEventListener('click', () => {
+        const top48 = [...WC_ALL_NATIONS].sort((a, b) => b.str - a.str).slice(0, 48);
+        customDrawSelected = new Set(top48.map(n => n.name));
+        renderCustomDrawGrid();
+        updateCustomDrawProgress();
+      });
+    }
+
+    // Launch simulation
+    if (startBtn) {
+      startBtn.addEventListener('click', () => {
+        if (customDrawSelected.size !== 48) return;
+        wcCustomTeams = [...customDrawSelected];
+        closeCustomDrawModal();
+        initTournamentState('wc');
+        const state = tournamentState['wc'];
+        if (state) {
+          state.subView = 'sim';
+          activeStageFilter = 'all';
+        }
+        renderActiveTournament();
+      });
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // 13. MARIO STRIKER HEADER PITCH ENGINE
+  // ---------------------------------------------------------------------------
+  function initMarioStrikerEngine() {
+    const actor = document.getElementById('mario-pitch-actor');
+    const pitch = document.getElementById('header-pitch-track');
+    const ballWrap = document.getElementById('mario-soccer-ball-wrap');
+    const bubble = document.getElementById('mario-action-bubble');
+    if (!actor || !pitch) return;
+
+    let posX = 15; // percentage across header
+    let speed = 0.18; // percent per frame
+    let direction = 1; // 1 = right, -1 = left
+    let isPowerShot = false;
+    let powerShotProgress = 0;
+    let isPaused = false;
+
+    const phrases = [
+      'GOAL! ⚽🔥', 'SUPER STRIKE! ⚡', 'HAT-TRICK! 🎩🎩🎩',
+      'MAMA MIA! 🍄', 'ITS-A ME, SCORER! 🎉',
+      'WAHOOOO! 🌟', 'POISSON CURVE! 📐💥',
+      'ARENA CHAMP! 🏆', 'LET\'S-A GO! 🚀',
+      'TOP BINS! 🎯', 'BELLISSIMO! 🇮🇹✨',
+      'GOLAZO! 🥇🔥', '1-UP! 💚', 'GAME OVER? NEVER! 😤'
+    ];
+
+    actor.classList.add('running');
+
+    function animateMario() {
+      if (!isPaused) {
+        if (isPowerShot) {
+          powerShotProgress += 1.5;
+          if (ballWrap) {
+            const ballLead = direction === 1 ? powerShotProgress * 4 : -powerShotProgress * 4;
+            ballWrap.style.transform = `translateX(${ballLead}px) rotate(${powerShotProgress * 25}deg)`;
+          }
+
+          if (powerShotProgress > 45) {
+            isPowerShot = false;
+            powerShotProgress = 0;
+            actor.classList.remove('power-shot');
+            if (ballWrap) {
+              ballWrap.style.transition = 'transform 0.4s ease-out';
+              ballWrap.style.transform = 'none';
+              setTimeout(() => {
+                if (ballWrap) ballWrap.style.transition = '';
+              }, 400);
+            }
+          }
+        } else {
+          // Regular dribble cycle
+          posX += speed * direction;
+
+          // Boundary bounce with direction flip
+          if (posX >= 88) {
+            posX = 88;
+            direction = -1;
+            triggerDribbleTurn();
+          } else if (posX <= 4) {
+            posX = 4;
+            direction = 1;
+            triggerDribbleTurn();
+          }
+
+          actor.style.left = `${posX}%`;
+          actor.style.transform = direction === -1 ? 'scaleX(-1)' : 'scaleX(1)';
+        }
+      }
+
+      requestAnimationFrame(animateMario);
+    }
+
+    function triggerDribbleTurn() {
+      actor.classList.remove('running');
+      if (ballWrap) {
+        ballWrap.style.transform = 'translateY(-6px)';
+        setTimeout(() => { if (ballWrap) ballWrap.style.transform = 'none'; }, 200);
+      }
+      setTimeout(() => {
+        actor.classList.add('running');
+      }, 150);
+    }
+
+    function triggerSuperShot() {
+      if (isPowerShot) return;
+      isPowerShot = true;
+      powerShotProgress = 0;
+      actor.classList.add('power-shot');
+
+      // Random celebration phrase
+      if (bubble) {
+        const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+        bubble.textContent = randomPhrase;
+      }
+    }
+
+    // Click on Mario triggers super strike
+    actor.addEventListener('click', (e) => {
+      e.stopPropagation();
+      triggerSuperShot();
+    });
+
+    actor.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        triggerSuperShot();
+      }
+    });
+
+    // Pause slightly on hover so user can appreciate details
+    actor.addEventListener('mouseenter', () => {
+      speed = 0.08;
+    });
+    actor.addEventListener('mouseleave', () => {
+      speed = 0.18;
+    });
+
+    requestAnimationFrame(animateMario);
+  }
+
+  // ---------------------------------------------------------------------------
+  // 13. DOM BOOTSTRAP
   // ---------------------------------------------------------------------------
   document.addEventListener('DOMContentLoaded', () => {
     buildLogoCache();
     setupNavigation();
     setupSimulationControls();
     setupModalHandlers();
+    setupCustomDrawModalHandlers();
+    initMarioStrikerEngine();
     // Start on HOME view — selectTournament will set subView='home' via initTournamentState
     selectTournament('wc');
     switchView('tournament-home');
   });
 
 })();
+

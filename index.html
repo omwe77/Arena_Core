@@ -20,13 +20,128 @@
 
 <body>
 
-  <!-- Top Broadcast Header -->
+  <!-- Top Broadcast Header with Interactive Stadium Pitch Strip & Mario Striker -->
   <header class="site-header">
+    <!-- Header Mini Stadium Turf Pitch Track with Realistic Grass Blades -->
+    <div class="header-pitch-track" id="header-pitch-track" aria-hidden="true">
+      <div class="pitch-turf-stripes"></div>
+      <div class="pitch-grass-texture-real"></div>
+      <div class="pitch-touchline top-line"></div>
+      <div class="pitch-touchline bottom-line"></div>
+      <div class="pitch-marking-center"></div>
+      <div class="pitch-penalty-arc left-arc"></div>
+      <div class="pitch-penalty-arc right-arc"></div>
+      <div class="pitch-corner-flag flag-left">🚩</div>
+      <div class="pitch-corner-flag flag-right">🚩</div>
+      <div class="pitch-floodlight left-floodlight"></div>
+      <div class="pitch-floodlight right-floodlight"></div>
+
+      <!-- Animated Mario Striker Runner (Rigged Hands & Legs) & Dynamic Soccer Ball -->
+      <div class="mario-pitch-actor" id="mario-pitch-actor" role="button" tabindex="0" title="⚡ Click Mario to trigger Super Power Shot!">
+        <div class="mario-sprite-container">
+          <!-- Rigged Animated Themed Mario Striker SVG -->
+          <svg class="mario-svg" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="mario-glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="var(--mario-glow, rgba(46,204,113,0.6))" />
+              </filter>
+            </defs>
+            <g filter="url(#mario-glow)">
+              
+              <!-- 1. LEFT ARM (Back Arm - Pumps opposite to left leg) -->
+              <g class="mario-limb mario-arm-left">
+                <path d="M25 38 C18 40, 14 44, 13 48 C15 50, 19 48, 22 43 Z" fill="var(--mario-kit-primary, #E52521)" stroke="#111" stroke-width="1.1"/>
+                <ellipse cx="12" cy="49" rx="3.5" ry="3.5" fill="#FFFFFF" stroke="#111" stroke-width="1"/>
+              </g>
+
+              <!-- 2. LEFT LEG (Back Leg - Runs & kicks) -->
+              <g class="mario-limb mario-leg-left">
+                <path d="M26 48 C23 53, 21 57, 24 59 C28 59, 29 55, 30 50 Z" fill="var(--mario-kit-secondary, #002B7F)" stroke="#111" stroke-width="1.1"/>
+                <!-- Left Cleat Boot -->
+                <path d="M22 57 C17 59, 16 63, 21 64 C25 64, 28 61, 28 57 Z" fill="#5D3A1A" stroke="#111" stroke-width="1.2"/>
+                <circle cx="18" cy="64.5" r="0.9" fill="#E0E0E0"/>
+                <circle cx="22" cy="64.5" r="0.9" fill="#E0E0E0"/>
+              </g>
+
+              <!-- 3. TORSO & HEAD (Core body) -->
+              <g class="mario-torso-head">
+                <!-- Hair Back -->
+                <path d="M22 23 C18 27, 20 34, 25 35 C23 32, 23 27, 26 24 Z" fill="#4E2E19" stroke="#111" stroke-width="1"/>
+
+                <!-- Dynamic Overalls / Shorts -->
+                <path class="mario-shorts-fill" d="M26 46 C24 51, 26 55, 34 55 C37 55, 37 53, 40 53 C43 53, 43 55, 47 55 C50 54, 49 48, 45 46 Z" fill="var(--mario-kit-secondary, #002B7F)" stroke="#111" stroke-width="1.2"/>
+                <!-- Golden Buttons -->
+                <circle cx="30" cy="46" r="1.6" fill="#FFD700" stroke="#111" stroke-width="0.8"/>
+                <circle cx="42" cy="46" r="1.6" fill="#FFD700" stroke="#111" stroke-width="0.8"/>
+
+                <!-- Dynamic Tournament Football Jersey -->
+                <path class="mario-jersey-fill" d="M26 36 C24 40, 23 46, 27 49 C32 51, 42 50, 45 45 C47 41, 45 36, 42 36 Z" fill="var(--mario-kit-primary, #E52521)" stroke="#111" stroke-width="1.2"/>
+                <path class="mario-jersey-stripe" d="M31 36 C34 41, 38 41, 41 36" stroke="var(--mario-kit-secondary, #FFD700)" stroke-width="2.5" fill="none"/>
+
+                <!-- Face & Ears -->
+                <ellipse cx="35" cy="29" rx="10" ry="8.5" fill="#FFCCA3" stroke="#111" stroke-width="1"/>
+                <circle cx="25" cy="30" r="3.2" fill="#FFCCA3" stroke="#111" stroke-width="1"/>
+                <!-- Nose -->
+                <ellipse cx="43" cy="28" rx="5" ry="4" fill="#FFCCA3" stroke="#111" stroke-width="1.2"/>
+                <!-- Eye -->
+                <ellipse cx="37" cy="25.5" rx="2.5" ry="3.5" fill="#FFFFFF" stroke="#111" stroke-width="0.8"/>
+                <ellipse cx="38" cy="25.5" rx="1.5" ry="2.2" fill="#2980B9"/>
+                <circle cx="38.5" cy="24.8" r="0.6" fill="#FFFFFF"/>
+                <!-- Mustache -->
+                <path d="M30 33 C34 31, 38 31, 41 33 C45 32, 49 33, 51 35 C48 37, 40 37, 30 34 Z" fill="#3D2314" stroke="#111" stroke-width="1"/>
+
+                <!-- Mario Cap -->
+                <path class="mario-cap-fill" d="M18 22 C18 13, 44 11, 52 18 C56 22, 58 27, 46 27 C38 27, 24 27, 18 22 Z" fill="var(--mario-cap, #E52521)" stroke="#111" stroke-width="1.2"/>
+                <path class="mario-cap-visor" d="M38 24 C46 24, 60 25, 62 29 C56 31, 42 30, 36 27 Z" fill="var(--mario-cap-dark, #B71C1C)" stroke="#111" stroke-width="1"/>
+                <!-- Cap Emblem (M) -->
+                <ellipse cx="34" cy="18" rx="6" ry="5.5" fill="#FFFFFF" stroke="#111" stroke-width="1"/>
+                <text x="31" y="21.5" font-family="'Chakra Petch', sans-serif" font-weight="900" font-size="7" fill="var(--mario-cap, #E52521)">M</text>
+              </g>
+
+              <!-- 4. RIGHT LEG (Front Leg - High-knee stride) -->
+              <g class="mario-limb mario-leg-right">
+                <path d="M38 48 C41 53, 44 57, 48 57 C51 55, 49 50, 44 48 Z" fill="var(--mario-kit-secondary, #002B7F)" stroke="#111" stroke-width="1.1"/>
+                <!-- Right Cleat Boot -->
+                <path d="M42 55 C42 59, 46 63, 51 63 C55 61, 54 57, 49 55 Z" fill="#5D3A1A" stroke="#111" stroke-width="1.2"/>
+                <circle cx="49" cy="63.5" r="0.9" fill="#E0E0E0"/>
+                <circle cx="53" cy="63.5" r="0.9" fill="#E0E0E0"/>
+              </g>
+
+              <!-- 5. RIGHT ARM (Front Arm - Forward athletic balance) -->
+              <g class="mario-limb mario-arm-right">
+                <path d="M42 39 C47 41, 52 44, 55 42 C56 40, 52 37, 47 37 Z" fill="var(--mario-kit-primary, #E52521)" stroke="#111" stroke-width="1.1"/>
+                <ellipse cx="56" cy="42" rx="3.5" ry="3.5" fill="#FFFFFF" stroke="#111" stroke-width="1"/>
+              </g>
+
+            </g>
+          </svg>
+          <div class="mario-drop-shadow"></div>
+          <div class="grass-kick-burst" id="grass-kick-burst">
+            <span class="grass-blade b1"></span>
+            <span class="grass-blade b2"></span>
+            <span class="grass-blade b3"></span>
+          </div>
+        </div>
+
+        <!-- Soccer Ball with Spin & Shadow -->
+        <div class="mario-soccer-ball-wrap" id="mario-soccer-ball-wrap">
+          <div class="mario-ball-element">
+            <div class="ball-pentagons"></div>
+          </div>
+          <div class="ball-ground-shadow"></div>
+          <div class="ball-fire-trail" id="ball-fire-trail"></div>
+        </div>
+
+        <!-- Power Shot Floating Toast Text -->
+        <div class="mario-action-bubble" id="mario-action-bubble">GOAL! ⚽🔥</div>
+      </div>
+    </div>
+
+
     <div class="header-left">
       <div class="brand-logo">
-        <span class="logo-title">ARENA_CORE<span class="logo-ver">_V2.0</span></span>
+        <span class="logo-title">ARENA_CORE</span>
       </div>
-      <div class="brand-tagline">GLOBAL FOOTBALL DATA & SIMULATION NEXUS</div>
     </div>
 
     <!-- Main Navigation Bar -->
@@ -50,11 +165,20 @@
     </div>
   </header>
 
-  <!-- 10-Competition Selection Bar -->
+  <!-- 10-Competition Selection Bar with Scroll Navigation Arrows -->
   <nav class="competition-selector-bar" role="tablist" aria-label="Select Competition">
+    <button type="button" class="comp-nav-arrow arrow-left" id="comp-nav-left" aria-label="Scroll left" title="Scroll left">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
     <div class="comp-bar-inner" id="comp-bar-inner">
       <button type="button" class="comp-tab active" data-tourn="wc" role="tab" aria-selected="true">
         🌍 FIFA WORLD CUP
+      </button>
+      <button type="button" class="comp-tab" data-tourn="euro" role="tab" aria-selected="false">
+        🇪🇺 UEFA EURO 2024
+      </button>
+      <button type="button" class="comp-tab" data-tourn="copa" role="tab" aria-selected="false">
+        🏆 COPA AMÉRICA
       </button>
       <button type="button" class="comp-tab" data-tourn="ucl" role="tab" aria-selected="false">
         ⭐ UEFA CHAMPIONS LEAGUE
@@ -86,13 +210,10 @@
       <button type="button" class="comp-tab" data-tourn="scottishPrem" role="tab" aria-selected="false">
         🏴󠁧󠁢󠁳󠁣󠁴󠁿 SCOTTISH PREM
       </button>
-      <button type="button" class="comp-tab" data-tourn="euro" role="tab" aria-selected="false">
-        🇪🇺 UEFA EURO 2024
-      </button>
-      <button type="button" class="comp-tab" data-tourn="copa" role="tab" aria-selected="false">
-        🏆 COPA AMÉRICA
-      </button>
     </div>
+    <button type="button" class="comp-nav-arrow arrow-right" id="comp-nav-right" aria-label="Scroll right" title="Scroll right">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
   </nav>
 
   <!-- App Main Content Container -->
@@ -324,12 +445,57 @@
           </div>
         </div>
 
-        <footer class="site-footer">
-          <div class="footer-copy">©2024 ARENA_CORE // MULTI-TOURNAMENT FOOTBALL SIMULATION PLATFORM</div>
-          <div class="footer-links">
-            <a href="#" class="foot-link">PRIVACY</a>
-            <a href="#" class="foot-link">TERMS</a>
-            <a href="#" class="foot-link">DOCUMENTATION</a>
+        <!-- Modern Stadium Broadcast Footer -->
+        <footer class="stadium-broadcast-footer">
+          <div class="footer-glow-silhouette"></div>
+          <div class="footer-main-grid">
+            <div class="footer-brand-col">
+              <div class="footer-logo">
+                <span class="foot-logo-txt">ARENA_CORE</span>
+                <span class="foot-logo-badge">V2.0</span>
+              </div>
+              <p class="foot-desc">
+                High-performance global football simulation nexus powered by Poisson probability matrices, official historical metrics, and real-time interactive matchday engines.
+              </p>
+              <div class="foot-status-pill">
+                <span class="status-indicator-dot"></span>
+                <span>ENGINE ONLINE // 10 LEAGUES ACTIVE</span>
+              </div>
+            </div>
+
+            <div class="footer-links-col">
+              <h4 class="foot-col-title"><i class="fa-solid fa-trophy"></i> COMPETITIONS</h4>
+              <div class="foot-comp-tags">
+                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'wc\']')?.click();">🌍 World Cup</button>
+                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'ucl\']')?.click();">⭐ UCL</button>
+                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'pl\']')?.click();">⚔️ Premier League</button>
+                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'laliga\']')?.click();">🇪🇸 La Liga</button>
+                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'serieA\']')?.click();">🇮🇹 Serie A</button>
+                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'bundesliga\']')?.click();">🇩🇪 Bundesliga</button>
+                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'ligue1\']')?.click();">🇫🇷 Ligue 1</button>
+                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'ligaPortugal\']')?.click();">🇵🇹 Liga Portugal</button>
+                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'eredivisie\']')?.click();">🇳🇱 Eredivisie</button>
+                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'superLig\']')?.click();">🇹🇷 Süper Lig</button>
+              </div>
+            </div>
+
+            <div class="footer-tactical-col">
+              <h4 class="foot-col-title"><i class="fa-solid fa-bolt"></i> TACTICAL NEXUS</h4>
+              <ul class="foot-tactical-list">
+                <li><i class="fa-solid fa-chart-line"></i> Poisson Attack/Defense Calibrations</li>
+                <li><i class="fa-solid fa-shield-halved"></i> Live Table Goal Differential Computations</li>
+                <li><i class="fa-solid fa-clapperboard"></i> Highlight Video Replay Center</li>
+                <li><i class="fa-solid fa-gamepad"></i> Mario Striker Pitch Engine</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="footer-sub-bar">
+            <div class="foot-copy">© 2024 ARENA_CORE // MULTI-TOURNAMENT FOOTBALL PLATFORM. ALL RIGHTS RESERVED.</div>
+            <div class="foot-sub-links">
+              <span class="foot-hud-tag">BUILD: 2024.11.STRIKER</span>
+              <span class="foot-hud-tag">STATUS: 100% OPERATIONAL</span>
+            </div>
           </div>
         </footer>
       </section>
@@ -398,8 +564,58 @@
           </div>
         </div>
 
-        <footer class="site-footer">
-          <div class="footer-copy">©2024 ARENA_CORE // OFFICIAL FOOTBALL DATA LAYER</div>
+        <!-- Modern Stadium Broadcast Footer -->
+        <footer class="stadium-broadcast-footer">
+          <div class="footer-glow-silhouette"></div>
+          <div class="footer-main-grid">
+            <div class="footer-brand-col">
+              <div class="footer-logo">
+                <span class="foot-logo-txt">ARENA_CORE</span>
+                <span class="foot-logo-badge">V2.0</span>
+              </div>
+              <p class="foot-desc">
+                Official standings tables & top goalscorer statistics synchronized in real time with the simulation engine.
+              </p>
+              <div class="foot-status-pill">
+                <span class="status-indicator-dot"></span>
+                <span>STANDINGS LAYER // LIVE UPDATED</span>
+              </div>
+            </div>
+
+            <div class="footer-links-col">
+              <h4 class="foot-col-title"><i class="fa-solid fa-trophy"></i> COMPETITIONS</h4>
+              <div class="foot-comp-tags">
+                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'wc\']')?.click();">🌍 World Cup</button>
+                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'ucl\']')?.click();">⭐ UCL</button>
+                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'pl\']')?.click();">⚔️ Premier League</button>
+                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'laliga\']')?.click();">🇪🇸 La Liga</button>
+                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'serieA\']')?.click();">🇮🇹 Serie A</button>
+                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'bundesliga\']')?.click();">🇩🇪 Bundesliga</button>
+                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'ligue1\']')?.click();">🇫🇷 Ligue 1</button>
+                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'ligaPortugal\']')?.click();">🇵🇹 Liga Portugal</button>
+                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'eredivisie\']')?.click();">🇳🇱 Eredivisie</button>
+                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'superLig\']')?.click();">🇹🇷 Süper Lig</button>
+              </div>
+            </div>
+
+            <div class="footer-tactical-col">
+              <h4 class="foot-col-title"><i class="fa-solid fa-bolt"></i> TACTICAL NEXUS</h4>
+              <ul class="foot-tactical-list">
+                <li><i class="fa-solid fa-chart-simple"></i> Real-time Points & GD Recalibration</li>
+                <li><i class="fa-solid fa-trophy"></i> Golden Boot & Top Scorer Leaderboards</li>
+                <li><i class="fa-solid fa-flag-checkered"></i> Qualification Zone Highlights</li>
+                <li><i class="fa-solid fa-gamepad"></i> Mario Striker Live Pitch Integration</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="footer-sub-bar">
+            <div class="foot-copy">© 2024 ARENA_CORE // OFFICIAL FOOTBALL DATA LAYER. ALL RIGHTS RESERVED.</div>
+            <div class="foot-sub-links">
+              <span class="foot-hud-tag">LAYER: STANDINGS ENGINE</span>
+              <span class="foot-hud-tag">STATUS: 100% OPERATIONAL</span>
+            </div>
+          </div>
         </footer>
       </section>
 
@@ -442,23 +658,26 @@
   <!-- Majestic Grand Championship Celebration Modal -->
   <div id="champion-modal" class="modal celebration-modal" hidden tabindex="-1" role="dialog" aria-modal="true"
     aria-labelledby="champ-modal-name">
-    <div class="modal-backdrop" id="champ-modal-backdrop"></div>
+    <div class="modal-backdrop" id="champ-modal-backdrop" onclick="document.getElementById('champion-modal').hidden=true;"></div>
     <div class="modal-dialog champ-dialog">
       <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
-      <button type="button" id="champ-modal-close" class="modal-close-btn" aria-label="Close celebration">✕</button>
+      <button type="button" id="champ-modal-close" class="modal-close-btn" aria-label="Close celebration" onclick="document.getElementById('champion-modal').hidden=true;">✕</button>
 
       <div class="champ-modal-content">
         <div class="trophy-sparkle-wrap">
           <div class="gold-aura"></div>
-          <span class="champ-giant-trophy">🏆</span>
+          <span class="champ-giant-trophy" id="champ-modal-trophy">🏆</span>
         </div>
-        <div class="champ-headline">WORLD CHAMPIONS CROWNED!</div>
+        <div class="champ-headline" id="champ-modal-headline">CHAMPIONS CROWNED!</div>
         <div class="champ-tourn-name" id="champ-modal-tourn">FIFA WORLD CUP 2026</div>
 
         <div class="champ-team-card" id="champ-modal-team-card">
           <div class="champ-team-flag" id="champ-modal-flag">🇦🇷</div>
           <h2 class="champ-team-title" id="champ-modal-name">ARGENTINA</h2>
-          <div class="champ-tagline" id="champ-modal-tagline">GLORIOUS CHAMPIONS OF THE WORLD</div>
+          <div class="champ-tagline" id="champ-modal-tagline">GLORIOUS CHAMPIONS</div>
+          <div class="champ-hero-stats" id="champ-hero-stats">
+            <!-- Injected dynamically: Avg Goals/Match & Team Top Scorer -->
+          </div>
         </div>
 
         <div class="champ-stats-row" id="champ-stats-row">
@@ -467,7 +686,7 @@
 
         <div class="champ-modal-actions">
           <button type="button" class="champ-btn-primary" id="champ-confetti-btn">🎉 MORE CONFETTI</button>
-          <button type="button" class="champ-btn-secondary" id="champ-view-bracket-btn">🏆 BACK TO TOURNAMENT</button>
+          <button type="button" class="champ-btn-secondary" id="champ-view-bracket-btn" onclick="document.getElementById('champion-modal').hidden=true;">🏆 BACK TO TOURNAMENT</button>
         </div>
       </div>
     </div>
@@ -483,9 +702,116 @@
     <button type="button" class="toast-close" id="toast-close" aria-label="Dismiss toast">✕</button>
   </div>
 
+  <!-- ============================================================
+       WORLD CUP CUSTOM DRAW MODAL (PRO HIGH-TECH FIFA EDITION)
+       ============================================================ -->
+  <div id="wc-draw-modal" class="modal wc-draw-modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="wc-draw-title">
+    <div class="modal-backdrop wc-draw-backdrop" id="wc-draw-backdrop" onclick="window.closeCustomDrawModal &amp;&amp; window.closeCustomDrawModal()"></div>
+    <div class="modal-dialog wc-draw-dialog">
+
+      <!-- Header -->
+      <div class="wc-draw-header">
+        <div class="wc-draw-header-left">
+          <div class="wc-draw-trophy-badge">🏆</div>
+          <div>
+            <div class="wc-draw-gold-tag">FIFA WORLD CUP 2026</div>
+            <h2 class="wc-draw-title" id="wc-draw-title">CUSTOM TOURNAMENT DRAW</h2>
+          </div>
+        </div>
+        <button type="button" class="wc-draw-close-btn" id="wc-draw-close" aria-label="Close draw" onclick="window.closeCustomDrawModal &amp;&amp; window.closeCustomDrawModal()">✕</button>
+      </div>
+
+      <!-- Top HUD Toolbar: Progress Bar + Presets -->
+      <div class="wc-draw-progress-wrap">
+        <div class="wc-draw-count-row">
+          <div class="wc-draw-counter-box">
+            <span class="wc-draw-count-label">SELECTED CONTENDERS</span>
+            <span class="wc-draw-count-val"><span id="wc-draw-selected-count">0</span> <span class="wc-draw-of">/ 48</span></span>
+          </div>
+          
+          <!-- Preset Buttons -->
+          <div class="wc-draw-preset-actions">
+            <button type="button" class="wc-draw-preset-btn gold" id="wc-draw-preset-real" title="Load real FIFA 2026 Confederation Allocation">
+              <i class="fa-solid fa-globe"></i> REAL 2026
+            </button>
+            <button type="button" class="wc-draw-preset-btn" id="wc-draw-preset-elite" title="Select Top 48 Highest Rated Global Nations">
+              <i class="fa-solid fa-star"></i> TOP 48 ELITE
+            </button>
+            <button type="button" class="wc-draw-preset-btn" id="wc-draw-btn-random" title="Randomly shuffle 48 global contenders">
+              <i class="fa-solid fa-shuffle"></i> RANDOM 48
+            </button>
+            <button type="button" class="wc-draw-preset-btn danger" id="wc-draw-btn-reset" title="Clear all selections">
+              <i class="fa-solid fa-rotate-left"></i> CLEAR
+            </button>
+          </div>
+
+          <span class="wc-draw-count-tip" id="wc-draw-tip">Select 48 nations to launch</span>
+        </div>
+
+        <div class="wc-draw-progress-track">
+          <div class="wc-draw-progress-fill" id="wc-draw-progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- Search & Confederation Tabs Filter Bar -->
+      <div class="wc-draw-filter-bar">
+        <div class="wc-draw-search-box">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="wc-draw-search" class="wc-draw-search-input" placeholder="Search country (e.g. Brazil, France, Japan, USA)..." autocomplete="off" />
+        </div>
+
+        <div class="wc-draw-tabs" role="tablist" aria-label="Confederation tabs">
+          <button type="button" class="wc-draw-tab active" data-conf="all" role="tab">
+            🌐 ALL <span class="conf-pill" id="pill-all">48</span>
+          </button>
+          <button type="button" class="wc-draw-tab" data-conf="UEFA" role="tab">
+            🇪🇺 UEFA <span class="conf-pill" id="pill-uefa">0</span>
+          </button>
+          <button type="button" class="wc-draw-tab" data-conf="CONMEBOL" role="tab">
+            🌎 CONMEBOL <span class="conf-pill" id="pill-conmebol">0</span>
+          </button>
+          <button type="button" class="wc-draw-tab" data-conf="CONCACAF" role="tab">
+            🌐 CONCACAF <span class="conf-pill" id="pill-concacaf">0</span>
+          </button>
+          <button type="button" class="wc-draw-tab" data-conf="CAF" role="tab">
+            🌍 CAF <span class="conf-pill" id="pill-caf">0</span>
+          </button>
+          <button type="button" class="wc-draw-tab" data-conf="AFC" role="tab">
+            🌏 AFC <span class="conf-pill" id="pill-afc">0</span>
+          </button>
+          <button type="button" class="wc-draw-tab" data-conf="OFC" role="tab">
+            🏝️ OFC <span class="conf-pill" id="pill-ofc">0</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Nation Cards Grid Viewport -->
+      <div class="wc-draw-grid-wrap">
+        <div class="wc-draw-grid" id="wc-draw-grid">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+
+      <!-- Footer Actions & Simulation Launch Bar -->
+      <div class="wc-draw-footer">
+        <div class="wc-draw-footer-meta">
+          <span class="wc-hud-tag"><i class="fa-solid fa-layer-group"></i> 12 GROUPS (A–L)</span>
+          <span class="wc-hud-tag"><i class="fa-solid fa-trophy"></i> 32-TEAM KNOCKOUT</span>
+          <span class="wc-hud-tag"><i class="fa-solid fa-chart-line"></i> POISSON SIMULATION</span>
+        </div>
+
+        <button type="button" class="wc-draw-btn-start" id="wc-draw-btn-start" disabled>
+          <i class="fa-solid fa-play"></i>
+          <span>LAUNCH SIMULATION</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Real Data Layer & Application Script -->
-  <script src="data/real-tournaments.js"></script>
-  <script src="app.js"></script>
+  <script src="data/real-tournaments.js" defer></script>
+  <script src="app.js" defer></script>
 </body>
 
 </html>
