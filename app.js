@@ -4723,7 +4723,10 @@ enterBtn.addEventListener('click', () => {
         <!-- 4. Action Buttons Toolbar -->
         <div class="match-card-actions" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:4px;">
           ${!m.isSimulated && !m.isLive ? `
-            <button type="button" class="btn-sim-single btn-3d-click" data-stage="${stage}" data-idx="${idx}">
+            <button type="button" class="btn-card-fast-sim btn-3d-click" data-stage="${stage}" data-idx="${idx}" style="background:var(--pitch-green);color:#000;font-weight:900;border:none;padding:5px 10px;border-radius:6px;font-size:0.72rem;cursor:pointer;">
+              ▶ SIMULATE MATCH
+            </button>
+            <button type="button" class="btn-sim-single btn-3d-click" data-stage="${stage}" data-idx="${idx}" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.25);color:#fff;padding:5px 10px;border-radius:6px;font-size:0.72rem;cursor:pointer;">
               <i class="fa-solid fa-crosshairs"></i> 🎯 TACTICAL TRACKER
             </button>
             <button type="button" class="btn-open-holo-broadcast btn-3d-click" data-stage="${stage}" data-idx="${idx}" style="background:linear-gradient(135deg,#00e5ff,#2ecc71);color:#000;font-weight:900;border:none;padding:5px 10px;border-radius:6px;font-size:0.72rem;cursor:pointer;">
@@ -5313,7 +5316,7 @@ enterBtn.addEventListener('click', () => {
     match.currentSimMinute = 0;
     match.currentDisplayScoreHome = 0;
     match.currentDisplayScoreAway = 0;
-    renderStageViewport();
+    renderActiveTournament();
 
     const simKey = `${stageKey}_${matchIdx}`;
     if (activeSingleMatchIntervals[simKey]) {
@@ -5345,7 +5348,7 @@ enterBtn.addEventListener('click', () => {
       const timerEl = document.querySelector(`[data-stage="${stageKey}"] .card-live-progress-fill`);
       if (timerEl) timerEl.style.width = `${pct}%`;
 
-      renderStageViewport();
+      renderActiveTournament();
 
       if (curMin >= totalTargetMinutes) {
         clearInterval(activeSingleMatchIntervals[simKey]);
@@ -6744,7 +6747,13 @@ enterBtn.addEventListener('click', () => {
           matchObj.isLive = false;
           matchObj.isSimulated = true;
         }
-        renderStageViewport();
+        if (stageKey && tournamentState[activeTournKey]?.[stageKey]) {
+          const allDone = (tournamentState[activeTournKey][stageKey] || []).every(m => m.isSimulated);
+          if (allDone) {
+            progressToNextStage(stageKey);
+          }
+        }
+        renderActiveTournament();
         if (stageKey) showStageAdvancementToast(stageKey);
       }
     }, 150);
@@ -6773,7 +6782,13 @@ enterBtn.addEventListener('click', () => {
           matchObj.isLive = false;
           matchObj.isSimulated = true;
         }
-        renderStageViewport();
+        if (stageKey && tournamentState[activeTournKey]?.[stageKey]) {
+          const allDone = (tournamentState[activeTournKey][stageKey] || []).every(m => m.isSimulated);
+          if (allDone) {
+            progressToNextStage(stageKey);
+          }
+        }
+        renderActiveTournament();
         if (stageKey) showStageAdvancementToast(stageKey);
       };
     }
@@ -7033,7 +7048,13 @@ enterBtn.addEventListener('click', () => {
           matchObj.isLive = false;
           matchObj.isSimulated = true;
         }
-        renderStageViewport();
+        if (stageKey && tournamentState[activeTournKey]?.[stageKey]) {
+          const allDone = (tournamentState[activeTournKey][stageKey] || []).every(m => m.isSimulated);
+          if (allDone) {
+            progressToNextStage(stageKey);
+          }
+        }
+        renderActiveTournament();
         if (stageKey) showStageAdvancementToast(stageKey);
       }
     }, 150);
@@ -7062,7 +7083,13 @@ enterBtn.addEventListener('click', () => {
           matchObj.isLive = false;
           matchObj.isSimulated = true;
         }
-        renderStageViewport();
+        if (stageKey && tournamentState[activeTournKey]?.[stageKey]) {
+          const allDone = (tournamentState[activeTournKey][stageKey] || []).every(m => m.isSimulated);
+          if (allDone) {
+            progressToNextStage(stageKey);
+          }
+        }
+        renderActiveTournament();
         if (stageKey) showStageAdvancementToast(stageKey);
       };
     }
@@ -7113,6 +7140,17 @@ enterBtn.addEventListener('click', () => {
 
     // Global delegation for single match simulation buttons across all tournaments & leagues
     document.addEventListener('click', (e) => {
+      // 1. Fast On-Card Simulation
+      const fastSimBtn = e.target.closest('.btn-card-fast-sim');
+      if (fastSimBtn) {
+        e.preventDefault();
+        const stageKey = fastSimBtn.dataset.stage;
+        const matchIdx = parseInt(fastSimBtn.dataset.idx, 10);
+        simulateSingleMatch(stageKey, matchIdx);
+        return;
+      }
+
+      // 2. Tactical Tracker Modal Simulation
       const simBtn = e.target.closest('.btn-sim-single, .btn-sim-league-match');
       if (simBtn) {
         e.preventDefault();
@@ -7128,15 +7166,14 @@ enterBtn.addEventListener('click', () => {
           match = state?.[stageKey]?.[matchIdx];
           if (match) {
             openProTacticalTracker(match.home, match.away, match, stageKey, matchIdx);
-            simulateSingleMatch(stageKey, matchIdx);
           }
         } else if (mdIdx !== undefined && midx !== undefined) {
           match = state?.matchdays?.[mdIdx]?.[midx];
           if (match) {
             openProTacticalTracker(match.home, match.away, match, `md_${mdIdx}`, midx);
-            simulateSingleLeagueMatch(mdIdx, midx);
           }
         }
+        return;
       }
 
       const replayBtn = e.target.closest('.btn-reopen-tactical');
