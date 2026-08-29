@@ -4633,28 +4633,101 @@ enterBtn.addEventListener('click', () => {
     if (m.hadPenalties) ftBadgeText = `✓ FT (PENS ${m.penHome}-${m.penAway})`;
     else if (m.hadExtraTime) ftBadgeText = '✓ AET (120\')';
 
+    const compTitle = (config.name || 'FIFA WORLD CUP 2026').toUpperCase();
+    const stageTitle = STAGE_META[stage]?.title || stage.toUpperCase();
+    const clockStatus = m.isLive ? 'LIVE' : (m.isSimulated ? 'FULL TIME' : 'UPCOMING');
+    const clockTime = m.isLive ? `${m.currentSimMinute || 0}'` : (m.isSimulated ? '90:00' : '00:00');
+
+    // Dynamic tactical formation patterns
+    const tacticalPatterns = [
+      '4-3-3 Gegenpress · Compact High Block',
+      '4-2-3-1 Rapid Transition · Wing Overloads',
+      '3-5-2 Inverted Wingbacks · Central Overload',
+      '4-4-2 Zonal Pressing · Direct Attack',
+      '4-1-4-1 Deep Pivot · Possession Control'
+    ];
+    const hPatIdx = (m.home.charCodeAt(0) + (stage.charCodeAt(0) || 0)) % tacticalPatterns.length;
+    const aPatIdx = (m.away.charCodeAt(0) + (idx || 0) + 2) % tacticalPatterns.length;
+    const homePattern = tacticalPatterns[hPatIdx];
+    const awayPattern = tacticalPatterns[aPatIdx];
+
     return `
       <div class="bracket-match-card ${stageClass} ${m.isLive ? 'live-now' : ''}" data-stage="${stage}" data-idx="${idx}" data-match-id="${stage}_${idx}">
-        ${stageHeaderBadge}
-        ${m.hadExtraTime && m.isSimulated && !m.hadPenalties ? '<div class="match-meta-tag">AET</div>' : ''}
-        ${m.hadPenalties && m.isSimulated ? `<div class="match-meta-tag">PENS (${m.penHome}-${m.penAway})</div>` : ''}
+        
+        <!-- 1. Top TV Broadcast Scorebug Ribbon (Reference Design) -->
+        <div class="card-scorebug-header">
+          <div class="scorebug-comp-cap">
+            ${compTitle} // ${stageTitle}
+          </div>
+          <div class="scorebug-ribbon-bar">
+            <!-- Left Home Side (Red Ribbon) -->
+            <div class="scorebug-side home-side ${isWinnerHome ? 'winner-side' : ''}">
+              ${getTeamLogoHtml(m.home)}
+              <span class="scorebug-team-text">${m.home}</span>
+            </div>
 
-        <div class="bracket-team-row ${isWinnerHome ? 'winner-row' : ''}">
-          <span class="b-team-name">${getTeamLogoHtml(m.home)}${m.home}</span>
-          <span class="b-team-score">${homeScore}</span>
+            <!-- Center Digital Clock & Scores -->
+            <div class="scorebug-center-display">
+              <span class="scorebug-score-num">${homeScore}</span>
+              <div class="scorebug-clock-box">
+                <span class="scorebug-clock-time">⏱ ${clockTime}</span>
+                <span class="scorebug-clock-status">${clockStatus}</span>
+              </div>
+              <span class="scorebug-score-num">${awayScore}</span>
+            </div>
+
+            <!-- Right Away Side (Blue Ribbon) -->
+            <div class="scorebug-side away-side ${isWinnerAway ? 'winner-side' : ''}">
+              <span class="scorebug-team-text">${m.away}</span>
+              ${getTeamLogoHtml(m.away)}
+            </div>
+          </div>
         </div>
-        <div class="bracket-team-row ${isWinnerAway ? 'winner-row' : ''}">
-          <span class="b-team-name">${getTeamLogoHtml(m.away)}${m.away}</span>
-          <span class="b-team-score">${awayScore}</span>
+
+        <!-- 2. Middle 3D VS Arena with Glowing Stadium Shields -->
+        <div class="card-vs-arena">
+          <!-- Home 3D Shield -->
+          <div class="vs-shield home-shield">
+            <span class="vs-shield-sparkle s-left">✦</span>
+            <div class="vs-shield-logo">${getTeamLogoHtml(m.home)}</div>
+            <span class="vs-shield-name">${m.home}</span>
+          </div>
+
+          <!-- Chrome 3D VS Emblem -->
+          <div class="vs-chrome-emblem">VS</div>
+
+          <!-- Away 3D Shield -->
+          <div class="vs-shield away-shield">
+            <span class="vs-shield-sparkle s-right">✦</span>
+            <div class="vs-shield-logo">${getTeamLogoHtml(m.away)}</div>
+            <span class="vs-shield-name">${m.away}</span>
+          </div>
         </div>
+
+        <!-- 3. Below Broadcast Section: Tactical Patterns & Intelligence -->
+        <div class="card-tactical-pattern-banner">
+          <div class="pattern-row">
+            <span class="pattern-tag home-pat">🛡️ ${m.home}</span>
+            <span class="pattern-desc">${homePattern}</span>
+          </div>
+          <div class="pattern-row">
+            <span class="pattern-tag away-pat">⚔️ ${m.away}</span>
+            <span class="pattern-desc">${awayPattern}</span>
+          </div>
+        </div>
+
         ${liveTimerHtml}
         ${pitch3dRadarHtml}
         ${eventsHtml}
 
-        <div class="match-card-actions" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+        <!-- 4. Action Buttons Toolbar -->
+        <div class="match-card-actions" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:4px;">
           ${!m.isSimulated && !m.isLive ? `
             <button type="button" class="btn-sim-single btn-3d-click" data-stage="${stage}" data-idx="${idx}">
               <i class="fa-solid fa-crosshairs"></i> 🎯 TACTICAL TRACKER
+            </button>
+            <button type="button" class="btn-open-holo-broadcast btn-3d-click" data-stage="${stage}" data-idx="${idx}" style="background:linear-gradient(135deg,#00e5ff,#2ecc71);color:#000;font-weight:900;border:none;padding:5px 10px;border-radius:6px;font-size:0.72rem;cursor:pointer;">
+              📺 3D BROADCAST
             </button>
           ` : ''}
           ${m.isLive ? `<span class="live-pill">🔴 LIVE IN-PROGRESS</span>` : ''}
@@ -4662,6 +4735,9 @@ enterBtn.addEventListener('click', () => {
             <span class="ft-pill">${ftBadgeText}</span>
             <button type="button" class="btn-reopen-tactical btn-3d-click" data-stage="${stage}" data-idx="${idx}" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:4px 8px;border-radius:4px;font-size:0.68rem;cursor:pointer;">
               🎯 REPLAY TACTICS
+            </button>
+            <button type="button" class="btn-open-holo-broadcast btn-3d-click" data-stage="${stage}" data-idx="${idx}" style="background:rgba(0,229,255,0.15);border:1px solid #00e5ff;color:#00e5ff;padding:4px 8px;border-radius:4px;font-size:0.68rem;cursor:pointer;">
+              📺 3D HOLO REPLAY
             </button>
           ` : ''}
         </div>
@@ -7072,6 +7148,18 @@ enterBtn.addEventListener('click', () => {
         const match = state?.[stageKey]?.[matchIdx];
         if (match) {
           openProTacticalTracker(match.home, match.away, match, stageKey, matchIdx);
+        }
+      }
+
+      const holoBtn = e.target.closest('.btn-open-holo-broadcast');
+      if (holoBtn) {
+        e.preventDefault();
+        const stageKey = holoBtn.dataset.stage;
+        const matchIdx = parseInt(holoBtn.dataset.idx, 10);
+        const state = tournamentState[activeTournKey];
+        const match = state?.[stageKey]?.[matchIdx];
+        if (match) {
+          open3DHolographicBroadcast(match.home, match.away, match, stageKey, matchIdx);
         }
       }
     });
