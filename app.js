@@ -1519,17 +1519,17 @@ function setupNavigation() {
   function selectTournament(key) {
     if (!TOURNAMENTS_CONFIG[key]) return;
     cancelAllActiveSimulationTimers();
+
+    // Check if the simulator tab is currently selected in top nav or if previously in sim subview
+    const isSimNavActive = document.querySelector('.top-nav-link[data-nav="tournament-sim"]')?.classList.contains('active') ||
+                           document.querySelector('.side-item[data-target="tournament-sim"]')?.classList.contains('active') ||
+                           tournamentState[activeTournKey]?.subView === 'sim';
+
     activeTournKey = key;
     activeStageFilter = 'all';
 
     document.documentElement.setAttribute('data-theme', activeTournKey);
     document.body.setAttribute('data-theme', activeTournKey);
-
-    // Add theme transition class for smooth color transition
-    document.documentElement.classList.add('theme-transition');
-    setTimeout(() => {
-      document.documentElement.classList.remove('theme-transition');
-    }, 2000);
 
     // Update competition tabs in header & auto-scroll active tab into view
     const compInner = document.getElementById('comp-bar-inner');
@@ -1544,6 +1544,11 @@ function setupNavigation() {
 
     // Initialize/reset tournament state for fresh simulation
     initTournamentState(activeTournKey);
+
+    // If user was viewing simulator, maintain simulator subview for immediate simulation
+    if (isSimNavActive && tournamentState[activeTournKey]) {
+      tournamentState[activeTournKey].subView = 'sim';
+    }
 
     renderActiveTournament();
   }
@@ -1592,26 +1597,24 @@ function setupNavigation() {
     // Adapt Stage Action Button text
     if (stageActionBtn) {
       if (config.format === 'leagueSeason') {
-        stageActionBtn.textContent = state.currentMatchday >= state.totalMatchdays
+        const pendingMd = getFirstPendingMatchdayIdx(state);
+        stageActionBtn.textContent = pendingMd >= state.totalMatchdays
           ? '🏆 SEASON DONE'
-          : `⚡ MATCHDAY ${state.currentMatchday + 1}`;
-        stageActionBtn.disabled = state.currentMatchday >= state.totalMatchdays;
+          : `⚡ MATCHDAY ${pendingMd + 1}`;
+        stageActionBtn.disabled = pendingMd >= state.totalMatchdays;
       } else if (state.groups && !state.groupsPlayed) {
         stageActionBtn.textContent = '⚡ GROUP STAGE';
         stageActionBtn.disabled = false;
-      } else if (state.r32 && state.r32.length > 0 && state.r16.length === 0) {
+      } else if (state.r32 && state.r32.length > 0 && state.r32.some(m => !m.isSimulated)) {
         stageActionBtn.textContent = '⚡ ROUND OF 32';
         stageActionBtn.disabled = false;
-      } else if (state.playoffs && state.playoffs.length > 0 && state.r16.length === 0) {
-        stageActionBtn.textContent = '⚡ PLAYOFFS';
-        stageActionBtn.disabled = false;
-      } else if (state.r16 && state.r16.length > 0 && state.qf.length === 0) {
+      } else if (state.r16 && state.r16.length > 0 && state.r16.some(m => !m.isSimulated)) {
         stageActionBtn.textContent = '⚡ ROUND OF 16';
         stageActionBtn.disabled = false;
-      } else if (state.qf && state.qf.length > 0 && state.sf.length === 0) {
+      } else if (state.qf && state.qf.length > 0 && state.qf.some(m => !m.isSimulated)) {
         stageActionBtn.textContent = '⚡ QUARTERFINALS';
         stageActionBtn.disabled = false;
-      } else if (state.sf && state.sf.length > 0 && state.gf.length === 0) {
+      } else if (state.sf && state.sf.length > 0 && state.sf.some(m => !m.isSimulated)) {
         stageActionBtn.textContent = '⚡ SEMIFINALS';
         stageActionBtn.disabled = false;
       } else if (state.gf && state.gf.length > 0 && !state.champion) {
@@ -1625,18 +1628,10 @@ function setupNavigation() {
 
     const simHeaderCard = document.querySelector('.sim-header-card');
     const stageTabsWrap = document.querySelector('.bracket-nav-tabs');
-    const isLaLigaHome = activeTournKey === 'laliga' && state.subView !== 'sim';
-    const isPLHome = activeTournKey === 'pl' && state.subView !== 'sim';
-    const isSerieAHome = activeTournKey === 'serieA' && state.subView !== 'sim';
-    const isBundesligaHome = activeTournKey === 'bundesliga' && state.subView !== 'sim';
-    const isLigue1Home = activeTournKey === 'ligue1' && state.subView !== 'sim';
-    const isLigaPortugalHome = activeTournKey === 'ligaPortugal' && state.subView !== 'sim';
-    const isEredivisieHome = activeTournKey === 'eredivisie' && state.subView !== 'sim';
-    const isSuperLigHome = activeTournKey === 'superLig' && state.subView !== 'sim';
-    const isScottishPremHome = activeTournKey === 'scottishPrem' && state.subView !== 'sim';
-    const isWcHome = activeTournKey === 'wc' && state.subView !== 'sim';
-    const isUclHome = activeTournKey === 'ucl' && state.subView !== 'sim';
-    if (isLaLigaHome || isPLHome || isSerieAHome || isBundesligaHome || isLigue1Home || isLigaPortugalHome || isEredivisieHome || isSuperLigHome || isScottishPremHome || isWcHome || isUclHome) {
+    const isHomeSubView = state.subView !== 'sim';
+    const hasDedicatedHomePage = ['wc', 'ucl', 'pl', 'laliga', 'serieA', 'bundesliga', 'ligue1', 'ligaPortugal', 'eredivisie', 'superLig', 'scottishPrem'].includes(activeTournKey);
+
+    if (isHomeSubView && hasDedicatedHomePage) {
       if (simHeaderCard) simHeaderCard.hidden = true;
       if (stageTabsWrap) stageTabsWrap.hidden = true;
     } else {
@@ -1884,8 +1879,42 @@ function setupNavigation() {
     return [];
   }
 
+  function scrollToStageSection(stageKey) {
+    setTimeout(() => {
+      const scrollOuter = document.querySelector('.bracket-scroll-flip-outer');
+      const stageViewport = document.querySelector('.tournament-stage-viewport');
+
+      if (stageViewport) {
+        const yOffset = -70;
+        const y = stageViewport.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+      }
+
+      if (stageKey === 'groups') {
+        const groupsContainer = document.getElementById('groups-grid-container');
+        if (groupsContainer) {
+          groupsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } else if (scrollOuter) {
+        const targetCol = document.getElementById(`col-${stageKey}`);
+        if (targetCol) {
+          const targetLeft = targetCol.offsetLeft;
+          scrollOuter.scrollTo({ left: Math.max(0, targetLeft - 20), behavior: 'smooth' });
+        }
+      }
+    }, 80);
+  }
+
   function setStageTab(stageKey, shouldScroll = false) {
     activeStageFilter = stageKey || 'all';
+
+    const state = tournamentState[activeTournKey];
+    if (state) {
+      state.subView = 'sim';
+      if (['r32', 'r16', 'qf', 'sf', 'gf'].includes(activeStageFilter)) {
+        ensureStagePrerequisites(activeStageFilter);
+      }
+    }
 
     document.querySelectorAll('#stage-tabs-group .bracket-tab').forEach(t => {
       const isMatch = (t.dataset.stage === activeStageFilter);
@@ -1897,15 +1926,10 @@ function setupNavigation() {
       }
     });
 
-    renderStageViewport();
+    renderActiveTournament();
 
     if (shouldScroll) {
-      const stageViewport = document.querySelector('.tournament-stage-viewport');
-      if (stageViewport) {
-        const yOffset = -80;
-        const y = stageViewport.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
-      }
+      scrollToStageSection(stageKey);
     }
   }
 
@@ -1967,7 +1991,7 @@ function setupNavigation() {
       const placeholders = getPlaceholdersForStage(stageKey);
       const prevActionText = state.groups && !state.groupsPlayed
         ? 'SIMULATE GROUP STAGE'
-        : `SIMULATE ${meta.prevStage.toUpperCase()}`;
+        : `SIMULATE UP TO ${meta.title}`;
 
       const pendingBanner = `
         <div class="stage-pending-banner">
@@ -1975,7 +1999,7 @@ function setupNavigation() {
             <span>⏳</span>
             <span>${meta.title} PENDING — ${meta.count} FIXTURE SLOTS (Awaiting ${meta.prevStage} Qualification)</span>
           </div>
-          <button type="button" class="btn-stage-quick-action" data-action="advance-stage">⚡ ${prevActionText}</button>
+          <button type="button" class="btn-stage-quick-action" data-stage="${stageKey}" data-action="advance-stage">⚡ ${prevActionText}</button>
         </div>
       `;
 
@@ -2085,9 +2109,14 @@ function setupNavigation() {
 
     bracketContainer.querySelectorAll('.btn-stage-quick-action').forEach(btn => {
       btn.addEventListener('click', () => {
-        const mainStageBtn = document.getElementById('sim-stage-action-btn');
-        if (mainStageBtn && !mainStageBtn.disabled) {
-          mainStageBtn.click();
+        const targetStage = btn.dataset.stage;
+        if (targetStage) {
+          simulateStageWithClock(targetStage);
+        } else {
+          const mainStageBtn = document.getElementById('sim-stage-action-btn');
+          if (mainStageBtn && !mainStageBtn.disabled) {
+            mainStageBtn.click();
+          }
         }
       });
     });
@@ -2190,14 +2219,19 @@ function setupNavigation() {
 
             <!-- Action CTAs -->
             <div class="wc-hero-actions">
-              <button type="button" class="wc-btn-primary" id="btn-wc-explore">
+              <button type="button" class="wc-btn-primary" id="btn-wc-sim-now" style="background: linear-gradient(135deg, #eab308, #ca8a04); border-color: #fde047; color: #0f172a; font-weight: 800; box-shadow: 0 4px 20px rgba(234, 179, 8, 0.4);">
+                <i class="fa-solid fa-bolt"></i>
+                <span>SIMULATE WORLD CUP</span>
                 <i class="fa-solid fa-play"></i>
-                <span>GO TO SIMULATION</span>
+              </button>
+              <button type="button" class="wc-btn-primary" id="btn-wc-explore">
+                <i class="fa-solid fa-layer-group"></i>
+                <span>VIEW BRACKET & GROUPS</span>
                 <i class="fa-solid fa-chevron-right"></i>
               </button>
               <button type="button" class="wc-btn-custom-draw" id="btn-wc-custom-draw" onclick="window.openCustomDrawModal &amp;&amp; window.openCustomDrawModal()">
                 <i class="fa-solid fa-sliders"></i>
-                <span>CUSTOM DRAW</span>
+                <span>CUSTOM DRAW (48)</span>
               </button>
             </div>
           </div>
@@ -2256,6 +2290,21 @@ function setupNavigation() {
     `;
 
     // Bind Hero Actions
+    const simNowBtn = container.querySelector('#btn-wc-sim-now');
+    if (simNowBtn) {
+      simNowBtn.addEventListener('click', () => {
+        state.subView = 'sim';
+        activeStageFilter = 'all';
+        renderActiveTournament();
+        setTimeout(() => {
+          const simStageBtn = document.getElementById('sim-stage-action-btn');
+          if (simStageBtn && !simStageBtn.disabled) {
+            simStageBtn.click();
+          }
+        }, 100);
+      });
+    }
+
     const exploreBtn = container.querySelector('#btn-wc-explore');
     if (exploreBtn) {
       exploreBtn.addEventListener('click', () => {
@@ -4269,8 +4318,10 @@ enterBtn.addEventListener('click', () => {
 
             <div class="match-card-actions">
               ${actionBtnHtml}
+              <button type="button" class="sfc-action-btn btn-open-detailed-stats" data-md="${selectedMdIdx}" data-midx="${mIdx}" data-home="${m.home}" data-away="${m.away}">📊 Detailed Stats</button>
             </div>
           </div>
+
         `;
       }).join('');
 
@@ -4419,13 +4470,83 @@ enterBtn.addEventListener('click', () => {
   }
 
   function renderGroupsGrid(state, container) {
-    container.innerHTML = Object.keys(state.groups).map(letter => {
+    const config = TOURNAMENTS_CONFIG[activeTournKey] || {};
+
+    // 1. Identify which 3rd-placed teams qualified
+    const thirdBestNames = new Set();
+    const qualifiedTeamsList = [];
+
+    if (state.groupsPlayed && state.groups) {
+      const thirdBest = [];
+      Object.keys(state.groups).forEach(letter => {
+        const teams = state.groups[letter];
+        if (teams && teams[0]) qualifiedTeamsList.push({ name: teams[0].name, isBest3rd: false, group: letter, rank: '1st' });
+        if (teams && teams[1]) qualifiedTeamsList.push({ name: teams[1].name, isBest3rd: false, group: letter, rank: '2nd' });
+        if (teams && teams[2]) {
+          thirdBest.push({ ...teams[2], group: letter });
+        }
+      });
+
+      const numQual = config.format === 'worldcup48' ? 8 : (config.format === 'euro24' ? 4 : 0);
+      thirdBest.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf).slice(0, numQual).forEach(t => {
+        thirdBestNames.add(t.name.toUpperCase());
+        qualifiedTeamsList.push({ name: t.name, isBest3rd: true, group: t.group, rank: '3rd' });
+      });
+    }
+
+    let summaryHubHtml = '';
+    if (state.groupsPlayed && qualifiedTeamsList.length > 0) {
+      const nextStageName = config.format === 'worldcup48' ? 'ROUND OF 32' : (config.format === 'euro24' ? 'ROUND OF 16' : 'QUARTERFINALS');
+      summaryHubHtml = `
+        <div class="groups-qualified-summary-card">
+          <div class="gq-header">
+            <div class="gq-title">
+              <span class="gq-trophy">🏆</span>
+              <div>
+                <h4>${qualifiedTeamsList.length} CONTENDERS ADVANCED TO ${nextStageName}</h4>
+                <span class="gq-subtitle">Group Stage Complete • Qualifiers Secured for Knockout Bracket</span>
+              </div>
+            </div>
+            <div class="gq-actions-row">
+              <button type="button" class="btn-gq-resim" id="btn-gq-resim"><i class="fa-solid fa-rotate"></i> Re-Simulate Groups</button>
+              <button type="button" class="btn-gq-advance" id="btn-gq-goto-r32">⚡ VIEW ${nextStageName} BRACKET →</button>
+            </div>
+          </div>
+          <div class="gq-teams-pills-wrap">
+            ${qualifiedTeamsList.map(t => `
+              <div class="gq-team-chip">
+                ${getTeamLogoHtml(t.name)}
+                <span>${t.name}</span>
+                <span class="gq-tag ${t.isBest3rd ? 'tag-3rd' : 'tag-top2'}">${t.isBest3rd ? '3RD' : 'TOP 2'}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    } else {
+      summaryHubHtml = `
+        <div class="groups-command-hub-banner">
+          <div class="gch-info">
+            <div class="gch-icon">⚡</div>
+            <div>
+              <h3 class="gch-heading">GROUP STAGE FIXTURES READY (12 GROUPS • 48 TEAMS)</h3>
+              <p class="gch-desc">Simulate all 36 group matches to determine the top 2 from each group plus the 8 best 3rd-placed teams advancing to the Round of 32.</p>
+            </div>
+          </div>
+          <button type="button" class="btn-sim-all-groups-hero" id="btn-sim-all-groups">
+            <i class="fa-solid fa-play"></i> ⚡ SIMULATE ALL 12 GROUPS
+          </button>
+        </div>
+      `;
+    }
+
+    const groupCardsHtml = Object.keys(state.groups).map(letter => {
       const teams = state.groups[letter];
       return `
         <div class="group-card">
           <div class="group-title">
             <span><i class="fa-solid fa-layer-group" style="color:var(--champions-gold);margin-right:6px;"></i> GROUP ${letter}</span>
-            ${state.groupsPlayed ? '<span class="group-status-done"><i class="fa-solid fa-check"></i> PLAYED</span>' : ''}
+            ${state.groupsPlayed ? '<span class="group-status-done"><i class="fa-solid fa-check"></i> PLAYED</span>' : `<button type="button" class="btn-quick-group-sim" data-group="${letter}"><i class="fa-solid fa-play"></i> Sim Group</button>`}
           </div>
           <table class="group-table">
             <thead>
@@ -4441,33 +4562,85 @@ enterBtn.addEventListener('click', () => {
               </tr>
             </thead>
             <tbody>
-              ${teams.map((t, idx) => `
-                <tr class="${state.groupsPlayed && (idx < 2) ? 'qualified' : ''}">
-                  <td>
-                    <span class="pos-badge ${idx === 0 ? 'pos-champion' : (idx === 1 ? 'pos-ucl' : '')}">
-                      ${idx + 1}
-                    </span>
-                  </td>
-                  <td class="b-team-name-cell">
-                    <div style="display:flex;align-items:center;gap:8px;">
-                      ${getTeamLogoHtml(t.name)}
-                      <strong>${t.name.toUpperCase()}</strong>
-                      ${state.groupsPlayed && idx === 0 ? '<i class="fa-solid fa-crown widget-crown-icon"></i>' : ''}
-                    </div>
-                  </td>
-                  <td>${t.mp}</td>
-                  <td>${t.w || 0}</td>
-                  <td>${t.d || 0}</td>
-                  <td>${t.l || 0}</td>
-                  <td>${t.gd > 0 ? '+' + t.gd : (t.gd || 0)}</td>
-                  <td><strong class="${idx < 2 ? 'gold-text' : 'pts-val'}">${t.pts}</strong></td>
-                </tr>
-              `).join('')}
+              ${teams.map((t, idx) => {
+                const isTop2 = state.groupsPlayed && (idx < 2);
+                const isBest3rd = state.groupsPlayed && idx === 2 && thirdBestNames.has(t.name.toUpperCase());
+                const isElim = state.groupsPlayed && (!isTop2 && !isBest3rd);
+
+                let qualBadge = '';
+                if (state.groupsPlayed) {
+                  if (idx === 0) qualBadge = '<span class="qual-badge-pill rank-1">🏆 1ST • QUALIFIED</span>';
+                  else if (idx === 1) qualBadge = '<span class="qual-badge-pill rank-2">✅ 2ND • QUALIFIED</span>';
+                  else if (isBest3rd) qualBadge = '<span class="qual-badge-pill rank-3-qual">⚡ 3RD • QUALIFIED</span>';
+                  else qualBadge = '<span class="elim-badge-pill">ELIMINATED</span>';
+                }
+
+                const rowClass = isTop2 ? 'qualified' : (isBest3rd ? 'qualified-3rd' : (isElim ? 'eliminated' : ''));
+
+                return `
+                  <tr class="${rowClass}">
+                    <td>
+                      <span class="pos-badge ${idx === 0 ? 'pos-champion' : (idx === 1 ? 'pos-ucl' : '')}">
+                        ${idx + 1}
+                      </span>
+                    </td>
+                    <td class="b-team-name-cell">
+                      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                        ${getTeamLogoHtml(t.name)}
+                        <strong>${t.name.toUpperCase()}</strong>
+                        ${state.groupsPlayed && idx === 0 ? '<i class="fa-solid fa-crown widget-crown-icon"></i>' : ''}
+                        ${qualBadge}
+                      </div>
+                    </td>
+                    <td>${t.mp}</td>
+                    <td>${t.w || 0}</td>
+                    <td>${t.d || 0}</td>
+                    <td>${t.l || 0}</td>
+                    <td>${t.gd > 0 ? '+' + t.gd : (t.gd || 0)}</td>
+                    <td><strong class="${idx < 2 || isBest3rd ? 'gold-text' : 'pts-val'}">${t.pts}</strong></td>
+                  </tr>
+                `;
+              }).join('')}
             </tbody>
           </table>
         </div>
       `;
     }).join('');
+
+    container.innerHTML = summaryHubHtml + groupCardsHtml;
+
+    // Attach listeners
+    const simAllBtn = container.querySelector('#btn-sim-all-groups');
+    if (simAllBtn) {
+      simAllBtn.addEventListener('click', () => {
+        resolveGroupStage();
+        renderActiveTournament();
+      });
+    }
+
+    const resimBtn = container.querySelector('#btn-gq-resim');
+    if (resimBtn) {
+      resimBtn.addEventListener('click', () => {
+        resolveGroupStage();
+        renderActiveTournament();
+      });
+    }
+
+    const gotoBtn = container.querySelector('#btn-gq-goto-r32');
+    if (gotoBtn) {
+      gotoBtn.addEventListener('click', () => {
+        const nextStage = config.format === 'worldcup48' ? 'r32' : (config.format === 'euro24' ? 'r16' : 'qf');
+        setStageTab('all', true);
+        scrollToStageSection(nextStage);
+      });
+    }
+
+    container.querySelectorAll('.btn-quick-group-sim').forEach(btn => {
+      btn.addEventListener('click', () => {
+        resolveGroupStage();
+        renderActiveTournament();
+      });
+    });
   }
 
   function renderPlaceholderMatchCard(p, stage, idx, isFinal = false) {
@@ -4485,12 +4658,15 @@ enterBtn.addEventListener('click', () => {
         </div>
         <div class="match-card-actions">
           <span class="empty-stage-hint-tag">⏳ QUALIFICATION PENDING</span>
+          <button type="button" class="sfc-action-btn btn-open-detailed-stats" data-stage="${stage}" data-idx="${idx}" data-home="${p.home}" data-away="${p.away}" style="font-size:0.65rem;padding:3px 8px;">📊 Detailed Stats</button>
         </div>
       </div>
+
     `;
   }
 
   function renderMatchCard(m, stage, idx, isFinal = false) {
+    const config = TOURNAMENTS_CONFIG[activeTournKey] || {};
     const homeScore = m.isSimulated ? m.scoreHome : (m.isLive ? m.currentDisplayScoreHome : '–');
     const awayScore = m.isSimulated ? m.scoreAway : (m.isLive ? m.currentDisplayScoreAway : '–');
     const isWinnerHome = m.isSimulated && m.winner === m.home;
@@ -4629,120 +4805,244 @@ enterBtn.addEventListener('click', () => {
       `;
     }
 
-    let ftBadgeText = '✓ FULL TIME';
-    if (m.hadPenalties) ftBadgeText = `✓ FT (PENS ${m.penHome}-${m.penAway})`;
-    else if (m.hadExtraTime) ftBadgeText = '✓ AET (120\')';
+    let ftBadgeText = 'FT';
+    if (m.hadPenalties) ftBadgeText = `FT (PENS ${m.penHome}-${m.penAway})`;
+    else if (m.hadExtraTime) ftBadgeText = 'AET';
 
-    const compTitle = (config.name || 'FIFA WORLD CUP 2026').toUpperCase();
+    const compTitle = config.name || 'FIFA WORLD CUP 2026';
     const stageTitle = STAGE_META[stage]?.title || stage.toUpperCase();
-    const clockStatus = m.isLive ? 'LIVE' : (m.isSimulated ? 'FULL TIME' : 'UPCOMING');
-    const clockTime = m.isLive ? `${m.currentSimMinute || 0}'` : (m.isSimulated ? '90:00' : '00:00');
 
-    // Dynamic tactical formation patterns
+    const statusBadge = m.isLive
+      ? `<span class="sfc-status-badge live">🔴 LIVE ${m.currentSimMinute || 0}'</span>`
+      : m.isSimulated
+        ? `<span class="sfc-status-badge ft">${ftBadgeText}</span>`
+        : `<span class="sfc-status-badge upcoming">UPCOMING</span>`;
+
+    // Build chronological match events timeline
+    const allEvents = (m.events || [])
+      .filter(e => m.isLive ? e.minute <= (m.currentSimMinute || 0) : m.isSimulated)
+      .sort((a, b) => b.minute - a.minute);
+
+    const timelineHtml = allEvents.length > 0 ? allEvents.map(e => {
+      const isHome = e.team === 'home';
+      const eventIcon = '⚽';
+      return `
+        <div class="sfc-event-row ${isHome ? 'ev-home' : 'ev-away'}">
+          ${isHome ? `
+            <div class="sfc-ev-content home-ev">
+              <span class="sfc-ev-player">${e.player}</span>
+              <span class="sfc-ev-icon">${eventIcon}</span>
+            </div>
+            <span class="sfc-ev-minute">${e.minute}'</span>
+            <div class="sfc-ev-spacer"></div>
+          ` : `
+            <div class="sfc-ev-spacer"></div>
+            <span class="sfc-ev-minute">${e.minute}'</span>
+            <div class="sfc-ev-content away-ev">
+              <span class="sfc-ev-icon">${eventIcon}</span>
+              <span class="sfc-ev-player">${e.player}</span>
+            </div>
+          `}
+        </div>
+      `;
+    }).join('') : `<div class="sfc-no-events">${m.isSimulated ? 'No goals scored' : 'Match not yet played'}</div>`;
+
+    if (m.hadPenalties && m.isSimulated) {
+      // Append penalty result
+    }
+
+    // Top performers — pick top scorers per team
+    const homeTopScorer = (m.events || []).filter(e => e.team === 'home')[0];
+    const awayTopScorer = (m.events || []).filter(e => e.team === 'away')[0];
+    const motm = homeTopScorer || awayTopScorer;
+
+    // Chance distribution
+    const homeStr = (window.NATIONS_DATA || []).find(n => n.name === m.home)?.str || 75;
+    const awayStr = (window.NATIONS_DATA || []).find(n => n.name === m.away)?.str || 75;
+    const total = homeStr + awayStr + 30;
+    const homePct = Math.round((homeStr / total) * 100);
+    const drawPct = Math.round(30 / total * 100);
+    const awayPct = 100 - homePct - drawPct;
+
+    // Tactical patterns
     const tacticalPatterns = [
-      '4-3-3 Gegenpress · Compact High Block',
-      '4-2-3-1 Rapid Transition · Wing Overloads',
-      '3-5-2 Inverted Wingbacks · Central Overload',
-      '4-4-2 Zonal Pressing · Direct Attack',
-      '4-1-4-1 Deep Pivot · Possession Control'
+      { f: '4-3-3', s: 'Gegenpress' },
+      { f: '4-2-3-1', s: 'Wing Overloads' },
+      { f: '3-5-2', s: 'Central Overload' },
+      { f: '4-4-2', s: 'Direct Attack' },
+      { f: '4-1-4-1', s: 'Deep Possession' }
     ];
-    const hPatIdx = (m.home.charCodeAt(0) + (stage.charCodeAt(0) || 0)) % tacticalPatterns.length;
-    const aPatIdx = (m.away.charCodeAt(0) + (idx || 0) + 2) % tacticalPatterns.length;
-    const homePattern = tacticalPatterns[hPatIdx];
-    const awayPattern = tacticalPatterns[aPatIdx];
+    const hPat = tacticalPatterns[(m.home.charCodeAt(0) + stage.charCodeAt(0)) % 5];
+    const aPat = tacticalPatterns[(m.away.charCodeAt(0) + (idx || 0) + 2) % 5];
 
     return `
-      <div class="bracket-match-card ${stageClass} ${m.isLive ? 'live-now' : ''}" data-stage="${stage}" data-idx="${idx}" data-match-id="${stage}_${idx}">
-        
-        <!-- 1. Top TV Broadcast Scorebug Ribbon (Reference Design) -->
-        <div class="card-scorebug-header">
-          <div class="scorebug-comp-cap">
-            ${compTitle} // ${stageTitle}
-          </div>
-          <div class="scorebug-ribbon-bar">
-            <!-- Left Home Side (Red Ribbon) -->
-            <div class="scorebug-side home-side ${isWinnerHome ? 'winner-side' : ''}">
-              ${getTeamLogoHtml(m.home)}
-              <span class="scorebug-team-text">${m.home}</span>
-            </div>
+      <div class="sfc-match-wrapper ${m.isLive ? 'sfc-live' : ''}" data-stage="${stage}" data-idx="${idx}" data-match-id="${stage}_${idx}">
+        <div class="sfc-card unified-match-card">
 
-            <!-- Center Digital Clock & Scores -->
-            <div class="scorebug-center-display">
-              <span class="scorebug-score-num">${homeScore}</span>
-              <div class="scorebug-clock-box">
-                <span class="scorebug-clock-time">⏱ ${clockTime}</span>
-                <span class="scorebug-clock-status">${clockStatus}</span>
+          <!-- TOP META BAR -->
+          <div class="sfc-card-header">
+            <div class="sfc-comp-label">🏆 ${compTitle} · ${stageTitle} · FIXTURE #${idx + 1}</div>
+            <div class="sfc-status-badge-wrap">${statusBadge}</div>
+          </div>
+
+          <!-- UNIFIED 3-COLUMN HERO: TEAM 1 — BROADCAST PITCH RADAR — TEAM 2 -->
+          <div class="sfc-hero-matchup">
+
+            <!-- TEAM 1 (HOME) -->
+            <div class="sfc-hero-team home-side ${isWinnerHome ? 'winner-side' : ''}">
+              <div class="sfc-team-crest ${isWinnerHome ? 'winner-crest' : ''}">
+                ${getTeamLogoHtml(m.home)}
+                ${isWinnerHome ? '<span class="sfc-winner-badge">👑</span>' : ''}
               </div>
-              <span class="scorebug-score-num">${awayScore}</span>
+              <div class="sfc-team-info">
+                <div class="sfc-team-name">${m.home.toUpperCase()}</div>
+                <div class="sfc-tactic-tag"><span class="tac-form">${hPat.f}</span> <span class="tac-style">${hPat.s}</span></div>
+              </div>
+              <div class="sfc-score-box ${isWinnerHome ? 'winner-score' : ''}">${homeScore}</div>
             </div>
 
-            <!-- Right Away Side (Blue Ribbon) -->
-            <div class="scorebug-side away-side ${isWinnerAway ? 'winner-side' : ''}">
-              <span class="scorebug-team-text">${m.away}</span>
-              ${getTeamLogoHtml(m.away)}
+            <!-- CENTER: LIVE BROADCAST RADAR & STADIUM PITCH -->
+            <div class="sfc-hero-center-broadcast">
+              ${pitch3dRadarHtml || `
+                <div class="sfc-mini-pitch-broadcast">
+                  <div class="sfc-pitch-turf">
+                    <div class="sfc-pitch-center-circle"></div>
+                    <div class="sfc-pitch-halfway"></div>
+                    <span class="sfc-pitch-vs-pill">VS</span>
+                  </div>
+                </div>
+              `}
+              ${m.isLive ? `
+                <div class="sfc-live-progress-box">
+                  <div class="sfc-live-text">⏱ ${m.currentSimMinute || 0}' IN PLAY</div>
+                  <div class="sfc-live-bar-track">
+                    <div class="sfc-live-bar-fill" style="width:${Math.min(100, Math.round(((m.currentSimMinute || 0) / 90) * 100))}%"></div>
+                  </div>
+                </div>
+              ` : ''}
+              ${m.hadPenalties && m.isSimulated ? `<div class="sfc-pens-tag">🧤 PENS: ${m.penHome} - ${m.penAway} (${m.winner} WON)</div>` : (m.hadExtraTime ? `<div class="sfc-aet-tag">AFTER EXTRA TIME</div>` : '')}
             </div>
+
+            <!-- TEAM 2 (AWAY) -->
+            <div class="sfc-hero-team away-side ${isWinnerAway ? 'winner-side' : ''}">
+              <div class="sfc-score-box ${isWinnerAway ? 'winner-score' : ''}">${awayScore}</div>
+              <div class="sfc-team-info">
+                <div class="sfc-team-name">${m.away.toUpperCase()}</div>
+                <div class="sfc-tactic-tag"><span class="tac-form">${aPat.f}</span> <span class="tac-style">${aPat.s}</span></div>
+              </div>
+              <div class="sfc-team-crest ${isWinnerAway ? 'winner-crest' : ''}">
+                ${getTeamLogoHtml(m.away)}
+                ${isWinnerAway ? '<span class="sfc-winner-badge">👑</span>' : ''}
+              </div>
+            </div>
+
           </div>
-        </div>
 
-        <!-- 2. Middle 3D VS Arena with Glowing Stadium Shields -->
-        <div class="card-vs-arena">
-          <!-- Home 3D Shield -->
-          <div class="vs-shield home-shield">
-            <span class="vs-shield-sparkle s-left">✦</span>
-            <div class="vs-shield-logo">${getTeamLogoHtml(m.home)}</div>
-            <span class="vs-shield-name">${m.home}</span>
+          <!-- ACTION BUTTONS TOOLBAR -->
+          <div class="sfc-header-actions">
+            ${!m.isSimulated && !m.isLive ? `
+              <button type="button" class="sfc-action-btn btn-card-fast-sim" data-stage="${stage}" data-idx="${idx}"><i class="fa-solid fa-play"></i> Simulate</button>
+              <button type="button" class="sfc-action-btn btn-sim-single" data-stage="${stage}" data-idx="${idx}"><i class="fa-solid fa-crosshairs"></i> Track Live</button>
+              <button type="button" class="sfc-action-btn btn-open-holo-broadcast" data-stage="${stage}" data-idx="${idx}"><i class="fa-solid fa-tv"></i> Broadcast</button>
+              <button type="button" class="sfc-action-btn btn-open-detailed-stats" data-stage="${stage}" data-idx="${idx}" data-home="${m.home}" data-away="${m.away}"><i class="fa-solid fa-chart-column"></i> Detailed Stats</button>
+            ` : m.isSimulated ? `
+              <button type="button" class="sfc-action-btn btn-open-holo-broadcast" data-stage="${stage}" data-idx="${idx}"><i class="fa-solid fa-vr-cardboard"></i> Holo Replay</button>
+              <button type="button" class="sfc-action-btn btn-open-detailed-stats btn-match-report" data-stage="${stage}" data-idx="${idx}" data-home="${m.home}" data-away="${m.away}" data-rewatch="true"><i class="fa-solid fa-film"></i> Match Report &amp; Replay</button>
+            ` : `
+              <button type="button" class="sfc-action-btn btn-open-detailed-stats" data-stage="${stage}" data-idx="${idx}" data-home="${m.home}" data-away="${m.away}"><i class="fa-solid fa-chart-column"></i> Detailed Stats</button>
+            `}
           </div>
 
-          <!-- Chrome 3D VS Emblem -->
-          <div class="vs-chrome-emblem">VS</div>
-
-          <!-- Away 3D Shield -->
-          <div class="vs-shield away-shield">
-            <span class="vs-shield-sparkle s-right">✦</span>
-            <div class="vs-shield-logo">${getTeamLogoHtml(m.away)}</div>
-            <span class="vs-shield-name">${m.away}</span>
+          <!-- TABS -->
+          <div class="sfc-tabs">
+            <button type="button" class="sfc-tab active" data-card="${stage}_${idx}" data-tab="summary">Summary & Events</button>
+            <button type="button" class="sfc-tab" data-card="${stage}_${idx}" data-tab="stats">Match Stats</button>
+            <button type="button" class="sfc-tab" data-card="${stage}_${idx}" data-tab="lineups">Lineups & Tactics</button>
           </div>
-        </div>
 
-        <!-- 3. Below Broadcast Section: Tactical Patterns & Intelligence -->
-        <div class="card-tactical-pattern-banner">
-          <div class="pattern-row">
-            <span class="pattern-tag home-pat">🛡️ ${m.home}</span>
-            <span class="pattern-desc">${homePattern}</span>
+          <!-- TAB BODY -->
+          <div class="sfc-tab-body">
+
+            <!-- SUMMARY PANEL -->
+            <div class="sfc-panel panel-summary" data-card="${stage}_${idx}" data-panel="summary">
+              <div class="sfc-panel-columns">
+
+                <!-- Left: Timeline -->
+                <div class="sfc-timeline-col">
+                  <div class="sfc-section-title">⚽ Match Timeline & Goals</div>
+                  <div class="sfc-timeline">
+                    ${timelineHtml}
+                  </div>
+                </div>
+
+                <!-- Right: Top Performers + Chance Dist -->
+                <div class="sfc-performers-col">
+                  ${motm ? `
+                    <div class="sfc-section-title">⭐ Top Performers</div>
+                    <div class="sfc-performers-bar">
+                      ${homeTopScorer ? `
+                        <div class="sfc-performer home-performer">
+                          <div class="sfc-perf-jersey">⚽</div>
+                          <div class="sfc-perf-info">
+                            <div class="sfc-perf-name">${homeTopScorer.player}</div>
+                            <div class="sfc-perf-team">${m.home}</div>
+                          </div>
+                        </div>
+                      ` : ''}
+                      ${awayTopScorer ? `
+                        <div class="sfc-performer away-performer">
+                          <div class="sfc-perf-jersey">⚽</div>
+                          <div class="sfc-perf-info">
+                            <div class="sfc-perf-name">${awayTopScorer.player}</div>
+                            <div class="sfc-perf-team">${m.away}</div>
+                          </div>
+                        </div>
+                      ` : ''}
+                    </div>
+                  ` : ''}
+
+                  <div class="sfc-section-title" style="margin-top:10px;">📊 Win Probability & Chance Distribution</div>
+                  <div class="sfc-chance-row">
+                    <span class="sfc-chance-label home-label">${m.home.substring(0, 3)} (${homePct}%)</span>
+                    <span class="sfc-chance-draw">Draw (${drawPct}%)</span>
+                    <span class="sfc-chance-label away-label">${m.away.substring(0, 3)} (${awayPct}%)</span>
+                  </div>
+                  <div class="sfc-chance-bar">
+                    <div class="sfc-chance-home-fill" style="width:${homePct}%"></div>
+                    <div class="sfc-chance-draw-fill" style="width:${drawPct}%"></div>
+                    <div class="sfc-chance-away-fill" style="width:${awayPct}%"></div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- STATS PANEL -->
+            <div class="sfc-panel panel-stats hidden" data-card="${stage}_${idx}" data-panel="stats">
+              <div class="sfc-stat-row"><span>${m.home}</span><span>Possession</span><span>${homePct}%</span></div>
+              <div class="sfc-stat-row"><span>${homeScore}</span><span>Goals</span><span>${awayScore}</span></div>
+              <div class="sfc-stat-row"><span>${hPat.f}</span><span>Formation</span><span>${aPat.f}</span></div>
+              <div class="sfc-stat-row"><span>${hPat.s}</span><span>Style</span><span>${aPat.s}</span></div>
+              ${m.hadExtraTime ? `<div class="sfc-stat-row"><span>✓</span><span>Extra Time</span><span>✓</span></div>` : ''}
+              ${m.hadPenalties ? `<div class="sfc-stat-row"><span>${m.penHome}</span><span>Penalty Score</span><span>${m.penAway}</span></div>` : ''}
+            </div>
+
+            <!-- LINEUPS PANEL -->
+            <div class="sfc-panel panel-lineups hidden" data-card="${stage}_${idx}" data-panel="lineups">
+              <div class="sfc-lineup-row">
+                <div class="sfc-lineup-team">
+                  <div class="sfc-lineup-head home-lh">${m.home} · ${hPat.f}</div>
+                  <div class="sfc-lineup-grid">${(window.TEAM_STAR_PLAYERS?.[m.home] || []).slice(0, 6).map(p => `<span class="sfc-player-chip">${p}</span>`).join('') || '<span class="sfc-player-chip">Formation TBC</span>'}</div>
+                </div>
+                <div class="sfc-lineup-team">
+                  <div class="sfc-lineup-head away-lh">${m.away} · ${aPat.f}</div>
+                  <div class="sfc-lineup-grid">${(window.TEAM_STAR_PLAYERS?.[m.away] || []).slice(0, 6).map(p => `<span class="sfc-player-chip">${p}</span>`).join('') || '<span class="sfc-player-chip">Formation TBC</span>'}</div>
+                </div>
+              </div>
+            </div>
+
           </div>
-          <div class="pattern-row">
-            <span class="pattern-tag away-pat">⚔️ ${m.away}</span>
-            <span class="pattern-desc">${awayPattern}</span>
-          </div>
-        </div>
 
-        ${liveTimerHtml}
-        ${pitch3dRadarHtml}
-        ${eventsHtml}
-
-        <!-- 4. Action Buttons Toolbar -->
-        <div class="match-card-actions" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:4px;">
-          ${!m.isSimulated && !m.isLive ? `
-            <button type="button" class="btn-card-fast-sim btn-3d-click" data-stage="${stage}" data-idx="${idx}" style="background:var(--pitch-green);color:#000;font-weight:900;border:none;padding:5px 10px;border-radius:6px;font-size:0.72rem;cursor:pointer;">
-              ▶ SIMULATE MATCH
-            </button>
-            <button type="button" class="btn-sim-single btn-3d-click" data-stage="${stage}" data-idx="${idx}" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.25);color:#fff;padding:5px 10px;border-radius:6px;font-size:0.72rem;cursor:pointer;">
-              <i class="fa-solid fa-crosshairs"></i> 🎯 TACTICAL TRACKER
-            </button>
-            <button type="button" class="btn-open-holo-broadcast btn-3d-click" data-stage="${stage}" data-idx="${idx}" style="background:linear-gradient(135deg,#00e5ff,#2ecc71);color:#000;font-weight:900;border:none;padding:5px 10px;border-radius:6px;font-size:0.72rem;cursor:pointer;">
-              📺 3D BROADCAST
-            </button>
-          ` : ''}
-          ${m.isLive ? `<span class="live-pill">🔴 LIVE IN-PROGRESS</span>` : ''}
-          ${m.isSimulated ? `
-            <span class="ft-pill">${ftBadgeText}</span>
-            <button type="button" class="btn-reopen-tactical btn-3d-click" data-stage="${stage}" data-idx="${idx}" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:4px 8px;border-radius:4px;font-size:0.68rem;cursor:pointer;">
-              🎯 REPLAY TACTICS
-            </button>
-            <button type="button" class="btn-open-holo-broadcast btn-3d-click" data-stage="${stage}" data-idx="${idx}" style="background:rgba(0,229,255,0.15);border:1px solid #00e5ff;color:#00e5ff;padding:4px 8px;border-radius:4px;font-size:0.68rem;cursor:pointer;">
-              📺 3D HOLO REPLAY
-            </button>
-          ` : ''}
         </div>
       </div>
     `;
@@ -4751,6 +5051,7 @@ enterBtn.addEventListener('click', () => {
   // ---------------------------------------------------------------------------
   // 8. 60-SECOND MATCHDAY & LEAGUE SIMULATION ENGINE
   // ---------------------------------------------------------------------------
+
   function simulateLeagueMatchdayWithClock(mdIdx, onComplete) {
     cancelAllActiveSimulationTimers();
     const state = tournamentState[activeTournKey];
@@ -5202,11 +5503,236 @@ enterBtn.addEventListener('click', () => {
   }
 
 
+  function resolveGroupStage() {
+    const state = tournamentState[activeTournKey];
+    const config = TOURNAMENTS_CONFIG[activeTournKey];
+    if (!state || !state.groups) return;
+
+    state.groupMatches = [];
+    Object.keys(state.groups).forEach(letter => {
+      const teams = state.groups[letter];
+      teams.forEach(t => { t.mp = 0; t.w = 0; t.d = 0; t.l = 0; t.gf = 0; t.ga = 0; t.gd = 0; t.pts = 0; });
+
+      const fixtures = [
+        [0, 1], [2, 3],
+        [0, 2], [1, 3],
+        [0, 3], [1, 2]
+      ];
+
+      fixtures.forEach(([hIdx, aIdx]) => {
+        const res = precomputeMatchResult(teams[hIdx].name, teams[aIdx].name, false);
+        res.isSimulated = true;
+        state.groupMatches.push(res);
+        teams[hIdx].mp++;
+        teams[aIdx].mp++;
+        teams[hIdx].gf += res.regHome;
+        teams[hIdx].ga += res.regAway;
+        teams[aIdx].gf += res.regAway;
+        teams[aIdx].ga += res.regHome;
+
+        if (res.regHome > res.regAway) {
+          teams[hIdx].w++; teams[hIdx].pts += 3;
+          teams[aIdx].l++;
+        } else if (res.regAway > res.regHome) {
+          teams[aIdx].w++; teams[aIdx].pts += 3;
+          teams[hIdx].l++;
+        } else {
+          teams[hIdx].d++; teams[hIdx].pts += 1;
+          teams[aIdx].d++; teams[aIdx].pts += 1;
+        }
+      });
+
+      teams.forEach(t => { t.gd = t.gf - t.ga; });
+      teams.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+    });
+    state.groupsPlayed = true;
+
+    // Qualify teams to first knockout round
+    const qualified = [];
+    Object.keys(state.groups).forEach(letter => {
+      qualified.push(state.groups[letter][0].name, state.groups[letter][1].name);
+    });
+
+    if (config.format === 'worldcup48') {
+      // 48 teams in 12 groups -> 24 top 2 + 8 best 3rd placed teams = 32 teams to Round of 32
+      const thirdBest = [];
+      Object.keys(state.groups).forEach(letter => thirdBest.push(state.groups[letter][2]));
+      thirdBest.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf).slice(0, 8).forEach(t => qualified.push(t.name));
+      const shuffled = [...qualified].sort(() => Math.random() - 0.5);
+      state.r32 = [];
+      for (let i = 0; i < 16; i++) {
+        state.r32.push({ home: shuffled[i * 2], away: shuffled[i * 2 + 1], scoreHome: '–', scoreAway: '–', isSimulated: false });
+      }
+    } else if (config.format === 'euro24' || config.format === 'uclLeaguePhase') {
+      const pool = config.format === 'euro24' ? (function() {
+        const thirdBest = [];
+        Object.keys(state.groups).forEach(letter => thirdBest.push(state.groups[letter][2]));
+        thirdBest.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf).slice(0, 4).forEach(t => qualified.push(t.name));
+        return qualified;
+      })() : qualified;
+      const shuffled = [...pool].sort(() => Math.random() - 0.5);
+      state.r16 = [];
+      for (let i = 0; i < 8; i++) {
+        state.r16.push({ home: shuffled[i * 2], away: shuffled[i * 2 + 1], scoreHome: '–', scoreAway: '–', isSimulated: false });
+      }
+    } else {
+      const shuffled = [...qualified].sort(() => Math.random() - 0.5);
+      state.qf = [];
+      for (let i = 0; i < 4; i++) {
+        state.qf.push({ home: shuffled[i * 2], away: shuffled[i * 2 + 1], scoreHome: '–', scoreAway: '–', isSimulated: false });
+      }
+    }
+  }
+
+  function triggerNextSimulationStep() {
+    const state = tournamentState[activeTournKey];
+    const config = TOURNAMENTS_CONFIG[activeTournKey];
+    if (!state) return;
+
+    state.subView = 'sim';
+
+    if (config.format === 'leagueSeason') {
+      const targetMd = getFirstPendingMatchdayIdx(state);
+      state.selectedMatchday = targetMd;
+      simulateLeagueMatchdayWithClock(targetMd);
+      scrollToStageSection('groups');
+      return;
+    }
+
+    // Step 1: If Groups are not played, resolve groups and create Round of 32 (or R16)
+    if (state.groups && !state.groupsPlayed) {
+      resolveGroupStage();
+      setStageTab('all', false);
+      renderActiveTournament();
+      const firstKnockout = config.format === 'worldcup48' ? 'r32' : (config.format === 'euro24' ? 'r16' : 'qf');
+      scrollToStageSection(firstKnockout);
+      return;
+    }
+
+    // Step 2: Round of 32
+    if (state.r32 && state.r32.length > 0 && state.r32.some(m => !m.isSimulated)) {
+      simulateStageWithClock('r32');
+      scrollToStageSection('r32');
+      return;
+    }
+
+    // Step 3: Round of 16
+    if (state.r16 && state.r16.length > 0 && state.r16.some(m => !m.isSimulated)) {
+      simulateStageWithClock('r16');
+      scrollToStageSection('r16');
+      return;
+    }
+
+    // Step 4: Quarterfinals
+    if (state.qf && state.qf.length > 0 && state.qf.some(m => !m.isSimulated)) {
+      simulateStageWithClock('qf');
+      scrollToStageSection('qf');
+      return;
+    }
+
+    // Step 5: Semifinals
+    if (state.sf && state.sf.length > 0 && state.sf.some(m => !m.isSimulated)) {
+      simulateStageWithClock('sf');
+      scrollToStageSection('sf');
+      return;
+    }
+
+    // Step 6: Grand Final
+    if (state.gf && state.gf.length > 0 && !state.champion) {
+      simulateStageWithClock('gf');
+      scrollToStageSection('gf');
+      return;
+    }
+  }
+
+  function ensureStagePrerequisites(stageKey) {
+    const state = tournamentState[activeTournKey];
+    const config = TOURNAMENTS_CONFIG[activeTournKey];
+    if (!state) return;
+
+    if (stageKey === 'r32') {
+      if (!state.groupsPlayed || !state.r32 || state.r32.length === 0) {
+        resolveGroupStage();
+      }
+    } else if (stageKey === 'r16') {
+      if (config.format === 'worldcup48') {
+        ensureStagePrerequisites('r32');
+        if (!state.r32 || state.r32.some(m => !m.isSimulated)) {
+          (state.r32 || []).forEach(m => {
+            if (!m.isSimulated) {
+              Object.assign(m, precomputeMatchResult(m.home, m.away, true));
+              m.isSimulated = true;
+            }
+          });
+          progressToNextStage('r32');
+        }
+      } else {
+        if (!state.groupsPlayed || !state.r16 || state.r16.length === 0) {
+          resolveGroupStage();
+        }
+      }
+    } else if (stageKey === 'qf') {
+      if (config.format === 'copa16' || config.format === 'genericCup') {
+        if (!state.groupsPlayed || !state.qf || state.qf.length === 0) {
+          resolveGroupStage();
+        }
+      } else {
+        ensureStagePrerequisites('r16');
+        if (!state.r16 || state.r16.some(m => !m.isSimulated)) {
+          (state.r16 || []).forEach(m => {
+            if (!m.isSimulated) {
+              Object.assign(m, precomputeMatchResult(m.home, m.away, true));
+              m.isSimulated = true;
+            }
+          });
+          progressToNextStage('r16');
+        }
+      }
+    } else if (stageKey === 'sf') {
+      ensureStagePrerequisites('qf');
+      if (!state.qf || state.qf.some(m => !m.isSimulated)) {
+        (state.qf || []).forEach(m => {
+          if (!m.isSimulated) {
+            Object.assign(m, precomputeMatchResult(m.home, m.away, true));
+            m.isSimulated = true;
+          }
+        });
+        progressToNextStage('qf');
+      }
+    } else if (stageKey === 'gf') {
+      ensureStagePrerequisites('sf');
+      if (!state.sf || state.sf.some(m => !m.isSimulated)) {
+        (state.sf || []).forEach(m => {
+          if (!m.isSimulated) {
+            Object.assign(m, precomputeMatchResult(m.home, m.away, true));
+            m.isSimulated = true;
+          }
+        });
+        progressToNextStage('sf');
+      }
+    }
+  }
+
   function simulateStageWithClock(stageKey) {
     cancelAllActiveSimulationTimers();
     const state = tournamentState[activeTournKey];
+    const config = TOURNAMENTS_CONFIG[activeTournKey];
+    if (!state) return;
+
+    state.subView = 'sim';
+
+    // Auto-prepare all prerequisite stages recursively
+    ensureStagePrerequisites(stageKey);
+
     let matches = state[stageKey] || [];
     if (matches.length === 0) return;
+
+    if (matches.every(m => m.isSimulated)) {
+      finalizeStageSimulation(stageKey);
+      return;
+    }
+
+    scrollToStageSection(stageKey);
 
     // Precompute outcomes for all unsimulated matches in the stage
     matches.forEach(m => {
@@ -5255,11 +5781,11 @@ enterBtn.addEventListener('click', () => {
 
     renderStageViewport();
 
-    // 1-second interval increments simulated clock by 2.5 minutes (90 min in 36 sec)
+    // Responsive interval: increments simulated clock smoothly
     activeSimulationInterval = setInterval(() => {
       if (activeSimulationClock.isPaused) return;
 
-      activeSimulationClock.currentSimMinute += 2.5;
+      activeSimulationClock.currentSimMinute += 3.75;
       const curMin = Math.floor(activeSimulationClock.currentSimMinute);
 
       const minText = document.getElementById('clock-minute-text');
@@ -5297,7 +5823,7 @@ enterBtn.addEventListener('click', () => {
       if (curMin >= 90) {
         finalizeStageSimulation(stageKey);
       }
-    }, 1000);
+    }, 250);
   }
 
   function simulateSingleMatch(stageKey, matchIdx) {
@@ -5324,11 +5850,12 @@ enterBtn.addEventListener('click', () => {
     }
 
     const totalTargetMinutes = match.hadExtraTime ? 120 : 90;
-    // Step by 8 simulated minutes every 150ms (~2.2 seconds total for full animated match)
+    // Step by 4 simulated minutes every 100ms
     activeSingleMatchIntervals[simKey] = setInterval(() => {
-      match.currentSimMinute = (match.currentSimMinute || 0) + 8;
+      match.currentSimMinute = (match.currentSimMinute || 0) + 4;
       const curMin = match.currentSimMinute;
 
+      // Update live display scores
       match.currentDisplayScoreHome = match.events.filter(e => e.team === 'home' && e.minute <= curMin).length;
       match.currentDisplayScoreAway = match.events.filter(e => e.team === 'away' && e.minute <= curMin).length;
 
@@ -5356,6 +5883,8 @@ enterBtn.addEventListener('click', () => {
 
         match.isLive = false;
         match.isSimulated = true;
+        match.currentDisplayScoreHome = match.scoreHome;
+        match.currentDisplayScoreAway = match.scoreAway;
 
         const tickerEl = document.getElementById('bracket-ticker-text');
         if (tickerEl) {
@@ -5377,7 +5906,7 @@ enterBtn.addEventListener('click', () => {
         }
         renderActiveTournament();
       }
-    }, 150);
+    }, 100);
   }
 
   function finalizeStageSimulation(stageKey) {
@@ -5385,9 +5914,20 @@ enterBtn.addEventListener('click', () => {
     const state = tournamentState[activeTournKey];
     const matches = state[stageKey] || [];
     matches.forEach(m => {
+      if (!m.winner || m.scoreHome === null || m.scoreHome === undefined || m.scoreHome === '–') {
+        const outcome = precomputeMatchResult(m.home, m.away, true);
+        Object.assign(m, outcome);
+      }
       m.isLive = false;
       m.isSimulated = true;
+      m.currentDisplayScoreHome = m.scoreHome;
+      m.currentDisplayScoreAway = m.scoreAway;
     });
+
+    const clockHud = document.getElementById('sim-clock-hud');
+    const liveControlBar = document.getElementById('live-control-bar');
+    if (clockHud) clockHud.hidden = true;
+    if (liveControlBar) liveControlBar.hidden = true;
 
     const stageMeta = STAGE_META[stageKey] || { title: stageKey.toUpperCase() };
     const tickerEl = document.getElementById('bracket-ticker-text');
@@ -5397,7 +5937,6 @@ enterBtn.addEventListener('click', () => {
 
     progressToNextStage(stageKey);
 
-    // Keep user on the current round view so they can review the full results before advancing manually
     renderActiveTournament();
   }
 
@@ -5722,34 +6261,70 @@ enterBtn.addEventListener('click', () => {
   function progressToNextStage(stageKey) {
     const state = tournamentState[activeTournKey];
     const config = TOURNAMENTS_CONFIG[activeTournKey];
+    if (!state) return;
 
     if (stageKey === 'r32') {
-      const winners = state.r32.map(m => m.winner);
+      const winners = (state.r32 || []).map(m => {
+        if (!m.winner) {
+          const outcome = precomputeMatchResult(m.home, m.away, true);
+          Object.assign(m, outcome);
+          m.isSimulated = true;
+        }
+        return m.winner;
+      });
       state.r16 = [];
       for (let i = 0; i < 8; i++) {
         state.r16.push({ home: winners[i * 2], away: winners[i * 2 + 1], scoreHome: '–', scoreAway: '–', isSimulated: false });
       }
       showStageAdvancementToast('r32');
     } else if (stageKey === 'r16') {
-      const winners = state.r16.map(m => m.winner);
+      const winners = (state.r16 || []).map(m => {
+        if (!m.winner) {
+          const outcome = precomputeMatchResult(m.home, m.away, true);
+          Object.assign(m, outcome);
+          m.isSimulated = true;
+        }
+        return m.winner;
+      });
       state.qf = [];
       for (let i = 0; i < 4; i++) {
         state.qf.push({ home: winners[i * 2], away: winners[i * 2 + 1], scoreHome: '–', scoreAway: '–', isSimulated: false });
       }
       showStageAdvancementToast('r16');
     } else if (stageKey === 'qf') {
-      const winners = state.qf.map(m => m.winner);
+      const winners = (state.qf || []).map(m => {
+        if (!m.winner) {
+          const outcome = precomputeMatchResult(m.home, m.away, true);
+          Object.assign(m, outcome);
+          m.isSimulated = true;
+        }
+        return m.winner;
+      });
       state.sf = [];
       for (let i = 0; i < 2; i++) {
         state.sf.push({ home: winners[i * 2], away: winners[i * 2 + 1], scoreHome: '–', scoreAway: '–', isSimulated: false });
       }
       showStageAdvancementToast('qf');
     } else if (stageKey === 'sf') {
-      const winners = state.sf.map(m => m.winner);
+      const winners = (state.sf || []).map(m => {
+        if (!m.winner) {
+          const outcome = precomputeMatchResult(m.home, m.away, true);
+          Object.assign(m, outcome);
+          m.isSimulated = true;
+        }
+        return m.winner;
+      });
       state.gf = [{ home: winners[0], away: winners[1], scoreHome: '–', scoreAway: '–', isSimulated: false }];
       showStageAdvancementToast('sf');
     } else if (stageKey === 'gf') {
-      state.champion = state.gf[0].winner;
+      if (state.gf && state.gf[0]) {
+        if (!state.gf[0].winner) {
+          const outcome = precomputeMatchResult(state.gf[0].home, state.gf[0].away, true);
+          Object.assign(state.gf[0], outcome);
+          state.gf[0].isSimulated = true;
+        }
+        state.champion = state.gf[0].winner;
+      }
       const tickerEl = document.getElementById('bracket-ticker-text');
       if (tickerEl) {
         tickerEl.textContent = `🏆 CHAMPION CROWNED: ${state.champion} wins the ${config.name}! // `;
@@ -5833,111 +6408,7 @@ enterBtn.addEventListener('click', () => {
     const stageActionBtn = document.getElementById('sim-stage-action-btn');
     if (stageActionBtn) {
       stageActionBtn.addEventListener('click', () => {
-        const state = tournamentState[activeTournKey];
-        const config = TOURNAMENTS_CONFIG[activeTournKey];
-
-        if (config.format === 'leagueSeason') {
-          const targetMd = getFirstPendingMatchdayIdx(state);
-          state.selectedMatchday = targetMd;
-          simulateLeagueMatchdayWithClock(targetMd);
-          return;
-        }
-
-        if (state.groups && !state.groupsPlayed) {
-          // Realistic Group Matches Resolution
-          state.groupMatches = [];
-          Object.keys(state.groups).forEach(letter => {
-            const teams = state.groups[letter];
-            teams.forEach(t => { t.mp = 0; t.w = 0; t.d = 0; t.l = 0; t.gf = 0; t.ga = 0; t.gd = 0; t.pts = 0; });
-
-            // 6 round-robin fixtures per group
-            const fixtures = [
-              [0, 1], [2, 3],
-              [0, 2], [1, 3],
-              [0, 3], [1, 2]
-            ];
-
-            fixtures.forEach(([hIdx, aIdx]) => {
-              const res = precomputeMatchResult(teams[hIdx].name, teams[aIdx].name, false);
-              res.isSimulated = true;
-              state.groupMatches.push(res);
-              teams[hIdx].mp++;
-              teams[aIdx].mp++;
-              teams[hIdx].gf += res.regHome;
-              teams[hIdx].ga += res.regAway;
-              teams[aIdx].gf += res.regAway;
-              teams[aIdx].ga += res.regHome;
-
-              if (res.regHome > res.regAway) {
-                teams[hIdx].w++; teams[hIdx].pts += 3;
-                teams[aIdx].l++;
-              } else if (res.regAway > res.regHome) {
-                teams[aIdx].w++; teams[aIdx].pts += 3;
-                teams[hIdx].l++;
-              } else {
-                teams[hIdx].d++; teams[hIdx].pts += 1;
-                teams[aIdx].d++; teams[aIdx].pts += 1;
-              }
-            });
-
-            teams.forEach(t => { t.gd = t.gf - t.ga; });
-            teams.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
-          });
-          state.groupsPlayed = true;
-
-          // Qualify teams to first knockout round
-          const qualified = [];
-          Object.keys(state.groups).forEach(letter => {
-            qualified.push(state.groups[letter][0].name, state.groups[letter][1].name);
-          });
-
-          if (config.format === 'worldcup48') {
-            // Top 24 + Best 8 3rd Placed Teams = 32 teams to R32
-            const thirdBest = [];
-            Object.keys(state.groups).forEach(letter => thirdBest.push(state.groups[letter][2]));
-            thirdBest.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf).slice(0, 8).forEach(t => qualified.push(t.name));
-            const shuffled = [...qualified].sort(() => Math.random() - 0.5);
-            state.r32 = [];
-            for (let i = 0; i < 16; i++) {
-              state.r32.push({ home: shuffled[i * 2], away: shuffled[i * 2 + 1], scoreHome: '–', scoreAway: '–', isSimulated: false });
-            }
-          } else if (config.format === 'euro24' || config.format === 'uclLeaguePhase') {
-            const pool = config.format === 'euro24' ? (function() {
-              const thirdBest = [];
-              Object.keys(state.groups).forEach(letter => thirdBest.push(state.groups[letter][2]));
-              thirdBest.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf).slice(0, 4).forEach(t => qualified.push(t.name));
-              return qualified;
-            })() : qualified;
-            const shuffled = [...pool].sort(() => Math.random() - 0.5);
-            state.r16 = [];
-            for (let i = 0; i < 8; i++) {
-              state.r16.push({ home: shuffled[i * 2], away: shuffled[i * 2 + 1], scoreHome: '–', scoreAway: '–', isSimulated: false });
-            }
-          } else {
-            const shuffled = [...qualified].sort(() => Math.random() - 0.5);
-            state.qf = [];
-            for (let i = 0; i < 4; i++) {
-              state.qf.push({ home: shuffled[i * 2], away: shuffled[i * 2 + 1], scoreHome: '–', scoreAway: '–', isSimulated: false });
-            }
-          }
-          // Stay on the group stage view so user can review the final standings
-          renderActiveTournament();
-        } else if (state.r32 && state.r32.length > 0 && state.r16.length === 0) {
-          setStageTab('r32', true);
-          simulateStageWithClock('r32');
-        } else if (state.r16 && state.r16.length > 0 && state.qf.length === 0) {
-          setStageTab('r16', true);
-          simulateStageWithClock('r16');
-        } else if (state.qf && state.qf.length > 0 && state.sf.length === 0) {
-          setStageTab('qf', true);
-          simulateStageWithClock('qf');
-        } else if (state.sf && state.sf.length > 0 && state.gf.length === 0) {
-          setStageTab('sf', true);
-          simulateStageWithClock('sf');
-        } else if (state.gf && state.gf.length > 0 && !state.champion) {
-          setStageTab('gf', true);
-          simulateStageWithClock('gf');
-        }
+        triggerNextSimulationStep();
       });
     }
 
@@ -6088,7 +6559,8 @@ enterBtn.addEventListener('click', () => {
         // --- Knockout / Cup Format: Instant Full Resolution ---
         cancelAllActiveSimulationTimers(); // Stop any running clock before resetting
         initTournamentState(activeTournKey);
-        const state = tournamentState[activeTournKey]; // Declare state here — accessible for champion check below
+        const state = tournamentState[activeTournKey]; // Declare state here—accessible for champion check below
+        state.subView = 'sim'; // Always show bracket, not home page
 
         // Instant resolution across all tournament stages
         if (state.groups) {
@@ -6202,6 +6674,7 @@ enterBtn.addEventListener('click', () => {
         state.gf = [finalMatch];
         state.champion = finalMatch.winner;
 
+        state.subView = 'sim';
         renderActiveTournament();
         if (state.champion) {
           triggerChampionCelebration(state.champion);
@@ -6444,10 +6917,11 @@ enterBtn.addEventListener('click', () => {
 
     grid.querySelectorAll('.btn-fixture-center').forEach(btn => {
       btn.addEventListener('click', () => {
-        openMatchCenterModal(btn.dataset.home, btn.dataset.away);
+        openDetailedStatsModal(btn.dataset.home, btn.dataset.away);
       });
     });
   }
+
 
   // ---------------------------------------------------------------------------
   // 11. MEDIA HUB & HIGHLIGHTS REPLAYS
@@ -6601,6 +7075,775 @@ enterBtn.addEventListener('click', () => {
 
     modal.hidden = false;
   }
+
+  // ---------------------------------------------------------------------------
+  // 10.5. LIVE 2D PITCH BROADCAST TRACKER & SOFASCORE MATCH CENTER CONTROLLER
+  // ---------------------------------------------------------------------------
+  let activeLivePitchInterval = null;
+  let livePitchState = {
+    homeTeam: '',
+    awayTeam: '',
+    matchObj: null,
+    stageKey: null,
+    matchIdx: null,
+    curMin: 0,
+    maxMin: 90,
+    isPaused: false,
+    speed: 1,
+    homeFormation: '4-3-3',
+    awayFormation: '4-2-3-1'
+  };
+
+  function stopLive2DPitchEngine() {
+    if (activeLivePitchInterval) {
+      clearInterval(activeLivePitchInterval);
+      activeLivePitchInterval = null;
+    }
+  }
+
+  function getFormationPositions(formation, isHome) {
+    const positions = [];
+    if (isHome) {
+      // 4-3-3 Left Half
+      positions.push({ role: 'GK', x: 7, y: 50, num: 1 });
+      positions.push({ role: 'LB', x: 20, y: 18, num: 3 });
+      positions.push({ role: 'CB', x: 17, y: 38, num: 4 });
+      positions.push({ role: 'CB', x: 17, y: 62, num: 5 });
+      positions.push({ role: 'RB', x: 20, y: 82, num: 2 });
+      positions.push({ role: 'LCM', x: 31, y: 28, num: 8 });
+      positions.push({ role: 'CM',  x: 29, y: 50, num: 6 });
+      positions.push({ role: 'RCM', x: 31, y: 72, num: 10 });
+      positions.push({ role: 'LW',  x: 43, y: 22, num: 11 });
+      positions.push({ role: 'ST',  x: 45, y: 50, num: 9 });
+      positions.push({ role: 'RW',  x: 43, y: 78, num: 7 });
+    } else {
+      // 4-2-3-1 Right Half
+      positions.push({ role: 'GK', x: 93, y: 50, num: 1 });
+      positions.push({ role: 'RB', x: 80, y: 18, num: 2 });
+      positions.push({ role: 'CB', x: 83, y: 38, num: 4 });
+      positions.push({ role: 'CB', x: 83, y: 62, num: 5 });
+      positions.push({ role: 'LB', x: 80, y: 82, num: 3 });
+      positions.push({ role: 'LDM', x: 71, y: 36, num: 6 });
+      positions.push({ role: 'RDM', x: 71, y: 64, num: 8 });
+      positions.push({ role: 'LM',  x: 59, y: 20, num: 11 });
+      positions.push({ role: 'CAM', x: 57, y: 50, num: 10 });
+      positions.push({ role: 'RM',  x: 59, y: 80, num: 7 });
+      positions.push({ role: 'ST',  x: 53, y: 50, num: 9 });
+    }
+    return positions;
+  }
+
+  function initLive2DPitchEngine(homeTeam, awayTeam, matchObj = null, stageKey = null, matchIdx = null) {
+    stopLive2DPitchEngine();
+
+    const pitchPlayersContainer = document.getElementById('dstats-pitch-players');
+    const pitchBall = document.getElementById('dstats-pitch-ball');
+    const broadcastBanner = document.getElementById('dstats-pitch-banner');
+    const bannerIcon = document.getElementById('dstats-banner-icon');
+    const bannerText = document.getElementById('dstats-banner-text');
+    const scrubberTime = document.getElementById('dstats-scrubber-time');
+    const scrubberFill = document.getElementById('dstats-scrubber-fill');
+    const scrubberThumb = document.getElementById('dstats-scrubber-thumb');
+    const scrubberEvents = document.getElementById('dstats-scrubber-events');
+    const tickerText = document.getElementById('dstats-pitch-ticker');
+    const tacticsText = document.getElementById('dstats-tactics-text');
+    const momHomeLabel = document.getElementById('dstats-mom-home-label');
+    const momAwayLabel = document.getElementById('dstats-mom-away-label');
+    const momHomeFill = document.getElementById('dstats-mom-home-fill');
+    const momAwayFill = document.getElementById('dstats-mom-away-fill');
+    const btnPlayPause = document.getElementById('dstats-btn-play-pause');
+    const iconPlay = document.getElementById('dstats-icon-play');
+    const txtPlay = document.getElementById('dstats-txt-play');
+    const btnSkip = document.getElementById('dstats-btn-skip-match');
+    const btnReplay = document.getElementById('dstats-btn-replay-event');
+    const btnSpeed = document.getElementById('dstats-btn-speed');
+    const btnLiveSim = document.getElementById('dstats-btn-live-sim');
+    const scrubberTrack = document.getElementById('dstats-scrubber-track');
+
+    if (!pitchPlayersContainer || !pitchBall) return;
+
+    const homeStars = window.TEAM_STAR_PLAYERS?.[homeTeam] || ['Goalkeeper', 'Defender 1', 'Defender 2', 'Defender 3', 'Defender 4', 'Midfielder 1', 'Midfielder 2', 'Midfielder 3', 'Winger 1', 'Striker', 'Winger 2'];
+    const awayStars = window.TEAM_STAR_PLAYERS?.[awayTeam] || ['Goalkeeper', 'Defender 1', 'Defender 2', 'Defender 3', 'Defender 4', 'Midfielder 1', 'Midfielder 2', 'Winger 1', 'Playmaker', 'Winger 2', 'Striker'];
+
+    const totalMinutes = matchObj?.hadExtraTime ? 120 : 90;
+    // Finished matches open paused at FT — user clicks REWATCH to replay from 0'
+    const isAlreadyFinished = matchObj?.isSimulated && !matchObj?.isLive;
+
+    livePitchState.homeTeam = homeTeam;
+    livePitchState.awayTeam = awayTeam;
+    livePitchState.matchObj = matchObj;
+    livePitchState.stageKey = stageKey;
+    livePitchState.matchIdx = matchIdx;
+    livePitchState.curMin = isAlreadyFinished ? totalMinutes : (matchObj?.isLive ? (matchObj.currentSimMinute || 0) : 0);
+    livePitchState.maxMin = totalMinutes;
+    livePitchState.isPaused = isAlreadyFinished; // paused at FT for finished matches
+    livePitchState.speed = 1;
+
+    if (btnSpeed) btnSpeed.textContent = '1x';
+    // RESUME/PAUSE icon — at FT show ▶ RESUME, during play show ⏸ PAUSE
+    if (iconPlay) iconPlay.className = isAlreadyFinished ? 'fa-solid fa-play' : 'fa-solid fa-pause';
+    if (txtPlay) txtPlay.textContent = isAlreadyFinished ? 'RESUME' : 'PAUSE';
+
+    function finalizeMatch() {
+      const m = livePitchState.matchObj;
+      if (!m) return;
+      m.isLive = false;
+      m.isSimulated = true;
+
+      // Update status pill in modal
+      const statusBadge = document.getElementById('dstats-status-badge');
+      if (statusBadge) {
+        statusBadge.textContent = m.hadPenalties ? `FT (PENS ${m.penHome}-${m.penAway})` : (m.hadExtraTime ? 'AET' : 'FT');
+        statusBadge.className = 'dstats-status-pill';
+      }
+
+      // Update score display in modal
+      const homeScoreEl = document.getElementById('dstats-home-score');
+      const awayScoreEl = document.getElementById('dstats-away-score');
+      if (homeScoreEl) homeScoreEl.textContent = m.scoreHome;
+      if (awayScoreEl) awayScoreEl.textContent = m.scoreAway;
+
+      if (stageKey && tournamentState[activeTournKey]?.[stageKey]) {
+        const allDone = (tournamentState[activeTournKey][stageKey] || []).every(match => match.isSimulated);
+        if (allDone) {
+          progressToNextStage(stageKey);
+        }
+      }
+      renderActiveTournament();
+    }
+
+    // Build Formations
+    const homeFormPos = getFormationPositions('4-3-3', true);
+    const awayFormPos = getFormationPositions('4-2-3-1', false);
+
+    if (tacticsText) tacticsText.textContent = `${homeTeam.substring(0, 3).toUpperCase()} 4-3-3 vs 4-2-3-1 ${awayTeam.substring(0, 3).toUpperCase()}`;
+
+    // Render Scrubber Goal & Card Markers
+    if (scrubberEvents) {
+      const events = matchObj?.events || [];
+      scrubberEvents.innerHTML = events.map(ev => {
+        const pct = Math.min(100, Math.max(0, (ev.minute / totalMinutes) * 100));
+        const icon = ev.type?.includes('GOAL') ? '⚽' : (ev.type?.includes('CARD') ? '🟨' : '⚡');
+        return `<div class="dstats-event-dot" style="left: ${pct}%;" title="${ev.minute}' ${ev.teamName}: ${ev.player}">${icon}</div>`;
+      }).join('');
+    }
+
+    // Create 22 Player DOM Nodes
+    let playersHtml = '';
+    const homeNodes = homeFormPos.map((pos, i) => {
+      const name = homeStars[i] || `Home ${i+1}`;
+      const isGK = pos.role === 'GK';
+      return `
+        <div class="dstats-player-node home ${isGK ? 'gk' : ''}" id="p-home-${i}" style="left: ${pos.x}%; top: ${pos.y}%;" data-idx="${i}" data-team="home" title="${name} (${pos.role})">
+          <div class="dstats-player-jersey">${pos.num}</div>
+          <div class="dstats-player-name-tag">${name.split(' ').pop()}</div>
+        </div>
+      `;
+    });
+
+    const awayNodes = awayFormPos.map((pos, i) => {
+      const name = awayStars[i] || `Away ${i+1}`;
+      const isGK = pos.role === 'GK';
+      return `
+        <div class="dstats-player-node away ${isGK ? 'gk' : ''}" id="p-away-${i}" style="left: ${pos.x}%; top: ${pos.y}%;" data-idx="${i}" data-team="away" title="${name} (${pos.role})">
+          <div class="dstats-player-jersey">${pos.num}</div>
+          <div class="dstats-player-name-tag">${name.split(' ').pop()}</div>
+        </div>
+      `;
+    });
+
+    pitchPlayersContainer.innerHTML = homeNodes.join('') + awayNodes.join('');
+
+    // Update Frame Function
+    function updatePitchFrame() {
+      const m = livePitchState.matchObj;
+      const min = Math.min(livePitchState.maxMin, Math.floor(livePitchState.curMin));
+      
+      if (scrubberTime) scrubberTime.textContent = `${min}'`;
+      const progressPct = (min / livePitchState.maxMin) * 100;
+      if (scrubberFill) scrubberFill.style.width = `${progressPct}%`;
+      if (scrubberThumb) scrubberThumb.style.left = `${progressPct}%`;
+
+      // Find if an event happened at or near this minute
+      const currentEvent = m?.events?.find(e => Math.abs(e.minute - min) <= 1);
+      
+      let ballX = 50;
+      let ballY = 50;
+      let actionTitle = '';
+      let actionIcon = '⚡';
+      let tickerMsg = '';
+
+      if (currentEvent) {
+        const isHomeGoal = currentEvent.team === 'home';
+        ballX = isHomeGoal ? 92 : 8; // near goal net
+        ballY = 48 + (Math.sin(min) * 12);
+        actionIcon = '⚽';
+        actionTitle = `GOAL! ${currentEvent.teamName} — ${currentEvent.player} (${currentEvent.minute}')`;
+        tickerMsg = `⚽ GOLAZO! ${currentEvent.player} scores for ${currentEvent.teamName}!`;
+      } else if (min % 10 < 3) {
+        // Attack Left / Right
+        const isHomeAtt = (min % 20 < 10);
+        ballX = isHomeAtt ? 72 + (min % 5) * 3 : 28 - (min % 5) * 3;
+        ballY = 30 + ((min * 17) % 40);
+        actionIcon = '⚡';
+        actionTitle = isHomeAtt ? `${homeTeam.substring(0, 3).toUpperCase()} DANGEROUS ATTACK` : `${awayTeam.substring(0, 3).toUpperCase()} ATTACKING SURGE`;
+        tickerMsg = isHomeAtt ? `⚡ ${homeTeam} pushing numbers forward down the wing!` : `⚡ ${awayTeam} carving out space through the middle!`;
+      } else if (min % 10 < 6) {
+        // Midfield Passing
+        ballX = 42 + ((min * 13) % 18);
+        ballY = 25 + ((min * 23) % 50);
+        actionIcon = '🔄';
+        actionTitle = 'TACTICAL MIDFIELD BUILD-UP';
+        tickerMsg = `Controlling the tempo with crisp passing combinations across midfield.`;
+      } else {
+        // Defense / Save
+        const isHomeDef = (min % 20 < 10);
+        ballX = isHomeDef ? 85 : 15;
+        ballY = 45 + (Math.cos(min) * 10);
+        actionIcon = '🧤';
+        actionTitle = 'KEY DEFENSIVE CLEARANCE';
+        tickerMsg = `🧤 Crucial intervention inside the penalty box clears the danger!`;
+      }
+
+      // Position Ball
+      pitchBall.style.left = `${ballX}%`;
+      pitchBall.style.top = `${ballY}%`;
+
+      // Dynamically shift players slightly toward the ball
+      const allPlayerEls = pitchPlayersContainer.querySelectorAll('.dstats-player-node');
+      allPlayerEls.forEach(el => {
+        el.classList.remove('has-ball');
+      });
+
+      // Find closest player to ball and highlight
+      let closestEl = null;
+      let minDistance = 9999;
+      allPlayerEls.forEach(el => {
+        const isHome = el.dataset.team === 'home';
+        const idx = parseInt(el.dataset.idx, 10);
+        const basePos = isHome ? homeFormPos[idx] : awayFormPos[idx];
+        
+        // Small organic drift toward ball
+        const dx = (ballX - basePos.x) * 0.28;
+        const dy = (ballY - basePos.y) * 0.28;
+        const finalX = Math.max(5, Math.min(95, basePos.x + dx));
+        const finalY = Math.max(8, Math.min(92, basePos.y + dy));
+
+        el.style.left = `${finalX}%`;
+        el.style.top = `${finalY}%`;
+
+        const dist = Math.hypot(ballX - finalX, ballY - finalY);
+        if (dist < minDistance) {
+          minDistance = dist;
+          closestEl = el;
+        }
+      });
+
+      if (closestEl && minDistance < 14) {
+        closestEl.classList.add('has-ball');
+      }
+
+      // Update Momentum Bar
+      const homeMom = Math.max(30, Math.min(70, Math.round(50 + (ballX - 50) * 0.4)));
+      const awayMom = 100 - homeMom;
+      if (momHomeLabel) momHomeLabel.textContent = `${homeTeam.substring(0, 3).toUpperCase()} ${homeMom}%`;
+      if (momAwayLabel) momAwayLabel.textContent = `${awayMom}% ${awayTeam.substring(0, 3).toUpperCase()}`;
+      if (momHomeFill) momHomeFill.style.width = `${homeMom}%`;
+      if (momAwayFill) momAwayFill.style.width = `${awayMom}%`;
+
+      // Update Action Banner
+      if (broadcastBanner && bannerText && bannerIcon) {
+        broadcastBanner.hidden = false;
+        bannerIcon.textContent = actionIcon;
+        bannerText.textContent = actionTitle;
+      }
+
+      if (tickerText) {
+        tickerText.textContent = tickerMsg;
+      }
+    }
+
+    // Scrubber click listener
+    if (scrubberTrack) {
+      scrubberTrack.onclick = (e) => {
+        const rect = scrubberTrack.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const pct = Math.max(0, Math.min(1, clickX / rect.width));
+        livePitchState.curMin = pct * livePitchState.maxMin;
+        updatePitchFrame();
+      };
+    }
+
+    // Play/Pause button
+    // RESUME / PAUSE button — toggles play/pause during ball-tracking
+    if (btnPlayPause) {
+      btnPlayPause.onclick = () => {
+        livePitchState.isPaused = !livePitchState.isPaused;
+        if (iconPlay) iconPlay.className = livePitchState.isPaused ? 'fa-solid fa-play' : 'fa-solid fa-pause';
+        if (txtPlay) txtPlay.textContent = livePitchState.isPaused ? 'RESUME' : 'PAUSE';
+        updatePitchFrame();
+      };
+    }
+
+    // SKIP TO END — fast-forward directly to match conclusion
+    if (btnSkip) {
+      btnSkip.onclick = () => {
+        livePitchState.curMin = livePitchState.maxMin;
+        livePitchState.isPaused = true;
+        finalizeMatch();
+        updatePitchFrame();
+        if (iconPlay) iconPlay.className = 'fa-solid fa-play';
+        if (txtPlay) txtPlay.textContent = 'RESUME';
+      };
+    }
+
+    // PREV EVENT — jump backward to the previous key moment (goal/chance)
+    if (btnReplay) {
+      btnReplay.onclick = () => {
+        const m = livePitchState.matchObj;
+        const events = m?.events || [];
+        const prevEvent = [...events].reverse().find(e => e.minute < livePitchState.curMin - 1) || events[0];
+        if (prevEvent) {
+          livePitchState.curMin = Math.max(0, prevEvent.minute - 2);
+        } else {
+          livePitchState.curMin = 0;
+        }
+        livePitchState.isPaused = false;
+        if (iconPlay) iconPlay.className = 'fa-solid fa-pause';
+        if (txtPlay) txtPlay.textContent = 'PAUSE';
+        updatePitchFrame();
+      };
+    }
+
+    // Speed toggle
+    if (btnSpeed) {
+      btnSpeed.onclick = () => {
+        livePitchState.speed = livePitchState.speed === 1 ? 2 : (livePitchState.speed === 2 ? 4 : 1);
+        btnSpeed.textContent = `${livePitchState.speed}x`;
+      };
+    }
+
+    // REWATCH — reset to kick-off (0') and auto-play full ball-tracking simulation
+    if (btnLiveSim) {
+      btnLiveSim.onclick = () => {
+        livePitchState.curMin = 0;
+        livePitchState.isPaused = false;
+        if (iconPlay) iconPlay.className = 'fa-solid fa-pause';
+        if (txtPlay) txtPlay.textContent = 'PAUSE';
+        updatePitchFrame();
+      };
+    }
+
+    updatePitchFrame();
+
+    // Live 2D Pitch Animation Loop — stops at FT, no looping
+    activeLivePitchInterval = setInterval(() => {
+      if (livePitchState.isPaused) return;
+
+      livePitchState.curMin += 0.8 * livePitchState.speed;
+      if (livePitchState.curMin >= livePitchState.maxMin) {
+        livePitchState.curMin = livePitchState.maxMin;
+        livePitchState.isPaused = true;
+        finalizeMatch();
+        updatePitchFrame();
+        // At FT, switch to RESUME state
+        if (iconPlay) iconPlay.className = 'fa-solid fa-play';
+        if (txtPlay) txtPlay.textContent = 'RESUME';
+        return;
+      }
+      updatePitchFrame();
+    }, 400);
+  }
+
+  function openDetailedStatsModal(homeTeam, awayTeam, matchObj = null, stageKey = null, matchIdx = null) {
+    const modal = document.getElementById('detailed-stats-modal');
+    if (!modal) return;
+
+    const state = tournamentState[activeTournKey];
+    const config = TOURNAMENTS_CONFIG[activeTournKey] || {};
+    const compName = (config.name || 'FIFA WORLD CUP 2026').toUpperCase();
+    const stageTitle = STAGE_META[stageKey]?.title || (stageKey ? stageKey.toUpperCase() : 'MATCH FIXTURE');
+
+    // 1. Meta Line
+    const venueEl = document.getElementById('dstats-venue');
+    const compStageEl = document.getElementById('dstats-comp-stage');
+    if (venueEl) venueEl.textContent = `📍 ${matchObj?.stadium ? `${matchObj.stadium}, ${matchObj.city}` : 'Official Match Arena'}`;
+    if (compStageEl) compStageEl.textContent = `${compName} · ${stageTitle}`;
+
+    // 2. Status Badge
+    const statusBadge = document.getElementById('dstats-status-badge');
+    if (statusBadge) {
+      if (matchObj?.isLive) {
+        statusBadge.textContent = `LIVE ${matchObj.currentSimMinute || 0}'`;
+        statusBadge.className = 'dstats-status-pill live';
+      } else if (matchObj?.isSimulated) {
+        statusBadge.textContent = matchObj.hadPenalties ? `FT (PENS ${matchObj.penHome}-${matchObj.penAway})` : (matchObj.hadExtraTime ? 'AET' : 'FT');
+        statusBadge.className = 'dstats-status-pill';
+      } else {
+        statusBadge.textContent = 'UPCOMING';
+        statusBadge.className = 'dstats-status-pill';
+      }
+    }
+
+    // 3. Team Shields & Names
+    const homeLogoEl = document.getElementById('dstats-home-logo');
+    const awayLogoEl = document.getElementById('dstats-away-logo');
+    const homeNameEl = document.getElementById('dstats-home-name');
+    const awayNameEl = document.getElementById('dstats-away-name');
+    if (homeLogoEl) homeLogoEl.innerHTML = getTeamLogoHtml(homeTeam);
+    if (awayLogoEl) awayLogoEl.innerHTML = getTeamLogoHtml(awayTeam);
+    if (homeNameEl) homeNameEl.textContent = homeTeam;
+    if (awayNameEl) awayNameEl.textContent = awayTeam;
+
+    // 4. Scores
+    const scoreDisplayEl = document.getElementById('dstats-score-display');
+    const pensInfoEl = document.getElementById('dstats-pens-info');
+    if (scoreDisplayEl) {
+      if (matchObj?.isSimulated) {
+        scoreDisplayEl.textContent = `${matchObj.scoreHome} - ${matchObj.scoreAway}`;
+      } else if (matchObj?.isLive) {
+        scoreDisplayEl.textContent = `${matchObj.currentDisplayScoreHome || 0} - ${matchObj.currentDisplayScoreAway || 0}`;
+      } else {
+        scoreDisplayEl.textContent = '0 - 0';
+      }
+    }
+    if (pensInfoEl) {
+      pensInfoEl.textContent = matchObj?.hadPenalties && matchObj?.isSimulated ? `🧤 Shootout: ${matchObj.penHome} - ${matchObj.penAway} (${matchObj.winner} won)` : '';
+    }
+
+    // Star Players
+    const homeStars = window.TEAM_STAR_PLAYERS?.[homeTeam] || ['Captain', 'Midfielder', 'Striker', 'Winger', 'Defender', 'Goalkeeper'];
+    const awayStars = window.TEAM_STAR_PLAYERS?.[awayTeam] || ['Captain', 'Midfielder', 'Striker', 'Winger', 'Defender', 'Goalkeeper'];
+
+    // 5. Timeline Events
+    const timelineEl = document.getElementById('dstats-timeline-list');
+    if (timelineEl) {
+      const curMin = matchObj?.isLive ? (matchObj.currentSimMinute || 0) : 120;
+      let events = (matchObj?.events || []).filter(e => matchObj.isSimulated || (matchObj.isLive && e.minute <= curMin));
+      
+      let timelineItemsHtml = '';
+      if (events.length > 0) {
+        const sorted = [...events].sort((a, b) => b.minute - a.minute);
+        timelineItemsHtml = sorted.map(ev => {
+          const isHome = ev.team === 'home';
+          return `
+            <div class="dstats-event-item">
+              <span class="dstats-ev-min">${ev.minute}'</span>
+              <div class="dstats-ev-body ${isHome ? 'home-align' : 'away-align'}">
+                ${isHome ? `
+                  <span class="dstats-ev-icon-pill">⚽</span>
+                  <span class="dstats-ev-player-main">${ev.player}</span>
+                  ${ev.assist ? `<span class="dstats-ev-assist">(${ev.assist})</span>` : ''}
+                ` : `
+                  ${ev.assist ? `<span class="dstats-ev-assist">(${ev.assist})</span>` : ''}
+                  <span class="dstats-ev-player-main">${ev.player}</span>
+                  <span class="dstats-ev-icon-pill">⚽</span>
+                `}
+              </div>
+            </div>
+          `;
+        }).join('');
+      } else {
+        timelineItemsHtml = `
+          <div class="dstats-event-item" style="justify-content:center;color:#94a3b8;font-style:italic;padding:24px 0;">
+            ${matchObj?.isSimulated ? 'Defensive tactical masterclass · No regular time goals' : 'Match scheduled to kickoff'}
+          </div>
+        `;
+      }
+      timelineEl.innerHTML = timelineItemsHtml;
+    }
+
+    // 6. Top Performers (Green Pitch Box)
+    const performersBox = document.getElementById('dstats-performers-box');
+    if (performersBox) {
+      const p1 = homeStars[homeStars.length - 1] || 'Goalkeeper';
+      const p2 = (matchObj?.events?.[0]?.player) || homeStars[0] || 'Star Striker';
+      const p3 = awayStars[0] || 'Key Playmaker';
+
+      performersBox.innerHTML = `
+        <div class="dstats-player-performer">
+          <div class="dstats-performer-jersey-wrap">
+            <span class="dstats-perf-rating-pill">7.1</span>
+            👕
+          </div>
+          <span class="dstats-perf-name">${p1}</span>
+          <span class="dstats-perf-role">GK | ${homeTeam.substring(0, 3).toUpperCase()}</span>
+        </div>
+
+        <div class="dstats-player-performer star-performer">
+          <div class="dstats-performer-jersey-wrap">
+            <span class="dstats-perf-rating-pill">⭐ 7.4</span>
+            <span class="dstats-perf-goal-ball">⚽</span>
+            🎽
+          </div>
+          <span class="dstats-perf-name">${p2}</span>
+          <span class="dstats-perf-role">FW | ${homeTeam.substring(0, 3).toUpperCase()}</span>
+        </div>
+
+        <div class="dstats-player-performer">
+          <div class="dstats-performer-jersey-wrap">
+            <span class="dstats-perf-rating-pill">7.1</span>
+            <span class="dstats-perf-goal-ball">⚽</span>
+            👕
+          </div>
+          <span class="dstats-perf-name">${p3}</span>
+          <span class="dstats-perf-role">MF | ${awayTeam.substring(0, 3).toUpperCase()}</span>
+        </div>
+      `;
+    }
+
+    // 7. Chance Distribution
+    const chanceBox = document.getElementById('dstats-chance-box');
+    if (chanceBox) {
+      const homeStr = (window.NATIONS_DATA || []).find(n => n.name === homeTeam)?.str || 78;
+      const awayStr = (window.NATIONS_DATA || []).find(n => n.name === awayTeam)?.str || 75;
+      const total = homeStr + awayStr + 32;
+      const homePct = Math.round((homeStr / total) * 100);
+      const drawPct = Math.round((32 / total) * 100);
+      const awayPct = 100 - homePct - drawPct;
+
+      chanceBox.innerHTML = `
+        <div>
+          <div class="dstats-chance-metric-row">
+            <span class="dstats-chance-team-tag">${getTeamLogoHtml(homeTeam)} ${homeTeam.substring(0, 3).toUpperCase()}</span>
+            <span>${homePct}%</span>
+          </div>
+          <div class="dstats-chance-bar-track">
+            <div class="dstats-chance-bar-fill" style="width: ${homePct}%; background: #2563eb;"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="dstats-chance-metric-row">
+            <span class="dstats-chance-team-tag">⚖️ Draw</span>
+            <span>${drawPct}%</span>
+          </div>
+          <div class="dstats-chance-bar-track">
+            <div class="dstats-chance-bar-fill" style="width: ${drawPct}%; background: #64748b;"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="dstats-chance-metric-row">
+            <span class="dstats-chance-team-tag">${getTeamLogoHtml(awayTeam)} ${awayTeam.substring(0, 3).toUpperCase()}</span>
+            <span>${awayPct}%</span>
+          </div>
+          <div class="dstats-chance-bar-track">
+            <div class="dstats-chance-bar-fill" style="width: ${awayPct}%; background: #dc2626;"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    // 8. Stats Comparison Container
+    const statsContainer = document.getElementById('dstats-stats-container');
+    if (statsContainer) {
+      const homePoss = 52 + ((homeTeam.charCodeAt(0) % 15) - 7);
+      const awayPoss = 100 - homePoss;
+      const hShots = (matchObj?.scoreHome || 0) * 3 + 6;
+      const aShots = (matchObj?.scoreAway || 0) * 3 + 5;
+      const hxG = ((matchObj?.scoreHome || 0) * 0.72 + 0.54).toFixed(2);
+      const axG = ((matchObj?.scoreAway || 0) * 0.68 + 0.42).toFixed(2);
+
+      const statMetrics = [
+        { lbl: 'Ball Possession', h: `${homePoss}%`, a: `${awayPoss}%`, hp: homePoss },
+        { lbl: 'Expected Goals (xG)', h: hxG, a: axG, hp: Math.round((parseFloat(hxG)/(parseFloat(hxG)+parseFloat(axG)+0.01))*100) },
+        { lbl: 'Total Shots', h: hShots, a: aShots, hp: Math.round((hShots/(hShots+aShots))*100) },
+        { lbl: 'Shots on Target', h: Math.round(hShots * 0.45), a: Math.round(aShots * 0.4), hp: 50 },
+        { lbl: 'Corner Kicks', h: 6, a: 4, hp: 60 },
+        { lbl: 'Fouls Committed', h: 11, a: 13, hp: 45 },
+        { lbl: 'Yellow Cards', h: 1, a: 2, hp: 33 },
+        { lbl: 'Pass Accuracy', h: '88%', a: '84%', hp: 52 }
+      ];
+
+      statsContainer.innerHTML = statMetrics.map(sm => `
+        <div class="dstats-stat-compare-row">
+          <div class="dstats-stat-nums-line">
+            <span>${sm.h}</span>
+            <span class="dstats-stat-center-lbl">${sm.lbl}</span>
+            <span>${sm.a}</span>
+          </div>
+          <div class="dstats-stat-dual-bar">
+            <div class="dstats-stat-left-bar" style="width: ${sm.hp}%"></div>
+            <div class="dstats-stat-right-bar" style="width: ${100 - sm.hp}%"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // 9. Lineups Container
+    const lineupsContainer = document.getElementById('dstats-lineups-container');
+    if (lineupsContainer) {
+      lineupsContainer.innerHTML = `
+        <div class="dstats-lineup-squad-box">
+          <div class="dstats-lineup-header">
+            <span>${homeTeam} (4-3-3)</span>
+            <span>STARTING XI</span>
+          </div>
+          <div class="dstats-lineup-roster-list">
+            ${homeStars.slice(0, 11).map((p, i) => `
+              <div class="dstats-lineup-player-row">
+                <span class="dstats-roster-num">${i + 1}</span>
+                <span class="dstats-roster-pname">${p}</span>
+                <span class="dstats-roster-pos">${i === 0 ? 'GK' : (i < 5 ? 'DEF' : (i < 8 ? 'MID' : 'FWD'))}</span>
+                <span class="dstats-roster-rating">${(7.0 + ((p.charCodeAt(0) % 15) / 10)).toFixed(1)}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="dstats-lineup-squad-box">
+          <div class="dstats-lineup-header">
+            <span>${awayTeam} (4-2-3-1)</span>
+            <span>STARTING XI</span>
+          </div>
+          <div class="dstats-lineup-roster-list">
+            ${awayStars.slice(0, 11).map((p, i) => `
+              <div class="dstats-lineup-player-row">
+                <span class="dstats-roster-num">${i + 1}</span>
+                <span class="dstats-roster-pname">${p}</span>
+                <span class="dstats-roster-pos">${i === 0 ? 'GK' : (i < 5 ? 'DEF' : (i < 8 ? 'MID' : 'FWD'))}</span>
+                <span class="dstats-roster-rating">${(6.9 + ((p.charCodeAt(0) % 14) / 10)).toFixed(1)}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // 10. Feed Commentary List
+    const feedList = document.getElementById('dstats-feed-list');
+    if (feedList) {
+      feedList.innerHTML = `
+        <div class="dstats-feed-entry">
+          <span class="dstats-feed-min-badge">90'</span>
+          <div class="dstats-feed-text">Referee blows the final whistle! High intensity tactical encounter concludes.</div>
+        </div>
+        <div class="dstats-feed-entry">
+          <span class="dstats-feed-min-badge">78'</span>
+          <div class="dstats-feed-text">Dangerous counter-attack creates a golden scoring opportunity!</div>
+        </div>
+        <div class="dstats-feed-entry">
+          <span class="dstats-feed-min-badge">45'</span>
+          <div class="dstats-feed-text">Half-time whistle. Teams head to the dressing room after an intense midfield battle.</div>
+        </div>
+        <div class="dstats-feed-entry">
+          <span class="dstats-feed-min-badge">1'</span>
+          <div class="dstats-feed-text">Kick-off! The match gets underway in front of an electric crowd.</div>
+        </div>
+      `;
+    }
+
+    // 11. Info Tab
+    const infoContainer = document.getElementById('dstats-info-container');
+    if (infoContainer) {
+      infoContainer.innerHTML = `
+        <div class="dstats-info-item">
+          <span class="dstats-info-lbl">Competition</span>
+          <span class="dstats-info-val">${compName}</span>
+        </div>
+        <div class="dstats-info-item">
+          <span class="dstats-info-lbl">Stage / Round</span>
+          <span class="dstats-info-val">${stageTitle}</span>
+        </div>
+        <div class="dstats-info-item">
+          <span class="dstats-info-lbl">Stadium Venue</span>
+          <span class="dstats-info-val">${matchObj?.stadium || 'MetLife Stadium, New Jersey'}</span>
+        </div>
+        <div class="dstats-info-item">
+          <span class="dstats-info-lbl">Capacity</span>
+          <span class="dstats-info-val">82,500 Spectators</span>
+        </div>
+        <div class="dstats-info-item">
+          <span class="dstats-info-lbl">Referee</span>
+          <span class="dstats-info-val">Szymon Marciniak (POL)</span>
+        </div>
+        <div class="dstats-info-item">
+          <span class="dstats-info-lbl">Simulation Engine</span>
+          <span class="dstats-info-val">Poisson xG Tactical Radar v2.0</span>
+        </div>
+      `;
+    }
+
+    // Set default active tab: livepitch (Live 2D Pitch)
+    document.querySelectorAll('.dstats-tab-pill').forEach(p => p.classList.remove('active'));
+    const defPill = document.querySelector('.dstats-tab-pill[data-tab="livepitch"]');
+    if (defPill) defPill.classList.add('active');
+    document.querySelectorAll('.dstats-panel').forEach(p => p.classList.remove('active'));
+    const defPanel = document.getElementById('dstats-panel-livepitch');
+    if (defPanel) defPanel.classList.add('active');
+
+    // Launch Live 2D Pitch Engine
+    initLive2DPitchEngine(homeTeam, awayTeam, matchObj, stageKey, matchIdx);
+
+    // View Lineups link click
+    const viewLineupsLink = document.getElementById('dstats-link-lineups');
+    if (viewLineupsLink) {
+      viewLineupsLink.onclick = () => {
+        document.querySelectorAll('.dstats-tab-pill').forEach(p => p.classList.remove('active'));
+        const luPill = document.querySelector('.dstats-tab-pill[data-tab="lineups"]');
+        if (luPill) luPill.classList.add('active');
+        document.querySelectorAll('.dstats-panel').forEach(p => p.classList.remove('active'));
+        const luPanel = document.getElementById('dstats-panel-lineups');
+        if (luPanel) luPanel.classList.add('active');
+      };
+    }
+
+    // Action button listeners
+    const restartBtn = document.getElementById('dstats-btn-restart');
+    if (restartBtn) {
+      restartBtn.onclick = () => {
+        if (stageKey && matchIdx !== undefined && state?.[stageKey]?.[matchIdx]) {
+          state[stageKey][matchIdx].isSimulated = false;
+          state[stageKey][matchIdx].isLive = false;
+          state[stageKey][matchIdx].scoreHome = 0;
+          state[stageKey][matchIdx].scoreAway = 0;
+          state[stageKey][matchIdx].events = [];
+          renderActiveTournament();
+          openDetailedStatsModal(homeTeam, awayTeam, state[stageKey][matchIdx], stageKey, matchIdx);
+        }
+      };
+    }
+
+    const rematchBtn = document.getElementById('dstats-btn-rematch');
+    if (rematchBtn) {
+      rematchBtn.onclick = () => {
+        modal.hidden = true;
+        stopLive2DPitchEngine();
+        if (stageKey && matchIdx !== undefined) {
+          simulateSingleMatch(stageKey, matchIdx);
+        }
+      };
+    }
+
+    const saveBtn = document.getElementById('dstats-btn-save');
+    if (saveBtn) {
+      saveBtn.onclick = () => {
+        saveBtn.innerHTML = '<i class="fa-solid fa-check"></i> <span>Saved!</span>';
+        setTimeout(() => {
+          saveBtn.innerHTML = '<i class="fa-regular fa-bookmark"></i> <span>Save</span>';
+        }, 1500);
+      };
+    }
+
+    const shareBtn = document.getElementById('dstats-btn-share');
+    if (shareBtn) {
+      shareBtn.onclick = () => {
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(`${homeTeam} vs ${awayTeam} — ${compName}`);
+          shareBtn.innerHTML = '<i class="fa-solid fa-check"></i> <span>Copied!</span>';
+          setTimeout(() => {
+            shareBtn.innerHTML = '<i class="fa-solid fa-share-nodes"></i> <span>Share</span>';
+          }, 1500);
+        }
+      };
+    }
+
+    modal.hidden = false;
+  }
+
+  window.openDetailedStatsModal = openDetailedStatsModal;
+
 
   // ---------------------------------------------------------------------------
   // 11. 3D HOLOGRAPHIC STADIUM BROADCAST STUDIO CONTROLLER
@@ -7129,17 +8372,77 @@ enterBtn.addEventListener('click', () => {
     if (tacCloseBtn) tacCloseBtn.addEventListener('click', closeTacModal);
     if (tacBackdrop) tacBackdrop.addEventListener('click', closeTacModal);
 
+    function closeDetailedStatsModal() {
+      const dmodal = document.getElementById('detailed-stats-modal');
+      if (dmodal) dmodal.hidden = true;
+      stopLive2DPitchEngine();
+    }
+    const dstatsCloseBtn = document.getElementById('dstats-close-btn');
+    const dstatsBackdrop = document.getElementById('dstats-backdrop');
+    if (dstatsCloseBtn) dstatsCloseBtn.addEventListener('click', closeDetailedStatsModal);
+    if (dstatsBackdrop) dstatsBackdrop.addEventListener('click', closeDetailedStatsModal);
+
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         const detailModal = document.getElementById('match-detail-modal');
         if (detailModal) detailModal.hidden = true;
         closeHoloModal();
         closeTacModal();
+        closeDetailedStatsModal();
       }
     });
 
     // Global delegation for single match simulation buttons across all tournaments & leagues
     document.addEventListener('click', (e) => {
+      // 0. Detailed Stats Popup Modal Trigger
+      const dstatsBtn = e.target.closest('.btn-open-detailed-stats');
+      if (dstatsBtn) {
+        e.preventDefault();
+        const stageKey = dstatsBtn.dataset.stage;
+        const matchIdx = dstatsBtn.dataset.idx !== undefined ? parseInt(dstatsBtn.dataset.idx, 10) : undefined;
+        const mdIdx = dstatsBtn.dataset.md !== undefined ? parseInt(dstatsBtn.dataset.md, 10) : undefined;
+        const midx = dstatsBtn.dataset.midx !== undefined ? parseInt(dstatsBtn.dataset.midx, 10) : undefined;
+        const homeTeam = dstatsBtn.dataset.home || 'Home';
+        const awayTeam = dstatsBtn.dataset.away || 'Away';
+
+        const state = tournamentState[activeTournKey];
+        let match = null;
+
+        if (stageKey && matchIdx !== undefined) {
+          match = state?.[stageKey]?.[matchIdx];
+        } else if (mdIdx !== undefined && midx !== undefined) {
+          match = state?.matchdays?.[mdIdx]?.[midx];
+        }
+
+        if (!match) {
+          match = {
+            home: homeTeam,
+            away: awayTeam,
+            isSimulated: false,
+            isLive: false,
+            scoreHome: 0,
+            scoreAway: 0,
+            events: []
+          };
+        }
+
+        openDetailedStatsModal(homeTeam, awayTeam, match, stageKey, matchIdx);
+        return;
+      }
+
+      // Detailed Stats Modal Tab Pills
+      const dstatsTab = e.target.closest('.dstats-tab-pill');
+      if (dstatsTab) {
+        e.preventDefault();
+        const targetTab = dstatsTab.dataset.tab;
+        document.querySelectorAll('.dstats-tab-pill').forEach(t => t.classList.remove('active'));
+        dstatsTab.classList.add('active');
+        document.querySelectorAll('.dstats-panel').forEach(p => p.classList.remove('active'));
+        const targetPanel = document.getElementById(`dstats-panel-${targetTab}`);
+        if (targetPanel) targetPanel.classList.add('active');
+        return;
+      }
+
       // 1. Fast On-Card Simulation
       const fastSimBtn = e.target.closest('.btn-card-fast-sim');
       if (fastSimBtn) {
@@ -7176,6 +8479,7 @@ enterBtn.addEventListener('click', () => {
         return;
       }
 
+      // btn-reopen-tactical is now merged into Match Report & Replay — redirect to detailed stats
       const replayBtn = e.target.closest('.btn-reopen-tactical');
       if (replayBtn) {
         e.preventDefault();
@@ -7184,7 +8488,7 @@ enterBtn.addEventListener('click', () => {
         const state = tournamentState[activeTournKey];
         const match = state?.[stageKey]?.[matchIdx];
         if (match) {
-          openProTacticalTracker(match.home, match.away, match, stageKey, matchIdx);
+          openDetailedStatsModal(match.home, match.away, match, stageKey, matchIdx);
         }
       }
 
@@ -7199,7 +8503,25 @@ enterBtn.addEventListener('click', () => {
           open3DHolographicBroadcast(match.home, match.away, match, stageKey, matchIdx);
         }
       }
+
+      // SofaScore tab switching
+      const sfcTab = e.target.closest('.sfc-tab');
+      if (sfcTab) {
+        e.preventDefault();
+        const cardId = sfcTab.dataset.card;
+        const targetPanel = sfcTab.dataset.tab;
+        // Deactivate all tabs in this card
+        document.querySelectorAll(`.sfc-tab[data-card="${cardId}"]`).forEach(t => t.classList.remove('active'));
+        sfcTab.classList.add('active');
+        // Hide all panels for this card
+        document.querySelectorAll(`.sfc-panel[data-card="${cardId}"]`).forEach(p => p.classList.add('hidden'));
+        // Show target panel
+        const panel = document.querySelector(`.sfc-panel[data-card="${cardId}"][data-panel="${targetPanel}"]`);
+        if (panel) panel.classList.remove('hidden');
+      }
     });
+
+
 
     document.querySelectorAll('.chip').forEach(chip => {
       chip.addEventListener('click', () => {
@@ -7507,7 +8829,101 @@ enterBtn.addEventListener('click', () => {
   }
 
   // ---------------------------------------------------------------------------
-  // 13. MARIO STRIKER HEADER PITCH ENGINE
+  // 13. HEADER BROADCAST ENGINE
+  // ---------------------------------------------------------------------------
+
+  // ---------------------------------------------------------------------------
+  // 14. 3D INTERACTIVE CARD PARALLAX & SPECULAR GLOSS ENGINE
+  // ---------------------------------------------------------------------------
+  function init3DCardParallaxEngine() {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let activeCard = null;
+    let cardRect = null;
+    let glareEl = null;
+
+    function apply3DTilt(e) {
+      if (!activeCard || !cardRect) return;
+
+      const clientX = e.clientX;
+      const clientY = e.clientY;
+
+      const x = clientX - cardRect.left;
+      const y = clientY - cardRect.top;
+
+      const relX = Math.max(0, Math.min(1, x / cardRect.width));
+      const relY = Math.max(0, Math.min(1, y / cardRect.height));
+
+      // Calculate 3D tilt angles (smooth ±18 degrees)
+      const rotX = ((relY - 0.5) * -20).toFixed(2);
+      const rotY = ((relX - 0.5) * 20).toFixed(2);
+
+      activeCard.style.transform = `perspective(850px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.035, 1.035, 1.035)`;
+
+      if (glareEl) {
+        glareEl.style.background = `radial-gradient(circle at ${relX * 100}% ${relY * 100}%, rgba(255, 255, 255, 0.40) 0%, rgba(255, 255, 255, 0.08) 42%, transparent 78%)`;
+        glareEl.style.opacity = '1';
+      }
+    }
+
+    function reset3DTilt() {
+      if (!activeCard) return;
+      activeCard.style.transition = 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease';
+      activeCard.style.transform = 'perspective(850px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+
+      if (glareEl) {
+        glareEl.style.opacity = '0';
+      }
+
+      const cardToClear = activeCard;
+      setTimeout(() => {
+        if (cardToClear && cardToClear !== activeCard) {
+          cardToClear.style.transform = '';
+          cardToClear.style.transition = '';
+        }
+      }, 350);
+
+      activeCard = null;
+      cardRect = null;
+      glareEl = null;
+    }
+
+    // Global delegation for all interactive card elements
+    document.addEventListener('mouseover', (e) => {
+      const card = e.target.closest('.wc-nation-card, .single-stage-match-card, .fixture-card, .media-card, .champ-team-card, .champ-hero-stat-badge, .showcase-stat-card, .leader-item, .trophy-3d-stage');
+      if (!card) return;
+
+      activeCard = card;
+      cardRect = card.getBoundingClientRect();
+      activeCard.classList.add('card-3d-interactive');
+      activeCard.style.transition = 'transform 0.08s ease-out';
+
+      // Ensure specular glare element exists
+      glareEl = activeCard.querySelector('.card-3d-glare');
+      if (!glareEl && !activeCard.classList.contains('trophy-3d-stage')) {
+        glareEl = document.createElement('div');
+        glareEl.className = 'card-3d-glare';
+        activeCard.appendChild(glareEl);
+      }
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (activeCard) {
+        requestAnimationFrame(() => apply3DTilt(e));
+      }
+    });
+
+    document.addEventListener('mouseout', (e) => {
+      if (!activeCard) return;
+      const related = e.relatedTarget;
+      if (!related || !activeCard.contains(related)) {
+        reset3DTilt();
+      }
+    });
+  }
+
+  // ---------------------------------------------------------------------------
+  // 14. MARIO STRIKER HEADER PITCH ENGINE
   // ---------------------------------------------------------------------------
   function initMarioStrikerEngine() {
     const actor = document.getElementById('mario-pitch-actor');
@@ -7602,16 +9018,35 @@ enterBtn.addEventListener('click', () => {
       }
     }
 
-    // Click on Mario triggers super strike
+    function launchTacticalRadarFromBall() {
+      triggerSuperShot();
+      const state = tournamentState[activeTournKey];
+      const match = state?.gf?.[0] || state?.sf?.[0] || state?.qf?.[0] || state?.r16?.[0] || state?.r32?.[0] || { home: 'Argentina', away: 'France', scoreHome: 3, scoreAway: 3 };
+      const hTeam = match.home || 'Argentina';
+      const aTeam = match.away || 'France';
+      setTimeout(() => {
+        openProTacticalTracker(hTeam, aTeam, match);
+      }, 400);
+    }
+
+    // Click on Mario or Ball triggers super strike & opens KINEXON Tactical Radar
     actor.addEventListener('click', (e) => {
       e.stopPropagation();
-      triggerSuperShot();
+      launchTacticalRadarFromBall();
     });
+
+    if (ballWrap) {
+      ballWrap.style.cursor = 'pointer';
+      ballWrap.addEventListener('click', (e) => {
+        e.stopPropagation();
+        launchTacticalRadarFromBall();
+      });
+    }
 
     actor.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        triggerSuperShot();
+        launchTacticalRadarFromBall();
       }
     });
 
@@ -7627,96 +9062,6 @@ enterBtn.addEventListener('click', () => {
   }
 
   // ---------------------------------------------------------------------------
-  // 14. 3D INTERACTIVE CARD PARALLAX & SPECULAR GLOSS ENGINE
-  // ---------------------------------------------------------------------------
-  function init3DCardParallaxEngine() {
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    let activeCard = null;
-    let cardRect = null;
-    let glareEl = null;
-
-    function apply3DTilt(e) {
-      if (!activeCard || !cardRect) return;
-
-      const clientX = e.clientX;
-      const clientY = e.clientY;
-
-      const x = clientX - cardRect.left;
-      const y = clientY - cardRect.top;
-
-      const relX = Math.max(0, Math.min(1, x / cardRect.width));
-      const relY = Math.max(0, Math.min(1, y / cardRect.height));
-
-      // Calculate 3D tilt angles (smooth ±18 degrees)
-      const rotX = ((relY - 0.5) * -20).toFixed(2);
-      const rotY = ((relX - 0.5) * 20).toFixed(2);
-
-      activeCard.style.transform = `perspective(850px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.035, 1.035, 1.035)`;
-
-      if (glareEl) {
-        glareEl.style.background = `radial-gradient(circle at ${relX * 100}% ${relY * 100}%, rgba(255, 255, 255, 0.40) 0%, rgba(255, 255, 255, 0.08) 42%, transparent 78%)`;
-        glareEl.style.opacity = '1';
-      }
-    }
-
-    function reset3DTilt() {
-      if (!activeCard) return;
-      activeCard.style.transition = 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease';
-      activeCard.style.transform = 'perspective(850px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-
-      if (glareEl) {
-        glareEl.style.opacity = '0';
-      }
-
-      const cardToClear = activeCard;
-      setTimeout(() => {
-        if (cardToClear && cardToClear !== activeCard) {
-          cardToClear.style.transform = '';
-          cardToClear.style.transition = '';
-        }
-      }, 350);
-
-      activeCard = null;
-      cardRect = null;
-      glareEl = null;
-    }
-
-    // Global delegation for all interactive card elements
-    document.addEventListener('mouseover', (e) => {
-      const card = e.target.closest('.wc-nation-card, .single-stage-match-card, .fixture-card, .media-card, .champ-team-card, .champ-hero-stat-badge, .showcase-stat-card, .leader-item, .trophy-3d-stage');
-      if (!card) return;
-
-      activeCard = card;
-      cardRect = card.getBoundingClientRect();
-      activeCard.classList.add('card-3d-interactive');
-      activeCard.style.transition = 'transform 0.08s ease-out';
-
-      // Ensure specular glare element exists
-      glareEl = activeCard.querySelector('.card-3d-glare');
-      if (!glareEl && !activeCard.classList.contains('trophy-3d-stage')) {
-        glareEl = document.createElement('div');
-        glareEl.className = 'card-3d-glare';
-        activeCard.appendChild(glareEl);
-      }
-    });
-
-    document.addEventListener('mousemove', (e) => {
-      if (activeCard) {
-        requestAnimationFrame(() => apply3DTilt(e));
-      }
-    });
-
-    document.addEventListener('mouseout', (e) => {
-      if (!activeCard) return;
-      const related = e.relatedTarget;
-      if (!related || !activeCard.contains(related)) {
-        reset3DTilt();
-      }
-    });
-  }
-
-  // ---------------------------------------------------------------------------
   // 15. DOM BOOTSTRAP
   // ---------------------------------------------------------------------------
   window.open3DHolographicBroadcast = open3DHolographicBroadcast;
@@ -7728,8 +9073,8 @@ enterBtn.addEventListener('click', () => {
     setupSimulationControls();
     setupModalHandlers();
     setupCustomDrawModalHandlers();
-    initMarioStrikerEngine();
     init3DCardParallaxEngine();
+    initMarioStrikerEngine();
     // Start on HOME view — selectTournament will set subView='home' via initTournamentState
     selectTournament('wc');
     switchView('tournament-home');

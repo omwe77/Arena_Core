@@ -72,29 +72,30 @@
                 <path class="mario-shorts-fill" d="M26 46 C24 51, 26 55, 34 55 C37 55, 37 53, 40 53 C43 53, 43 55, 47 55 C50 54, 49 48, 45 46 Z" fill="var(--mario-kit-secondary, #002B7F)" stroke="#111" stroke-width="1.2"/>
                 <!-- Golden Buttons -->
                 <circle cx="30" cy="46" r="1.6" fill="#FFD700" stroke="#111" stroke-width="0.8"/>
-                <circle cx="42" cy="46" r="1.6" fill="#FFD700" stroke="#111" stroke-width="0.8"/>
+                <circle cx="41" cy="46" r="1.6" fill="#FFD700" stroke="#111" stroke-width="0.8"/>
 
-                <!-- Dynamic Tournament Football Jersey -->
+                <!-- Dynamic Kit Jersey (Color adapts per tournament) -->
                 <path class="mario-jersey-fill" d="M26 36 C24 40, 23 46, 27 49 C32 51, 42 50, 45 45 C47 41, 45 36, 42 36 Z" fill="var(--mario-kit-primary, #E52521)" stroke="#111" stroke-width="1.2"/>
+                <!-- Jersey Stripe Accent -->
                 <path class="mario-jersey-stripe" d="M31 36 C34 41, 38 41, 41 36" stroke="var(--mario-kit-secondary, #FFD700)" stroke-width="2.5" fill="none"/>
 
-                <!-- Face & Ears -->
-                <ellipse cx="35" cy="29" rx="10" ry="8.5" fill="#FFCCA3" stroke="#111" stroke-width="1"/>
-                <circle cx="25" cy="30" r="3.2" fill="#FFCCA3" stroke="#111" stroke-width="1"/>
+                <!-- Mario Head & Face -->
+                <ellipse cx="36" cy="28" rx="11" ry="9" fill="#FFC9A2" stroke="#111" stroke-width="1.2"/>
                 <!-- Nose -->
-                <ellipse cx="43" cy="28" rx="5" ry="4" fill="#FFCCA3" stroke="#111" stroke-width="1.2"/>
-                <!-- Eye -->
-                <ellipse cx="37" cy="25.5" rx="2.5" ry="3.5" fill="#FFFFFF" stroke="#111" stroke-width="0.8"/>
-                <ellipse cx="38" cy="25.5" rx="1.5" ry="2.2" fill="#2980B9"/>
-                <circle cx="38.5" cy="24.8" r="0.6" fill="#FFFFFF"/>
-                <!-- Mustache -->
-                <path d="M30 33 C34 31, 38 31, 41 33 C45 32, 49 33, 51 35 C48 37, 40 37, 30 34 Z" fill="#3D2314" stroke="#111" stroke-width="1"/>
+                <ellipse cx="44" cy="27" rx="4.5" ry="3.5" fill="#FFC9A2" stroke="#111" stroke-width="1"/>
+                <!-- Eyes -->
+                <ellipse cx="38" cy="24" rx="2.5" ry="3.5" fill="#FFFFFF" stroke="#111" stroke-width="0.9"/>
+                <circle cx="39" cy="24" r="1.6" fill="#007ACC"/>
+                <circle cx="39.5" cy="23.2" r="0.6" fill="#FFFFFF"/>
+                <!-- Moustache -->
+                <path d="M35 30 C37 32, 45 32, 48 29 C45 34, 33 34, 31 30 C33 29, 34 30, 35 30 Z" fill="#2B170B" stroke="#111" stroke-width="1.1"/>
+                <!-- Ear -->
+                <ellipse cx="27" cy="27" rx="2.8" ry="3.5" fill="#FFC9A2" stroke="#111" stroke-width="0.9"/>
 
                 <!-- Mario Cap -->
                 <path class="mario-cap-fill" d="M18 22 C18 13, 44 11, 52 18 C56 22, 58 27, 46 27 C38 27, 24 27, 18 22 Z" fill="var(--mario-cap, #E52521)" stroke="#111" stroke-width="1.2"/>
                 <path class="mario-cap-visor" d="M38 24 C46 24, 60 25, 62 29 C56 31, 42 30, 36 27 Z" fill="var(--mario-cap-dark, #B71C1C)" stroke="#111" stroke-width="1"/>
-                <!-- Cap Emblem (M) -->
-                <ellipse cx="34" cy="18" rx="6" ry="5.5" fill="#FFFFFF" stroke="#111" stroke-width="1"/>
+                <circle cx="33" cy="20" r="5" fill="#FFFFFF" stroke="#111" stroke-width="0.9"/>
                 <text x="31" y="21.5" font-family="'Chakra Petch', sans-serif" font-weight="900" font-size="7" fill="var(--mario-cap, #E52521)">M</text>
               </g>
 
@@ -155,9 +156,6 @@
       <button type="button" class="top-nav-link" data-nav="standings-view">
         <i class="fa-solid fa-chart-simple"></i> LEAGUE STANDINGS
       </button>
-      <button type="button" class="top-nav-link" id="nav-tactical-radar" data-nav="tactical-tracker" style="background:linear-gradient(135deg,rgba(46,204,113,0.15),rgba(0,229,255,0.15));border:1px solid var(--pitch-green);color:#fff;">
-        <i class="fa-solid fa-crosshairs"></i> 🎯 KINEXON TACTICAL RADAR
-      </button>
     </nav>
 
     <div class="header-right">
@@ -168,7 +166,7 @@
     </div>
   </header>
 
-  <!-- 10-Competition Selection Bar with Scroll Navigation Arrows -->
+
   <nav class="competition-selector-bar" role="tablist" aria-label="Select Competition">
     <button type="button" class="comp-nav-arrow arrow-left" id="comp-nav-left" aria-label="Scroll left" title="Scroll left">
       <i class="fa-solid fa-chevron-left"></i>
@@ -488,7 +486,7 @@
                 <li><i class="fa-solid fa-chart-line"></i> Poisson Attack/Defense Calibrations</li>
                 <li><i class="fa-solid fa-shield-halved"></i> Live Table Goal Differential Computations</li>
                 <li><i class="fa-solid fa-clapperboard"></i> Highlight Video Replay Center</li>
-                <li><i class="fa-solid fa-gamepad"></i> Mario Striker Pitch Engine</li>
+                <li><i class="fa-solid fa-tower-broadcast"></i> Real-time 2D Pitch Live Radar</li>
               </ul>
             </div>
           </div>
@@ -607,7 +605,7 @@
                 <li><i class="fa-solid fa-chart-simple"></i> Real-time Points & GD Recalibration</li>
                 <li><i class="fa-solid fa-trophy"></i> Golden Boot & Top Scorer Leaderboards</li>
                 <li><i class="fa-solid fa-flag-checkered"></i> Qualification Zone Highlights</li>
-                <li><i class="fa-solid fa-gamepad"></i> Mario Striker Live Pitch Integration</li>
+                <li><i class="fa-solid fa-tower-broadcast"></i> Real-time 2D Pitch Live Radar</li>
               </ul>
             </div>
           </div>
@@ -626,12 +624,285 @@
     </main>
   </div>
 
+  <!-- Comprehensive SofaScore-Style Detailed Stats Modal (Matching Reference Broadcast Design) -->
+  <div id="detailed-stats-modal" class="modal detailed-stats-modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="dstats-home-name">
+    <div class="modal-backdrop dstats-backdrop" id="dstats-backdrop"></div>
+    <div class="modal-dialog dstats-dialog">
+      <button type="button" id="dstats-close-btn" class="dstats-close-btn" aria-label="Close details">✕</button>
+
+      <!-- 1. Top Deep Purple Header -->
+      <div class="dstats-header-banner" id="dstats-header-banner">
+        <div class="dstats-meta-line" id="dstats-meta-line">
+          <span class="dstats-venue-text" id="dstats-venue">📍 Official Match Arena</span>
+          <span class="dstats-comp-stage" id="dstats-comp-stage">FIFA WORLD CUP · KNOCKOUT STAGE</span>
+        </div>
+
+        <div class="dstats-status-pill-wrap">
+          <span class="dstats-status-pill" id="dstats-status-badge">FT</span>
+        </div>
+
+        <!-- 3-Column Match Scoreboard Display -->
+        <div class="dstats-match-scoreboard">
+          <!-- Home Team -->
+          <div class="dstats-team-box home-team-box">
+            <div class="dstats-shield-outer home-shield-bg" id="dstats-home-shield">
+              <div class="dstats-shield-inner" id="dstats-home-logo"></div>
+            </div>
+            <h3 class="dstats-team-name" id="dstats-home-name">Home Team</h3>
+          </div>
+
+          <!-- Center Big Score -->
+          <div class="dstats-score-center">
+            <div class="dstats-huge-score" id="dstats-score-display">0 - 0</div>
+            <div class="dstats-sub-score-info" id="dstats-pens-info"></div>
+          </div>
+
+          <!-- Away Team -->
+          <div class="dstats-team-box away-team-box">
+            <div class="dstats-shield-outer away-shield-bg" id="dstats-away-shield">
+              <div class="dstats-shield-inner" id="dstats-away-logo"></div>
+            </div>
+            <h3 class="dstats-team-name" id="dstats-away-name">Away Team</h3>
+          </div>
+        </div>
+
+        <!-- Action Icons Row Under Score -->
+        <div class="dstats-quick-actions">
+          <button type="button" class="dstats-icon-action" id="dstats-btn-restart" title="Restart match">
+            <i class="fa-solid fa-rotate-left"></i>
+            <span>Restart</span>
+          </button>
+          <button type="button" class="dstats-icon-action" id="dstats-btn-rematch" title="Simulate Rematch">
+            <i class="fa-solid fa-arrows-rotate"></i>
+            <span>Rematch</span>
+          </button>
+          <button type="button" class="dstats-icon-action" id="dstats-btn-save" title="Save match bookmark">
+            <i class="fa-regular fa-bookmark"></i>
+            <span>Save</span>
+          </button>
+          <button type="button" class="dstats-icon-action" id="dstats-btn-share" title="Share match report">
+            <i class="fa-solid fa-share-nodes"></i>
+            <span>Share</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. Pill Tabs Navigation Bar -->
+      <div class="dstats-tabs-bar">
+        <button type="button" class="dstats-tab-pill active" data-tab="livepitch">
+          <i class="fa-solid fa-tower-broadcast"></i> Live 2D Pitch
+        </button>
+        <button type="button" class="dstats-tab-pill" data-tab="summary">
+          <i class="fa-solid fa-chart-pie"></i> Summary
+        </button>
+        <button type="button" class="dstats-tab-pill" data-tab="feed">
+          <i class="fa-solid fa-bolt"></i> Feed
+        </button>
+        <button type="button" class="dstats-tab-pill" data-tab="stats">
+          <i class="fa-solid fa-chart-simple"></i> Stats
+        </button>
+        <button type="button" class="dstats-tab-pill" data-tab="lineups">
+          <i class="fa-solid fa-users"></i> Lineups
+        </button>
+        <button type="button" class="dstats-tab-pill" data-tab="comments">
+          <i class="fa-regular fa-comments"></i> Comments <span class="dstats-comments-badge">0</span>
+        </button>
+        <button type="button" class="dstats-tab-pill" data-tab="info">
+          <i class="fa-solid fa-circle-info"></i> Info
+        </button>
+      </div>
+
+      <!-- 3. Modal Body Panels -->
+      <div class="dstats-body-wrap">
+        <!-- TAB 0: LIVE 2D PITCH BROADCAST TRACKER -->
+        <div class="dstats-panel dstats-panel-livepitch active" id="dstats-panel-livepitch">
+          <!-- Broadcast Momentum & Match Status HUD -->
+          <div class="dstats-pitch-hud-bar">
+            <div class="dstats-momentum-widget">
+              <span class="dstats-mom-team home" id="dstats-mom-home-label">HOME 52%</span>
+              <div class="dstats-mom-track">
+                <div class="dstats-mom-fill-home" id="dstats-mom-home-fill" style="width: 52%;"></div>
+                <div class="dstats-mom-fill-away" id="dstats-mom-away-fill" style="width: 48%;"></div>
+              </div>
+              <span class="dstats-mom-team away" id="dstats-mom-away-label">48% AWAY</span>
+            </div>
+
+            <div class="dstats-pitch-tactics-tag" id="dstats-pitch-tactics-tag">
+              <i class="fa-solid fa-chess-board"></i> <span id="dstats-tactics-text">TACTICAL FORMATION: 4-3-3 vs 4-2-3-1</span>
+            </div>
+          </div>
+
+          <!-- The Realistic 2D Soccer Pitch Canvas/DOM Visualizer -->
+          <div class="dstats-pitch-viewport" id="dstats-pitch-viewport">
+            <!-- 2D Grass Turf Field with Striping -->
+            <div class="dstats-pitch-field" id="dstats-pitch-field">
+              <div class="dstats-pitch-stripes"></div>
+              <div class="dstats-pitch-grass-texture"></div>
+
+              <!-- Pitch Markings -->
+              <div class="dstats-pitch-line dstats-pitch-border"></div>
+              <div class="dstats-pitch-line dstats-pitch-halfway"></div>
+              <div class="dstats-pitch-circle dstats-pitch-center-circle"></div>
+              <div class="dstats-pitch-spot dstats-pitch-center-spot"></div>
+
+              <!-- Left Penalty Area -->
+              <div class="dstats-pitch-box left-box"></div>
+              <div class="dstats-pitch-box left-goal-box"></div>
+              <div class="dstats-pitch-arc left-arc"></div>
+              <div class="dstats-pitch-spot left-pen-spot"></div>
+              <div class="dstats-pitch-goal left-goal-net"></div>
+
+              <!-- Right Penalty Area -->
+              <div class="dstats-pitch-box right-box"></div>
+              <div class="dstats-pitch-box right-goal-box"></div>
+              <div class="dstats-pitch-arc right-arc"></div>
+              <div class="dstats-pitch-spot right-pen-spot"></div>
+              <div class="dstats-pitch-goal right-goal-net"></div>
+
+              <!-- Corner Arcs -->
+              <div class="dstats-pitch-corner corner-tl"></div>
+              <div class="dstats-pitch-corner corner-tr"></div>
+              <div class="dstats-pitch-corner corner-bl"></div>
+              <div class="dstats-pitch-corner corner-br"></div>
+
+              <!-- 22 Dynamic Player Nodes Layer -->
+              <div class="dstats-pitch-players-layer" id="dstats-pitch-players">
+                <!-- 11 Home & 11 Away players injected dynamically -->
+              </div>
+
+              <!-- Dynamic Soccer Ball Node -->
+              <div class="dstats-pitch-ball-node" id="dstats-pitch-ball">
+                <div class="dstats-ball-sphere"></div>
+                <div class="dstats-ball-shadow"></div>
+                <div class="dstats-ball-trail" id="dstats-ball-trail"></div>
+              </div>
+
+              <!-- TV Broadcast Lower-Third Live Action Graphic Banner -->
+              <div class="dstats-pitch-broadcast-banner" id="dstats-pitch-banner" hidden>
+                <span class="dstats-banner-icon" id="dstats-banner-icon">⚡</span>
+                <span class="dstats-banner-text" id="dstats-banner-text">DANGEROUS ATTACK</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Playback Controls & Timeline Scrubber Bar -->
+          <div class="dstats-pitch-controls-bar">
+            <div class="dstats-scrubber-actions">
+              <!-- REWATCH: resets ball tracking to 0' and auto-plays from kick-off -->
+              <button type="button" class="dstats-ctrl-btn btn-rewatch-primary" id="dstats-btn-live-sim" title="Rewatch full match simulation from kick-off">
+                <i class="fa-solid fa-rotate-left"></i> <span>REWATCH</span>
+              </button>
+              <!-- RESUME / PAUSE -->
+              <button type="button" class="dstats-ctrl-btn" id="dstats-btn-play-pause" title="Resume or pause the ball-tracking broadcast">
+                <i class="fa-solid fa-play" id="dstats-icon-play"></i> <span id="dstats-txt-play">RESUME</span>
+              </button>
+              <!-- SKIP TO END -->
+              <button type="button" class="dstats-ctrl-btn" id="dstats-btn-skip-match" title="Skip directly to full-time conclusion">
+                <i class="fa-solid fa-forward-step"></i> <span>SKIP TO END</span>
+              </button>
+              <!-- PREV EVENT (jump to previous goal/chance in the timeline) -->
+              <button type="button" class="dstats-ctrl-btn" id="dstats-btn-replay-event" title="Jump to previous key event">
+                <i class="fa-solid fa-backward-step"></i> <span>PREV EVENT</span>
+              </button>
+              <button type="button" class="dstats-ctrl-btn speed-btn" id="dstats-btn-speed" title="Toggle playback speed">1x</button>
+            </div>
+
+            <!-- Scrubber Timeline -->
+            <div class="dstats-scrubber-track-wrap">
+              <div class="dstats-scrubber-time-badge" id="dstats-scrubber-time">0'</div>
+              <div class="dstats-scrubber-track" id="dstats-scrubber-track">
+                <div class="dstats-scrubber-fill" id="dstats-scrubber-fill" style="width: 0%;"></div>
+                <div class="dstats-scrubber-thumb" id="dstats-scrubber-thumb" style="left: 0%;"></div>
+                <div class="dstats-scrubber-events" id="dstats-scrubber-events">
+                  <!-- Goal and Card event markers -->
+                </div>
+              </div>
+              <div class="dstats-scrubber-time-badge ft-badge">90'</div>
+            </div>
+          </div>
+
+          <!-- Live Tactical Action Ticker -->
+          <div class="dstats-live-ticker-wrap">
+            <span class="dstats-ticker-badge"><i class="fa-solid fa-circle-dot"></i> LIVE BROADCAST</span>
+            <span class="dstats-ticker-text" id="dstats-pitch-ticker">Match ready for kickoff. Track player movements and ball possession live on the 2D pitch!</span>
+          </div>
+        </div>
+
+        <!-- TAB 1: SUMMARY -->
+        <div class="dstats-panel dstats-panel-summary" id="dstats-panel-summary">
+          <div class="dstats-summary-grid">
+            <!-- Left Column: Match Timeline -->
+            <div class="dstats-timeline-card">
+              <div class="dstats-card-heading">Summary</div>
+              <div class="dstats-timeline-events-list" id="dstats-timeline-list">
+                <!-- Chronological goals, cards, substitutions injected here -->
+              </div>
+            </div>
+
+            <!-- Right Column: Top Performers & Chance Distribution -->
+            <div class="dstats-sidebar-col">
+              <!-- Top Performers Card -->
+              <div class="dstats-performers-card">
+                <div class="dstats-card-heading">Top performers</div>
+                <div class="dstats-performers-turf" id="dstats-performers-box">
+                  <!-- Green pitch with player cards injected here -->
+                </div>
+                <button type="button" class="dstats-view-lineups-link" id="dstats-link-lineups">
+                  <span>View lineups</span>
+                  <i class="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
+
+              <!-- Chance Distribution Card -->
+              <div class="dstats-chance-card">
+                <div class="dstats-card-heading">Chance distribution</div>
+                <div class="dstats-chance-content" id="dstats-chance-box">
+                  <!-- Team 1, Draw, Team 2 distribution bars injected here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: FEED -->
+        <div class="dstats-panel dstats-panel-feed" id="dstats-panel-feed">
+          <div class="dstats-feed-list" id="dstats-feed-list"></div>
+        </div>
+
+        <!-- TAB 3: STATS -->
+        <div class="dstats-panel dstats-panel-stats" id="dstats-panel-stats">
+          <div class="dstats-stats-container" id="dstats-stats-container"></div>
+        </div>
+
+        <!-- TAB 4: LINEUPS -->
+        <div class="dstats-panel dstats-panel-lineups" id="dstats-panel-lineups">
+          <div class="dstats-lineups-container" id="dstats-lineups-container"></div>
+        </div>
+
+        <!-- TAB 5: COMMENTS -->
+        <div class="dstats-panel dstats-panel-comments" id="dstats-panel-comments">
+          <div class="dstats-comments-empty">
+            <i class="fa-regular fa-comment-dots"></i>
+            <p>No fan comments yet. Be the first to analyze this match!</p>
+          </div>
+        </div>
+
+        <!-- TAB 6: INFO -->
+        <div class="dstats-panel dstats-panel-info" id="dstats-panel-info">
+          <div class="dstats-info-container" id="dstats-info-container"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Focused Match Center Modal -->
   <div id="match-detail-modal" class="modal" hidden tabindex="-1" role="dialog" aria-modal="true"
     aria-labelledby="modal-match-title">
     <div class="modal-backdrop" id="modal-backdrop"></div>
     <div class="modal-dialog">
       <button type="button" id="modal-close" class="modal-close-btn" aria-label="Close match details">✕</button>
+
 
       <div class="modal-header-bar">
         <span class="modal-tag" id="modal-match-tag">UEFA CHAMPIONS LEAGUE</span>

@@ -390,9 +390,153 @@
     </main>
   </div>
 
+  <!-- Comprehensive SofaScore-Style Detailed Stats Modal (Matching Reference Broadcast Design) -->
+  <div id="detailed-stats-modal" class="modal detailed-stats-modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="dstats-home-name">
+    <div class="modal-backdrop dstats-backdrop" id="dstats-backdrop"></div>
+    <div class="modal-dialog dstats-dialog">
+      <button type="button" id="dstats-close-btn" class="dstats-close-btn" aria-label="Close details">✕</button>
+
+      <!-- 1. Top Deep Purple Header -->
+      <div class="dstats-header-banner" id="dstats-header-banner">
+        <div class="dstats-meta-line" id="dstats-meta-line">
+          <span class="dstats-venue-text" id="dstats-venue">📍 Official Match Arena</span>
+          <span class="dstats-comp-stage" id="dstats-comp-stage">FIFA WORLD CUP · KNOCKOUT STAGE</span>
+        </div>
+
+        <div class="dstats-status-pill-wrap">
+          <span class="dstats-status-pill" id="dstats-status-badge">FT</span>
+        </div>
+
+        <!-- 3-Column Match Scoreboard Display -->
+        <div class="dstats-match-scoreboard">
+          <!-- Home Team -->
+          <div class="dstats-team-box home-team-box">
+            <div class="dstats-shield-outer home-shield-bg" id="dstats-home-shield">
+              <div class="dstats-shield-inner" id="dstats-home-logo"></div>
+            </div>
+            <h3 class="dstats-team-name" id="dstats-home-name">Home Team</h3>
+          </div>
+
+          <!-- Center Big Score -->
+          <div class="dstats-score-center">
+            <div class="dstats-huge-score" id="dstats-score-display">0 - 0</div>
+            <div class="dstats-sub-score-info" id="dstats-pens-info"></div>
+          </div>
+
+          <!-- Away Team -->
+          <div class="dstats-team-box away-team-box">
+            <div class="dstats-shield-outer away-shield-bg" id="dstats-away-shield">
+              <div class="dstats-shield-inner" id="dstats-away-logo"></div>
+            </div>
+            <h3 class="dstats-team-name" id="dstats-away-name">Away Team</h3>
+          </div>
+        </div>
+
+        <!-- Action Icons Row Under Score -->
+        <div class="dstats-quick-actions">
+          <button type="button" class="dstats-icon-action" id="dstats-btn-restart" title="Restart match">
+            <i class="fa-solid fa-rotate-left"></i>
+            <span>Restart</span>
+          </button>
+          <button type="button" class="dstats-icon-action" id="dstats-btn-rematch" title="Simulate Rematch">
+            <i class="fa-solid fa-arrows-rotate"></i>
+            <span>Rematch</span>
+          </button>
+          <button type="button" class="dstats-icon-action" id="dstats-btn-save" title="Save match bookmark">
+            <i class="fa-regular fa-bookmark"></i>
+            <span>Save</span>
+          </button>
+          <button type="button" class="dstats-icon-action" id="dstats-btn-share" title="Share match report">
+            <i class="fa-solid fa-share-nodes"></i>
+            <span>Share</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. Pill Tabs Navigation Bar -->
+      <div class="dstats-tabs-bar">
+        <button type="button" class="dstats-tab-pill active" data-tab="summary">Summary</button>
+        <button type="button" class="dstats-tab-pill" data-tab="feed">Feed</button>
+        <button type="button" class="dstats-tab-pill" data-tab="stats">Stats</button>
+        <button type="button" class="dstats-tab-pill" data-tab="lineups">Lineups</button>
+        <button type="button" class="dstats-tab-pill" data-tab="comments">Comments <span class="dstats-comments-badge">0</span></button>
+        <button type="button" class="dstats-tab-pill" data-tab="info">Info</button>
+      </div>
+
+      <!-- 3. Modal Body Panels -->
+      <div class="dstats-body-wrap">
+        <!-- TAB 1: SUMMARY -->
+        <div class="dstats-panel dstats-panel-summary active" id="dstats-panel-summary">
+          <div class="dstats-summary-grid">
+            <!-- Left Column: Match Timeline -->
+            <div class="dstats-timeline-card">
+              <div class="dstats-card-heading">Summary</div>
+              <div class="dstats-timeline-events-list" id="dstats-timeline-list">
+                <!-- Chronological goals, cards, substitutions injected here -->
+              </div>
+            </div>
+
+            <!-- Right Column: Top Performers & Chance Distribution -->
+            <div class="dstats-sidebar-col">
+              <!-- Top Performers Card -->
+              <div class="dstats-performers-card">
+                <div class="dstats-card-heading">Top performers</div>
+                <div class="dstats-performers-turf" id="dstats-performers-box">
+                  <!-- Green pitch with player cards injected here -->
+                </div>
+                <button type="button" class="dstats-view-lineups-link" id="dstats-link-lineups">
+                  <span>View lineups</span>
+                  <i class="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
+
+              <!-- Chance Distribution Card -->
+              <div class="dstats-chance-card">
+                <div class="dstats-card-heading">Chance distribution</div>
+                <div class="dstats-chance-content" id="dstats-chance-box">
+                  <!-- Team 1, Draw, Team 2 distribution bars injected here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: FEED -->
+        <div class="dstats-panel dstats-panel-feed" id="dstats-panel-feed">
+          <div class="dstats-feed-list" id="dstats-feed-list"></div>
+        </div>
+
+        <!-- TAB 3: STATS -->
+        <div class="dstats-panel dstats-panel-stats" id="dstats-panel-stats">
+          <div class="dstats-stats-container" id="dstats-stats-container"></div>
+        </div>
+
+        <!-- TAB 4: LINEUPS -->
+        <div class="dstats-panel dstats-panel-lineups" id="dstats-panel-lineups">
+          <div class="dstats-lineups-container" id="dstats-lineups-container"></div>
+        </div>
+
+        <!-- TAB 5: COMMENTS -->
+        <div class="dstats-panel dstats-panel-comments" id="dstats-panel-comments">
+          <div class="dstats-comments-empty">
+            <i class="fa-regular fa-comment-dots"></i>
+            <p>No fan comments yet. Be the first to analyze this match!</p>
+          </div>
+        </div>
+
+        <!-- TAB 6: INFO -->
+        <div class="dstats-panel dstats-panel-info" id="dstats-panel-info">
+          <div class="dstats-info-container" id="dstats-info-container"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Focused Match Detail View Modal -->
   <div id="match-detail-modal" class="modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="modal-match-title">
     <div class="modal-backdrop" id="modal-backdrop"></div>
+
     <div class="modal-dialog">
       <button type="button" id="modal-close" class="modal-close-btn" aria-label="Close match details">✕</button>
       
