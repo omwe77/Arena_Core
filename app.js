@@ -2194,7 +2194,7 @@ function setupNavigation() {
   // 7A-2. DYNAMIC YOUTUBE HERO VIDEO BACKGROUND SYSTEM
   // ---------------------------------------------------------------------------
   const TOURNAMENT_HERO_VIDEOS = {
-    wc: { id: 'fm20OYYxLmU', title: 'FIFA World Cup Finals' },
+    wc: { id: '8C3we1FSAA0', title: 'Iconic FIFA World Cup Moments' },
     ucl: { id: 'dQw4w9WgXcQ', title: 'UEFA Champions League Highlights' },
     pl: { id: 'dQw4w9WgXcQ', title: 'Premier League Highlights' },
     laliga: { id: 'dQw4w9WgXcQ', title: 'La Liga Highlights' },
