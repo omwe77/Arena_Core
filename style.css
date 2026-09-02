@@ -13246,13 +13246,13 @@ border-color: #facc15;
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 100vw;
-  min-width: 177.78vh; /* 16:9 ratio */
-  height: 56.25vw;    /* 16:9 ratio */
-  min-height: 100%;
+  width: 120vw;
+  min-width: 213.33vh; /* 16:9 ratio * 1.2 zoom to crop channel watermarks/logos */
+  height: 67.5vw;     /* 16:9 ratio * 1.2 zoom */
+  min-height: 120%;
   transform: translate(-50%, -50%);
   border: none;
-  filter: brightness(0.58) contrast(1.1) saturate(1.15);
+  filter: brightness(0.68) contrast(1.05) saturate(1.1);
   pointer-events: none;
   transition: opacity 0.5s ease;
 }
@@ -13280,53 +13280,22 @@ border-color: #facc15;
   z-index: 2;
 }
 
-.hero-video-badge-bar {
+/* Bottom Action Bar for Video Customization */
+.hero-video-bottom-action {
   position: absolute;
-  top: 20px;
-  right: 24px;
+  bottom: 16px;
+  right: 20px;
   z-index: 10;
   display: flex;
   align-items: center;
-  gap: 8px;
-}
-
-.hero-highlight-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(10, 15, 30, 0.82);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
-}
-
-.hero-highlight-pill .live-dot {
-  width: 8px;
-  height: 8px;
-  background: #ef4444;
-  border-radius: 50%;
-  box-shadow: 0 0 10px #ef4444;
-  animation: heroPulseDot 1.4s ease-in-out infinite;
-}
-
-@keyframes heroPulseDot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.8); }
 }
 
 .hero-edit-video-btn {
-  background: rgba(10, 15, 30, 0.82);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(10, 15, 30, 0.78);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   color: #cbd5e1;
-  padding: 6px 12px;
+  padding: 6px 14px;
   border-radius: 20px;
   font-size: 0.72rem;
   font-weight: 700;
@@ -13336,13 +13305,13 @@ border-color: #facc15;
   gap: 6px;
   transition: all 0.2s ease;
   font-family: inherit;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 
 .hero-edit-video-btn:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.2);
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.45);
   transform: translateY(-1px);
 }
 

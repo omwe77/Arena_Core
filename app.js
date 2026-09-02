@@ -2240,7 +2240,7 @@ function setupNavigation() {
       <div class="hero-video-bg-wrap" id="hero-video-bg-${tournKey}">
         <iframe 
           class="hero-video-iframe" 
-          src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&playsinline=1&rel=0&showinfo=0&modestbranding=1&iv_load_policy=3&enablejsapi=1" 
+          src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&playsinline=1&rel=0&showinfo=0&modestbranding=1&iv_load_policy=3&enablejsapi=1&vq=hd1080&hd=1" 
           title="Tournament Highlights Video" 
           frameborder="0" 
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -2252,10 +2252,9 @@ function setupNavigation() {
 
   function renderHeroVideoBadgeHtml(tournKey) {
     return `
-      <div class="hero-video-badge-bar">
-        <span class="hero-highlight-pill"><span class="live-dot"></span> Highlights Reel</span>
+      <div class="hero-video-bottom-action">
         <button type="button" class="hero-edit-video-btn" onclick="window.openHeroVideoModal && window.openHeroVideoModal('${tournKey}')" title="Change highlight video link">
-          <i class="fa-solid fa-gear"></i> <span>Video Link</span>
+          <i class="fa-solid fa-film"></i> <span>Change Video Link</span>
         </button>
       </div>
     `;
