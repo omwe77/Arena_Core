@@ -2194,7 +2194,7 @@ function setupNavigation() {
   // 7A-2. DYNAMIC YOUTUBE HERO VIDEO BACKGROUND SYSTEM
   // ---------------------------------------------------------------------------
   const TOURNAMENT_HERO_VIDEOS = {
-    wc: { id: '2YZxC2Rmr8M', title: '30 Minutes of the Best Ever FIFA World Cup Goals (2010-2022)' },
+    wc: { id: 'I_kDmkCBm_c', title: 'Iconic FIFA World Cup Highlights' },
     ucl: { id: 'dQw4w9WgXcQ', title: 'UEFA Champions League Highlights' },
     pl: { id: 'dQw4w9WgXcQ', title: 'Premier League Highlights' },
     laliga: { id: 'dQw4w9WgXcQ', title: 'La Liga Highlights' },
@@ -2218,10 +2218,6 @@ function setupNavigation() {
   }
 
   function getHeroVideoId(tournKey) {
-    try {
-      const saved = localStorage.getItem(`arena_hero_video_${tournKey}`);
-      if (saved) return extractYouTubeId(saved);
-    } catch(e) {}
     return TOURNAMENT_HERO_VIDEOS[tournKey]?.id || '';
   }
 
@@ -2236,14 +2232,16 @@ function setupNavigation() {
   function renderHeroVideoBgHtml(tournKey) {
     const videoId = getHeroVideoId(tournKey);
     if (!videoId) return '';
+    const originParam = window.location.origin && window.location.origin !== 'null' ? `&origin=${encodeURIComponent(window.location.origin)}` : '';
     return `
       <div class="hero-video-bg-wrap" id="hero-video-bg-${tournKey}">
         <iframe 
           class="hero-video-iframe" 
-          src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&playsinline=1&rel=0&showinfo=0&modestbranding=1&iv_load_policy=3&disablekb=1" 
+          src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&playsinline=1&rel=0&iv_load_policy=3&disablekb=1${originParam}" 
           title="Tournament Highlights Video" 
           frameborder="0" 
-          allow="autoplay; encrypted-media; picture-in-picture" 
+          referrerpolicy="strict-origin-when-cross-origin"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
           allowfullscreen>
         </iframe>
       </div>
@@ -2337,11 +2335,7 @@ function setupNavigation() {
                 <span>SIMULATE WORLD CUP</span>
                 <i class="fa-solid fa-play"></i>
               </button>
-              <button type="button" class="wc-btn-primary" id="btn-wc-explore">
-                <i class="fa-solid fa-layer-group"></i>
-                <span>VIEW BRACKET & GROUPS</span>
-                <i class="fa-solid fa-chevron-right"></i>
-              </button>
+
               <button type="button" class="wc-btn-custom-draw" id="btn-wc-custom-draw" onclick="window.openCustomDrawModal &amp;&amp; window.openCustomDrawModal()">
                 <i class="fa-solid fa-sliders"></i>
                 <span>CUSTOM DRAW (48)</span>
@@ -2418,14 +2412,7 @@ function setupNavigation() {
       });
     }
 
-    const exploreBtn = container.querySelector('#btn-wc-explore');
-    if (exploreBtn) {
-      exploreBtn.addEventListener('click', () => {
-        state.subView = 'sim';
-        activeStageFilter = 'all';
-        renderActiveTournament();
-      });
-    }
+
 
     const customDrawBtn = container.querySelector('#btn-wc-custom-draw');
     if (customDrawBtn) {
