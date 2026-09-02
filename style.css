@@ -1,17 +1,17 @@
-/* ==========================================================================
-   ARENA_CORE_V2.0 â€” GLOBAL FOOTBALL BROADCAST & SIMULATOR STYLESHEET
+﻿/* ==========================================================================
+   ARENA_CORE_V2.0 Ã¢â‚¬â€ GLOBAL FOOTBALL BROADCAST & SIMULATOR STYLESHEET
    Authentic Stadium Pitch-Night Theme with Pitch Green (#2ECC71),
    Trophy Gold (#FFC94A), Red Card Accent (#E74C3C), and Deep Turf Surfaces.
    ========================================================================== */
 
 :root {
   /* Pitch Night Surfaces - Lightened & Elevated for Crisp Readability */
-  --bg-pitch: #0E1614;               /* elevated deep pitch-night base */
-  --bg-sidebar: #131E1A;             /* lifted edge / sidebar surface */
-  --bg-card: #1C2B25;                /* lightened charcoal-green card panel */
-  --bg-card-hover: #243830;          /* active interactive lighter panel */
-  --bg-surface: #22332D;             /* elevated tactical card surface */
-  --bg-glass: rgba(28, 43, 37, 0.92); /* luminous tactical glass */
+  --bg-pitch: #E9FFDB;               /* light background */
+  --bg-sidebar: #C8F0B0;             /* light sidebar */
+  --bg-card: rgba(233,255,219,0.92);   /* glassâ€‘card base */
+  --bg-card-hover: rgba(233,255,219,0.97); /* hover */
+  --bg-surface: #D6FFB7;             /* subtle surface */
+  --bg-glass: rgba(233,255,219,0.85); /* light glass */
   
   /* Turf & Stadium Floodlights */
   --pitch-green: #2ECC71;            /* vivid pitch green "under the lights" */
@@ -44,6 +44,8 @@
   --font-hud: 'Share Tech Mono', monospace;
   --font-title: 'Chakra Petch', sans-serif;
   --font-body: 'Outfit', sans-serif;
+  /* Lightâ€‘theme glass card utility */
+  .glass-card { backdrop-filter: blur(8px); background: var(--bg-glass); border: 1px solid var(--border-focus); box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 8px; padding: 1rem; }
 }
 
 /* ==========================================================================
@@ -226,7 +228,7 @@
   box-shadow: 0 0 12px rgba(255, 119, 0, 0.4) !important;
 }
 
-/* 7. Trendyol Süper Lig (Turkey) Theme */
+/* 7. Trendyol SÃ¼per Lig (Turkey) Theme */
 [data-theme="superLig"] {
   --pitch-green: #E30A17;
   --pitch-green-glow: rgba(227, 10, 23, 0.45);
@@ -865,7 +867,7 @@ html, body {
   text-shadow: 0 0 20px var(--pitch-green-glow);
 }
 .logo-title::before {
-  content: '⚽';
+  content: 'âš½';
   font-size: 1.15rem;
   -webkit-text-fill-color: initial;
 }
@@ -1058,7 +1060,7 @@ html, body {
 }
 
 .tech-sidebar {
-  display: none; /* Sidebar removed â€” content duplicated in top nav */
+  display: none; /* Sidebar removed Ã¢â‚¬â€ content duplicated in top nav */
 }
 
 .broadcast-status-badge {
@@ -1233,7 +1235,7 @@ html, body {
   overflow: hidden;
 }
 
-/* Controls column — stacks primary action, live controls, and instant btn vertically */
+/* Controls column â€” stacks primary action, live controls, and instant btn vertically */
 .sim-controls-group {
   display: flex;
   flex-direction: column;
@@ -1480,7 +1482,7 @@ html, body {
   border: 1px solid rgba(46, 204, 113, 0.25);
 }
 
-/* Groups Grid — horizontal scroll so cards never get cut off */
+/* Groups Grid â€” horizontal scroll so cards never get cut off */
 .groups-grid-container {
   display: flex;
   flex-direction: row;
@@ -1818,7 +1820,7 @@ html, body {
 }
 
 /* ==========================================================================
-   BRACKET FLIP WRAPPER — puts scrollbar at TOP of bracket (above cards)
+   BRACKET FLIP WRAPPER â€” puts scrollbar at TOP of bracket (above cards)
    Technique: scaleY(-1) on outer flips the element, moving its bottom
    scrollbar visually to the top. Inner element is flipped back to normal.
    ========================================================================== */
@@ -3399,7 +3401,7 @@ html, body {
   overflow: hidden;
   border: 1px solid rgba(56, 0, 113, 0.55);
   background:
-    url('pl_hero_bg.jpg') no-repeat center center / cover;
+    background: #E9FFDB; /* light fallback, hero image removed */
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 50px rgba(56, 0, 113, 0.25);
   display: flex;
   flex-direction: column;
@@ -3825,7 +3827,7 @@ html, body {
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(26, 86, 219, 0.5);
-  background: url('seriea_hero_bg.jpg') no-repeat center center / cover;
+  background: #060412;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 50px rgba(26, 86, 219, 0.22);
   display: flex;
   flex-direction: column;
@@ -4248,7 +4250,7 @@ html, body {
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(210, 5, 21, 0.55);
-  background: url('bundesliga_hero_bg.jpg') no-repeat center center / cover;
+  background: #060412;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 50px rgba(210, 5, 21, 0.22);
   display: flex;
   flex-direction: column;
@@ -4653,7 +4655,7 @@ html, body {
 }
 
 /* ==========================================================================
-   LIGUE 1 MCDONALDâ€™S SHOWCASE HERO & LANDING EXPERIENCE
+   LIGUE 1 MCDONALDÃ¢â‚¬â„¢S SHOWCASE HERO & LANDING EXPERIENCE
    ========================================================================== */
 .ligue1-showcase-wrapper {
   width: 100%;
@@ -4671,7 +4673,7 @@ html, body {
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(0, 79, 159, 0.55);
-  background: url('ligue1_hero_bg.jpg') no-repeat center center / cover;
+  background: #060412;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 50px rgba(0, 79, 159, 0.25);
   display: flex;
   flex-direction: column;
@@ -5096,7 +5098,7 @@ html, body {
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(229, 9, 20, 0.55);
-  background: url('ligaportugal_hero_bg.jpg') no-repeat center center / cover;
+  background: #060412;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 50px rgba(229, 9, 20, 0.25);
   display: flex;
   flex-direction: column;
@@ -5521,7 +5523,7 @@ html, body {
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(255, 102, 0, 0.55);
-  background: url('eredivisie_hero_bg.jpg') no-repeat center center / cover;
+  background: #060412;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 50px rgba(255, 102, 0, 0.25);
   display: flex;
   flex-direction: column;
@@ -5928,7 +5930,7 @@ html, body {
 }
 
 /* ==========================================================================
-   TRENDYOL SÃœPER LÄ°G SHOWCASE HERO & LANDING EXPERIENCE
+   TRENDYOL SÃƒÅ“PER LÃ„Â°G SHOWCASE HERO & LANDING EXPERIENCE
    ========================================================================== */
 .superlig-showcase-wrapper {
   width: 100%;
@@ -5946,7 +5948,7 @@ html, body {
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(227, 10, 23, 0.55);
-  background: url('superlig_hero_bg.jpg') no-repeat center center / cover;
+  background: #060412;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 50px rgba(227, 10, 23, 0.25);
   display: flex;
   flex-direction: column;
@@ -5964,7 +5966,7 @@ html, body {
   z-index: 1;
 }
 
-/* Interactive Cursor Spotlight for Trendyol SÃ¼per Lig */
+/* Interactive Cursor Spotlight for Trendyol SÃƒÂ¼per Lig */
 .superlig-spotlight-glow {
   position: absolute;
   top: 0;
@@ -5995,7 +5997,7 @@ html, body {
   gap: 18px;
 }
 
-/* Trendyol SÃ¼per Lig Brand Badge */
+/* Trendyol SÃƒÂ¼per Lig Brand Badge */
 .superlig-brand-badge {
   display: inline-flex;
   align-items: center;
@@ -6024,7 +6026,7 @@ html, body {
   box-shadow: 0 0 8px rgba(255, 215, 0, 0.18);
 }
 
-/* Trendyol SÃ¼per Lig Hero Title */
+/* Trendyol SÃƒÂ¼per Lig Hero Title */
 .superlig-hero-title {
   font-family: var(--font-title);
   font-size: clamp(2.6rem, 4.5vw, 4.4rem);
@@ -6110,7 +6112,7 @@ html, body {
   transform: translateY(-2px);
 }
 
-/* Trendyol SÃ¼per Lig Standings Glassmorphism Widget */
+/* Trendyol SÃƒÂ¼per Lig Standings Glassmorphism Widget */
 .superlig-standings-widget {
   background: rgba(21, 5, 7, 0.90);
   border: 1px solid rgba(227, 10, 23, 0.30);
@@ -6169,7 +6171,7 @@ html, body {
   transform: translateX(3px);
 }
 
-/* Trendyol SÃ¼per Lig Widget Table */
+/* Trendyol SÃƒÂ¼per Lig Widget Table */
 .superlig-widget-table {
   width: 100%;
   border-collapse: collapse;
@@ -6205,7 +6207,7 @@ html, body {
 .sl-row-pos-uel td   { background: rgba(0, 180, 216, 0.08); }
 .sl-row-pos-uecl td  { background: rgba(255, 145, 0, 0.06); }
 
-/* Trendyol SÃ¼per Lig Position Badges */
+/* Trendyol SÃƒÂ¼per Lig Position Badges */
 .superlig-pos-badge {
   display: inline-flex;
   align-items: center;
@@ -6245,7 +6247,7 @@ html, body {
   max-width: 160px;
 }
 
-/* Trendyol SÃ¼per Lig Stats Ribbon */
+/* Trendyol SÃƒÂ¼per Lig Stats Ribbon */
 .superlig-stats-ribbon {
   position: relative;
   z-index: 2;
@@ -6296,7 +6298,7 @@ html, body {
   text-transform: uppercase;
 }
 
-/* Trendyol SÃ¼per Lig Sim Back Topbar */
+/* Trendyol SÃƒÂ¼per Lig Sim Back Topbar */
 .superlig-sim-topbar {
   display: flex;
   align-items: center;
@@ -6343,7 +6345,7 @@ html, body {
 }
 .superlig-sim-topbar-title i { color: #E30A17; }
 
-/* Trendyol SÃ¼per Lig responsive */
+/* Trendyol SÃƒÂ¼per Lig responsive */
 @media (max-width: 768px) {
   .superlig-hero-layout { grid-template-columns: 1fr; }
   .superlig-standings-widget { display: none; }
@@ -6371,7 +6373,7 @@ html, body {
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(0, 94, 184, 0.45);
-  background: url('scottishprem_hero_bg.jpg') no-repeat center center / cover;
+  background: #060412;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 50px rgba(0, 94, 184, 0.22);
   display: flex;
   flex-direction: column;
@@ -6733,7 +6735,7 @@ html, body {
   overflow: hidden;
   border: 1px solid rgba(255, 43, 68, 0.38);
   background: 
-    url('laliga_hero_bg.jpg') no-repeat center center / cover;
+    background: #060412;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 50px rgba(255, 43, 68, 0.18);
   display: flex;
   flex-direction: column;
@@ -7505,7 +7507,7 @@ html, body {
   overflow: hidden;
   border: 1px solid rgba(255, 201, 74, 0.35);
   background: 
-    url('wc_hero_bg.jpg') no-repeat center center / cover;
+    background: #060412;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 50px rgba(255, 201, 74, 0.15);
   display: flex;
   flex-direction: column;
@@ -7826,7 +7828,7 @@ html, body {
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(0, 240, 255, 0.4);
-  background: url('ucl_hero_bg.png') no-repeat center center / cover;
+  background: #060412;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 50px rgba(0, 102, 255, 0.25);
   display: flex;
   flex-direction: column;
@@ -8679,7 +8681,7 @@ html, body {
 }
 
 /* ============================================================
-   WORLD CUP CUSTOM DRAW â€” PREMIUM FIFA EDITION
+   WORLD CUP CUSTOM DRAW Ã¢â‚¬â€ PREMIUM FIFA EDITION
    ============================================================ */
 
 /* Modal overlay */
@@ -8724,7 +8726,7 @@ html, body {
   to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/* â”€â”€â”€ HEADER â”€â”€â”€ */
+/* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ HEADER Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
 .wc-draw-header {
   display: flex !important;
   align-items: center !important;
@@ -8797,7 +8799,7 @@ html, body {
   transform: rotate(90deg);
 }
 
-/* â”€â”€â”€ PROGRESS + PRESETS HUD â”€â”€â”€ */
+/* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ PROGRESS + PRESETS HUD Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
 .wc-draw-progress-wrap {
   padding: 12px 28px;
   background: #060f08;
@@ -8902,7 +8904,7 @@ html, body {
   background: linear-gradient(90deg, #c0392b, #e74c3c);
 }
 
-/* â”€â”€â”€ FILTER BAR (search + tabs) â”€â”€â”€ */
+/* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ FILTER BAR (search + tabs) Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
 .wc-draw-filter-bar {
   display: flex;
   flex-direction: column;
@@ -8997,7 +8999,7 @@ html, body {
   background: rgba(0,0,0,0.2);
 }
 
-/* â”€â”€â”€ NATION GRID â”€â”€â”€ */
+/* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ NATION GRID Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
 .wc-draw-grid-wrap {
   flex: 1;
   overflow-y: auto;
@@ -9118,7 +9120,7 @@ html, body {
   border-color: #c0392b !important;
 }
 
-/* â”€â”€â”€ FOOTER â”€â”€â”€ */
+/* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ FOOTER Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
 .wc-draw-footer {
   display: flex;
   align-items: center;
@@ -10965,7 +10967,7 @@ html, body {
 }
 
 .vs-chrome-emblem::after {
-  content: '✦';
+  content: 'âœ¦';
   position: absolute;
   top: -6px;
   right: -10px;
@@ -11091,7 +11093,7 @@ html, body {
   50% { opacity: 0.8; box-shadow: 0 0 16px rgba(229, 57, 53, 0.8); }
 }
 
-/* UNIFIED 3-COLUMN HERO: TEAM 1 — BROADCAST PITCH RADAR — TEAM 2 */
+/* UNIFIED 3-COLUMN HERO: TEAM 1 â€” BROADCAST PITCH RADAR â€” TEAM 2 */
 .sfc-hero-matchup {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
@@ -13438,3 +13440,4 @@ border-color: #facc15;
   filter: brightness(1.15);
   transform: translateY(-1px);
 }
+

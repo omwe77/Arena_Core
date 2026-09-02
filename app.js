@@ -783,7 +783,6 @@
     'MEXICO': ['S. Giménez', 'H. Lozano', 'E. Álvarez', 'L. Chávez', 'O. Pineda', 'U. Antuna'],
     'COLOMBIA': ['L. Díaz', 'J. Rodríguez', 'J. Arias', 'R. Borré', 'J. Córdoba', 'R. Rios'],
     'SENEGAL': ['S. Mané', 'N. Jackson', 'I. Sarr', 'K. Diatta', 'P. Gueye'],
-    'KOREA REPUBLIC': ['Son Heung-min', 'Lee Kang-in', 'Hwang Hee-chan', 'Cho Gue-sung'],
     'SOUTH KOREA': ['Son Heung-min', 'Lee Kang-in', 'Hwang Hee-chan', 'Cho Gue-sung'],
     'SWITZERLAND': ['G. Xhaka', 'B. Embolo', 'X. Shaqiri', 'M. Akanji', 'R. Vargas'],
     'DENMARK': ['C. Eriksen', 'R. Højlund', 'J. Wind', 'P. Højbjerg', 'M. Damsgaard'],
@@ -2195,18 +2194,18 @@ function setupNavigation() {
   // ---------------------------------------------------------------------------
   const TOURNAMENT_HERO_VIDEOS = {
     wc: { id: 'I_kDmkCBm_c', title: 'Iconic FIFA World Cup Highlights' },
-    ucl: { id: 'dQw4w9WgXcQ', title: 'UEFA Champions League Highlights' },
-    pl: { id: 'dQw4w9WgXcQ', title: 'Premier League Highlights' },
-    laliga: { id: 'dQw4w9WgXcQ', title: 'La Liga Highlights' },
-    serieA: { id: 'dQw4w9WgXcQ', title: 'Serie A Highlights' },
-    bundesliga: { id: 'dQw4w9WgXcQ', title: 'Bundesliga Highlights' },
-    ligue1: { id: 'dQw4w9WgXcQ', title: 'Ligue 1 Highlights' },
-    ligaPortugal: { id: 'dQw4w9WgXcQ', title: 'Liga Portugal Highlights' },
-    eredivisie: { id: 'dQw4w9WgXcQ', title: 'Eredivisie Highlights' },
-    superLig: { id: 'dQw4w9WgXcQ', title: 'Süper Lig Highlights' },
-    scottishPrem: { id: 'dQw4w9WgXcQ', title: 'Scottish Premiership Highlights' },
-    euro24: { id: 'dQw4w9WgXcQ', title: 'UEFA Euro Highlights' },
-    copa16: { id: 'dQw4w9WgXcQ', title: 'Copa América Highlights' }
+    ucl: { id: 'TODO: replace with proper UCL highlight video ID', title: 'UEFA Champions League Highlights' },
+    pl: { id: 'TODO: replace with proper Premier League highlight video ID', title: 'Premier League Highlights' },
+    laliga: { id: 'TODO: replace with proper La Liga highlight video ID', title: 'La Liga Highlights' },
+    serieA: { id: 'TODO: replace with proper Serie A highlight video ID', title: 'Serie A Highlights' },
+    bundesliga: { id: 'TODO: replace with proper Bundesliga highlight video ID', title: 'Bundesliga Highlights' },
+    ligue1: { id: 'TODO: replace with proper Ligue 1 highlight video ID', title: 'Ligue 1 Highlights' },
+    ligaPortugal: { id: 'TODO: replace with proper Liga Portugal highlight video ID', title: 'Liga Portugal Highlights' },
+    eredivisie: { id: 'TODO: replace with proper Eredivisie highlight video ID', title: 'Eredivisie Highlights' },
+    superLig: { id: 'TODO: replace with proper Süper Lig highlight video ID', title: 'Süper Lig Highlights' },
+    scottishPrem: { id: 'TODO: replace with proper Scottish Premiership highlight video ID', title: 'Scottish Premiership Highlights' },
+    euro24: { id: 'TODO: replace with proper UEFA Euro highlight video ID', title: 'UEFA Euro Highlights' },
+    copa16: { id: 'TODO: replace with proper Copa América highlight video ID', title: 'Copa América Highlights' }
   };
 
   function extractYouTubeId(urlOrId) {
