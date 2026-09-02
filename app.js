@@ -1603,19 +1603,19 @@ function setupNavigation() {
           : `⚡ MATCHDAY ${pendingMd + 1}`;
         stageActionBtn.disabled = pendingMd >= state.totalMatchdays;
       } else if (state.groups && !state.groupsPlayed) {
-        stageActionBtn.textContent = '⚡ GROUP STAGE';
+        stageActionBtn.textContent = '⚡ SIMULATE GROUP STAGE';
         stageActionBtn.disabled = false;
       } else if (state.r32 && state.r32.length > 0 && state.r32.some(m => !m.isSimulated)) {
-        stageActionBtn.textContent = '⚡ ROUND OF 32';
+        stageActionBtn.textContent = '⚡ SIMULATE ROUND OF 32';
         stageActionBtn.disabled = false;
       } else if (state.r16 && state.r16.length > 0 && state.r16.some(m => !m.isSimulated)) {
-        stageActionBtn.textContent = '⚡ ROUND OF 16';
+        stageActionBtn.textContent = '⚡ SIMULATE ROUND OF 16';
         stageActionBtn.disabled = false;
       } else if (state.qf && state.qf.length > 0 && state.qf.some(m => !m.isSimulated)) {
-        stageActionBtn.textContent = '⚡ QUARTERFINALS';
+        stageActionBtn.textContent = '⚡ SIMULATE QUARTERFINALS';
         stageActionBtn.disabled = false;
       } else if (state.sf && state.sf.length > 0 && state.sf.some(m => !m.isSimulated)) {
-        stageActionBtn.textContent = '⚡ SEMIFINALS';
+        stageActionBtn.textContent = '⚡ SIMULATE SEMIFINALS';
         stageActionBtn.disabled = false;
       } else if (state.gf && state.gf.length > 0 && !state.champion) {
         stageActionBtn.textContent = '⚡ SIMULATE GRAND FINAL';
@@ -1884,21 +1884,21 @@ function setupNavigation() {
       const scrollOuter = document.querySelector('.bracket-scroll-flip-outer');
       const stageViewport = document.querySelector('.tournament-stage-viewport');
 
-      if (stageViewport) {
+      if (stageViewport && typeof stageViewport.getBoundingClientRect === 'function' && typeof window.scrollTo === 'function') {
         const yOffset = -70;
-        const y = stageViewport.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        const y = stageViewport.getBoundingClientRect().top + (window.pageYOffset || 0) + yOffset;
         window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
       }
 
       if (stageKey === 'groups') {
         const groupsContainer = document.getElementById('groups-grid-container');
-        if (groupsContainer) {
+        if (groupsContainer && typeof groupsContainer.scrollIntoView === 'function') {
           groupsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-      } else if (scrollOuter) {
+      } else if (scrollOuter && typeof scrollOuter.scrollTo === 'function') {
         const targetCol = document.getElementById(`col-${stageKey}`);
         if (targetCol) {
-          const targetLeft = targetCol.offsetLeft;
+          const targetLeft = targetCol.offsetLeft || 0;
           scrollOuter.scrollTo({ left: Math.max(0, targetLeft - 20), behavior: 'smooth' });
         }
       }
@@ -1911,9 +1911,9 @@ function setupNavigation() {
     const state = tournamentState[activeTournKey];
     if (state) {
       state.subView = 'sim';
-      if (['r32', 'r16', 'qf', 'sf', 'gf'].includes(activeStageFilter)) {
-        ensureStagePrerequisites(activeStageFilter);
-      }
+      // NOTE: Do NOT call ensureStagePrerequisites here.
+      // Switching tabs must ONLY change the view — never auto-simulate matches.
+      // ensureStagePrerequisites is called only by simulateStageWithClock (the simulate button).
     }
 
     document.querySelectorAll('#stage-tabs-group .bracket-tab').forEach(t => {
@@ -4630,8 +4630,7 @@ enterBtn.addEventListener('click', () => {
     if (gotoBtn) {
       gotoBtn.addEventListener('click', () => {
         const nextStage = config.format === 'worldcup48' ? 'r32' : (config.format === 'euro24' ? 'r16' : 'qf');
-        setStageTab('all', true);
-        scrollToStageSection(nextStage);
+        setStageTab(nextStage, true);
       });
     }
 
@@ -4789,8 +4788,8 @@ enterBtn.addEventListener('click', () => {
 
     let eventsHtml = '';
     if (hasEventsToShow || (m.hadPenalties && m.isSimulated)) {
-      const homeEventsText = homeEvents.map(e => `${e.player} ${e.minute}'${e.type.includes('ET') ? ' (ET)' : ''}`).join(', ');
-      const awayEventsText = awayEvents.map(e => `${e.player} ${e.minute}'${e.type.includes('ET') ? ' (ET)' : ''}`).join(', ');
+      const homeEventsText = homeEvents.map(e => `${e.player || 'Goal'} ${e.minute}'${(e.type && e.type.includes('ET')) || e.minute > 90 ? ' (ET)' : ''}`).join(', ');
+      const awayEventsText = awayEvents.map(e => `${e.player || 'Goal'} ${e.minute}'${(e.type && e.type.includes('ET')) || e.minute > 90 ? ' (ET)' : ''}`).join(', ');
 
       eventsHtml = `
         <div class="match-events-list">
@@ -5599,48 +5598,45 @@ enterBtn.addEventListener('click', () => {
       return;
     }
 
-    // Step 1: If Groups are not played, resolve groups and create Round of 32 (or R16)
+    // Step 1: If Groups are not played, resolve groups and show the 32 qualifiers hub
     if (state.groups && !state.groupsPlayed) {
       resolveGroupStage();
-      setStageTab('all', false);
-      renderActiveTournament();
-      const firstKnockout = config.format === 'worldcup48' ? 'r32' : (config.format === 'euro24' ? 'r16' : 'qf');
-      scrollToStageSection(firstKnockout);
+      setStageTab('groups', true);
       return;
     }
 
     // Step 2: Round of 32
     if (state.r32 && state.r32.length > 0 && state.r32.some(m => !m.isSimulated)) {
+      setStageTab('r32', true);
       simulateStageWithClock('r32');
-      scrollToStageSection('r32');
       return;
     }
 
     // Step 3: Round of 16
     if (state.r16 && state.r16.length > 0 && state.r16.some(m => !m.isSimulated)) {
+      setStageTab('r16', true);
       simulateStageWithClock('r16');
-      scrollToStageSection('r16');
       return;
     }
 
     // Step 4: Quarterfinals
     if (state.qf && state.qf.length > 0 && state.qf.some(m => !m.isSimulated)) {
+      setStageTab('qf', true);
       simulateStageWithClock('qf');
-      scrollToStageSection('qf');
       return;
     }
 
     // Step 5: Semifinals
     if (state.sf && state.sf.length > 0 && state.sf.some(m => !m.isSimulated)) {
+      setStageTab('sf', true);
       simulateStageWithClock('sf');
-      scrollToStageSection('sf');
       return;
     }
 
     // Step 6: Grand Final
     if (state.gf && state.gf.length > 0 && !state.champion) {
+      setStageTab('gf', true);
       simulateStageWithClock('gf');
-      scrollToStageSection('gf');
       return;
     }
   }
@@ -5864,8 +5860,8 @@ enterBtn.addEventListener('click', () => {
       if (recentGoal) {
         const tickerEl = document.getElementById('bracket-ticker-text');
         if (tickerEl) {
-          const goalType = recentGoal.type.includes('ET') ? ' (ET)' : '';
-          tickerEl.textContent = `⚡ GOAL! ${recentGoal.teamName}: ${recentGoal.player}${goalType} (${recentGoal.minute}') // `;
+          const goalType = (recentGoal.type && recentGoal.type.includes('ET')) || recentGoal.minute > 90 ? ' (ET)' : '';
+          tickerEl.textContent = `⚡ GOAL! ${recentGoal.teamName || 'Goal'}: ${recentGoal.player || 'Player'}${goalType} (${recentGoal.minute}') // `;
         }
       }
 
@@ -5937,7 +5933,17 @@ enterBtn.addEventListener('click', () => {
 
     progressToNextStage(stageKey);
 
-    renderActiveTournament();
+    let nextStage = null;
+    if (stageKey === 'r32') nextStage = 'r16';
+    else if (stageKey === 'r16') nextStage = 'qf';
+    else if (stageKey === 'qf') nextStage = 'sf';
+    else if (stageKey === 'sf') nextStage = 'gf';
+
+    if (nextStage) {
+      setStageTab(nextStage, true);
+    } else {
+      renderActiveTournament();
+    }
   }
 
   function showStageAdvancementToast(stageKey) {
@@ -5969,10 +5975,11 @@ enterBtn.addEventListener('click', () => {
   let confettiAnimationId = null;
   function startConfettiAnimation() {
     const canvas = document.getElementById('confetti-canvas');
-    if (!canvas) return;
+    if (!canvas || typeof canvas.getContext !== 'function') return;
     const ctx = canvas.getContext('2d');
-    canvas.width = canvas.parentElement.offsetWidth || 600;
-    canvas.height = canvas.parentElement.offsetHeight || 500;
+    if (!ctx) return;
+    canvas.width = canvas.parentElement?.offsetWidth || 600;
+    canvas.height = canvas.parentElement?.offsetHeight || 500;
 
     const colors = ['#FFC94A', '#2ECC71', '#58D68D', '#FFE082', '#E74C3C', '#FFFFFF'];
     const particles = [];

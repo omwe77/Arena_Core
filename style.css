@@ -40,7 +40,8 @@
   /* Broadcast Typography */
   --text-white: #FFFFFF;
   --text-main: #F7FAF8;              /* bright crisp text */
-  --text-muted: #A3B5AC;             /* lightened sage-gray for high contrast */  --font-hud: 'Share Tech Mono', monospace;
+  --text-muted: #A3B5AC;             /* lightened sage-gray for high contrast */
+  --font-hud: 'Share Tech Mono', monospace;
   --font-title: 'Chakra Petch', sans-serif;
   --font-body: 'Outfit', sans-serif;
 }
@@ -1891,8 +1892,8 @@ html, body {
 
 .bracket-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(540px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+  gap: 20px;
   width: 100%;
 }
 
@@ -2172,8 +2173,8 @@ html, body {
 
 .bracket-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+  gap: 20px;
   width: 100%;
 }
 
@@ -11093,7 +11094,7 @@ html, body {
 /* UNIFIED 3-COLUMN HERO: TEAM 1 — BROADCAST PITCH RADAR — TEAM 2 */
 .sfc-hero-matchup {
   display: grid;
-  grid-template-columns: 1fr 140px 1fr;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   gap: 14px;
   padding: 16px 20px;
@@ -11117,8 +11118,8 @@ html, body {
 }
 
 .sfc-team-crest {
-  width: 52px;
-  height: 52px;
+  width: 50px;
+  height: 50px;
   background: rgba(255, 255, 255, 0.06);
   border-radius: 50%;
   border: 2px solid rgba(255, 255, 255, 0.15);
@@ -11130,8 +11131,8 @@ html, body {
   transition: all 0.3s ease;
 }
 .sfc-team-crest img, .sfc-team-crest .team-logo-img {
-  width: 36px !important;
-  height: 36px !important;
+  width: 34px !important;
+  height: 34px !important;
   object-fit: contain;
 }
 .sfc-team-crest.winner-crest {
@@ -11154,7 +11155,7 @@ html, body {
   flex: 1;
 }
 .sfc-team-name {
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   font-weight: 800;
   color: #FFFFFF;
   letter-spacing: 0.4px;
@@ -11190,8 +11191,10 @@ html, body {
   font-family: 'Space Grotesk', 'Outfit', sans-serif;
   line-height: 1;
   flex-shrink: 0;
-  min-width: 32px;
+  min-width: 36px;
   text-align: center;
+  padding: 0 4px;
+  z-index: 1;
 }
 .sfc-score-box.winner-score {
   color: #FFD700;
@@ -11204,19 +11207,21 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  min-width: 130px;
+  gap: 5px;
+  flex-shrink: 0;
+  padding: 0 4px;
 }
 
 .sfc-mini-pitch-broadcast {
-  width: 120px;
-  height: 66px;
+  width: 96px;
+  height: 52px;
   border-radius: 8px;
   border: 1.5px solid rgba(255, 255, 255, 0.2);
   overflow: hidden;
   position: relative;
   background: linear-gradient(135deg, #14532d 0%, #166534 100%);
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
 }
 .sfc-pitch-turf {
   width: 100%;
@@ -11538,11 +11543,45 @@ html, body {
 }
 
 /* Responsive */
+@media (max-width: 1024px) {
+  .bracket-cards-grid {
+    grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+    gap: 16px;
+  }
+}
+
 @media (max-width: 680px) {
-  .sfc-hero-matchup { grid-template-columns: 1fr; gap: 10px; }
-  .sfc-hero-team.away-side { justify-content: flex-start; text-align: left; }
-  .sfc-panel-columns { flex-direction: column; }
-  .sfc-performers-col { flex: 0 0 auto; width: 100%; }
+  .bracket-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .sfc-hero-matchup {
+    gap: 8px;
+    padding: 12px 14px;
+  }
+  .sfc-team-crest {
+    width: 42px;
+    height: 42px;
+  }
+  .sfc-team-crest img, .sfc-team-crest .team-logo-img {
+    width: 28px !important;
+    height: 28px !important;
+  }
+  .sfc-score-box {
+    font-size: 1.8rem;
+    min-width: 28px;
+  }
+  .sfc-mini-pitch-broadcast {
+    width: 78px;
+    height: 44px;
+  }
+  .sfc-panel-columns {
+    flex-direction: column;
+  }
+  .sfc-performers-col {
+    flex: 0 0 auto;
+    width: 100%;
+  }
 }
 
 .hidden { display: none !important; }
