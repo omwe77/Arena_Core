@@ -2194,7 +2194,7 @@ function setupNavigation() {
   // 7A-2. DYNAMIC YOUTUBE HERO VIDEO BACKGROUND SYSTEM
   // ---------------------------------------------------------------------------
   const TOURNAMENT_HERO_VIDEOS = {
-    wc: { id: 'mhJ7ZHQesJY', title: 'The Best Ever FIFA World Cup Goals' },
+    wc: { id: '2YZxC2Rmr8M', title: '30 Minutes of the Best Ever FIFA World Cup Goals (2010-2022)' },
     ucl: { id: 'dQw4w9WgXcQ', title: 'UEFA Champions League Highlights' },
     pl: { id: 'dQw4w9WgXcQ', title: 'Premier League Highlights' },
     laliga: { id: 'dQw4w9WgXcQ', title: 'La Liga Highlights' },
