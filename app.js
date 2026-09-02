@@ -2191,12 +2191,132 @@ function setupNavigation() {
   }
 
   // ---------------------------------------------------------------------------
+  // 7A-2. DYNAMIC YOUTUBE HERO VIDEO BACKGROUND SYSTEM
+  // ---------------------------------------------------------------------------
+  const TOURNAMENT_HERO_VIDEOS = {
+    wc: { id: 'fm20OYYxLmU', title: 'FIFA World Cup Finals' },
+    ucl: { id: 'dQw4w9WgXcQ', title: 'UEFA Champions League Highlights' },
+    pl: { id: 'dQw4w9WgXcQ', title: 'Premier League Highlights' },
+    laliga: { id: 'dQw4w9WgXcQ', title: 'La Liga Highlights' },
+    serieA: { id: 'dQw4w9WgXcQ', title: 'Serie A Highlights' },
+    bundesliga: { id: 'dQw4w9WgXcQ', title: 'Bundesliga Highlights' },
+    ligue1: { id: 'dQw4w9WgXcQ', title: 'Ligue 1 Highlights' },
+    ligaPortugal: { id: 'dQw4w9WgXcQ', title: 'Liga Portugal Highlights' },
+    eredivisie: { id: 'dQw4w9WgXcQ', title: 'Eredivisie Highlights' },
+    superLig: { id: 'dQw4w9WgXcQ', title: 'Süper Lig Highlights' },
+    scottishPrem: { id: 'dQw4w9WgXcQ', title: 'Scottish Premiership Highlights' },
+    euro24: { id: 'dQw4w9WgXcQ', title: 'UEFA Euro Highlights' },
+    copa16: { id: 'dQw4w9WgXcQ', title: 'Copa América Highlights' }
+  };
+
+  function extractYouTubeId(urlOrId) {
+    if (!urlOrId) return '';
+    const clean = urlOrId.trim();
+    if (/^[a-zA-Z0-9_-]{11}$/.test(clean)) return clean;
+    const match = clean.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+    return match ? match[1] : clean;
+  }
+
+  function getHeroVideoId(tournKey) {
+    try {
+      const saved = localStorage.getItem(`arena_hero_video_${tournKey}`);
+      if (saved) return extractYouTubeId(saved);
+    } catch(e) {}
+    return TOURNAMENT_HERO_VIDEOS[tournKey]?.id || '';
+  }
+
+  function setHeroVideoId(tournKey, urlOrId) {
+    const vidId = extractYouTubeId(urlOrId);
+    if (!vidId) return;
+    try {
+      localStorage.setItem(`arena_hero_video_${tournKey}`, vidId);
+    } catch(e) {}
+  }
+
+  function renderHeroVideoBgHtml(tournKey) {
+    const videoId = getHeroVideoId(tournKey);
+    if (!videoId) return '';
+    return `
+      <div class="hero-video-bg-wrap" id="hero-video-bg-${tournKey}">
+        <iframe 
+          class="hero-video-iframe" 
+          src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&playsinline=1&rel=0&showinfo=0&modestbranding=1&iv_load_policy=3&enablejsapi=1" 
+          title="Tournament Highlights Video" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
+      </div>
+    `;
+  }
+
+  function renderHeroVideoBadgeHtml(tournKey) {
+    return `
+      <div class="hero-video-badge-bar">
+        <span class="hero-highlight-pill"><span class="live-dot"></span> Highlights Reel</span>
+        <button type="button" class="hero-edit-video-btn" onclick="window.openHeroVideoModal && window.openHeroVideoModal('${tournKey}')" title="Change highlight video link">
+          <i class="fa-solid fa-gear"></i> <span>Video Link</span>
+        </button>
+      </div>
+    `;
+  }
+
+  window.openHeroVideoModal = function(tournKey) {
+    const currentId = getHeroVideoId(tournKey);
+    const existing = document.getElementById('hero-video-edit-modal');
+    if (existing) existing.remove();
+
+    const tournName = TOURNAMENTS_CONFIG[tournKey]?.title || tournKey.toUpperCase();
+    const modalHtml = `
+      <div class="hero-video-modal-backdrop" id="hero-video-edit-modal">
+        <div class="hero-video-modal-card">
+          <div class="hvm-title">
+            <i class="fa-solid fa-film" style="color:#6366f1;"></i>
+            <span>Set Hero Video Highlight</span>
+          </div>
+          <p class="hvm-desc">
+            Paste a YouTube video URL or ID to play in the background hero of <strong>${tournName}</strong> (muted, auto-looping).
+          </p>
+          <div class="hvm-input-group">
+            <label class="hvm-label" for="hvm-url-input">YouTube Link / Video ID</label>
+            <input type="text" class="hvm-input" id="hvm-url-input" placeholder="e.g. https://www.youtube.com/watch?v=fm20OYYxLmU" value="${currentId ? 'https://www.youtube.com/watch?v=' + currentId : ''}" />
+          </div>
+          <div class="hvm-actions">
+            <button type="button" class="hvm-btn-cancel" id="hvm-cancel-btn">Cancel</button>
+            <button type="button" class="hvm-btn-save" id="hvm-save-btn">Save &amp; Apply</button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+    const modalEl = document.getElementById('hero-video-edit-modal');
+    const inputEl = document.getElementById('hvm-url-input');
+    const saveBtn = document.getElementById('hvm-save-btn');
+    const cancelBtn = document.getElementById('hvm-cancel-btn');
+
+    cancelBtn.onclick = () => modalEl.remove();
+    modalEl.onclick = (e) => { if (e.target === modalEl) modalEl.remove(); };
+
+    saveBtn.onclick = () => {
+      const val = inputEl.value.trim();
+      if (val) {
+        setHeroVideoId(tournKey, val);
+        renderActiveTournament();
+      }
+      modalEl.remove();
+    };
+  };
+
+  // ---------------------------------------------------------------------------
   // 7B. FIFA WORLD CUP 2026 SHOWCASE HOME PAGE
   // ---------------------------------------------------------------------------
   function renderWcHomePage(state, container) {
     container.innerHTML = `
       <div class="wc-showcase-wrapper">
         <div class="wc-hero" id="wc-interactive-hero">
+          ${renderHeroVideoBgHtml('wc')}
+          ${renderHeroVideoBadgeHtml('wc')}
           <div class="wc-hero-overlay"></div>
           <div class="wc-spotlight-glow" id="wc-spotlight"></div>
           
@@ -2544,6 +2664,8 @@ const continentalGiants = [
     container.innerHTML = `
       <div class="ucl-showcase-wrapper">
         <div class="ucl-hero" id="ucl-interactive-hero">
+          ${renderHeroVideoBgHtml('ucl')}
+          ${renderHeroVideoBadgeHtml('ucl')}
           <div class="ucl-hero-overlay"></div>
           <div class="ucl-spotlight-glow" id="ucl-spotlight"></div>
 
@@ -2736,6 +2858,8 @@ enterBtn.addEventListener('click', () => {
       container.innerHTML = `
         <div class="pl-showcase-wrapper">
           <div class="pl-hero" id="pl-interactive-hero">
+            ${renderHeroVideoBgHtml('pl')}
+            ${renderHeroVideoBadgeHtml('pl')}
             <div class="pl-hero-overlay"></div>
             <div class="pl-spotlight-glow" id="pl-spotlight"></div>
 
@@ -2901,6 +3025,8 @@ enterBtn.addEventListener('click', () => {
       container.innerHTML = `
         <div class="seriea-showcase-wrapper">
           <div class="seriea-hero" id="seriea-interactive-hero">
+            ${renderHeroVideoBgHtml('serieA')}
+            ${renderHeroVideoBadgeHtml('serieA')}
             <div class="seriea-hero-overlay"></div>
             <div class="seriea-spotlight-glow" id="seriea-spotlight"></div>
 
@@ -3065,6 +3191,8 @@ enterBtn.addEventListener('click', () => {
       container.innerHTML = `
         <div class="bundesliga-showcase-wrapper">
           <div class="bundesliga-hero" id="bundesliga-interactive-hero">
+            ${renderHeroVideoBgHtml('bundesliga')}
+            ${renderHeroVideoBadgeHtml('bundesliga')}
             <div class="bundesliga-hero-overlay"></div>
             <div class="bundesliga-spotlight-glow" id="bundesliga-spotlight"></div>
 
@@ -3229,6 +3357,8 @@ enterBtn.addEventListener('click', () => {
       container.innerHTML = `
         <div class="ligue1-showcase-wrapper">
           <div class="ligue1-hero" id="ligue1-interactive-hero">
+            ${renderHeroVideoBgHtml('ligue1')}
+            ${renderHeroVideoBadgeHtml('ligue1')}
             <div class="ligue1-hero-overlay"></div>
             <div class="ligue1-spotlight-glow" id="ligue1-spotlight"></div>
 
@@ -3393,6 +3523,8 @@ enterBtn.addEventListener('click', () => {
       container.innerHTML = `
         <div class="ligaportugal-showcase-wrapper">
           <div class="ligaportugal-hero" id="ligaportugal-interactive-hero">
+            ${renderHeroVideoBgHtml('ligaPortugal')}
+            ${renderHeroVideoBadgeHtml('ligaPortugal')}
             <div class="ligaportugal-hero-overlay"></div>
             <div class="ligaportugal-spotlight-glow" id="ligaportugal-spotlight"></div>
 
@@ -3557,6 +3689,8 @@ enterBtn.addEventListener('click', () => {
       container.innerHTML = `
         <div class="eredivisie-showcase-wrapper">
           <div class="eredivisie-hero" id="eredivisie-interactive-hero">
+            ${renderHeroVideoBgHtml('eredivisie')}
+            ${renderHeroVideoBadgeHtml('eredivisie')}
             <div class="eredivisie-hero-overlay"></div>
             <div class="eredivisie-spotlight-glow" id="eredivisie-spotlight"></div>
 
@@ -3719,6 +3853,8 @@ enterBtn.addEventListener('click', () => {
       container.innerHTML = `
         <div class="superlig-showcase-wrapper">
           <div class="superlig-hero" id="superlig-interactive-hero">
+            ${renderHeroVideoBgHtml('superLig')}
+            ${renderHeroVideoBadgeHtml('superLig')}
             <div class="superlig-hero-overlay"></div>
             <div class="superlig-spotlight-glow" id="superlig-spotlight"></div>
 
@@ -3883,6 +4019,8 @@ enterBtn.addEventListener('click', () => {
       container.innerHTML = `
         <div class="scottishprem-showcase-wrapper">
           <div class="scottishprem-hero" id="scottishprem-interactive-hero">
+            ${renderHeroVideoBgHtml('scottishPrem')}
+            ${renderHeroVideoBadgeHtml('scottishPrem')}
             <div class="scottishprem-hero-overlay"></div>
             <div class="scottishprem-spotlight-glow" id="scottishprem-spotlight"></div>
 
@@ -4044,6 +4182,8 @@ enterBtn.addEventListener('click', () => {
       container.innerHTML = `
         <div class="laliga-showcase-wrapper">
           <div class="laliga-hero" id="laliga-interactive-hero">
+            ${renderHeroVideoBgHtml('laliga')}
+            ${renderHeroVideoBadgeHtml('laliga')}
             <div class="laliga-hero-overlay"></div>
             <div class="laliga-spotlight-glow" id="laliga-spotlight"></div>
 
