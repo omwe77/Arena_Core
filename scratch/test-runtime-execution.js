@@ -50,6 +50,7 @@ const mockDoc = {
 
 const mockWin = {
   document: mockDoc,
+  location: { origin: 'http://localhost' },
   REAL_TOURNAMENTS_DATA: {
     wc: { teams: Array.from({ length: 48 }, (_, i) => ({ name: `Nation ${i+1}`, code: `N${i+1}`, logo: 'flag.png' })) },
     ucl: { teams: Array.from({ length: 36 }, (_, i) => ({ name: `Club ${i+1}`, code: `C${i+1}`, logo: 'logo.png' })) },

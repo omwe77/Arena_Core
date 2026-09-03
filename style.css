@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    ARENA_CORE_V2.0 Ã¢â‚¬â€ GLOBAL FOOTBALL BROADCAST & SIMULATOR STYLESHEET
    Authentic Stadium Pitch-Night Theme with Pitch Green (#2ECC71),
    Trophy Gold (#FFC94A), Red Card Accent (#E74C3C), and Deep Turf Surfaces.
@@ -13440,4 +13440,129 @@ border-color: #facc15;
   filter: brightness(1.15);
   transform: translateY(-1px);
 }
+
+/* ============================================================
+   GRASSY FROSTED BLENDING THEME (STANDINGS WIDGETS & HERO TEXT)
+   ============================================================ */
+
+/* Translucent grassy-tinted frosted blend for all tournament standings widgets */
+.pl-standings-widget,
+.seriea-standings-widget,
+.bundesliga-standings-widget,
+.ligue1-standings-widget,
+.ligaportugal-standings-widget,
+.eredivisie-standings-widget,
+.superlig-standings-widget,
+.scottishprem-standings-widget,
+.laliga-standings-widget {
+  background: rgba(233, 255, 219, 0.40) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(46, 204, 113, 0.45) !important;
+  box-shadow: 0 16px 36px rgba(10, 28, 18, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+  border-radius: 14px !important;
+}
+
+/* Standings widget headers */
+.pl-standings-widget-header,
+.seriea-standings-widget-header,
+.bundesliga-standings-widget-header,
+.ligue1-standings-widget-header,
+.ligaportugal-standings-widget-header,
+.eredivisie-standings-widget-header,
+.superlig-standings-widget-header,
+.scottishprem-standings-widget-header,
+.standings-widget-header {
+  border-bottom: 1px solid rgba(15, 36, 26, 0.15) !important;
+}
+
+.pl-standings-widget-title,
+.seriea-standings-widget-title,
+.bundesliga-standings-widget-title,
+.ligue1-standings-widget-title,
+.ligaportugal-standings-widget-title,
+.eredivisie-standings-widget-title,
+.superlig-standings-widget-title,
+.scottishprem-standings-widget-title,
+.standings-widget-title {
+  color: #0A2214 !important;
+  text-shadow: 0 1px 2px rgba(233, 255, 219, 0.8) !important;
+}
+
+/* Table columns & cells */
+.pl-widget-table th,
+.seriea-widget-table th,
+.bundesliga-widget-table th,
+.ligue1-widget-table th,
+.ligaportugal-widget-table th,
+.eredivisie-widget-table th,
+.superlig-widget-table th,
+.scottishprem-widget-table th,
+.widget-table th {
+  color: #18472E !important;
+  font-weight: 800 !important;
+}
+
+.pl-widget-table td,
+.seriea-widget-table td,
+.bundesliga-widget-table td,
+.ligue1-widget-table td,
+.ligaportugal-widget-table td,
+.eredivisie-widget-table td,
+.superlig-widget-table td,
+.scottishprem-widget-table td,
+.widget-table td {
+  color: #091C10 !important;
+  border-bottom: 1px solid rgba(15, 36, 26, 0.08) !important;
+}
+
+.pl-widget-table td:nth-child(2),
+.seriea-widget-table td:nth-child(2),
+.bundesliga-widget-table td:nth-child(2),
+.ligue1-widget-table td:nth-child(2),
+.ligaportugal-widget-table td:nth-child(2),
+.eredivisie-widget-table td:nth-child(2),
+.superlig-widget-table td:nth-child(2),
+.scottishprem-widget-table td:nth-child(2),
+.widget-table td:nth-child(2) {
+  color: #091C10 !important;
+  font-weight: 800 !important;
+}
+
+/* Position mid badges */
+.pl-pos-mid, .sa-pos-mid, .b-pos-mid, .l1-pos-mid, .lp-pos-mid, .e-pos-mid, .sl-pos-mid, .sp-pos-mid, .pos-mid {
+  background: rgba(15, 36, 26, 0.08) !important;
+  color: #123B24 !important;
+  border: 1px solid rgba(15, 36, 26, 0.18) !important;
+}
+
+/* Hero Typography: Crisp, glowing and legible across all dynamic backgrounds */
+.pl-hero-title,
+.seriea-hero-title,
+.bundesliga-hero-title,
+.ligue1-hero-title,
+.ligaportugal-hero-title,
+.eredivisie-hero-title,
+.superlig-hero-title,
+.scottishprem-hero-title,
+.laliga-hero-title,
+.wc-hero-title,
+.ucl-hero-title {
+  color: #FFFFFF !important;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.95), 0 0 20px rgba(46, 204, 113, 0.25) !important;
+}
+
+.pl-brand-badge,
+.seriea-brand-badge,
+.bundesliga-brand-badge,
+.ligue1-brand-badge,
+.ligaportugal-brand-badge,
+.eredivisie-brand-badge,
+.superlig-brand-badge,
+.scottishprem-brand-badge,
+.laliga-brand-badge {
+  color: #FFFFFF !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85) !important;
+}
+
 

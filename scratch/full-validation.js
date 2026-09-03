@@ -14,6 +14,7 @@ console.log('1. CSS Braces Check:', openBraces === 0 ? '✓ PASS (Balanced)' : '
 
 // 2. Check HTML critical classes and modal markup
 const html = fs.readFileSync('index.html', 'utf8');
+const appJs = fs.readFileSync('app.js', 'utf8');
 const checks = [
   { name: 'Detailed Stats Modal', test: html.includes('id="detailed-stats-modal"') },
   { name: 'Live 2D Pitch Tab Button', test: html.includes('data-tab="livepitch"') },
@@ -23,7 +24,7 @@ const checks = [
   { name: 'Dynamic Ball Node', test: html.includes('id="dstats-pitch-ball"') },
   { name: 'Broadcast Action Banner', test: html.includes('id="dstats-pitch-banner"') },
   { name: 'Scrubber Timeline Controls', test: html.includes('id="dstats-scrubber-track"') && html.includes('id="dstats-btn-play-pause"') },
-  { name: 'World Cup Direct Sim Button', test: html.includes('id="btn-wc-sim-now"') },
+  { name: 'World Cup Direct Sim Button', test: appJs.includes('id="btn-wc-sim-now"') },
   { name: 'Stage Action Sim Button', test: html.includes('id="sim-stage-action-btn"') },
   { name: 'Instant Full Sim Button', test: html.includes('id="sim-instant-btn"') }
 ];

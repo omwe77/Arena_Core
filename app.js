@@ -1260,6 +1260,26 @@
     const realData = window.REAL_TOURNAMENTS_DATA?.[key];
     const teamList = (realData?.teams || []).map(t => t.name);
 
+    // Load saved state from localStorage
+    let savedState = null;
+    try { savedState = JSON.parse(localStorage.getItem('arena_tournament_state_' + key)); } catch (e) {}
+
+    // Initialize state based on saved data or fresh draw
+    let state;
+    if (savedState && savedState.subView) {
+      // Merge saved state with default structure for this format
+      const defaults = { groupsPlayed: false, champion: null, subView: 'home', groups: {}, r32: [], r16: [], qf: [], sf: [], gf: [] };
+      state = { ...defaults, ...savedState };
+      // Ensure groups exist and have proper shape
+      if (!state.groups) state.groups = {};
+      // If we have saved state, skip fresh initialization
+      tournamentState[key] = state;
+      // Save the preserved state to localStorage
+      try { localStorage.setItem('arena_tournament_state_' + key, JSON.stringify(state)); } catch (e) {}
+      return;
+    }
+
+    // Fresh initialization based on tournament format
     if (config.format === 'worldcup48') {
       // Use custom draw teams if set, otherwise fall back to real data pool (random draw)
       let pool;
@@ -1278,7 +1298,7 @@
           name, mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0
         }));
       });
-      tournamentState[key] = {
+      state = {
         groupsPlayed: false,
         champion: null,
         subView: 'home',
@@ -1294,7 +1314,7 @@
           name, mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0
         }));
       });
-      tournamentState[key] = {
+      state = {
         groupsPlayed: false,
         champion: null,
         subView: 'home',
@@ -1310,22 +1330,7 @@
           name, mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0
         }));
       });
-      tournamentState[key] = {
-        groupsPlayed: false,
-        champion: null,
-        groups,
-        r32: [], r16: [], qf: [], sf: [], gf: []
-      };
-    } else if (config.format === 'copa16' || config.format === 'genericCup') {
-      const pool = [...teamList].sort(() => Math.random() - 0.5);
-      const groups = {};
-      const groupLetters = ['A', 'B', 'C', 'D'];
-      groupLetters.forEach((letter, idx) => {
-        groups[letter] = pool.slice(idx * 4, idx * 4 + 4).map(name => ({
-          name, mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0
-        }));
-      });
-      tournamentState[key] = {
+      state = {
         groupsPlayed: false,
         champion: null,
         groups,
@@ -1341,7 +1346,7 @@
         mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0
       }));
       const matchdays = generateLeagueMatchdays(clubs, realData?.teams);
-      tournamentState[key] = {
+      state = {
         currentMatchday: 0,
         selectedMatchday: 0,
         subView: 'home',
@@ -1352,6 +1357,11 @@
         clubs
       };
     }
+
+    // Save initialized state to localStorage for persistence across page reloads
+    try { localStorage.setItem('arena_tournament_state_' + key, JSON.stringify(state)); } catch (e) {}
+
+    tournamentState[key] = state;
   }
 
   // Initialize isolated states for all 10 competitions
@@ -1360,6 +1370,15 @@
   // ---------------------------------------------------------------------------
   // 6. UI VIEW SWITCHING & NAVIGATION
   // ---------------------------------------------------------------------------
+  function syncPrimaryNavState(targetViewId) {
+    document.querySelectorAll('.side-item').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.target === targetViewId);
+    });
+    document.querySelectorAll('.top-nav-link').forEach(link => {
+      link.classList.toggle('active', link.dataset.nav === targetViewId);
+    });
+  }
+
   function switchView(targetViewId) {
     if (targetViewId === 'tactical-tracker') {
       const state = tournamentState[activeTournKey];
@@ -1409,13 +1428,7 @@
       }, 300);
     }
 
-    // Update nav active states
-    document.querySelectorAll('.side-item').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.target === targetViewId);
-    });
-    document.querySelectorAll('.top-nav-link').forEach(link => {
-      link.classList.toggle('active', link.dataset.nav === targetViewId);
-    });
+    syncPrimaryNavState(targetViewId);
   }
 
 function setupNavigation() {
@@ -1569,6 +1582,11 @@ function setupNavigation() {
     const champBanner = document.getElementById('champion-banner');
     const champName = document.getElementById('champion-team-name');
     const stageActionBtn = document.getElementById('sim-stage-action-btn');
+    const simPanel = document.getElementById('view-tournament-sim');
+
+    if (simPanel && !simPanel.hidden) {
+      syncPrimaryNavState(state.subView === 'sim' ? 'tournament-sim' : 'tournament-home');
+    }
 
     if (titleEl) titleEl.textContent = config.name;
     if (descEl) descEl.textContent = config.desc;
@@ -2192,32 +2210,25 @@ function setupNavigation() {
   // ---------------------------------------------------------------------------
   // 7A-2. DYNAMIC YOUTUBE HERO VIDEO BACKGROUND SYSTEM
   // ---------------------------------------------------------------------------
-  const TOURNAMENT_HERO_VIDEOS = {
-    wc: { id: 'I_kDmkCBm_c', title: 'Iconic FIFA World Cup Highlights' },
-    ucl: { id: 'TODO: replace with proper UCL highlight video ID', title: 'UEFA Champions League Highlights' },
-    pl: { id: 'TODO: replace with proper Premier League highlight video ID', title: 'Premier League Highlights' },
-    laliga: { id: 'TODO: replace with proper La Liga highlight video ID', title: 'La Liga Highlights' },
-    serieA: { id: 'TODO: replace with proper Serie A highlight video ID', title: 'Serie A Highlights' },
-    bundesliga: { id: 'TODO: replace with proper Bundesliga highlight video ID', title: 'Bundesliga Highlights' },
-    ligue1: { id: 'TODO: replace with proper Ligue 1 highlight video ID', title: 'Ligue 1 Highlights' },
-    ligaPortugal: { id: 'TODO: replace with proper Liga Portugal highlight video ID', title: 'Liga Portugal Highlights' },
-    eredivisie: { id: 'TODO: replace with proper Eredivisie highlight video ID', title: 'Eredivisie Highlights' },
-    superLig: { id: 'TODO: replace with proper Süper Lig highlight video ID', title: 'Süper Lig Highlights' },
-    scottishPrem: { id: 'TODO: replace with proper Scottish Premiership highlight video ID', title: 'Scottish Premiership Highlights' },
-    euro24: { id: 'TODO: replace with proper UEFA Euro highlight video ID', title: 'UEFA Euro Highlights' },
-    copa16: { id: 'TODO: replace with proper Copa América highlight video ID', title: 'Copa América Highlights' }
-  };
+  const TOURNAMENT_HERO_VIDEOS = Object.freeze(window.ARENA_HERO_VIDEOS || {});
 
   function extractYouTubeId(urlOrId) {
     if (!urlOrId) return '';
     const clean = urlOrId.trim();
     if (/^[a-zA-Z0-9_-]{11}$/.test(clean)) return clean;
     const match = clean.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
-    return match ? match[1] : clean;
+    return match ? match[1] : '';
   }
 
   function getHeroVideoId(tournKey) {
-    return TOURNAMENT_HERO_VIDEOS[tournKey]?.id || '';
+    let savedId = '';
+    try {
+      savedId = localStorage.getItem(`arena_hero_video_${tournKey}`) || '';
+    } catch (e) {}
+
+    const defaultId = TOURNAMENT_HERO_VIDEOS[tournKey]?.id || '';
+    const videoId = /^[a-zA-Z0-9_-]{11}$/.test(savedId) ? savedId : defaultId;
+    return /^[a-zA-Z0-9_-]{11}$/.test(videoId) ? videoId : '';
   }
 
   function setHeroVideoId(tournKey, urlOrId) {
@@ -2231,24 +2242,45 @@ function setupNavigation() {
   function renderHeroVideoBgHtml(tournKey) {
     const videoId = getHeroVideoId(tournKey);
     if (!videoId) return '';
-    const originParam = window.location.origin && window.location.origin !== 'null' ? `&origin=${encodeURIComponent(window.location.origin)}` : '';
+    const origin = window.location?.origin || '';
+    const originParam = origin && origin !== 'null' ? `&origin=${encodeURIComponent(origin)}` : '';
+    const videoTitle = TOURNAMENT_HERO_VIDEOS[tournKey]?.title || `${TOURNAMENTS_CONFIG[tournKey]?.name || 'Tournament'} highlights`;
     return `
       <div class="hero-video-bg-wrap" id="hero-video-bg-${tournKey}">
-        <iframe 
-          class="hero-video-iframe" 
-          src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&playsinline=1&rel=0&iv_load_policy=3&disablekb=1${originParam}" 
-          title="Tournament Highlights Video" 
-          frameborder="0" 
+        <iframe
+          class="hero-video-iframe"
+          src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&iv_load_policy=3&disablekb=1&modestbranding=1&enablejsapi=1${originParam}"
+          title="${videoTitle}"
+          tabindex="-1"
+          aria-hidden="true"
+          frameborder="0"
           referrerpolicy="strict-origin-when-cross-origin"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen>
         </iframe>
+        <div class="hero-video-click-shield" aria-hidden="true"></div>
       </div>
     `;
   }
 
   function renderHeroVideoBadgeHtml(tournKey) {
     return '';
+  }
+
+  // Restart hero background video when it ends (avoids YouTube playlist OSD pause/prev/next buttons)
+  if (typeof window !== 'undefined' && !window._heroVideoLoopAttached) {
+    window._heroVideoLoopAttached = true;
+    window.addEventListener('message', (ev) => {
+      try {
+        const msg = typeof ev.data === 'string' ? JSON.parse(ev.data) : ev.data;
+        if (msg && msg.event === 'onStateChange' && msg.info === 0) {
+          document.querySelectorAll('.hero-video-iframe').forEach(fr => {
+            fr.contentWindow?.postMessage(JSON.stringify({event:'command', func:'seekTo', args:[0,true]}), '*');
+            fr.contentWindow?.postMessage(JSON.stringify({event:'command', func:'playVideo', args:[]}), '*');
+          });
+        }
+      } catch(_) {}
+    });
   }
 
   window.openHeroVideoModal = function(tournKey) {
@@ -2399,7 +2431,9 @@ function setupNavigation() {
     const simNowBtn = container.querySelector('#btn-wc-sim-now');
     if (simNowBtn) {
       simNowBtn.addEventListener('click', () => {
+        initTournamentState(activeTournKey);
         state.subView = 'sim';
+        state.groupsPlayed = false;
         activeStageFilter = 'all';
         renderActiveTournament();
         setTimeout(() => {
@@ -4755,7 +4789,37 @@ enterBtn.addEventListener('click', () => {
 
     container.querySelectorAll('.btn-quick-group-sim').forEach(btn => {
       btn.addEventListener('click', () => {
-        resolveGroupStage();
+        const groupLetter = btn.dataset.group;
+        if (!groupLetter || !state.groups || !state.groups[groupLetter]) return;
+        const groups = state.groups;
+        const teams = groups[groupLetter];
+        // Reset team stats
+        teams.forEach(t => { t.mp = 0; t.w = 0; t.d = 0; t.l = 0; t.gf = 0; t.ga = 0; t.gd = 0; t.pts = 0; });
+        // Simulate round-robin fixtures for this group (6 matches for 4 teams)
+        const fixtures = [
+          [0, 1], [2, 3],
+          [0, 2], [1, 3],
+          [0, 3], [1, 2]
+        ];
+        fixtures.forEach(([hIdx, aIdx]) => {
+          const res = precomputeMatchResult(teams[hIdx].name, teams[aIdx].name, false);
+          res.isSimulated = true;
+          teams[hIdx].mp++; teams[aIdx].mp++;
+          teams[hIdx].gf += res.regHome; teams[hIdx].ga += res.regAway;
+          teams[aIdx].gf += res.regAway; teams[aIdx].ga += res.regHome;
+          if (res.regHome > res.regAway) {
+            teams[hIdx].w++; teams[hIdx].pts += 3; teams[aIdx].l++;
+          } else if (res.regAway > res.regHome) {
+            teams[aIdx].w++; teams[aIdx].pts += 3; teams[hIdx].l++;
+          } else {
+            teams[hIdx].d++; teams[hIdx].pts += 1; teams[aIdx].d++; teams[aIdx].pts += 1;
+          }
+        });
+        teams.forEach(t => { t.gd = t.gf - t.ga; });
+        teams.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+        // Mark that this group has been played; if ALL groups are played, set global flag
+        const allPlayed = Object.keys(groups).every(lg => groups[lg].every(t => t.mp > 0));
+        if (allPlayed) state.groupsPlayed = true;
         renderActiveTournament();
       });
     });

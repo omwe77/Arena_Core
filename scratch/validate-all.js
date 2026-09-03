@@ -1,8 +1,10 @@
 const fs = require('fs');
+const path = require('path');
 
 console.log('--- VALIDATING JAVASCRIPT SYNTAX ---');
 try {
-  require('./data/real-tournaments.js');
+  const dataCode = fs.readFileSync(path.join(__dirname, '..', 'data', 'real-tournaments.js'), 'utf8');
+  new Function('window', dataCode)({});
   console.log('✓ data/real-tournaments.js parsed without syntax errors');
 } catch (e) {
   console.error('✗ data/real-tournaments.js error:', e);
