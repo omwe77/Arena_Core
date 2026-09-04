@@ -545,7 +545,7 @@
     },
     euro: {
       key: 'euro',
-      name: 'UEFA EURO 2024',
+      name: 'UEFA EURO',
       desc: 'Simulate 24 European national contenders in 6 groups (A–F), knockout rounds, and crown the champion in Berlin!',
       format: 'euro24',
       type: 'cup',
@@ -1646,7 +1646,7 @@ function setupNavigation() {
     const simHeaderCard = document.querySelector('.sim-header-card');
     const stageTabsWrap = document.querySelector('.bracket-nav-tabs');
     const isHomeSubView = state.subView !== 'sim';
-    const hasDedicatedHomePage = ['wc', 'ucl', 'pl', 'laliga', 'serieA', 'bundesliga', 'ligue1', 'ligaPortugal', 'eredivisie', 'superLig', 'scottishPrem'].includes(activeTournKey);
+    const hasDedicatedHomePage = ['wc', 'ucl', 'euro', 'copa', 'pl', 'laliga', 'serieA', 'bundesliga', 'ligue1', 'ligaPortugal', 'eredivisie', 'superLig', 'scottishPrem'].includes(activeTournKey);
 
     if (isHomeSubView && hasDedicatedHomePage) {
       if (simHeaderCard) simHeaderCard.hidden = true;
@@ -1687,6 +1687,40 @@ function setupNavigation() {
         }
       } else {
         uclBackBar.hidden = true;
+      }
+    }
+
+    // UEFA EURO Simulator Back-Bar
+    const euroBackBar = document.getElementById('euro-sim-back-bar');
+    if (euroBackBar) {
+      if (activeTournKey === 'euro' && state.subView === 'sim') {
+        euroBackBar.hidden = false;
+        const euroBackBtn = document.getElementById('btn-back-to-euro-home');
+        if (euroBackBtn) {
+          euroBackBtn.onclick = () => {
+            state.subView = 'home';
+            renderActiveTournament();
+          };
+        }
+      } else {
+        euroBackBar.hidden = true;
+      }
+    }
+
+    // Copa América Simulator Back-Bar
+    const copaBackBar = document.getElementById('copa-sim-back-bar');
+    if (copaBackBar) {
+      if (activeTournKey === 'copa' && state.subView === 'sim') {
+        copaBackBar.hidden = false;
+        const copaBackBtn = document.getElementById('btn-back-to-copa-home');
+        if (copaBackBtn) {
+          copaBackBtn.onclick = () => {
+            state.subView = 'home';
+            renderActiveTournament();
+          };
+        }
+      } else {
+        copaBackBar.hidden = true;
       }
     }
 
@@ -2080,6 +2114,22 @@ function setupNavigation() {
       return;
     }
 
+    // --- UEFA EURO Home Landing Page ---
+    if (activeTournKey === 'euro' && state.subView !== 'sim') {
+      bracketContainer.hidden = true;
+      groupsContainer.hidden = false;
+      renderEuroHomePage(state, groupsContainer);
+      return;
+    }
+
+    // --- Copa América Home Landing Page ---
+    if (activeTournKey === 'copa' && state.subView !== 'sim') {
+      bracketContainer.hidden = true;
+      groupsContainer.hidden = false;
+      renderCopaHomePage(state, groupsContainer);
+      return;
+    }
+
     const showGroups = state.groups && (activeStageFilter === 'groups' || (activeStageFilter === 'all' && !state.groupsPlayed));
     groupsContainer.hidden = !showGroups;
     if (showGroups) {
@@ -2242,14 +2292,12 @@ function setupNavigation() {
   function renderHeroVideoBgHtml(tournKey) {
     const videoId = getHeroVideoId(tournKey);
     if (!videoId) return '';
-    const origin = window.location?.origin || '';
-    const originParam = origin && origin !== 'null' ? `&origin=${encodeURIComponent(origin)}` : '';
     const videoTitle = TOURNAMENT_HERO_VIDEOS[tournKey]?.title || `${TOURNAMENTS_CONFIG[tournKey]?.name || 'Tournament'} highlights`;
     return `
       <div class="hero-video-bg-wrap" id="hero-video-bg-${tournKey}">
         <iframe
           class="hero-video-iframe"
-          src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&iv_load_policy=3&disablekb=1&modestbranding=1&enablejsapi=1${originParam}"
+          src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&disablekb=1&modestbranding=1&enablejsapi=1"
           title="${videoTitle}"
           tabindex="-1"
           aria-hidden="true"
@@ -2267,16 +2315,24 @@ function setupNavigation() {
     return '';
   }
 
-  // Restart hero background video when it ends (avoids YouTube playlist OSD pause/prev/next buttons)
+  // Handle YouTube player state & graceful error fallback
   if (typeof window !== 'undefined' && !window._heroVideoLoopAttached) {
     window._heroVideoLoopAttached = true;
     window.addEventListener('message', (ev) => {
       try {
         const msg = typeof ev.data === 'string' ? JSON.parse(ev.data) : ev.data;
+        // On video end -> loop back to beginning
         if (msg && msg.event === 'onStateChange' && msg.info === 0) {
           document.querySelectorAll('.hero-video-iframe').forEach(fr => {
             fr.contentWindow?.postMessage(JSON.stringify({event:'command', func:'seekTo', args:[0,true]}), '*');
             fr.contentWindow?.postMessage(JSON.stringify({event:'command', func:'playVideo', args:[]}), '*');
+          });
+        }
+        // If YouTube emits onError (101/150 embedding restricted, 100 not found, 2 invalid param)
+        // Gracefully hide the iframe so the stadium graphic/image background is visible seamlessly
+        if (msg && (msg.event === 'onError' || (msg.info && msg.info.playerState === -1 && msg.info.errorCode))) {
+          document.querySelectorAll('.hero-video-bg-wrap').forEach(wrap => {
+            wrap.style.display = 'none';
           });
         }
       } catch(_) {}
@@ -2468,6 +2524,350 @@ function setupNavigation() {
         spotEl.style.transform = `translate(${x - 200}px, ${y - 200}px)`;
         spotEl.style.opacity = '1';
         // Add subtle pulse on mouse enter
+        spotEl.style.transition = 'transform 0.1s ease, opacity 0.3s ease';
+      });
+      heroEl.addEventListener('mouseleave', () => {
+        spotEl.style.opacity = '0';
+        spotEl.style.transform = '';
+      });
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // 7B-1. UEFA EURO SHOWCASE HOME PAGE
+  // ---------------------------------------------------------------------------
+  function renderEuroHomePage(state, container) {
+    const euroChampionsHonorRoll = [
+      { year: '2024', team: 'SPAIN', titles: '4', result: '2 - 1 vs England' },
+      { year: '2020', team: 'ITALY', titles: '2', result: '1(3) - 1(2) vs England' },
+      { year: '2016', team: 'PORTUGAL', titles: '1', result: '1 - 0 vs France' },
+      { year: '2012', team: 'SPAIN', titles: '3', result: '4 - 0 vs Italy' },
+      { year: '2008', team: 'SPAIN', titles: '2', result: '1 - 0 vs Germany' }
+    ];
+
+    container.innerHTML = `
+      <div class="euro-showcase-wrapper">
+        <div class="euro-hero" id="euro-interactive-hero">
+          ${renderHeroVideoBgHtml('euro')}
+          ${renderHeroVideoBadgeHtml('euro')}
+          <div class="euro-hero-overlay"></div>
+          <div class="euro-spotlight-glow" id="euro-spotlight"></div>
+
+          <div class="euro-hero-layout">
+            <!-- Left: Roll of Honor Table (Previous Champions) -->
+            <div class="euro-cyber-card">
+              <div class="euro-cyber-header">
+                <span><span class="euro-sparkle">✦</span> EURO RECENT CHAMPIONS // ROLL OF HONOR <span class="euro-sparkle">✦</span></span>
+                <span style="font-size:0.7rem;color:#FFD700;letter-spacing:0.5px;">HISTORY</span>
+              </div>
+              <table class="euro-cyber-table">
+                <thead>
+                  <tr>
+                    <th style="width:48px;">YEAR</th>
+                    <th>CHAMPION</th>
+                    <th style="text-align:center;">TITLES</th>
+                    <th style="text-align:right;">FINAL RESULT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${euroChampionsHonorRoll.map((r, idx) => `
+                    <tr>
+                      <td class="pos-col" style="font-size:0.8rem;color:#FFD700;">${r.year}</td>
+                      <td class="team-col">
+                        <div style="display:flex;align-items:center;gap:8px;">
+                          ${getTeamLogoHtml(r.team)}
+                          <strong style="letter-spacing:0.04em;">${r.team}</strong>
+                          ${idx === 0 ? '<i class="fa-solid fa-crown widget-crown-icon" style="color:#FFD700;"></i>' : ''}
+                        </div>
+                      </td>
+                      <td style="text-align:center;color:#FFD700;font-weight:800;font-family:var(--font-hud);">${r.titles} 🏆</td>
+                      <td class="pnt-col" style="font-size:0.78rem;color:#E2E8F0;font-weight:600;text-align:right;">${r.result}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Right: UEFA EURO Branding & Actions -->
+            <div class="euro-hero-right">
+              <div class="euro-badge-top">
+                <i class="fa-solid fa-trophy" style="color:#FFD700;"></i>
+                <span>UEFA EUROPEAN CHAMPIONSHIP</span>
+              </div>
+
+              <h1 class="euro-hero-title">
+                THE BATTLE FOR
+                <span class="euro-gold-text">EUROPEAN GLORY</span>
+              </h1>
+
+              <p class="euro-hero-desc">
+                24 elite European contenders clash across 6 groups for continental supremacy and the Henri Delaunay Trophy.
+              </p>
+
+              <div class="euro-hero-actions">
+                <button type="button" class="euro-btn-primary" id="btn-euro-sim-now">
+                  <i class="fa-solid fa-bolt"></i>
+                  <span>SIMULATE EURO</span>
+                  <i class="fa-solid fa-play"></i>
+                </button>
+
+                <button type="button" class="euro-btn-secondary" id="btn-euro-enter">
+                  <i class="fa-solid fa-table-cells"></i>
+                  <span>VIEW GROUPS & BRACKET</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Stats Ribbon -->
+          <div class="euro-stats-ribbon">
+            <div class="euro-ribbon-card">
+              <div class="euro-ribbon-icon-wrap"><i class="fa-solid fa-earth-europe"></i></div>
+              <div class="euro-ribbon-data">
+                <span class="euro-ribbon-number">24</span>
+                <span class="euro-ribbon-label">NATIONS</span>
+              </div>
+            </div>
+            <div class="euro-ribbon-divider"></div>
+            <div class="euro-ribbon-card">
+              <div class="euro-ribbon-icon-wrap"><i class="fa-solid fa-futbol"></i></div>
+              <div class="euro-ribbon-data">
+                <span class="euro-ribbon-number">51</span>
+                <span class="euro-ribbon-label">MATCHES</span>
+              </div>
+            </div>
+            <div class="euro-ribbon-divider"></div>
+            <div class="euro-ribbon-card">
+              <div class="euro-ribbon-icon-wrap"><i class="fa-solid fa-layer-group"></i></div>
+              <div class="euro-ribbon-data">
+                <span class="euro-ribbon-number">6</span>
+                <span class="euro-ribbon-label">GROUPS (A–F)</span>
+              </div>
+            </div>
+            <div class="euro-ribbon-divider"></div>
+            <div class="euro-ribbon-card">
+              <div class="euro-ribbon-icon-wrap"><i class="fa-regular fa-calendar-days"></i></div>
+              <div class="euro-ribbon-data">
+                <span class="euro-ribbon-number">31</span>
+                <span class="euro-ribbon-label">DAYS OF ACTION</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    `;
+
+    // Event listeners
+    const simNowBtn = container.querySelector('#btn-euro-sim-now');
+    if (simNowBtn) {
+      simNowBtn.addEventListener('click', () => {
+        initTournamentState(activeTournKey);
+        state.subView = 'sim';
+        state.groupsPlayed = false;
+        activeStageFilter = 'all';
+        renderActiveTournament();
+        setTimeout(() => {
+          const simStageBtn = document.getElementById('sim-stage-action-btn');
+          if (simStageBtn && !simStageBtn.disabled) {
+            simStageBtn.click();
+          }
+        }, 100);
+      });
+    }
+
+    const enterBtn = container.querySelector('#btn-euro-enter');
+    if (enterBtn) {
+      enterBtn.addEventListener('click', () => {
+        initTournamentState(activeTournKey);
+        state.subView = 'sim';
+        activeStageFilter = 'all';
+        renderActiveTournament();
+      });
+    }
+
+    // Dynamic mouse-tracking interactive spotlight
+    const heroEl = container.querySelector('#euro-interactive-hero');
+    const spotEl = container.querySelector('#euro-spotlight');
+    if (heroEl && spotEl) {
+      heroEl.addEventListener('mousemove', (e) => {
+        const rect = heroEl.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        spotEl.style.transform = `translate(${x - 225}px, ${y - 225}px)`;
+        spotEl.style.opacity = '1';
+        spotEl.style.transition = 'transform 0.1s ease, opacity 0.3s ease';
+      });
+      heroEl.addEventListener('mouseleave', () => {
+        spotEl.style.opacity = '0';
+        spotEl.style.transform = '';
+      });
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // 7B-2. COPA AMÉRICA SHOWCASE HOME PAGE
+  // ---------------------------------------------------------------------------
+  function renderCopaHomePage(state, container) {
+    const copaChampionsHonorRoll = [
+      { year: '2024', team: 'ARGENTINA', titles: '16', result: '1 - 0 vs Colombia' },
+      { year: '2021', team: 'ARGENTINA', titles: '15', result: '1 - 0 vs Brazil' },
+      { year: '2019', team: 'BRAZIL', titles: '9', result: '3 - 1 vs Peru' },
+      { year: '2016', team: 'CHILE', titles: '2', result: '0(4) - 0(2) vs Argentina' },
+      { year: '2015', team: 'CHILE', titles: '1', result: '0(4) - 0(1) vs Argentina' }
+    ];
+
+    container.innerHTML = `
+      <div class="copa-showcase-wrapper">
+        <div class="copa-hero" id="copa-interactive-hero">
+          ${renderHeroVideoBgHtml('copa')}
+          ${renderHeroVideoBadgeHtml('copa')}
+          <div class="copa-hero-overlay"></div>
+          <div class="copa-spotlight-glow" id="copa-spotlight"></div>
+
+          <div class="copa-hero-layout">
+            <!-- Left: Roll of Honor Table (Previous Champions) -->
+            <div class="copa-cyber-card">
+              <div class="copa-cyber-header">
+                <span><span class="copa-sparkle">✦</span> COPA AMÉRICA // ROLL OF HONOR <span class="copa-sparkle">✦</span></span>
+                <span style="font-size:0.7rem;color:#F59E0B;letter-spacing:0.5px;">HISTORY</span>
+              </div>
+              <table class="copa-cyber-table">
+                <thead>
+                  <tr>
+                    <th style="width:48px;">YEAR</th>
+                    <th>CHAMPION</th>
+                    <th style="text-align:center;">TITLES</th>
+                    <th style="text-align:right;">FINAL RESULT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${copaChampionsHonorRoll.map((r, idx) => `
+                    <tr>
+                      <td class="pos-col" style="font-size:0.8rem;color:#F59E0B;">${r.year}</td>
+                      <td class="team-col">
+                        <div style="display:flex;align-items:center;gap:8px;">
+                          ${getTeamLogoHtml(r.team)}
+                          <strong style="letter-spacing:0.04em;">${r.team}</strong>
+                          ${idx === 0 ? '<i class="fa-solid fa-crown widget-crown-icon" style="color:#F59E0B;"></i>' : ''}
+                        </div>
+                      </td>
+                      <td style="text-align:center;color:#F59E0B;font-weight:800;font-family:var(--font-hud);">${r.titles} 🏆</td>
+                      <td class="pnt-col" style="font-size:0.78rem;color:#E2E8F0;font-weight:600;text-align:right;">${r.result}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Right: Copa América Branding & Actions -->
+            <div class="copa-hero-right">
+              <div class="copa-badge-top">
+                <i class="fa-solid fa-trophy" style="color:#F59E0B;"></i>
+                <span>CONMEBOL COPA AMÉRICA</span>
+              </div>
+
+              <h1 class="copa-hero-title">
+                SOUTH AMERICA'S
+                <span class="copa-gold-text">GREATEST PASSION</span>
+              </h1>
+
+              <p class="copa-hero-desc">
+                16 elite nations from across the Americas clash for continental dominance and eternal football glory.
+              </p>
+
+              <div class="copa-hero-actions">
+                <button type="button" class="copa-btn-primary" id="btn-copa-sim-now">
+                  <i class="fa-solid fa-bolt"></i>
+                  <span>SIMULATE COPA</span>
+                  <i class="fa-solid fa-play"></i>
+                </button>
+
+                <button type="button" class="copa-btn-secondary" id="btn-copa-enter">
+                  <i class="fa-solid fa-table-cells"></i>
+                  <span>VIEW GROUPS & BRACKET</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Stats Ribbon -->
+          <div class="copa-stats-ribbon">
+            <div class="copa-ribbon-card">
+              <div class="copa-ribbon-icon-wrap"><i class="fa-solid fa-earth-americas"></i></div>
+              <div class="copa-ribbon-data">
+                <span class="copa-ribbon-number">16</span>
+                <span class="copa-ribbon-label">NATIONS</span>
+              </div>
+            </div>
+            <div class="copa-ribbon-divider"></div>
+            <div class="copa-ribbon-card">
+              <div class="copa-ribbon-icon-wrap"><i class="fa-solid fa-futbol"></i></div>
+              <div class="copa-ribbon-data">
+                <span class="copa-ribbon-number">32</span>
+                <span class="copa-ribbon-label">MATCHES</span>
+              </div>
+            </div>
+            <div class="copa-ribbon-divider"></div>
+            <div class="copa-ribbon-card">
+              <div class="copa-ribbon-icon-wrap"><i class="fa-solid fa-layer-group"></i></div>
+              <div class="copa-ribbon-data">
+                <span class="copa-ribbon-number">4</span>
+                <span class="copa-ribbon-label">GROUPS (A–D)</span>
+              </div>
+            </div>
+            <div class="copa-ribbon-divider"></div>
+            <div class="copa-ribbon-card">
+              <div class="copa-ribbon-icon-wrap"><i class="fa-solid fa-crown"></i></div>
+              <div class="copa-ribbon-data">
+                <span class="copa-ribbon-number">16</span>
+                <span class="copa-ribbon-label">RECORD TITLES</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    `;
+
+    // Event listeners
+    const simNowBtn = container.querySelector('#btn-copa-sim-now');
+    if (simNowBtn) {
+      simNowBtn.addEventListener('click', () => {
+        initTournamentState(activeTournKey);
+        state.subView = 'sim';
+        state.groupsPlayed = false;
+        activeStageFilter = 'all';
+        renderActiveTournament();
+        setTimeout(() => {
+          const simStageBtn = document.getElementById('sim-stage-action-btn');
+          if (simStageBtn && !simStageBtn.disabled) {
+            simStageBtn.click();
+          }
+        }, 100);
+      });
+    }
+
+    const enterBtn = container.querySelector('#btn-copa-enter');
+    if (enterBtn) {
+      enterBtn.addEventListener('click', () => {
+        initTournamentState(activeTournKey);
+        state.subView = 'sim';
+        activeStageFilter = 'all';
+        renderActiveTournament();
+      });
+    }
+
+    // Dynamic mouse-tracking interactive spotlight
+    const heroEl = container.querySelector('#copa-interactive-hero');
+    const spotEl = container.querySelector('#copa-spotlight');
+    if (heroEl && spotEl) {
+      heroEl.addEventListener('mousemove', (e) => {
+        const rect = heroEl.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        spotEl.style.transform = `translate(${x - 225}px, ${y - 225}px)`;
+        spotEl.style.opacity = '1';
         spotEl.style.transition = 'transform 0.1s ease, opacity 0.3s ease';
       });
       heroEl.addEventListener('mouseleave', () => {

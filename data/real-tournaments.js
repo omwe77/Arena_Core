@@ -420,7 +420,7 @@
     euro: {
       key: 'euro',
       leagueId: 4,
-      name: 'UEFA EURO 2024',
+      name: 'UEFA EURO',
       category: 'international',
       format: 'euro24',
       requestedSeason: 2024,

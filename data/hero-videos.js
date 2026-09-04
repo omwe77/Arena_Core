@@ -5,17 +5,17 @@
    ========================================================================== */
 
 window.ARENA_HERO_VIDEOS = Object.freeze({
-  wc: { id: '', title: 'FIFA World Cup 2026' },
-  ucl: { id: 'R7hkAM8D-VA', title: 'Every Goal From The Champions League League Phase' },
-  pl: { id: '', title: 'Premier League Highlights' },
+  wc: { id: 'I_kDmkCBm_c', title: 'ICONIC MOMENTS in Football History' },
+  ucl: { id: 'V_YxSJXR9D4', title: 'The Best Champions League Goals' },
+  pl: { id: 'wpcKyur-kbI', title: 'The Best Premier League Goals of 2024/25' },
   laliga: { id: 'wJZELdTCqeU', title: 'La Liga Highlights' },
   serieA: { id: '4KFo0Hw0GDI', title: 'Top 50 Serie A Goals of the Campaign' },
   bundesliga: { id: 'A9BbGK2Qt1Y', title: 'Bundesliga Highlights' },
-  ligue1: { id: '4N7KtauLMh4', title: 'Best Goals of the Ligue 1 Season' },
-  ligaPortugal: { id: 'NnbvlpBHG7w', title: 'Liga Portugal Highlights' },
+  ligue1: { id: 'D-Ni9FpJUmg', title: 'Top Goals of the Season | Ligue 1' },
+  ligaPortugal: { id: '7dz-XlnCIpw', title: 'Liga Portugal Highlights' },
   eredivisie: { id: 'b2HJtDx8BfE', title: 'Eredivisie Highlights' },
-  superLig: { id: '', title: 'Super Lig Highlights' },
-  scottishPrem: { id: '', title: 'Scottish Premiership Highlights' },
-  euro: { id: '', title: 'UEFA Euro Highlights' },
-  copa: { id: '', title: 'Copa America Highlights' }
+  superLig: { id: 'Hvm0T6_Vo4A', title: 'Trendyol Süper Lig Highlights' },
+  scottishPrem: { id: 'GXO_xenNTCc', title: 'William Hill Premiership Highlights' },
+  euro: { id: '81oEEXQIdjo', title: 'Best 500 World Cup/Euro Goals in Football History' },
+  copa: { id: 'RQEIQ9EYbRg', title: 'Copa America 2024 - All Goals' }
 });
