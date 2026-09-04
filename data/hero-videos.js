@@ -17,5 +17,5 @@ window.ARENA_HERO_VIDEOS = Object.freeze({
   superLig: { id: 'Hvm0T6_Vo4A', title: 'Trendyol Süper Lig Highlights' },
   scottishPrem: { id: 'GXO_xenNTCc', title: 'William Hill Premiership Highlights' },
   euro: { id: '81oEEXQIdjo', title: 'Best 500 World Cup/Euro Goals in Football History', start: 12 },
-  copa: { id: 'RQEIQ9EYbRg', title: 'Copa America 2024 - All Goals' }
+  copa: { id: 'RQEIQ9EYbRg', title: 'Copa America 2024 - All Goals', start: 10 }
 });
