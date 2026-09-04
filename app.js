@@ -2292,12 +2292,17 @@ function setupNavigation() {
   function renderHeroVideoBgHtml(tournKey) {
     const videoId = getHeroVideoId(tournKey);
     if (!videoId) return '';
-    const videoTitle = TOURNAMENT_HERO_VIDEOS[tournKey]?.title || `${TOURNAMENTS_CONFIG[tournKey]?.name || 'Tournament'} highlights`;
+    const videoConfig = TOURNAMENT_HERO_VIDEOS[tournKey] || {};
+    const videoTitle = videoConfig.title || `${TOURNAMENTS_CONFIG[tournKey]?.name || 'Tournament'} highlights`;
+    const startSec = Number(videoConfig.start) || 0;
+    const startParam = startSec > 0 ? `&start=${startSec}` : '';
     return `
       <div class="hero-video-bg-wrap" id="hero-video-bg-${tournKey}">
         <iframe
           class="hero-video-iframe"
-          src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&disablekb=1&modestbranding=1&enablejsapi=1"
+          data-tourn="${tournKey}"
+          data-start="${startSec}"
+          src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&disablekb=1&modestbranding=1&enablejsapi=1${startParam}"
           title="${videoTitle}"
           tabindex="-1"
           aria-hidden="true"
@@ -2321,10 +2326,11 @@ function setupNavigation() {
     window.addEventListener('message', (ev) => {
       try {
         const msg = typeof ev.data === 'string' ? JSON.parse(ev.data) : ev.data;
-        // On video end -> loop back to beginning
+        // On video end -> loop back to beginning (or specified start time, e.g. 10s)
         if (msg && msg.event === 'onStateChange' && msg.info === 0) {
           document.querySelectorAll('.hero-video-iframe').forEach(fr => {
-            fr.contentWindow?.postMessage(JSON.stringify({event:'command', func:'seekTo', args:[0,true]}), '*');
+            const startSec = Number(fr.dataset.start) || 0;
+            fr.contentWindow?.postMessage(JSON.stringify({event:'command', func:'seekTo', args:[startSec, true]}), '*');
             fr.contentWindow?.postMessage(JSON.stringify({event:'command', func:'playVideo', args:[]}), '*');
           });
         }
