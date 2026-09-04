@@ -1,7 +1,7 @@
 {
   "name": "worldcup-project",
   "version": "1.0.0",
-  "description": "A working, no-build-step slice of the MVP described in `pitchreplay-plan.md`: filter by league/season, \"Finals only\" toggle, search, and click-to-load YouTube embeds (facade pattern — nothing loads until you click, for performance).",
+  "description": "ARENA_CORE — Global Football Platform & Multi-Tournament Simulator with real matchdays, live 2D tactical pitch broadcasts, and interactive stats.",
   "main": "app.js",
   "scripts": {
     "test": "node --check app.js && node --check data/hero-videos.js && node scratch/full-validation.js && node scratch/test-runtime-execution.js && node scratch/validate-all.js"

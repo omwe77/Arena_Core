@@ -6062,17 +6062,6 @@ enterBtn.addEventListener('click', () => {
     }
   }
 
-  function getValidStageKey(rawLabel) {
-    if (activeSimulationClock.stageKey) return activeSimulationClock.stageKey;
-    const txt = (rawLabel || '').trim().toUpperCase();
-    if (txt.includes('ROUND OF 32') || txt === 'R32') return 'r32';
-    if (txt.includes('ROUND OF 16') || txt === 'R16') return 'r16';
-    if (txt.includes('QUARTER') || txt === 'QF') return 'qf';
-    if (txt.includes('SEMI') || txt === 'SF') return 'sf';
-    if (txt.includes('FINAL') || txt === 'GF') return 'gf';
-    return 'r16';
-  }
-
   // Label-only parser for skip/restart fallback — returns null instead of a default
   // so we never accidentally skip a stage that isn't running
   function getValidStageKeyFromLabel(rawLabel) {
@@ -7479,45 +7468,6 @@ enterBtn.addEventListener('click', () => {
     }
   }
 
-  function renderRealFixtures() {
-    const realData = window.REAL_TOURNAMENTS_DATA?.[activeTournKey];
-    const grid = document.getElementById('real-fixtures-grid');
-    if (!grid || !realData) return;
-
-    const teams = realData.teams || [];
-    const sampleFixtures = [];
-    for (let i = 0; i < Math.min(8, Math.floor(teams.length / 2)); i++) {
-      sampleFixtures.push({
-        home: teams[i * 2].name,
-        away: teams[i * 2 + 1].name,
-        venue: teams[i * 2].stadium || 'Official Stadium',
-        date: 'Matchday Live Scheduled',
-        status: 'UPCOMING'
-      });
-    }
-
-    grid.innerHTML = sampleFixtures.map(f => `
-      <div class="fixture-card">
-        <div class="fixture-meta">
-          <span class="venue-tag">📍 ${f.venue}</span>
-          <span class="status-tag">${f.status}</span>
-        </div>
-        <div class="fixture-matchup">
-          <div class="fixture-team">${getTeamLogoHtml(f.home)} <span>${f.home}</span></div>
-          <div class="fixture-vs">VS</div>
-          <div class="fixture-team">${getTeamLogoHtml(f.away)} <span>${f.away}</span></div>
-        </div>
-        <button type="button" class="btn-fixture-center" data-home="${f.home}" data-away="${f.away}">MATCH CENTER & STATS</button>
-      </div>
-    `).join('');
-
-    grid.querySelectorAll('.btn-fixture-center').forEach(btn => {
-      btn.addEventListener('click', () => {
-        openDetailedStatsModal(btn.dataset.home, btn.dataset.away);
-      });
-    });
-  }
-
 
   // ---------------------------------------------------------------------------
   // 11. MEDIA HUB & HIGHLIGHTS REPLAYS
@@ -7577,96 +7527,6 @@ enterBtn.addEventListener('click', () => {
     }
     if (info) {
       info.innerHTML = `<p>${item.summary} <strong>(Final Score: ${item.score})</strong></p>`;
-    }
-
-    modal.hidden = false;
-  }
-
-  function openMatchCenterModal(homeTeam, awayTeam, matchObj = null) {
-    const modal = document.getElementById('match-detail-modal');
-    const title = document.getElementById('modal-match-title');
-    const tag = document.getElementById('modal-match-tag');
-    const playerBox = document.getElementById('modal-player-box');
-    const info = document.getElementById('modal-match-info');
-    const relatedGrid = document.getElementById('related-grid');
-    if (!modal) return;
-
-    if (title) title.textContent = `${homeTeam} vs ${awayTeam}`;
-    if (tag) tag.textContent = `${TOURNAMENTS_CONFIG[activeTournKey]?.name || 'GLOBAL FOOTBALL'} MATCH CENTER`;
-
-    // Find related highlight or fallback highlight video
-    const highlight = HIGHLIGHTS_DATA.find(h =>
-      h.tournamentKey === activeTournKey ||
-      h.homeTeam.toLowerCase() === homeTeam.toLowerCase() ||
-      h.awayTeam.toLowerCase() === awayTeam.toLowerCase()
-    ) || HIGHLIGHTS_DATA[0];
-
-    if (playerBox) {
-      playerBox.innerHTML = `
-        <video controls autoplay class="modal-video-stream" poster="${highlight.thumbnail}">
-          <source src="${highlight.fallbackVideo}" type="video/mp4">
-        </video>
-      `;
-    }
-
-    if (info) {
-      let scoreHtml = 'UPCOMING / IN PROGRESS';
-      let eventsHtml = '<p style="color:var(--text-muted);font-size:0.85rem;">Match simulation in progress or scheduled.</p>';
-
-      if (matchObj && matchObj.isSimulated) {
-        scoreHtml = `${matchObj.scoreHome} - ${matchObj.scoreAway}`;
-        if (matchObj.hadExtraTime) scoreHtml += ' (AET)';
-        if (matchObj.hadPenalties) scoreHtml += ` [PENS ${matchObj.penHome}-${matchObj.penAway}]`;
-
-        if (matchObj.events && matchObj.events.length > 0) {
-          eventsHtml = `
-            <div class="modal-events-list" style="margin-top:12px;display:flex;flex-direction:column;gap:6px;">
-              ${matchObj.events.map(ev => `
-                <div style="display:flex;align-items:center;gap:8px;font-family:var(--font-hud);font-size:0.8rem;color:var(--pitch-green);">
-                  <span style="background:rgba(0,230,118,0.15);padding:2px 6px;border-radius:4px;font-weight:700;">${ev.minute}'</span>
-                  <span>⚽ <strong>${ev.teamName}</strong> — ${ev.type || 'GOAL'}</span>
-                </div>
-              `).join('')}
-            </div>
-          `;
-        } else {
-          eventsHtml = '<p style="color:var(--text-muted);font-size:0.85rem;">Defensive tactical battle — No regular time goals.</p>';
-        }
-      }
-
-      info.innerHTML = `
-        <div class="match-center-tabs">
-          <div class="matchup-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-            <div style="display:flex;align-items:center;gap:8px;">${getTeamLogoHtml(homeTeam)} <h3 style="margin:0;font-size:1.1rem;">${homeTeam}</h3></div>
-            <div style="font-family:var(--font-hud);font-size:1.3rem;font-weight:800;color:var(--champions-gold);">${scoreHtml}</div>
-            <div style="display:flex;align-items:center;gap:8px;">${getTeamLogoHtml(awayTeam)} <h3 style="margin:0;font-size:1.1rem;">${awayTeam}</h3></div>
-          </div>
-          <div style="margin-bottom:10px;">
-            <strong style="color:var(--floodlight-cyan);font-family:var(--font-title);font-size:0.85rem;">MATCH TIMELINE & KEY EVENTS:</strong>
-            ${eventsHtml}
-          </div>
-          <p style="font-size:0.78rem;color:var(--text-muted);margin-top:12px;border-top:1px solid var(--border-subtle);padding-top:8px;">
-            Venue: Official FIFA Match Arena • Status: ${matchObj && matchObj.isSimulated ? 'Full Time Official Result' : 'Official Match Fixture'}
-          </p>
-        </div>
-      `;
-    }
-
-    if (relatedGrid) {
-      const relatedHighlights = HIGHLIGHTS_DATA.slice(0, 3);
-      relatedGrid.innerHTML = relatedHighlights.map(h => `
-        <div class="related-card" data-play="${h.id}" style="cursor:pointer;background:rgba(255,255,255,0.02);padding:8px;border-radius:6px;border:1px solid var(--border-subtle);">
-          <div style="font-size:0.8rem;font-weight:700;color:var(--pitch-green);">${h.title}</div>
-          <div style="font-size:0.7rem;color:var(--text-muted);">${h.competition} • ${h.duration}</div>
-        </div>
-      `).join('');
-
-      relatedGrid.querySelectorAll('.related-card').forEach(card => {
-        card.addEventListener('click', () => {
-          const item = HIGHLIGHTS_DATA.find(h => h.id === card.dataset.play);
-          if (item) openHighlightModal(item);
-        });
-      });
     }
 
     modal.hidden = false;
