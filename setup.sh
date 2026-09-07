@@ -66,7 +66,7 @@ echo -e "Option 2: Using Python HTTP server:"
 echo -e "          ${BOLD}python3 -m http.server 8080${NC} (or ${BOLD}python -m http.server 8080${NC})"
 echo -e "Option 3: Using Node / npx:"
 echo -e "          ${BOLD}npx -y serve .${NC}"
-echo -e "Live URL: ${BOLD}https://omwe77.github.io/SIEP--arena_coore/${NC}"
+echo -e "Live URL: ${BOLD}https://lemon-ocean-06aede400.5.azurestaticapps.net${NC}"
 echo -e "${CYAN}==================================================================${NC}\n"
 
 exit 0

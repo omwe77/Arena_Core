@@ -2,14 +2,14 @@
 
 > A high-performance, responsive football platform combining official competition data, live standings, match centers, media highlights, and a 10-competition Poisson mathematical tournament simulation engine.
 
-[![GitHub Pages Deployment](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-2ecc71?style=for-the-badge&logo=github)](https://omwe77.github.io/SIEP--arena_coore/)
+[![Azure Static Web Apps Deployment](https://img.shields.io/badge/Live%20Demo-Azure%20Static%20Web%20Apps-2ecc71?style=for-the-badge&logo=microsoftazure)](https://lemon-ocean-06aede400.5.azurestaticapps.net)
 [![Tech Stack](https://img.shields.io/badge/Stack-Vanilla%20JS%20%7C%20HTML5%20%7C%20CSS3%20%7C%20Bash-00E5FF?style=for-the-badge)](https://github.com/omwe77/SIEP--arena_coore)
 
 ---
 
 ## 🌐 Live Demo
-Experience the live application on GitHub Pages:  
-👉 **[https://omwe77.github.io/SIEP--arena_coore/](https://omwe77.github.io/SIEP--arena_coore/)**
+Experience the live application on Azure Static Web Apps (auto-deploys on every push to `main`):  
+👉 **[https://lemon-ocean-06aede400.5.azurestaticapps.net](https://lemon-ocean-06aede400.5.azurestaticapps.net)**
 
 ---
 
@@ -26,7 +26,7 @@ Experience the live application on GitHub Pages:
 * **Frontend Architecture**: Semantic HTML5, Vanilla CSS3 (Custom Design System & Glassmorphism), Modern Flexbox & CSS Grid.
 * **Scripting & Engine**: Vanilla JavaScript (ES6+), Zero Heavy Framework Dependencies.
 * **Simulation Algorithm**: Poisson Goal Distribution Model ($\lambda$ adjusted for FIFA rankings, home advantage, and attack/defense strength).
-* **Automation & DevOps**: Bash Automation Script (`setup.sh`), Git Version Control, GitHub Actions / Pages.
+* **Automation & DevOps**: Bash Automation Script (`setup.sh`), Git Version Control, GitHub Actions / Azure Static Web Apps CI/CD.
 
 ---
 
