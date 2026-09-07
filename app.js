@@ -574,11 +574,12 @@
       date: '2022-12-18',
       isFinal: true,
       duration: '09:45',
-      fallbackVideo: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+      youtubeId: 'I_kDmkCBm_c',
+      fallbackVideo: 'https://vjs.zencdn.net/v/oceans.mp4',
       homeTeam: 'ARGENTINA',
       awayTeam: 'FRANCE',
       score: '3 - 3 (4-2 pens)',
-      thumbnail: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+      thumbnail: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80',
       summary: 'Lionel Messi and Kylian Mbappé deliver an all-time classic World Cup final in Lusail.'
     },
     {
@@ -590,7 +591,8 @@
       date: '2024-06-01',
       isFinal: true,
       duration: '08:30',
-      fallbackVideo: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+      youtubeId: 'V_YxSJXR9D4',
+      fallbackVideo: 'https://vjs.zencdn.net/v/oceans.mp4',
       homeTeam: 'REAL MADRID',
       awayTeam: 'DORTMUND',
       score: '2 - 0',
@@ -606,7 +608,8 @@
       date: '2024-05-19',
       isFinal: true,
       duration: '06:45',
-      fallbackVideo: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+      youtubeId: 'wpcKyur-kbI',
+      fallbackVideo: 'https://vjs.zencdn.net/v/oceans.mp4',
       homeTeam: 'MAN CITY',
       awayTeam: 'WEST HAM',
       score: '3 - 1',
@@ -622,11 +625,12 @@
       date: '2024-04-21',
       isFinal: true,
       duration: '08:15',
-      fallbackVideo: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+      youtubeId: 'wJZELdTCqeU',
+      fallbackVideo: 'https://vjs.zencdn.net/v/oceans.mp4',
       homeTeam: 'REAL MADRID',
       awayTeam: 'BARCELONA',
       score: '3 - 2',
-      thumbnail: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+      thumbnail: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80',
       summary: 'Jude Bellingham strikes in the 91st minute to cap an unforgettable comeback win at the Santiago Bernabéu.'
     },
     {
@@ -638,7 +642,8 @@
       date: '2024-04-22',
       isFinal: true,
       duration: '07:45',
-      fallbackVideo: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+      youtubeId: '4KFo0Hw0GDI',
+      fallbackVideo: 'https://vjs.zencdn.net/v/oceans.mp4',
       homeTeam: 'AC MILAN',
       awayTeam: 'INTER MILAN',
       score: '1 - 2',
@@ -654,7 +659,8 @@
       date: '2024-04-14',
       isFinal: true,
       duration: '07:20',
-      fallbackVideo: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoylikes.mp4',
+      youtubeId: 'A9BbGK2Qt1Y',
+      fallbackVideo: 'https://vjs.zencdn.net/v/oceans.mp4',
       homeTeam: 'BAYER LEVERKUSEN',
       awayTeam: 'WERDER BREMEN',
       score: '5 - 0',
@@ -670,7 +676,8 @@
       date: '2024-07-14',
       isFinal: true,
       duration: '09:10',
-      fallbackVideo: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+      youtubeId: '81oEEXQIdjo',
+      fallbackVideo: 'https://vjs.zencdn.net/v/oceans.mp4',
       homeTeam: 'SPAIN',
       awayTeam: 'ENGLAND',
       score: '2 - 1',
@@ -686,11 +693,12 @@
       date: '2024-07-14',
       isFinal: true,
       duration: '08:50',
-      fallbackVideo: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+      youtubeId: 'RQEIQ9EYbRg',
+      fallbackVideo: 'https://vjs.zencdn.net/v/oceans.mp4',
       homeTeam: 'ARGENTINA',
       awayTeam: 'COLOMBIA',
       score: '1 - 0 (AET)',
-      thumbnail: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+      thumbnail: 'https://images.unsplash.com/photo-1517747614396-d21a78b850e8?auto=format&fit=crop&w=800&q=80',
       summary: 'Lautaro Martínez scores in the 112th minute in Miami as Argentina retain their Copa América crown.'
     }
   ];
@@ -7523,7 +7531,21 @@ enterBtn.addEventListener('click', () => {
     if (title) title.textContent = item.title;
     if (tag) tag.textContent = `${item.competition} // ${item.season}`;
     if (playerBox) {
-      playerBox.innerHTML = `<video controls autoplay class="modal-video-stream" poster="${item.thumbnail}"><source src="${item.fallbackVideo}" type="video/mp4"></video>`;
+      if (item.youtubeId) {
+        playerBox.innerHTML = `
+          <iframe
+            class="modal-video-stream"
+            src="https://www.youtube.com/embed/${item.youtubeId}?autoplay=1&playsinline=1&rel=0&modestbranding=1"
+            title="${item.title}"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+            style="width: 100%; height: 100%; min-height: 280px; border: none; border-radius: 8px;">
+          </iframe>
+        `;
+      } else {
+        playerBox.innerHTML = `<video controls autoplay class="modal-video-stream" poster="${item.thumbnail}"><source src="${item.fallbackVideo}" type="video/mp4"></video>`;
+      }
     }
     if (info) {
       info.innerHTML = `<p>${item.summary} <strong>(Final Score: ${item.score})</strong></p>`;
@@ -8797,8 +8819,14 @@ enterBtn.addEventListener('click', () => {
   function setupModalHandlers() {
     const closeBtn = document.getElementById('modal-close');
     const backdrop = document.getElementById('modal-backdrop');
-    if (closeBtn) closeBtn.addEventListener('click', () => { document.getElementById('match-detail-modal').hidden = true; });
-    if (backdrop) backdrop.addEventListener('click', () => { document.getElementById('match-detail-modal').hidden = true; });
+    function closeDetailModal() {
+      const modal = document.getElementById('match-detail-modal');
+      if (modal) modal.hidden = true;
+      const playerBox = document.getElementById('modal-player-box');
+      if (playerBox) playerBox.innerHTML = '';
+    }
+    if (closeBtn) closeBtn.addEventListener('click', closeDetailModal);
+    if (backdrop) backdrop.addEventListener('click', closeDetailModal);
 
     // 3D Holographic Broadcast Modal Close Handlers
     const holoCloseBtn = document.getElementById('holo-modal-close');

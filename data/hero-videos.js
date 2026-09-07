@@ -14,8 +14,8 @@ window.ARENA_HERO_VIDEOS = Object.freeze({
   ligue1: { id: 'D-Ni9FpJUmg', title: 'Top Goals of the Season | Ligue 1' },
   ligaPortugal: { id: '7dz-XlnCIpw', title: 'Liga Portugal Highlights' },
   eredivisie: { id: 'b2HJtDx8BfE', title: 'Eredivisie Highlights' },
-  superLig: { id: 'Hvm0T6_Vo4A', title: 'Trendyol Süper Lig Highlights' },
+  superLig: { id: 'Ic-W7eM7Xrs', title: 'Turkish Super League Best Goals' },
   scottishPrem: { id: 'GXO_xenNTCc', title: 'William Hill Premiership Highlights' },
   euro: { id: '81oEEXQIdjo', title: 'Best 500 World Cup/Euro Goals in Football History', start: 12 },
-  copa: { id: 'RQEIQ9EYbRg', title: 'Copa America 2024 - All Goals', start: 10 }
+  copa: { id: 'RQEIQ9EYbRg', title: 'Copa America 2024 - All Goals', start: 16 }
 });
