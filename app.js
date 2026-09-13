@@ -998,6 +998,8 @@
         const weight = isOfficialTopScorer ? 4 : 1;
         for (let w = 0; w < weight; w++) weightedPool.push(player);
       });
+      // Fallback to raw candidate list if weightedPool somehow ended up empty
+      if (weightedPool.length === 0) return candidateList[Math.floor(Math.random() * candidateList.length)];
       return weightedPool[Math.floor(Math.random() * weightedPool.length)];
     }
 
@@ -2325,6 +2327,8 @@ function setupNavigation() {
   }
 
   function renderHeroVideoBadgeHtml(tournKey) {
+    // Badge is now rendered inline within the hero section; keeping this as a no-op
+    // for backward compatibility with existing hero render calls.
     return '';
   }
 
@@ -5453,8 +5457,8 @@ enterBtn.addEventListener('click', () => {
     const motm = homeTopScorer || awayTopScorer;
 
     // Chance distribution
-    const homeStr = (window.NATIONS_DATA || []).find(n => n.name === m.home)?.str || 75;
-    const awayStr = (window.NATIONS_DATA || []).find(n => n.name === m.away)?.str || 75;
+    const homeStr = (WC_ALL_NATIONS || []).find(n => n.name === m.home)?.str || 75;
+    const awayStr = (WC_ALL_NATIONS || []).find(n => n.name === m.away)?.str || 75;
     const total = homeStr + awayStr + 30;
     const homePct = Math.round((homeStr / total) * 100);
     const drawPct = Math.round(30 / total * 100);
@@ -8073,8 +8077,8 @@ enterBtn.addEventListener('click', () => {
     // 7. Chance Distribution
     const chanceBox = document.getElementById('dstats-chance-box');
     if (chanceBox) {
-      const homeStr = (window.NATIONS_DATA || []).find(n => n.name === homeTeam)?.str || 78;
-      const awayStr = (window.NATIONS_DATA || []).find(n => n.name === awayTeam)?.str || 75;
+      const homeStr = (WC_ALL_NATIONS || []).find(n => n.name === homeTeam)?.str || 78;
+      const awayStr = (WC_ALL_NATIONS || []).find(n => n.name === awayTeam)?.str || 75;
       const total = homeStr + awayStr + 32;
       const homePct = Math.round((homeStr / total) * 100);
       const drawPct = Math.round((32 / total) * 100);
