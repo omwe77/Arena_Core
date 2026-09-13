@@ -2299,6 +2299,11 @@ function setupNavigation() {
     } catch(e) {}
   }
 
+  // Global states for hero video playback & audio
+  window._heroVideoAudioStates = window._heroVideoAudioStates || {};
+  window._heroVideoPauseStates = window._heroVideoPauseStates || {};
+  window._heroVideoHiddenStates = window._heroVideoHiddenStates || {};
+
   function renderHeroVideoBgHtml(tournKey) {
     const videoId = getHeroVideoId(tournKey);
     if (!videoId) return '';
@@ -2306,10 +2311,12 @@ function setupNavigation() {
     const videoTitle = videoConfig.title || `${TOURNAMENTS_CONFIG[tournKey]?.name || 'Tournament'} highlights`;
     const startSec = Number(videoConfig.start) || 0;
     const startParam = startSec > 0 ? `&start=${startSec}` : '';
+    const isHidden = window._heroVideoHiddenStates[tournKey] === true;
     return `
-      <div class="hero-video-bg-wrap" id="hero-video-bg-${tournKey}">
+      <div class="hero-video-bg-wrap" id="hero-video-bg-${tournKey}" style="${isHidden ? 'opacity:0;pointer-events:none;' : ''}">
         <iframe
           class="hero-video-iframe"
+          id="hero-video-iframe-${tournKey}"
           data-tourn="${tournKey}"
           data-start="${startSec}"
           src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&disablekb=1&modestbranding=1&enablejsapi=1${startParam}"
@@ -2327,10 +2334,216 @@ function setupNavigation() {
   }
 
   function renderHeroVideoBadgeHtml(tournKey) {
-    // Badge is now rendered inline within the hero section; keeping this as a no-op
-    // for backward compatibility with existing hero render calls.
-    return '';
+    const videoId = getHeroVideoId(tournKey);
+    if (!videoId) return '';
+    const videoConfig = TOURNAMENT_HERO_VIDEOS[tournKey] || {};
+    const videoTitle = videoConfig.title || `${TOURNAMENTS_CONFIG[tournKey]?.name || 'Tournament'} Highlights`;
+    const isMuted = window._heroVideoAudioStates[tournKey] !== true;
+    const isPaused = window._heroVideoPauseStates[tournKey] === true;
+    const isHidden = window._heroVideoHiddenStates[tournKey] === true;
+
+    return `
+      <div class="hero-video-hud" id="hero-video-hud-${tournKey}" role="region" aria-label="Hero video highlight controls">
+        <div class="hvh-inner-card">
+          <!-- Live Indicator & Reel Info -->
+          <div class="hvh-indicator" title="${videoTitle}">
+            <span class="hvh-live-dot ${isPaused || isHidden ? 'hvh-dot-paused' : ''}"></span>
+            <div class="hvh-label-group">
+              <span class="hvh-badge-tag">${isHidden ? 'ARTWORK' : (isPaused ? 'PAUSED' : 'LIVE REEL')}</span>
+              <span class="hvh-video-title">${videoTitle}</span>
+            </div>
+            <!-- Animated Equalizer Bars -->
+            <div class="hvh-equalizer ${isMuted || isPaused || isHidden ? 'hvh-eq-muted' : 'hvh-eq-active'}" aria-hidden="true">
+              <span class="hvh-bar hvh-bar-1"></span>
+              <span class="hvh-bar hvh-bar-2"></span>
+              <span class="hvh-bar hvh-bar-3"></span>
+              <span class="hvh-bar hvh-bar-4"></span>
+            </div>
+          </div>
+
+          <span class="hvh-divider"></span>
+
+          <!-- Interactive Control Buttons -->
+          <div class="hvh-controls-row">
+            <!-- Sound Toggle -->
+            <button type="button" class="hvh-btn hvh-btn-sound ${!isMuted ? 'hvh-btn-active' : ''}" id="hvh-sound-btn-${tournKey}" onclick="window.toggleHeroVideoSound && window.toggleHeroVideoSound('${tournKey}')" title="${isMuted ? 'Unmute Stadium Audio' : 'Mute Stadium Audio'}">
+              <i class="fa-solid ${isMuted ? 'fa-volume-xmark' : 'fa-volume-high'}"></i>
+              <span class="hvh-btn-text">${isMuted ? 'Mute' : 'Audio On'}</span>
+            </button>
+
+            <!-- Play / Pause Toggle -->
+            <button type="button" class="hvh-btn hvh-btn-playback ${isPaused ? 'hvh-btn-paused' : ''}" id="hvh-play-btn-${tournKey}" onclick="window.toggleHeroVideoPlayback && window.toggleHeroVideoPlayback('${tournKey}')" title="${isPaused ? 'Play Background Video' : 'Pause Video'}">
+              <i class="fa-solid ${isPaused ? 'fa-play' : 'fa-pause'}"></i>
+            </button>
+
+            <!-- Video / Stadium Artwork Switch -->
+            <button type="button" class="hvh-btn hvh-btn-toggle-bg ${isHidden ? 'hvh-btn-active' : ''}" id="hvh-bg-btn-${tournKey}" onclick="window.toggleHeroVideoMode && window.toggleHeroVideoMode('${tournKey}')" title="${isHidden ? 'Switch back to Video' : 'Switch to Stadium Artwork'}">
+              <i class="fa-solid ${isHidden ? 'fa-film' : 'fa-image'}"></i>
+            </button>
+
+            <!-- Fullscreen Theater Cinema Mode -->
+            <button type="button" class="hvh-btn hvh-btn-theater" onclick="window.openHeroTheaterModal && window.openHeroTheaterModal('${tournKey}')" title="Watch highlights in Cinema Lightbox">
+              <i class="fa-solid fa-expand"></i>
+              <span class="hvh-btn-text">Cinema</span>
+            </button>
+
+            <!-- Change / Edit Video -->
+            <button type="button" class="hvh-btn hvh-btn-edit" onclick="window.openHeroVideoModal && window.openHeroVideoModal('${tournKey}')" title="Change YouTube Video URL or Preset">
+              <i class="fa-solid fa-gear"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
   }
+
+  window.postToHeroIframe = function(tournKey, command, args = []) {
+    const iframe = document.getElementById(`hero-video-iframe-${tournKey}`) || 
+                   document.querySelector(`#hero-video-bg-${tournKey} iframe`) ||
+                   document.querySelector('.hero-video-iframe');
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage(JSON.stringify({
+        event: 'command',
+        func: command,
+        args: args
+      }), '*');
+    }
+  };
+
+  window.toggleHeroVideoSound = function(tournKey) {
+    const isCurrentlyMuted = window._heroVideoAudioStates[tournKey] !== true;
+    const shouldUnmute = isCurrentlyMuted;
+    window._heroVideoAudioStates[tournKey] = shouldUnmute;
+
+    if (shouldUnmute) {
+      window.postToHeroIframe(tournKey, 'unMute');
+      window.postToHeroIframe(tournKey, 'setVolume', [85]);
+    } else {
+      window.postToHeroIframe(tournKey, 'mute');
+    }
+
+    const btn = document.getElementById(`hvh-sound-btn-${tournKey}`);
+    const eq = document.querySelector(`#hero-video-hud-${tournKey} .hvh-equalizer`);
+    if (btn) {
+      btn.classList.toggle('hvh-btn-active', shouldUnmute);
+      btn.title = shouldUnmute ? 'Mute Stadium Audio' : 'Unmute Stadium Audio';
+      btn.innerHTML = `
+        <i class="fa-solid ${shouldUnmute ? 'fa-volume-high' : 'fa-volume-xmark'}"></i>
+        <span class="hvh-btn-text">${shouldUnmute ? 'Audio On' : 'Mute'}</span>
+      `;
+    }
+    if (eq) {
+      eq.className = `hvh-equalizer ${shouldUnmute ? 'hvh-eq-active' : 'hvh-eq-muted'}`;
+    }
+  };
+
+  window.toggleHeroVideoPlayback = function(tournKey) {
+    const isCurrentlyPaused = window._heroVideoPauseStates[tournKey] === true;
+    const shouldPause = !isCurrentlyPaused;
+    window._heroVideoPauseStates[tournKey] = shouldPause;
+
+    if (shouldPause) {
+      window.postToHeroIframe(tournKey, 'pauseVideo');
+    } else {
+      window.postToHeroIframe(tournKey, 'playVideo');
+    }
+
+    const btn = document.getElementById(`hvh-play-btn-${tournKey}`);
+    const dot = document.querySelector(`#hero-video-hud-${tournKey} .hvh-live-dot`);
+    const tag = document.querySelector(`#hero-video-hud-${tournKey} .hvh-badge-tag`);
+    if (btn) {
+      btn.classList.toggle('hvh-btn-paused', shouldPause);
+      btn.title = shouldPause ? 'Play Background Video' : 'Pause Video';
+      btn.innerHTML = `<i class="fa-solid ${shouldPause ? 'fa-play' : 'fa-pause'}"></i>`;
+    }
+    if (dot) dot.classList.toggle('hvh-dot-paused', shouldPause);
+    if (tag) tag.textContent = shouldPause ? 'PAUSED' : 'LIVE REEL';
+  };
+
+  window.toggleHeroVideoMode = function(tournKey) {
+    const isCurrentlyHidden = window._heroVideoHiddenStates[tournKey] === true;
+    const shouldHide = !isCurrentlyHidden;
+    window._heroVideoHiddenStates[tournKey] = shouldHide;
+
+    const wrap = document.getElementById(`hero-video-bg-${tournKey}`) || document.querySelector('.hero-video-bg-wrap');
+    if (wrap) {
+      wrap.style.transition = 'opacity 0.4s ease';
+      wrap.style.opacity = shouldHide ? '0' : '1';
+      wrap.style.pointerEvents = 'none';
+      if (shouldHide) {
+        window.postToHeroIframe(tournKey, 'pauseVideo');
+      } else {
+        window.postToHeroIframe(tournKey, 'playVideo');
+      }
+    }
+
+    const btn = document.getElementById(`hvh-bg-btn-${tournKey}`);
+    const tag = document.querySelector(`#hero-video-hud-${tournKey} .hvh-badge-tag`);
+    if (btn) {
+      btn.classList.toggle('hvh-btn-active', shouldHide);
+      btn.title = shouldHide ? 'Switch back to Video' : 'Switch to Stadium Artwork';
+      btn.innerHTML = `<i class="fa-solid ${shouldHide ? 'fa-film' : 'fa-image'}"></i>`;
+    }
+    if (tag) tag.textContent = shouldHide ? 'ARTWORK' : 'LIVE REEL';
+  };
+
+  window.openHeroTheaterModal = function(tournKey) {
+    const videoId = getHeroVideoId(tournKey);
+    if (!videoId) return;
+    const videoConfig = TOURNAMENT_HERO_VIDEOS[tournKey] || {};
+    const videoTitle = videoConfig.title || `${TOURNAMENTS_CONFIG[tournKey]?.name || 'Tournament'} Highlights`;
+    const tournName = TOURNAMENTS_CONFIG[tournKey]?.name || tournKey.toUpperCase();
+
+    const existing = document.getElementById('hero-video-theater-modal');
+    if (existing) existing.remove();
+
+    const modalHtml = `
+      <div class="hero-theater-backdrop" id="hero-video-theater-modal">
+        <div class="hero-theater-card">
+          <div class="hero-theater-header">
+            <div class="hero-theater-title-info">
+              <span class="hero-theater-pill"><i class="fa-solid fa-film"></i> ${tournName} CINEMA</span>
+              <h3 class="hero-theater-heading">${videoTitle}</h3>
+            </div>
+            <button type="button" class="hero-theater-close-btn" id="hero-theater-close" aria-label="Close Theater">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div class="hero-theater-video-frame">
+            <iframe
+              src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0&controls=1&rel=0&playsinline=1"
+              title="${videoTitle}"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen>
+            </iframe>
+          </div>
+          <div class="hero-theater-footer">
+            <span class="hero-theater-hint"><i class="fa-regular fa-keyboard"></i> Press ESC or click outside to exit</span>
+            <button type="button" class="hero-theater-action-btn" onclick="window.openHeroVideoModal && window.openHeroVideoModal('${tournKey}'); document.getElementById('hero-video-theater-modal')?.remove();">
+              <i class="fa-solid fa-gear"></i> Change Highlights Reel
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+    const modal = document.getElementById('hero-video-theater-modal');
+    const closeBtn = document.getElementById('hero-theater-close');
+    const closeFn = () => modal?.remove();
+
+    if (closeBtn) closeBtn.onclick = closeFn;
+    if (modal) modal.onclick = (e) => { if (e.target === modal) closeFn(); };
+    
+    const keyHandler = (e) => {
+      if (e.key === 'Escape') {
+        closeFn();
+        document.removeEventListener('keydown', keyHandler);
+      }
+    };
+    document.addEventListener('keydown', keyHandler);
+  };
 
   // Handle YouTube player state & graceful error fallback
   if (typeof window !== 'undefined' && !window._heroVideoLoopAttached) {
@@ -2363,23 +2576,58 @@ function setupNavigation() {
     if (existing) existing.remove();
 
     const tournName = TOURNAMENTS_CONFIG[tournKey]?.title || tournKey.toUpperCase();
+    const presets = [
+      { id: 'I_kDmkCBm_c', label: 'World Cup Iconic' },
+      { id: 'V_YxSJXR9D4', label: 'UCL Magic' },
+      { id: 'wpcKyur-kbI', label: 'Premier League Best' },
+      { id: 'wJZELdTCqeU', label: 'La Liga Goals' },
+      { id: '81oEEXQIdjo', label: 'Euro Historic' }
+    ];
+
     const modalHtml = `
       <div class="hero-video-modal-backdrop" id="hero-video-edit-modal">
         <div class="hero-video-modal-card">
-          <div class="hvm-title">
-            <i class="fa-solid fa-film" style="color:#6366f1;"></i>
-            <span>Set Hero Video Highlight</span>
+          <div class="hvm-header">
+            <div class="hvm-title">
+              <i class="fa-solid fa-film" style="color:#6366f1;"></i>
+              <span>Customize Hero Highlights</span>
+            </div>
+            <button type="button" class="hvm-close-x" id="hvm-close-x" aria-label="Close modal">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
           </div>
           <p class="hvm-desc">
-            Paste a YouTube video URL or ID to play in the background hero of <strong>${tournName}</strong> (muted, auto-looping).
+            Choose a curated football highlights reel or paste any YouTube video link to stream in the hero background of <strong>${tournName}</strong>.
           </p>
+
+          <!-- Quick Presets -->
+          <div class="hvm-presets-group">
+            <span class="hvm-presets-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Quick Presets</span>
+            <div class="hvm-presets-grid">
+              ${presets.map(p => `
+                <button type="button" class="hvm-preset-chip ${p.id === currentId ? 'hvm-preset-active' : ''}" data-id="${p.id}">
+                  <i class="fa-solid fa-play"></i> ${p.label}
+                </button>
+              `).join('')}
+              <button type="button" class="hvm-preset-chip hvm-preset-reset" id="hvm-preset-reset" title="Restore default tournament reel">
+                <i class="fa-solid fa-rotate-left"></i> Default
+              </button>
+            </div>
+          </div>
+
           <div class="hvm-input-group">
             <label class="hvm-label" for="hvm-url-input">YouTube Link / Video ID</label>
-            <input type="text" class="hvm-input" id="hvm-url-input" placeholder="e.g. https://www.youtube.com/watch?v=fm20OYYxLmU" value="${currentId ? 'https://www.youtube.com/watch?v=' + currentId : ''}" />
+            <div class="hvm-input-wrap">
+              <i class="fa-brands fa-youtube hvm-input-icon"></i>
+              <input type="text" class="hvm-input" id="hvm-url-input" placeholder="e.g. https://www.youtube.com/watch?v=I_kDmkCBm_c" value="${currentId ? 'https://www.youtube.com/watch?v=' + currentId : ''}" />
+            </div>
           </div>
+
           <div class="hvm-actions">
             <button type="button" class="hvm-btn-cancel" id="hvm-cancel-btn">Cancel</button>
-            <button type="button" class="hvm-btn-save" id="hvm-save-btn">Save &amp; Apply</button>
+            <button type="button" class="hvm-btn-save" id="hvm-save-btn">
+              <i class="fa-solid fa-check"></i> Apply Highlights
+            </button>
           </div>
         </div>
       </div>
@@ -2390,18 +2638,44 @@ function setupNavigation() {
     const inputEl = document.getElementById('hvm-url-input');
     const saveBtn = document.getElementById('hvm-save-btn');
     const cancelBtn = document.getElementById('hvm-cancel-btn');
+    const closeXBtn = document.getElementById('hvm-close-x');
+    const resetBtn = document.getElementById('hvm-preset-reset');
 
-    cancelBtn.onclick = () => modalEl.remove();
-    modalEl.onclick = (e) => { if (e.target === modalEl) modalEl.remove(); };
+    const closeModal = () => modalEl?.remove();
+    if (cancelBtn) cancelBtn.onclick = closeModal;
+    if (closeXBtn) closeXBtn.onclick = closeModal;
+    if (modalEl) modalEl.onclick = (e) => { if (e.target === modalEl) closeModal(); };
 
-    saveBtn.onclick = () => {
-      const val = inputEl.value.trim();
-      if (val) {
-        setHeroVideoId(tournKey, val);
+    // Preset chip clicks
+    modalEl.querySelectorAll('.hvm-preset-chip[data-id]').forEach(chip => {
+      chip.onclick = () => {
+        const id = chip.dataset.id;
+        if (inputEl) inputEl.value = `https://www.youtube.com/watch?v=${id}`;
+        modalEl.querySelectorAll('.hvm-preset-chip').forEach(c => c.classList.remove('hvm-preset-active'));
+        chip.classList.add('hvm-preset-active');
+      };
+    });
+
+    if (resetBtn) {
+      resetBtn.onclick = () => {
+        try {
+          localStorage.removeItem(`arena_hero_video_${tournKey}`);
+        } catch(e) {}
         renderActiveTournament();
-      }
-      modalEl.remove();
-    };
+        closeModal();
+      };
+    }
+
+    if (saveBtn) {
+      saveBtn.onclick = () => {
+        const val = inputEl.value.trim();
+        if (val) {
+          setHeroVideoId(tournKey, val);
+          renderActiveTournament();
+        }
+        closeModal();
+      };
+    }
   };
 
   // ---------------------------------------------------------------------------

@@ -13284,48 +13284,398 @@ border-color: #facc15;
   z-index: 2;
 }
 
-/* Bottom Action Bar for Video Customization */
-.hero-video-bottom-action {
+/* ============================================================
+   INTERACTIVE HERO VIDEO HUD & CONTROL SUITE (ALL TOURNAMENTS)
+   ============================================================ */
+.hero-video-hud {
   position: absolute;
-  bottom: 16px;
-  right: 20px;
-  z-index: 10;
-  display: flex;
-  align-items: center;
+  bottom: 20px;
+  right: 24px;
+  z-index: 25;
+  pointer-events: auto;
+  user-select: none;
+  animation: hvhFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.hero-edit-video-btn {
-  background: rgba(10, 15, 30, 0.78);
-  backdrop-filter: blur(12px);
+@keyframes hvhFadeIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.hvh-inner-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(10, 15, 30, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 9999px;
+  padding: 6px 10px 6px 16px;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(99, 102, 241, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hvh-inner-card:hover {
+  background: rgba(13, 20, 38, 0.92);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 14px 40px rgba(0, 0, 0, 0.75),
+    0 0 20px rgba(99, 102, 241, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Live Indicator & Title */
+.hvh-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: default;
+}
+
+.hvh-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 10px #ef4444;
+  animation: hvhDotPulse 1.8s infinite ease-in-out;
+  flex-shrink: 0;
+}
+
+.hvh-live-dot.hvh-dot-paused {
+  background: #f59e0b;
+  box-shadow: 0 0 8px #f59e0b;
+  animation: none;
+}
+
+@keyframes hvhDotPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.5; }
+}
+
+.hvh-label-group {
+  display: flex;
+  flex-direction: column;
+  max-width: 140px;
+}
+
+.hvh-badge-tag {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #fca5a5;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.hvh-video-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #cbd5e1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 135px;
+  margin-top: 2px;
+}
+
+/* Audio Equalizer animation */
+.hvh-equalizer {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 14px;
+  padding: 0 2px;
+}
+
+.hvh-bar {
+  width: 3px;
+  background: #10b981;
+  border-radius: 2px;
+  transition: height 0.2s ease;
+}
+
+.hvh-eq-active .hvh-bar-1 { animation: hvhEqPulse1 0.7s infinite alternate ease-in-out; }
+.hvh-eq-active .hvh-bar-2 { animation: hvhEqPulse2 0.5s infinite alternate ease-in-out 0.15s; }
+.hvh-eq-active .hvh-bar-3 { animation: hvhEqPulse3 0.6s infinite alternate ease-in-out 0.3s; }
+.hvh-eq-active .hvh-bar-4 { animation: hvhEqPulse1 0.55s infinite alternate ease-in-out 0.2s; }
+
+.hvh-eq-muted .hvh-bar {
+  height: 3px !important;
+  background: #64748b;
+  opacity: 0.6;
+}
+
+@keyframes hvhEqPulse1 { 0% { height: 3px; } 100% { height: 13px; } }
+@keyframes hvhEqPulse2 { 0% { height: 5px; } 100% { height: 14px; } }
+@keyframes hvhEqPulse3 { 0% { height: 4px; } 100% { height: 11px; } }
+
+.hvh-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.18);
+  flex-shrink: 0;
+}
+
+/* Controls Buttons Row */
+.hvh-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hvh-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #e2e8f0;
+  border-radius: 9999px;
+  padding: 6px 11px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.hvh-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+}
+
+.hvh-btn:active {
+  transform: translateY(0) scale(0.95);
+}
+
+/* Active Sound Pill */
+.hvh-btn-sound.hvh-btn-active {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.35) 0%, rgba(5, 150, 105, 0.45) 100%);
+  border-color: #34d399;
+  color: #6ee7b7;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+}
+
+/* Paused Playback Pill */
+.hvh-btn-playback.hvh-btn-paused {
+  background: rgba(245, 158, 11, 0.25);
+  border-color: #fbbf24;
+  color: #fde68a;
+}
+
+/* Toggle Artwork Pill Active */
+.hvh-btn-toggle-bg.hvh-btn-active {
+  background: rgba(99, 102, 241, 0.25);
+  border-color: #818cf8;
+  color: #c7d2fe;
+}
+
+/* Theater Pill */
+.hvh-btn-theater {
+  background: rgba(99, 102, 241, 0.16);
+  border-color: rgba(129, 140, 248, 0.35);
+  color: #e0e7ff;
+}
+
+.hvh-btn-theater:hover {
+  background: rgba(99, 102, 241, 0.35);
+  border-color: #818cf8;
+  color: #ffffff;
+  box-shadow: 0 0 14px rgba(99, 102, 241, 0.4);
+}
+
+/* Edit Pill */
+.hvh-btn-edit {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.hvh-btn-edit:hover i {
+  transform: rotate(45deg);
+  transition: transform 0.25s ease;
+}
+
+/* Responsive collapse on mobile */
+@media (max-width: 640px) {
+  .hero-video-hud {
+    bottom: 12px;
+    right: 12px;
+    left: 12px;
+  }
+  .hvh-inner-card {
+    width: 100%;
+    justify-content: space-between;
+    padding: 6px 10px;
+  }
+  .hvh-label-group {
+    max-width: 90px;
+  }
+  .hvh-btn-text {
+    display: none;
+  }
+  .hvh-btn {
+    padding: 6px 9px;
+  }
+}
+
+/* ============================================================
+   CINEMA THEATER LIGHTBOX MODAL
+   ============================================================ */
+.hero-theater-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 1000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.25s ease;
+}
+
+.hero-theater-card {
+  width: 100%;
+  max-width: 980px;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 
+    0 30px 80px rgba(0, 0, 0, 0.9),
+    0 0 60px rgba(99, 102, 241, 0.25);
+  animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-theater-header {
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+.hero-theater-title-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hero-theater-pill {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #818cf8;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.hero-theater-heading {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin: 0;
+}
+
+.hero-theater-close-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #e2e8f0;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.hero-theater-close-btn:hover {
+  background: #ef4444;
+  border-color: #f87171;
+  color: #ffffff;
+  transform: rotate(90deg);
+}
+
+.hero-theater-video-frame {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+  background: #000000;
+}
+
+.hero-theater-video-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.hero-theater-footer {
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(15, 23, 42, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+
+.hero-theater-hint i {
+  margin-right: 6px;
+  color: #64748b;
+}
+
+.hero-theater-action-btn {
+  background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.18);
   color: #cbd5e1;
   padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.72rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
   font-weight: 700;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: all 0.2s ease;
-  font-family: inherit;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s;
 }
 
-.hero-edit-video-btn:hover {
+.hero-theater-action-btn:hover {
   background: rgba(255, 255, 255, 0.2);
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.45);
-  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
-/* Modal for editing tournament hero video */
+/* ============================================================
+   CUSTOMIZE HERO VIDEO MODAL (PRESETS & URL INPUT)
+   ============================================================ */
 .hero-video-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(3, 7, 18, 0.85);
-  backdrop-filter: blur(8px);
-  z-index: 999999;
+  background: rgba(3, 7, 18, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 1000001;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13335,26 +13685,46 @@ border-color: #facc15;
 
 .hero-video-modal-card {
   background: linear-gradient(180deg, #111827 0%, #0b0f19 100%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 16px;
-  padding: 28px;
-  max-width: 520px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 20px;
+  padding: 26px;
+  max-width: 540px;
   width: 100%;
   color: #ffffff;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85), 0 0 30px rgba(99, 102, 241, 0.2);
   position: relative;
   animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes modalPop {
-  from { transform: scale(0.92) translateY(10px); opacity: 0; }
-  to   { transform: scale(1) translateY(0); opacity: 1; }
+.hvm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.hvm-close-x {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #94a3b8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.hvm-close-x:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
 }
 
 .hvm-title {
   font-size: 1.25rem;
   font-weight: 800;
-  margin-bottom: 6px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -13362,17 +13732,84 @@ border-color: #facc15;
 }
 
 .hvm-desc {
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   color: #94a3b8;
   margin-bottom: 18px;
-  line-height: 1.45;
+  line-height: 1.5;
+}
+
+/* Quick Presets Grid */
+.hvm-presets-group {
+  margin-bottom: 18px;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hvm-presets-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #cbd5e1;
+  margin-bottom: 8px;
+}
+
+.hvm-presets-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hvm-preset-chip {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #cbd5e1;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.hvm-preset-chip:hover {
+  background: rgba(99, 102, 241, 0.3);
+  border-color: #818cf8;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.hvm-preset-chip.hvm-preset-active {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  border-color: #a5b4fc;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
+.hvm-preset-reset {
+  border-style: dashed;
+  background: transparent;
+  color: #94a3b8;
+}
+
+.hvm-preset-reset:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #f87171;
+  color: #fca5a5;
 }
 
 .hvm-input-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 .hvm-label {
@@ -13383,13 +13820,26 @@ border-color: #facc15;
   letter-spacing: 0.5px;
 }
 
+.hvm-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.hvm-input-icon {
+  position: absolute;
+  left: 14px;
+  color: #ef4444;
+  font-size: 1.1rem;
+}
+
 .hvm-input {
   width: 100%;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.5);
   border: 1.5px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  padding: 12px 14px;
-  font-size: 0.9rem;
+  border-radius: 10px;
+  padding: 12px 14px 12px 42px;
+  font-size: 0.88rem;
   color: #ffffff;
   outline: none;
   font-family: inherit;
@@ -13398,22 +13848,22 @@ border-color: #facc15;
 
 .hvm-input:focus {
   border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
-  background: rgba(0, 0, 0, 0.65);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.28);
+  background: rgba(0, 0, 0, 0.7);
 }
 
 .hvm-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 12px;
 }
 
 .hvm-btn-cancel {
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   color: #94a3b8;
   padding: 10px 18px;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 0.85rem;
   font-weight: 700;
   cursor: pointer;
@@ -13421,7 +13871,7 @@ border-color: #facc15;
 }
 
 .hvm-btn-cancel:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.18);
   color: #ffffff;
 }
 
@@ -13430,17 +13880,21 @@ border-color: #facc15;
   border: 1px solid #818cf8;
   color: #ffffff;
   padding: 10px 22px;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 0.85rem;
   font-weight: 800;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   transition: all 0.2s;
-  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.45);
 }
 
 .hvm-btn-save:hover {
   filter: brightness(1.15);
-  transform: translateY(-1px);
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
 }
 
 /* ============================================================
@@ -14757,7 +15211,51 @@ tr:hover .fa-crown {
 .superlig-btn-primary,
 .scottishprem-btn-primary,
 .laliga-btn-primary {
+  position: relative !important;
+  overflow: hidden !important;
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.wc-btn-primary::before,
+.euro-btn-primary::before,
+.copa-btn-primary::before,
+.ucl-btn-primary::before,
+.pl-btn-primary::before,
+.seriea-btn-primary::before,
+.bundesliga-btn-primary::before,
+.ligue1-btn-primary::before,
+.ligaportugal-btn-primary::before,
+.eredivisie-btn-primary::before,
+.superlig-btn-primary::before,
+.scottishprem-btn-primary::before,
+.laliga-btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 70%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+  transform: skewX(-20deg);
+  transition: none;
+  pointer-events: none;
+}
+
+.wc-btn-primary:hover::before,
+.euro-btn-primary:hover::before,
+.copa-btn-primary:hover::before,
+.ucl-btn-primary:hover::before,
+.pl-btn-primary:hover::before,
+.seriea-btn-primary:hover::before,
+.bundesliga-btn-primary:hover::before,
+.ligue1-btn-primary:hover::before,
+.ligaportugal-btn-primary:hover::before,
+.eredivisie-btn-primary:hover::before,
+.superlig-btn-primary:hover::before,
+.scottishprem-btn-primary:hover::before,
+.laliga-btn-primary:hover::before {
+  left: 180%;
+  transition: left 0.75s ease-in-out;
 }
 
 .wc-btn-primary:hover,
