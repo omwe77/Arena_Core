@@ -1421,6 +1421,13 @@
       cancelAllActiveSimulationTimers();
       renderActiveTournament();
     } else if (targetViewId === 'tournament-sim') {
+      if (activeTournKey === 'ucl') {
+        const feederInfo = getUclFeederStatus();
+        if (!feederInfo.allFinished) {
+          openUclGateModal();
+          return;
+        }
+      }
       // Set subView to 'sim' so simulator controls show
       if (activeTournKey && tournamentState[activeTournKey]) {
         tournamentState[activeTournKey].subView = 'sim';
@@ -1567,9 +1574,14 @@ function setupNavigation() {
     // Initialize/reset tournament state for fresh simulation
     initTournamentState(activeTournKey);
 
-    // If user was viewing simulator, maintain simulator subview for immediate simulation
+    // If user was viewing simulator, maintain simulator subview for immediate simulation (unless UCL leagues pending)
     if (isSimNavActive && tournamentState[activeTournKey]) {
-      tournamentState[activeTournKey].subView = 'sim';
+      if (activeTournKey === 'ucl') {
+        const feederInfo = getUclFeederStatus();
+        tournamentState[activeTournKey].subView = feederInfo.allFinished ? 'sim' : 'home';
+      } else {
+        tournamentState[activeTournKey].subView = 'sim';
+      }
     }
 
     renderActiveTournament();
@@ -2268,7 +2280,7 @@ function setupNavigation() {
   }
 
   // ---------------------------------------------------------------------------
-  // 7A-2. DYNAMIC YOUTUBE HERO VIDEO BACKGROUND SYSTEM
+  // 7A-2. DYNAMIC HERO VIDEO BACKGROUND SYSTEM (HTML5 VIDEO + YOUTUBE)
   // ---------------------------------------------------------------------------
   const TOURNAMENT_HERO_VIDEOS = Object.freeze(window.ARENA_HERO_VIDEOS || {});
 
@@ -2280,22 +2292,52 @@ function setupNavigation() {
     return match ? match[1] : '';
   }
 
-  function getHeroVideoId(tournKey) {
-    let savedId = '';
+  function getHeroVideoSource(tournKey) {
+    let savedVal = '';
     try {
-      savedId = localStorage.getItem(`arena_hero_video_${tournKey}`) || '';
+      savedVal = (localStorage.getItem(`arena_hero_video_${tournKey}`) || '').trim();
     } catch (e) {}
 
-    const defaultId = TOURNAMENT_HERO_VIDEOS[tournKey]?.id || '';
-    const videoId = /^[a-zA-Z0-9_-]{11}$/.test(savedId) ? savedId : defaultId;
-    return /^[a-zA-Z0-9_-]{11}$/.test(videoId) ? videoId : '';
+    const config = TOURNAMENT_HERO_VIDEOS[tournKey] || {};
+    const defaultVal = config.videoUrl || config.id || '';
+    const activeVal = savedVal || defaultVal;
+
+    if (!activeVal) return null;
+
+    // Check if direct video URL (.mp4, .webm, .ogg, or relative/blob video)
+    if (/\.(mp4|webm|ogg)(\?.*)?$/i.test(activeVal) || activeVal.startsWith('blob:') || activeVal.startsWith('data:video/')) {
+      return {
+        type: 'direct',
+        src: activeVal,
+        title: config.title || `${TOURNAMENTS_CONFIG[tournKey]?.name || 'Tournament'} Highlights`,
+        poster: config.poster || ''
+      };
+    }
+
+    const ytId = extractYouTubeId(activeVal);
+    if (ytId) {
+      return {
+        type: 'youtube',
+        id: ytId,
+        title: config.title || `${TOURNAMENTS_CONFIG[tournKey]?.name || 'Tournament'} Highlights`,
+        start: Number(config.start) || 0,
+        poster: config.poster || ''
+      };
+    }
+
+    return null;
+  }
+
+  function getHeroVideoId(tournKey) {
+    const src = getHeroVideoSource(tournKey);
+    return src ? (src.id || src.src || '') : '';
   }
 
   function setHeroVideoId(tournKey, urlOrId) {
-    const vidId = extractYouTubeId(urlOrId);
-    if (!vidId) return;
+    if (!urlOrId) return;
+    const clean = urlOrId.trim();
     try {
-      localStorage.setItem(`arena_hero_video_${tournKey}`, vidId);
+      localStorage.setItem(`arena_hero_video_${tournKey}`, clean);
     } catch(e) {}
   }
 
@@ -2305,13 +2347,44 @@ function setupNavigation() {
   window._heroVideoHiddenStates = window._heroVideoHiddenStates || {};
 
   function renderHeroVideoBgHtml(tournKey) {
-    const videoId = getHeroVideoId(tournKey);
-    if (!videoId) return '';
-    const videoConfig = TOURNAMENT_HERO_VIDEOS[tournKey] || {};
-    const videoTitle = videoConfig.title || `${TOURNAMENTS_CONFIG[tournKey]?.name || 'Tournament'} highlights`;
-    const startSec = Number(videoConfig.start) || 0;
-    const startParam = startSec > 0 ? `&start=${startSec}` : '';
+    const videoSource = getHeroVideoSource(tournKey);
+    if (!videoSource) return '';
     const isHidden = window._heroVideoHiddenStates[tournKey] === true;
+    const isMuted = window._heroVideoAudioStates[tournKey] !== true;
+
+    if (videoSource.type === 'direct') {
+      return `
+        <div class="hero-video-bg-wrap" id="hero-video-bg-${tournKey}" style="${isHidden ? 'opacity:0;pointer-events:none;' : ''}">
+          <video
+            class="hero-video-player"
+            id="hero-video-player-${tournKey}"
+            data-tourn="${tournKey}"
+            autoplay
+            ${isMuted ? 'muted' : ''}
+            loop
+            playsinline
+            preload="auto"
+            disablepictureinpicture
+            controlslist="nodownload nofullscreen noremoteplayback"
+            ${videoSource.poster ? `poster="${videoSource.poster}"` : ''}
+            aria-hidden="true"
+            tabindex="-1"
+            style="pointer-events:none;touch-action:none;">
+            <source src="${videoSource.src}" type="video/mp4">
+          </video>
+          <div class="hero-video-click-shield" aria-hidden="true" style="position:absolute;inset:0;z-index:5;pointer-events:all;touch-action:none;background:transparent;"></div>
+        </div>
+      `;
+    }
+
+    const videoId = videoSource.id;
+    const videoTitle = videoSource.title;
+    const startSec = videoSource.start || 0;
+    const startParam = startSec > 0 ? `&start=${startSec}` : '';
+    const originParam = typeof window !== 'undefined' && window.location && window.location.origin
+      ? `&origin=${encodeURIComponent(window.location.origin)}`
+      : '';
+
     return `
       <div class="hero-video-bg-wrap" id="hero-video-bg-${tournKey}" style="${isHidden ? 'opacity:0;pointer-events:none;' : ''}">
         <iframe
@@ -2319,25 +2392,99 @@ function setupNavigation() {
           id="hero-video-iframe-${tournKey}"
           data-tourn="${tournKey}"
           data-start="${startSec}"
-          src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&disablekb=1&modestbranding=1&enablejsapi=1${startParam}"
+          src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&disablekb=1&modestbranding=1&enablejsapi=1&iv_load_policy=3&fs=0&showinfo=0${startParam}${originParam}"
           title="${videoTitle}"
           tabindex="-1"
           aria-hidden="true"
           frameborder="0"
           referrerpolicy="strict-origin-when-cross-origin"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen>
+          allowfullscreen
+          style="pointer-events:none;touch-action:none;opacity:0;transition:opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);">
         </iframe>
-        <div class="hero-video-click-shield" aria-hidden="true"></div>
+        <div class="hero-video-click-shield" aria-hidden="true" style="position:absolute;inset:0;z-index:5;pointer-events:all;touch-action:none;background:transparent;"></div>
       </div>
     `;
   }
 
+  // Called by each page render function after inserting hero HTML into the DOM.
+  // Fades in the iframe only once video is actually buffering/playing (no pause icon flash).
+  window._attachHeroVideoFadeIn = function(tournKey) {
+    // Safety fallback: if postMessage events never fire (e.g. blocked browser), show the iframe after 3.5s anyway
+    const fallbackTimer = setTimeout(() => {
+      const el = document.getElementById('hero-video-iframe-' + tournKey);
+      if (el && el.style.opacity === '0') {
+        el.style.opacity = '1';
+        el.classList.add('hero-video-playing');
+      }
+    }, 3500);
+    // Store reference so we can cancel if postMessage fires first
+    window._heroFallbackTimers = window._heroFallbackTimers || {};
+    window._heroFallbackTimers[tournKey] = fallbackTimer;
+  };
+
+  // Seamless auto-loop & smooth playback fade-in listener for YouTube hero embeds
+  if (typeof window !== 'undefined' && !window._heroVideoLoopListenerAttached) {
+    window._heroVideoLoopListenerAttached = true;
+    window.addEventListener('message', function(event) {
+      if (!event || !event.data) return;
+      try {
+        const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+
+        // Fade in the iframe the moment real video frames are playing.
+        // We use two reliable signals:
+        // 1. onStateChange with info === 1 (YouTube PlayerState.PLAYING)
+        // 2. infoDelivery with currentTime > 0.3 (actual frames decoded, not just loading screen)
+        let shouldFadeIn = false;
+        if (data) {
+          if (data.event === 'onStateChange' && (data.info === 1 || data.info?.playerState === 1)) {
+            shouldFadeIn = true;
+          }
+          if (data.event === 'infoDelivery' && data.info && data.info.currentTime > 0.3) {
+            shouldFadeIn = true;
+          }
+        }
+        if (shouldFadeIn) {
+          document.querySelectorAll('.hero-video-iframe').forEach(iframe => {
+            if (iframe.style.opacity === '0') {
+              iframe.classList.add('hero-video-playing');
+              iframe.style.opacity = '1';
+              // Cancel the fallback timer since postMessage fired
+              const key = iframe.dataset.tourn;
+              if (window._heroFallbackTimers && window._heroFallbackTimers[key]) {
+                clearTimeout(window._heroFallbackTimers[key]);
+                delete window._heroFallbackTimers[key];
+              }
+            }
+          });
+        }
+
+        // YouTube PlayerState.ENDED is 0: loop seamlessly without playlist chrome
+        if (data && (data.event === 'onStateChange' && (data.info === 0 || data.info?.playerState === 0))) {
+          document.querySelectorAll('.hero-video-iframe').forEach(iframe => {
+            if (iframe.contentWindow) {
+              const startSec = Number(iframe.dataset.start) || 0;
+              iframe.contentWindow.postMessage(JSON.stringify({
+                event: 'command',
+                func: 'seekTo',
+                args: [startSec, true]
+              }), '*');
+              iframe.contentWindow.postMessage(JSON.stringify({
+                event: 'command',
+                func: 'playVideo',
+                args: []
+              }), '*');
+            }
+          });
+        }
+      } catch (e) {}
+    });
+  }
+
   function renderHeroVideoBadgeHtml(tournKey) {
-    const videoId = getHeroVideoId(tournKey);
-    if (!videoId) return '';
-    const videoConfig = TOURNAMENT_HERO_VIDEOS[tournKey] || {};
-    const videoTitle = videoConfig.title || `${TOURNAMENTS_CONFIG[tournKey]?.name || 'Tournament'} Highlights`;
+    const videoSource = getHeroVideoSource(tournKey);
+    if (!videoSource) return '';
+    const videoTitle = videoSource.title || `${TOURNAMENTS_CONFIG[tournKey]?.name || 'Tournament'} Highlights`;
     const isMuted = window._heroVideoAudioStates[tournKey] !== true;
     const isPaused = window._heroVideoPauseStates[tournKey] === true;
     const isHidden = window._heroVideoHiddenStates[tournKey] === true;
@@ -2398,6 +2545,22 @@ function setupNavigation() {
   }
 
   window.postToHeroIframe = function(tournKey, command, args = []) {
+    const wrap = document.getElementById(`hero-video-bg-${tournKey}`);
+    const videoEl = wrap?.querySelector('video') || document.getElementById(`hero-video-player-${tournKey}`);
+    if (videoEl) {
+      if (command === 'playVideo') {
+        videoEl.play().catch(() => {});
+      } else if (command === 'pauseVideo') {
+        videoEl.pause();
+      } else if (command === 'mute') {
+        videoEl.muted = true;
+      } else if (command === 'unMute') {
+        videoEl.muted = false;
+      } else if (command === 'setVolume' && args[0] !== undefined) {
+        videoEl.volume = Math.max(0, Math.min(1, args[0] / 100));
+      }
+    }
+
     const iframe = document.getElementById(`hero-video-iframe-${tournKey}`) || 
                    document.querySelector(`#hero-video-bg-${tournKey} iframe`) ||
                    document.querySelector('.hero-video-iframe');
@@ -2488,14 +2651,28 @@ function setupNavigation() {
   };
 
   window.openHeroTheaterModal = function(tournKey) {
-    const videoId = getHeroVideoId(tournKey);
-    if (!videoId) return;
-    const videoConfig = TOURNAMENT_HERO_VIDEOS[tournKey] || {};
-    const videoTitle = videoConfig.title || `${TOURNAMENTS_CONFIG[tournKey]?.name || 'Tournament'} Highlights`;
+    const videoSource = getHeroVideoSource(tournKey);
+    if (!videoSource) return;
+    const videoTitle = videoSource.title || `${TOURNAMENTS_CONFIG[tournKey]?.name || 'Tournament'} Highlights`;
     const tournName = TOURNAMENTS_CONFIG[tournKey]?.name || tournKey.toUpperCase();
 
     const existing = document.getElementById('hero-video-theater-modal');
     if (existing) existing.remove();
+
+    const isDirect = videoSource.type === 'direct';
+    const videoFrameHtml = isDirect ? `
+      <video class="hero-theater-direct-video" autoplay controls playsinline style="width:100%;height:100%;object-fit:cover;background:#000;">
+        <source src="${videoSource.src}" type="video/mp4">
+      </video>
+    ` : `
+      <iframe
+        src="https://www.youtube.com/embed/${videoSource.id}?autoplay=1&mute=0&controls=1&rel=0&playsinline=1"
+        title="${videoTitle}"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+    `;
 
     const modalHtml = `
       <div class="hero-theater-backdrop" id="hero-video-theater-modal">
@@ -2510,13 +2687,7 @@ function setupNavigation() {
             </button>
           </div>
           <div class="hero-theater-video-frame">
-            <iframe
-              src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0&controls=1&rel=0&playsinline=1"
-              title="${videoTitle}"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen>
-            </iframe>
+            ${videoFrameHtml}
           </div>
           <div class="hero-theater-footer">
             <span class="hero-theater-hint"><i class="fa-regular fa-keyboard"></i> Press ESC or click outside to exit</span>
@@ -2551,7 +2722,7 @@ function setupNavigation() {
     window.addEventListener('message', (ev) => {
       try {
         const msg = typeof ev.data === 'string' ? JSON.parse(ev.data) : ev.data;
-        // On video end -> loop back to beginning (or specified start time, e.g. 10s)
+        // On video end -> loop back to beginning
         if (msg && msg.event === 'onStateChange' && msg.info === 0) {
           document.querySelectorAll('.hero-video-iframe').forEach(fr => {
             const startSec = Number(fr.dataset.start) || 0;
@@ -2559,12 +2730,14 @@ function setupNavigation() {
             fr.contentWindow?.postMessage(JSON.stringify({event:'command', func:'playVideo', args:[]}), '*');
           });
         }
-        // If YouTube emits onError (101/150 embedding restricted, 100 not found, 2 invalid param)
-        // Gracefully hide the iframe so the stadium graphic/image background is visible seamlessly
-        if (msg && (msg.event === 'onError' || (msg.info && msg.info.playerState === -1 && msg.info.errorCode))) {
-          document.querySelectorAll('.hero-video-bg-wrap').forEach(wrap => {
-            wrap.style.display = 'none';
-          });
+        // Gracefully handle YouTube embedding restrictions (101/150) without hiding HUD
+        if (msg && msg.event === 'onError' && (msg.data === 150 || msg.data === 101 || msg.data === 100 || msg.info === 150 || msg.info === 101)) {
+          console.warn('[ARENA_CORE] YouTube video restricted for embedding, switching to artwork gracefully');
+          const tourn = document.querySelector('.hero-video-iframe')?.dataset?.tourn || activeTournKey;
+          const wrap = document.getElementById(`hero-video-bg-${tourn}`);
+          if (wrap) wrap.style.opacity = '0';
+          const tag = document.querySelector(`#hero-video-hud-${tourn} .hvh-badge-tag`);
+          if (tag) tag.textContent = 'ARTWORK';
         }
       } catch(_) {}
     });
@@ -2597,7 +2770,7 @@ function setupNavigation() {
             </button>
           </div>
           <p class="hvm-desc">
-            Choose a curated football highlights reel or paste any YouTube video link to stream in the hero background of <strong>${tournName}</strong>.
+            Choose a curated football highlights reel or paste any YouTube video link or direct MP4 URL to stream in the hero background of <strong>${tournName}</strong>.
           </p>
 
           <!-- Quick Presets -->
@@ -2616,10 +2789,10 @@ function setupNavigation() {
           </div>
 
           <div class="hvm-input-group">
-            <label class="hvm-label" for="hvm-url-input">YouTube Link / Video ID</label>
+            <label class="hvm-label" for="hvm-url-input">Video URL / YouTube Link</label>
             <div class="hvm-input-wrap">
-              <i class="fa-brands fa-youtube hvm-input-icon"></i>
-              <input type="text" class="hvm-input" id="hvm-url-input" placeholder="e.g. https://www.youtube.com/watch?v=I_kDmkCBm_c" value="${currentId ? 'https://www.youtube.com/watch?v=' + currentId : ''}" />
+              <i class="fa-solid fa-link hvm-input-icon"></i>
+              <input type="text" class="hvm-input" id="hvm-url-input" placeholder="e.g. https://www.youtube.com/watch?v=I_kDmkCBm_c or https://.../video.mp4" value="${currentId ? (currentId.includes('http') ? currentId : 'https://www.youtube.com/watch?v=' + currentId) : ''}" />
             </div>
           </div>
 
@@ -2823,6 +2996,7 @@ function setupNavigation() {
         spotEl.style.transform = '';
       });
     }
+    window._attachHeroVideoFadeIn && window._attachHeroVideoFadeIn('wc');
   }
 
   // ---------------------------------------------------------------------------
@@ -2995,6 +3169,7 @@ function setupNavigation() {
         spotEl.style.transform = '';
       });
     }
+    window._attachHeroVideoFadeIn && window._attachHeroVideoFadeIn('euro');
   }
 
   // ---------------------------------------------------------------------------
@@ -3167,6 +3342,7 @@ function setupNavigation() {
         spotEl.style.transform = '';
       });
     }
+    window._attachHeroVideoFadeIn && window._attachHeroVideoFadeIn('copa');
   }
 
   // ---------------------------------------------------------------------------
@@ -3300,22 +3476,55 @@ function getUclFeederStatus() {
 
   function syncUclFromLeagues() {
     const feederStatus = getUclFeederStatus();
-    const qualifiedClubs = [];
+
+    // Organize into Pots based on domestic league positions
+    const champions = [];
+    const runnersUp = [];
+    const thirdPlace = [];
+    const fourthPlace = [];
+
     feederStatus.feeders.forEach(f => {
-      f.top4.forEach(t => qualifiedClubs.push(t.club));
+      if (f.top4 && f.top4[0]) champions.push(f.top4[0].club);
+      if (f.top4 && f.top4[1]) runnersUp.push(f.top4[1].club);
+      if (f.top4 && f.top4[2]) thirdPlace.push(f.top4[2].club);
+      if (f.top4 && f.top4[3]) fourthPlace.push(f.top4[3].club);
     });
 
-const continentalGiants = [
-      'PSG', 'BENFICA', 'SPORTING CP', 'CELTIC', 'MONACO', 'LILLE',
-      'FEYENOORD', 'PSV', 'PORTO', 'GALATASARAY', 'FENERBAHÇE', 'TRABZONSPOR',
-      'BEŞİKTAŞ', 'DINAMO ZAGREB', 'YOUNG BOYS'
+    const continentalGiants = [
+      'REAL MADRID', 'MAN CITY', 'BAYERN MUNICH', 'PSG', 'BARCELONA',
+      'INTER MILAN', 'ARSENAL', 'LIVERPOOL', 'BORUSSIA DORTMUND', 'ATLETICO MADRID',
+      'BAYER LEVERKUSEN', 'JUVENTUS', 'BENFICA', 'SPORTING CP', 'PORTO',
+      'PSV', 'FEYENOORD', 'CELTIC', 'MONACO', 'LILLE', 'GALATASARAY',
+      'FENERBAHÇE', 'TRABZONSPOR', 'BEŞİKTAŞ', 'DINAMO ZAGREB', 'YOUNG BOYS',
+      'ASTON VILLA', 'ATALANTA', 'STUTTGART', 'BREST', 'BOLOGNA', 'GIRONA'
     ];
 
-    const finalPool = [...new Set([...qualifiedClubs, ...continentalGiants])].slice(0, 32);
-    const groups = {};
     const groupLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-    groupLetters.forEach((letter, idx) => {
-      groups[letter] = finalPool.slice(idx * 4, idx * 4 + 4).map(name => ({
+    const groups = {};
+    const usedTeams = new Set();
+
+    function getNextAvailable(pool) {
+      for (const club of pool) {
+        if (!usedTeams.has(club)) {
+          usedTeams.add(club);
+          return club;
+        }
+      }
+      for (const club of continentalGiants) {
+        if (!usedTeams.has(club)) {
+          usedTeams.add(club);
+          return club;
+        }
+      }
+      return 'EURO TITAN ' + (usedTeams.size + 1);
+    }
+
+    groupLetters.forEach(letter => {
+      const g1 = getNextAvailable(champions);
+      const g2 = getNextAvailable(runnersUp);
+      const g3 = getNextAvailable(thirdPlace);
+      const g4 = getNextAvailable(fourthPlace);
+      groups[letter] = [g1, g2, g3, g4].map(name => ({
         name, mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0
       }));
     });
@@ -3323,6 +3532,7 @@ const continentalGiants = [
     if (tournamentState.ucl) {
       tournamentState.ucl.groups = groups;
       tournamentState.ucl.groupsPlayed = false;
+      tournamentState.ucl.groupMatches = [];
       tournamentState.ucl.r16 = [];
       tournamentState.ucl.qf = [];
       tournamentState.ucl.sf = [];
@@ -3330,6 +3540,106 @@ const continentalGiants = [
       tournamentState.ucl.champion = null;
       tournamentState.ucl.qualifiersSynced = true;
     }
+  }
+
+  function openUclGateModal() {
+    const modal = document.getElementById('ucl-gate-modal');
+    if (!modal) return;
+    const feederInfo = getUclFeederStatus();
+
+    // Update progress header
+    const countEl = document.getElementById('ucl-gate-progress-count');
+    const fillEl = document.getElementById('ucl-gate-progress-fill');
+    if (countEl) countEl.textContent = `${feederInfo.finishedCount} / ${feederInfo.totalFeeders} COMPLETED`;
+    if (fillEl) {
+      const pct = Math.round((feederInfo.finishedCount / feederInfo.totalFeeders) * 100);
+      fillEl.style.width = `${pct}%`;
+    }
+
+    // Find next pending league
+    const firstPending = feederInfo.feeders.find(f => !f.isFinished);
+    const nextNameEl = document.getElementById('ucl-gate-next-league-name');
+    if (nextNameEl) {
+      nextNameEl.textContent = firstPending ? firstPending.name.toUpperCase() : 'LEAGUE';
+    }
+    const manualBtn = document.getElementById('btn-ucl-gate-go-league');
+    if (manualBtn) {
+      manualBtn.onclick = () => {
+        closeUclGateModal();
+        if (firstPending) {
+          selectTournament(firstPending.key);
+          if (tournamentState[firstPending.key]) {
+            tournamentState[firstPending.key].subView = 'sim';
+          }
+          renderActiveTournament();
+        }
+      };
+    }
+
+    // Render 9 league status cards
+    const gridEl = document.getElementById('ucl-gate-leagues-grid');
+    if (gridEl) {
+      gridEl.innerHTML = feederInfo.feeders.map(f => {
+        const leader = f.top4?.[0]?.club || f.defaultTop4Clubs?.[0] || 'TOP CLUB';
+        return `
+          <div class="ucl-gate-league-card ${f.isFinished ? 'completed' : ''}">
+            <div class="ucl-gate-league-top">
+              <span class="ucl-gate-league-title">${f.flag} ${f.name}</span>
+              <span class="ucl-gate-league-badge ${f.isFinished ? 'done' : 'pending'}">
+                ${f.isFinished ? '✅ FINISHED' : `⏳ MD ${f.curMd}/${f.totalMd}`}
+              </span>
+            </div>
+            <div class="ucl-gate-league-leader">
+              <span>${f.isFinished ? 'Champion:' : 'Leader:'}</span>
+              <strong>${leader}</strong>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    modal.hidden = false;
+  }
+
+  function closeUclGateModal() {
+    const modal = document.getElementById('ucl-gate-modal');
+    if (modal) modal.hidden = true;
+  }
+
+  function autoSimulateAllDomesticLeagues() {
+    const leagueKeys = ['pl', 'laliga', 'serieA', 'bundesliga', 'ligue1', 'ligaPortugal', 'eredivisie', 'superLig', 'scottishPrem'];
+    leagueKeys.forEach(key => {
+      if (!tournamentState[key] || !tournamentState[key].matchdays) {
+        initTournamentState(key);
+      }
+      const st = tournamentState[key];
+      if (st && st.matchdays) {
+        st.matchdays.forEach(md => {
+          md.forEach(m => {
+            if (!m.isSimulated) {
+              const res = precomputeMatchResult(m.home, m.away, false);
+              m.scoreHome = res.scoreHome;
+              m.scoreAway = res.scoreAway;
+              m.isSimulated = true;
+            }
+          });
+        });
+        st.currentMatchday = st.totalMatchdays;
+        recalculateLeagueStandings(st);
+      }
+    });
+
+    // Sync qualifiers into UCL
+    syncUclFromLeagues();
+    closeUclGateModal();
+
+    // Switch to UCL simulator view with qualified clubs
+    activeTournKey = 'ucl';
+    initTournamentState('ucl');
+    syncUclFromLeagues();
+    tournamentState.ucl.subView = 'sim';
+    activeStageFilter = 'all';
+    renderActiveTournament();
   }
 
   function resetAllLeaguesAndDraws() {
@@ -3444,7 +3754,7 @@ const continentalGiants = [
             <div class="ucl-feeders-header">
               <div class="ucl-feeders-title">
                 <i class="fa-solid fa-sitemap"></i>
-                <span>ROAD TO UCL // 16 DIRECT QUALIFICATION SPOTS (${feederInfo.finishedCount}/4 LEAGUES COMPLETED)</span>
+                <span>ROAD TO UCL // DIRECT QUALIFICATION SPOTS (${feederInfo.finishedCount}/${feederInfo.totalFeeders} LEAGUES COMPLETED)</span>
               </div>
               <div style="display:flex;align-items:center;gap:10px;">
                 ${feederInfo.finishedCount > 0 ? `
@@ -3492,7 +3802,12 @@ const continentalGiants = [
     // Event listeners
     const enterBtn = container.querySelector('#btn-ucl-enter');
     if (enterBtn) {
-enterBtn.addEventListener('click', () => {
+      enterBtn.addEventListener('click', () => {
+        const latestFeederInfo = getUclFeederStatus();
+        if (!latestFeederInfo.allFinished) {
+          openUclGateModal();
+          return;
+        }
         initTournamentState(activeTournKey);
         syncUclFromLeagues();
         state.subView = 'sim';
@@ -3531,6 +3846,7 @@ enterBtn.addEventListener('click', () => {
         spotEl.style.opacity = '0';
       });
     }
+    window._attachHeroVideoFadeIn && window._attachHeroVideoFadeIn('ucl');
   }
 
   function renderLeagueSeasonTable(state, container) {
@@ -3720,7 +4036,7 @@ enterBtn.addEventListener('click', () => {
           plSpotEl.style.opacity = '0';
         });
       }
-
+      window._attachHeroVideoFadeIn && window._attachHeroVideoFadeIn('pl');
       return; // stop here — don't render simulator below
     }
 
@@ -3886,7 +4202,7 @@ enterBtn.addEventListener('click', () => {
           saSpotEl.style.opacity = '0';
         });
       }
-
+      window._attachHeroVideoFadeIn && window._attachHeroVideoFadeIn('serieA');
       return; // stop here — don't render simulator below
     }
 
@@ -4052,7 +4368,7 @@ enterBtn.addEventListener('click', () => {
           blSpotEl.style.opacity = '0';
         });
       }
-
+      window._attachHeroVideoFadeIn && window._attachHeroVideoFadeIn('bundesliga');
       return; // stop here — don't render simulator below
     }
 
@@ -4218,7 +4534,7 @@ enterBtn.addEventListener('click', () => {
           l1SpotEl.style.opacity = '0';
         });
       }
-
+      window._attachHeroVideoFadeIn && window._attachHeroVideoFadeIn('ligue1');
       return; // stop here — don't render simulator below
     }
 
@@ -4384,7 +4700,7 @@ enterBtn.addEventListener('click', () => {
           lpSpotEl.style.opacity = '0';
         });
       }
-
+      window._attachHeroVideoFadeIn && window._attachHeroVideoFadeIn('ligaPortugal');
       return; // stop here — don't render simulator below
     }
 
@@ -4548,7 +4864,7 @@ enterBtn.addEventListener('click', () => {
           edSpotEl.style.opacity = '0';
         });
       }
-
+      window._attachHeroVideoFadeIn && window._attachHeroVideoFadeIn('eredivisie');
       return; // stop here — don't render simulator below
     }
 
@@ -4714,7 +5030,7 @@ enterBtn.addEventListener('click', () => {
           slSpotEl.style.opacity = '0';
         });
       }
-
+      window._attachHeroVideoFadeIn && window._attachHeroVideoFadeIn('superLig');
       return; // stop here — don't render simulator below
     }
 
@@ -4877,7 +5193,7 @@ enterBtn.addEventListener('click', () => {
           spSpotEl.style.opacity = '0';
         });
       }
-
+      window._attachHeroVideoFadeIn && window._attachHeroVideoFadeIn('scottishPrem');
       return; // stop here — don't render simulator below
     }
 
@@ -5044,7 +5360,7 @@ enterBtn.addEventListener('click', () => {
           llSpotEl.style.opacity = '0';
         });
       }
-
+      window._attachHeroVideoFadeIn && window._attachHeroVideoFadeIn('laliga');
       return; // stop here — don't render simulator below
     }
 
@@ -6452,6 +6768,14 @@ enterBtn.addEventListener('click', () => {
     const config = TOURNAMENTS_CONFIG[activeTournKey];
     if (!state) return;
 
+    if (activeTournKey === 'ucl') {
+      const feederInfo = getUclFeederStatus();
+      if (!feederInfo.allFinished) {
+        openUclGateModal();
+        return;
+      }
+    }
+
     state.subView = 'sim';
 
     if (config.format === 'leagueSeason') {
@@ -6574,6 +6898,13 @@ enterBtn.addEventListener('click', () => {
   }
 
   function simulateStageWithClock(stageKey) {
+    if (activeTournKey === 'ucl') {
+      const feederInfo = getUclFeederStatus();
+      if (!feederInfo.allFinished) {
+        openUclGateModal();
+        return;
+      }
+    }
     cancelAllActiveSimulationTimers();
     const state = tournamentState[activeTournKey];
     const config = TOURNAMENTS_CONFIG[activeTournKey];
@@ -7428,6 +7759,13 @@ enterBtn.addEventListener('click', () => {
         }
 
         // --- Knockout / Cup Format: Instant Full Resolution ---
+        if (activeTournKey === 'ucl') {
+          const feederInfo = getUclFeederStatus();
+          if (!feederInfo.allFinished) {
+            openUclGateModal();
+            return;
+          }
+        }
         cancelAllActiveSimulationTimers(); // Stop any running clock before resetting
         initTournamentState(activeTournKey);
         const state = tournamentState[activeTournKey]; // Declare state here—accessible for champion check below
@@ -9144,6 +9482,17 @@ enterBtn.addEventListener('click', () => {
     if (dstatsCloseBtn) dstatsCloseBtn.addEventListener('click', closeDetailedStatsModal);
     if (dstatsBackdrop) dstatsBackdrop.addEventListener('click', closeDetailedStatsModal);
 
+    // UEFA Champions League Qualification Gateway Modal Handlers
+    const uclGateCloseBtn = document.getElementById('ucl-gate-close');
+    const uclGateBackdrop = document.getElementById('ucl-gate-backdrop');
+    const uclGateCancelBtn = document.getElementById('btn-ucl-gate-cancel');
+    const uclGateAutoBtn = document.getElementById('btn-ucl-gate-auto-sim');
+
+    if (uclGateCloseBtn) uclGateCloseBtn.addEventListener('click', closeUclGateModal);
+    if (uclGateBackdrop) uclGateBackdrop.addEventListener('click', closeUclGateModal);
+    if (uclGateCancelBtn) uclGateCancelBtn.addEventListener('click', closeUclGateModal);
+    if (uclGateAutoBtn) uclGateAutoBtn.addEventListener('click', autoSimulateAllDomesticLeagues);
+
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         const detailModal = document.getElementById('match-detail-modal');
@@ -9151,6 +9500,7 @@ enterBtn.addEventListener('click', () => {
         closeHoloModal();
         closeTacModal();
         closeDetailedStatsModal();
+        closeUclGateModal();
       }
     });
 
