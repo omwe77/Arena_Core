@@ -3400,8 +3400,7 @@ html, body {
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(56, 0, 113, 0.55);
-  background:
-    background: #E9FFDB; /* light fallback, hero image removed */
+  background: #060412;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 50px rgba(56, 0, 113, 0.25);
   display: flex;
   flex-direction: column;
@@ -6734,8 +6733,7 @@ html, body {
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(255, 43, 68, 0.38);
-  background: 
-    background: #060412;
+  background: #060412;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 50px rgba(255, 43, 68, 0.18);
   display: flex;
   flex-direction: column;
@@ -7506,8 +7504,7 @@ html, body {
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(255, 201, 74, 0.35);
-  background: 
-    background: #060412;
+  background: #060412;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 50px rgba(255, 201, 74, 0.15);
   display: flex;
   flex-direction: column;
@@ -13239,9 +13236,59 @@ border-color: #facc15;
   height: 100%;
   overflow: hidden;
   z-index: 0;
-  pointer-events: none;
+  pointer-events: auto;
   background: transparent;
   border-radius: inherit;
+}
+
+/* Transparent full-cover shield that sits above the video — blocks all mouse and touch
+   events so the player never triggers any pause, skip, or media control overlays */
+.hero-video-click-shield {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  cursor: default;
+  -webkit-user-select: none;
+  user-select: none;
+  pointer-events: all !important;
+  touch-action: none !important;
+}
+
+/* Belt-and-suspenders: hide every part of the native browser media controls
+   toolbar on hero background videos via shadow-DOM pseudo-elements */
+.hero-video-player::-webkit-media-controls-enclosure,
+.hero-video-player::-webkit-media-controls-panel,
+.hero-video-player::-webkit-media-controls,
+.hero-video-player::-webkit-media-controls-play-button,
+.hero-video-player::-webkit-media-controls-timeline-container,
+.hero-video-player::-webkit-media-controls-current-time-display,
+.hero-video-player::-webkit-media-controls-time-remaining-display,
+.hero-video-player::-webkit-media-controls-timeline,
+.hero-video-player::-webkit-media-controls-seek-back-button,
+.hero-video-player::-webkit-media-controls-seek-forward-button,
+.hero-video-player::-webkit-media-controls-fullscreen-button,
+.hero-video-player::-webkit-media-controls-rewind-button,
+.hero-video-player::-webkit-media-controls-return-to-realtime-button,
+.hero-video-player::-webkit-media-controls-toggle-closed-captions-button,
+.hero-video-player::-webkit-media-controls-volume-slider-container,
+.hero-video-player::-webkit-media-controls-mute-button,
+.hero-video-player::-webkit-media-controls-volume-slider,
+.hero-video-player::-webkit-media-controls-overlay-play-button,
+.hero-video-player::-webkit-media-controls-start-playback-button,
+.hero-video-player::-internal-media-controls-button-panel,
+.hero-video-player::-internal-media-controls-overflow-button,
+.hero-video-player::-internal-media-controls-download-button,
+.hero-video-player::-internal-track-list-menu,
+.hero-video-player::-moz-media-controls {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 .hero-video-iframe {
@@ -13255,8 +13302,48 @@ border-color: #facc15;
   transform: translate(-50%, -50%);
   border: none;
   filter: brightness(0.68) contrast(1.05) saturate(1.1);
-  pointer-events: none;
+  pointer-events: none !important;
+  touch-action: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-video-iframe.hero-video-playing {
+  opacity: 1 !important;
+}
+
+.hero-video-player {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  transform: translate(-50%, -50%);
+  filter: brightness(0.68) contrast(1.05) saturate(1.1);
+  pointer-events: none !important;
+  touch-action: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
   transition: opacity 0.5s ease;
+}
+
+/* Suppress all native browser video controls on hero background videos */
+.hero-video-player::-webkit-media-controls,
+.hero-video-player::-webkit-media-controls-enclosure,
+.hero-video-player::-webkit-media-controls-panel,
+.hero-video-player::-webkit-media-controls-play-button,
+.hero-video-player::-webkit-media-controls-start-playback-button,
+.hero-video-player::-webkit-media-controls-overlay-play-button,
+.hero-video-player::-moz-media-controls {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 /* Ensure all hero foreground content renders on top of the video */
@@ -13267,19 +13354,44 @@ border-color: #facc15;
   overflow: hidden;
 }
 
-.wc-hero > *:not(.hero-video-bg-wrap),
-.ucl-hero > *:not(.hero-video-bg-wrap),
-.euro-hero > *:not(.hero-video-bg-wrap),
-.copa-hero > *:not(.hero-video-bg-wrap),
-.pl-hero > *:not(.hero-video-bg-wrap),
-.seriea-hero > *:not(.hero-video-bg-wrap),
-.bundesliga-hero > *:not(.hero-video-bg-wrap),
-.ligue1-hero > *:not(.hero-video-bg-wrap),
-.ligaportugal-hero > *:not(.hero-video-bg-wrap),
-.eredivisie-hero > *:not(.hero-video-bg-wrap),
-.superlig-hero > *:not(.hero-video-bg-wrap),
-.scottishprem-hero > *:not(.hero-video-bg-wrap),
-.laliga-hero > *:not(.hero-video-bg-wrap) {
+/* Ensure tournament overlays remain absolute full bleed across the hero video */
+.wc-hero-overlay,
+.ucl-hero-overlay,
+.euro-hero-overlay,
+.copa-hero-overlay,
+.pl-hero-overlay,
+.seriea-hero-overlay,
+.bundesliga-hero-overlay,
+.ligue1-hero-overlay,
+.ligaportugal-hero-overlay,
+.eredivisie-hero-overlay,
+.superlig-hero-overlay,
+.scottishprem-hero-overlay,
+.laliga-hero-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  background: 
+    linear-gradient(90deg, rgba(6, 12, 10, 0.90) 0%, rgba(6, 12, 10, 0.52) 38%, rgba(6, 12, 10, 0.18) 65%, rgba(6, 12, 10, 0.60) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.20) 0%, transparent 40%, rgba(5, 10, 8, 0.90) 100%) !important;
+}
+
+.wc-hero > *:not(.hero-video-bg-wrap):not([class*="-overlay"]):not([class*="-spotlight"]),
+.ucl-hero > *:not(.hero-video-bg-wrap):not([class*="-overlay"]):not([class*="-spotlight"]),
+.euro-hero > *:not(.hero-video-bg-wrap):not([class*="-overlay"]):not([class*="-spotlight"]),
+.copa-hero > *:not(.hero-video-bg-wrap):not([class*="-overlay"]):not([class*="-spotlight"]),
+.pl-hero > *:not(.hero-video-bg-wrap):not([class*="-overlay"]):not([class*="-spotlight"]),
+.seriea-hero > *:not(.hero-video-bg-wrap):not([class*="-overlay"]):not([class*="-spotlight"]),
+.bundesliga-hero > *:not(.hero-video-bg-wrap):not([class*="-overlay"]):not([class*="-spotlight"]),
+.ligue1-hero > *:not(.hero-video-bg-wrap):not([class*="-overlay"]):not([class*="-spotlight"]),
+.ligaportugal-hero > *:not(.hero-video-bg-wrap):not([class*="-overlay"]):not([class*="-spotlight"]),
+.eredivisie-hero > *:not(.hero-video-bg-wrap):not([class*="-overlay"]):not([class*="-spotlight"]),
+.superlig-hero > *:not(.hero-video-bg-wrap):not([class*="-overlay"]):not([class*="-spotlight"]),
+.scottishprem-hero > *:not(.hero-video-bg-wrap):not([class*="-overlay"]):not([class*="-spotlight"]),
+.laliga-hero > *:not(.hero-video-bg-wrap):not([class*="-overlay"]):not([class*="-spotlight"]) {
   position: relative;
   z-index: 2;
 }
@@ -13294,7 +13406,8 @@ border-color: #facc15;
   z-index: 25;
   pointer-events: auto;
   user-select: none;
-  animation: hvhFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0;
+  animation: hvhFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 1.4s forwards;
 }
 
 @keyframes hvhFadeIn {
@@ -13621,12 +13734,14 @@ border-color: #facc15;
   background: #000000;
 }
 
-.hero-theater-video-frame iframe {
+.hero-theater-video-frame iframe,
+.hero-theater-video-frame video {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   border: none;
+  object-fit: cover;
 }
 
 .hero-theater-footer {
@@ -13901,7 +14016,7 @@ border-color: #facc15;
    GRASSY FROSTED BLENDING THEME (STANDINGS WIDGETS & HERO TEXT)
    ============================================================ */
 
-/* Translucent grassy-tinted frosted blend for all tournament standings widgets */
+/* Translucent grassy-tinted frosted blend for all tournament standings widgets & hero cards */
 .pl-standings-widget,
 .seriea-standings-widget,
 .bundesliga-standings-widget,
@@ -13910,16 +14025,20 @@ border-color: #facc15;
 .eredivisie-standings-widget,
 .superlig-standings-widget,
 .scottishprem-standings-widget,
-.laliga-standings-widget {
+.laliga-standings-widget,
+.ucl-cyber-card,
+.euro-cyber-card,
+.copa-cyber-card,
+.wc-stats-ribbon {
   background: rgba(233, 255, 219, 0.40) !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
   border: 1px solid rgba(46, 204, 113, 0.45) !important;
   box-shadow: 0 16px 36px rgba(10, 28, 18, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
   border-radius: 14px !important;
 }
 
-/* Standings widget headers */
+/* Standings & Hero card headers */
 .pl-standings-widget-header,
 .seriea-standings-widget-header,
 .bundesliga-standings-widget-header,
@@ -13928,7 +14047,10 @@ border-color: #facc15;
 .eredivisie-standings-widget-header,
 .superlig-standings-widget-header,
 .scottishprem-standings-widget-header,
-.standings-widget-header {
+.standings-widget-header,
+.ucl-cyber-header,
+.euro-cyber-header,
+.copa-cyber-header {
   border-bottom: 1px solid rgba(15, 36, 26, 0.15) !important;
 }
 
@@ -13940,9 +14062,40 @@ border-color: #facc15;
 .eredivisie-standings-widget-title,
 .superlig-standings-widget-title,
 .scottishprem-standings-widget-title,
-.standings-widget-title {
+.standings-widget-title,
+.ucl-cyber-header span,
+.euro-cyber-header span,
+.copa-cyber-header span {
   color: #0A2214 !important;
   text-shadow: 0 1px 2px rgba(233, 255, 219, 0.8) !important;
+  font-weight: 800 !important;
+}
+
+.pl-standings-view-all,
+.seriea-standings-view-all,
+.bundesliga-standings-view-all,
+.ligue1-standings-view-all,
+.ligaportugal-standings-view-all,
+.eredivisie-standings-view-all,
+.superlig-standings-view-all,
+.scottishprem-standings-view-all,
+.standings-view-all {
+  color: #123B24 !important;
+  font-weight: 800 !important;
+  transition: all 0.2s ease !important;
+}
+
+.pl-standings-view-all:hover,
+.seriea-standings-view-all:hover,
+.bundesliga-standings-view-all:hover,
+.ligue1-standings-view-all:hover,
+.ligaportugal-standings-view-all:hover,
+.eredivisie-standings-view-all:hover,
+.superlig-standings-view-all:hover,
+.scottishprem-standings-view-all:hover,
+.standings-view-all:hover {
+  color: #041208 !important;
+  transform: translateX(3px) !important;
 }
 
 /* Table columns & cells */
@@ -13954,7 +14107,10 @@ border-color: #facc15;
 .eredivisie-widget-table th,
 .superlig-widget-table th,
 .scottishprem-widget-table th,
-.widget-table th {
+.widget-table th,
+.ucl-cyber-table th,
+.euro-cyber-table th,
+.copa-cyber-table th {
   color: #18472E !important;
   font-weight: 800 !important;
 }
@@ -13967,7 +14123,10 @@ border-color: #facc15;
 .eredivisie-widget-table td,
 .superlig-widget-table td,
 .scottishprem-widget-table td,
-.widget-table td {
+.widget-table td,
+.ucl-cyber-table td,
+.euro-cyber-table td,
+.copa-cyber-table td {
   color: #091C10 !important;
   border-bottom: 1px solid rgba(15, 36, 26, 0.08) !important;
 }
@@ -13980,16 +14139,136 @@ border-color: #facc15;
 .eredivisie-widget-table td:nth-child(2),
 .superlig-widget-table td:nth-child(2),
 .scottishprem-widget-table td:nth-child(2),
-.widget-table td:nth-child(2) {
+.widget-table td:nth-child(2),
+.ucl-cyber-table .team-col,
+.euro-cyber-table .team-col,
+.copa-cyber-table .team-col {
   color: #091C10 !important;
   font-weight: 800 !important;
 }
 
+.pl-widget-pts-cell,
+.seriea-widget-pts-cell,
+.bundesliga-widget-pts-cell,
+.ligue1-widget-pts-cell,
+.ligaportugal-widget-pts-cell,
+.eredivisie-widget-pts-cell,
+.superlig-widget-pts-cell,
+.scottishprem-widget-pts-cell,
+.widget-pts-cell {
+  color: #091C10 !important;
+  font-weight: 900 !important;
+}
+
+.ucl-cyber-table .pos-col,
+.euro-cyber-table .pos-col,
+.copa-cyber-table .pos-col {
+  color: #123B24 !important;
+  font-weight: 800 !important;
+}
+
+.ucl-cyber-table .pnt-col,
+.euro-cyber-table .pnt-col,
+.copa-cyber-table .pnt-col {
+  color: #123B24 !important;
+  font-weight: 900 !important;
+  text-shadow: none !important;
+}
+
+/* Position badges unified across all leagues */
+.pl-pos-badge,
+.seriea-pos-badge,
+.bundesliga-pos-badge,
+.ligue1-pos-badge,
+.ligaportugal-pos-badge,
+.eredivisie-pos-badge,
+.superlig-pos-badge,
+.scottishprem-pos-badge,
+.pos-badge {
+  border-radius: 6px !important;
+  font-weight: 800 !important;
+}
+
+/* 1st Place Champion Badge */
+.pl-pos-champion,
+.sa-pos-champion,
+.b-pos-champion,
+.l1-pos-champion,
+.lp-pos-champion,
+.e-pos-champion,
+.sl-pos-champion,
+.sp-pos-champion,
+.pos-champion {
+  background: #FFD700 !important;
+  color: #0A2214 !important;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5) !important;
+  border: 1px solid rgba(255, 215, 0, 0.8) !important;
+}
+
+/* UCL / Top European Qualification Badge */
+.pl-pos-ucl,
+.sa-pos-ucl,
+.b-pos-ucl,
+.l1-pos-ucl,
+.lp-pos-ucl,
+.e-pos-ucl,
+.sl-pos-ucl,
+.sp-pos-ucl,
+.pos-ucl {
+  background: rgba(0, 153, 255, 0.22) !important;
+  color: #0044bb !important;
+  border: 1px solid rgba(0, 153, 255, 0.45) !important;
+}
+
+/* UEL / Secondary Qualification Badge */
+.pl-pos-uel,
+.sa-pos-uel,
+.b-pos-uel,
+.l1-pos-uel,
+.lp-pos-uel,
+.e-pos-uel,
+.sl-pos-uel,
+.sp-pos-uel,
+.pos-uel {
+  background: rgba(255, 140, 0, 0.20) !important;
+  color: #8a4800 !important;
+  border: 1px solid rgba(255, 140, 0, 0.45) !important;
+}
+
 /* Position mid badges */
-.pl-pos-mid, .sa-pos-mid, .b-pos-mid, .l1-pos-mid, .lp-pos-mid, .e-pos-mid, .sl-pos-mid, .sp-pos-mid, .pos-mid {
+.pl-pos-mid,
+.sa-pos-mid,
+.b-pos-mid,
+.l1-pos-mid,
+.lp-pos-mid,
+.e-pos-mid,
+.sl-pos-mid,
+.sp-pos-mid,
+.pos-mid {
   background: rgba(15, 36, 26, 0.08) !important;
   color: #123B24 !important;
   border: 1px solid rgba(15, 36, 26, 0.18) !important;
+}
+
+/* World Cup stats ribbon integration */
+.wc-stats-ribbon .wc-ribbon-number {
+  color: #091C10 !important;
+  font-weight: 900 !important;
+}
+
+.wc-stats-ribbon .wc-ribbon-label {
+  color: #18472E !important;
+  font-weight: 800 !important;
+}
+
+.wc-stats-ribbon .wc-ribbon-divider {
+  background: rgba(15, 36, 26, 0.15) !important;
+}
+
+.wc-stats-ribbon .wc-ribbon-icon-wrap {
+  background: rgba(46, 204, 113, 0.2) !important;
+  border: 1px solid rgba(46, 204, 113, 0.4) !important;
+  color: #123B24 !important;
 }
 
 /* Hero Typography: Crisp, glowing and legible across all dynamic backgrounds */
@@ -15157,6 +15436,7 @@ tr:hover .fa-crown {
 .eredivisie-standings-widget,
 .superlig-standings-widget,
 .scottishprem-standings-widget,
+.laliga-standings-widget,
 .widget-card,
 .group-card,
 .tech-card {
@@ -15189,6 +15469,7 @@ tr:hover .fa-crown {
 .eredivisie-standings-widget:hover,
 .superlig-standings-widget:hover,
 .scottishprem-standings-widget:hover,
+.laliga-standings-widget:hover,
 .widget-card:hover,
 .group-card:hover,
 .tech-card:hover {
@@ -15583,6 +15864,327 @@ tr:hover .fa-crown {
   transform: scale(1.16);
   transition: transform 0.2s ease !important;
 }
+
+/* ============================================================
+   UEFA CHAMPIONS LEAGUE QUALIFICATION GATEWAY MODAL
+   ============================================================ */
+
+.ucl-gate-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 10000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px !important;
+}
+.ucl-gate-modal[hidden] { display: none !important; }
+
+.ucl-gate-backdrop {
+  position: absolute !important;
+  inset: 0 !important;
+  background: rgba(3, 9, 20, 0.88) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  z-index: 1 !important;
+}
+
+.ucl-gate-dialog {
+  position: relative !important;
+  z-index: 10 !important;
+  width: min(96vw, 920px) !important;
+  max-height: min(92vh, 840px) !important;
+  background: radial-gradient(circle at 50% 0%, #0a1f3d 0%, #040d1a 60%, #02070e 100%) !important;
+  border: 1px solid rgba(0, 240, 255, 0.4) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 0 50px rgba(0, 140, 255, 0.25), 0 30px 80px rgba(0, 0, 0, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  color: #fff !important;
+  animation: uclGateIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  padding: 24px 28px !important;
+  gap: 16px !important;
+}
+
+@keyframes uclGateIn {
+  from { opacity: 0; transform: scale(0.94) translateY(16px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.ucl-gate-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.2) !important;
+  padding-bottom: 14px !important;
+}
+
+.ucl-gate-starball {
+  font-size: 2.4rem !important;
+  line-height: 1 !important;
+  filter: drop-shadow(0 0 16px rgba(0, 240, 255, 0.8)) !important;
+  animation: uclStarSpin 12s linear infinite !important;
+}
+
+@keyframes uclStarSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.ucl-gate-header-text {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
+
+.ucl-gate-tag {
+  font-family: var(--font-hud, monospace) !important;
+  font-size: 0.72rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 1.5px !important;
+  color: #00F0FF !important;
+  text-transform: uppercase !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.ucl-gate-title {
+  margin: 0 !important;
+  font-size: 1.35rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.5px !important;
+  color: #FFFFFF !important;
+  text-shadow: 0 0 20px rgba(0, 240, 255, 0.4) !important;
+}
+
+.ucl-gate-notice {
+  background: rgba(0, 240, 255, 0.05) !important;
+  border: 1px solid rgba(0, 240, 255, 0.2) !important;
+  border-left: 4px solid #00F0FF !important;
+  border-radius: 10px !important;
+  padding: 12px 16px !important;
+  font-size: 0.88rem !important;
+  line-height: 1.45 !important;
+  color: #E2E8F0 !important;
+}
+
+.ucl-gate-notice p {
+  margin: 0 !important;
+}
+
+.ucl-gate-subnotice {
+  margin-top: 6px !important;
+  color: #A0AEC0 !important;
+  font-size: 0.82rem !important;
+}
+
+.ucl-gate-progress-wrap {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+.ucl-gate-progress-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  font-size: 0.8rem !important;
+  font-weight: 800 !important;
+  font-family: var(--font-hud, monospace) !important;
+}
+
+.ucl-gate-progress-label {
+  color: #00F0FF !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.ucl-gate-progress-count {
+  color: #FFC94A !important;
+  font-size: 0.85rem !important;
+}
+
+.ucl-gate-progress-bar {
+  width: 100% !important;
+  height: 8px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.ucl-gate-progress-fill {
+  height: 100% !important;
+  background: linear-gradient(90deg, #00F0FF, #2ECC71, #FFC94A) !important;
+  border-radius: 999px !important;
+  transition: width 0.4s ease !important;
+  box-shadow: 0 0 12px rgba(46, 204, 113, 0.6) !important;
+}
+
+.ucl-gate-leagues-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 10px !important;
+  max-height: 280px !important;
+  overflow-y: auto !important;
+  padding-right: 4px !important;
+}
+
+@media (max-width: 768px) {
+  .ucl-gate-leagues-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+.ucl-gate-league-card {
+  background: rgba(10, 25, 48, 0.7) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 10px !important;
+  padding: 10px 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  transition: all 0.2s ease !important;
+}
+
+.ucl-gate-league-card.completed {
+  border-color: rgba(46, 204, 113, 0.5) !important;
+  background: rgba(10, 38, 25, 0.6) !important;
+  box-shadow: inset 0 0 15px rgba(46, 204, 113, 0.1) !important;
+}
+
+.ucl-gate-league-top {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.ucl-gate-league-title {
+  font-size: 0.8rem !important;
+  font-weight: 800 !important;
+  color: #FFFFFF !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.ucl-gate-league-badge {
+  font-size: 0.68rem !important;
+  font-weight: 800 !important;
+  font-family: var(--font-hud, monospace) !important;
+  padding: 2px 7px !important;
+  border-radius: 4px !important;
+  letter-spacing: 0.4px !important;
+}
+
+.ucl-gate-league-badge.done {
+  background: rgba(46, 204, 113, 0.2) !important;
+  color: #2ECC71 !important;
+  border: 1px solid rgba(46, 204, 113, 0.4) !important;
+}
+
+.ucl-gate-league-badge.pending {
+  background: rgba(255, 201, 74, 0.15) !important;
+  color: #FFC94A !important;
+  border: 1px solid rgba(255, 201, 74, 0.35) !important;
+}
+
+.ucl-gate-league-leader {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 0.76rem !important;
+  color: #A0AEC0 !important;
+}
+
+.ucl-gate-league-leader strong {
+  color: #00F0FF !important;
+}
+
+.ucl-gate-league-card.completed .ucl-gate-league-leader strong {
+  color: #2ECC71 !important;
+}
+
+.ucl-gate-actions {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  border-top: 1px solid rgba(0, 240, 255, 0.15) !important;
+  padding-top: 14px !important;
+}
+
+.ucl-gate-btn-auto {
+  background: linear-gradient(135deg, #00B4D8 0%, #0077B6 50%, #023E8A 100%) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(0, 240, 255, 0.6) !important;
+  border-radius: 10px !important;
+  padding: 13px 20px !important;
+  font-size: 0.92rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.6px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  cursor: pointer !important;
+  box-shadow: 0 6px 20px rgba(0, 180, 216, 0.4) !important;
+  transition: all 0.2s ease !important;
+}
+
+.ucl-gate-btn-auto:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 26px rgba(0, 240, 255, 0.6) !important;
+  filter: brightness(1.1) !important;
+}
+
+.ucl-gate-actions-row {
+  display: flex !important;
+  gap: 10px !important;
+}
+
+.ucl-gate-btn-manual {
+  flex: 1 !important;
+  background: rgba(255, 201, 74, 0.12) !important;
+  color: #FFC94A !important;
+  border: 1px solid rgba(255, 201, 74, 0.4) !important;
+  border-radius: 8px !important;
+  padding: 10px 16px !important;
+  font-size: 0.82rem !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.ucl-gate-btn-manual:hover {
+  background: rgba(255, 201, 74, 0.22) !important;
+  border-color: #FFC94A !important;
+  color: #FFF !important;
+}
+
+.ucl-gate-btn-cancel {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #A0AEC0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 8px !important;
+  padding: 10px 18px !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.ucl-gate-btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #FFF !important;
+}
+
 
 
 

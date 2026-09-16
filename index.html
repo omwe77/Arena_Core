@@ -1437,6 +1437,69 @@
     </div>
   </div>
 
+  <!-- ============================================================
+       UCL QUALIFICATION GATEWAY MODAL (DOMESTIC LEAGUES REQUIRED)
+       ============================================================ -->
+  <div id="ucl-gate-modal" class="modal ucl-gate-modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="ucl-gate-title">
+    <div class="modal-backdrop ucl-gate-backdrop" id="ucl-gate-backdrop"></div>
+    <div class="modal-dialog ucl-gate-dialog">
+      <button type="button" id="ucl-gate-close" class="modal-close-btn" aria-label="Close modal">✕</button>
+
+      <!-- Header -->
+      <div class="ucl-gate-header">
+        <div class="ucl-gate-starball">⭐</div>
+        <div class="ucl-gate-header-text">
+          <span class="ucl-gate-tag"><i class="fa-solid fa-lock"></i> UEFA CHAMPIONS LEAGUE // QUALIFICATION GATEWAY</span>
+          <h2 id="ucl-gate-title" class="ucl-gate-title">DOMESTIC LEAGUE SEASONS REQUIRED</h2>
+        </div>
+      </div>
+
+      <!-- Description / Explanation -->
+      <div class="ucl-gate-notice">
+        <p>
+          The <strong>UEFA Champions League</strong> features Europe's top clubs who earn qualification through their domestic league standings.
+        </p>
+        <p class="ucl-gate-subnotice">
+          To simulate the Champions League with authentic qualifiers, <strong>all domestic league seasons must conclude first</strong>.
+        </p>
+      </div>
+
+      <!-- Progress Meter -->
+      <div class="ucl-gate-progress-wrap">
+        <div class="ucl-gate-progress-header">
+          <span class="ucl-gate-progress-label"><i class="fa-solid fa-list-check"></i> DOMESTIC LEAGUES STATUS</span>
+          <span class="ucl-gate-progress-count" id="ucl-gate-progress-count">0 / 9 COMPLETED</span>
+        </div>
+        <div class="ucl-gate-progress-bar">
+          <div class="ucl-gate-progress-fill" id="ucl-gate-progress-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- 9 Leagues Status Grid -->
+      <div class="ucl-gate-leagues-grid" id="ucl-gate-leagues-grid">
+        <!-- Injected dynamically with league cards -->
+      </div>
+
+      <!-- Action Footer -->
+      <div class="ucl-gate-actions">
+        <button type="button" class="ucl-gate-btn-auto" id="btn-ucl-gate-auto-sim">
+          <i class="fa-solid fa-bolt"></i>
+          <span>⚡ AUTO-SIMULATE ALL LEAGUES &amp; PROCEED TO UCL</span>
+        </button>
+        <div class="ucl-gate-actions-row">
+          <button type="button" class="ucl-gate-btn-manual" id="btn-ucl-gate-go-league">
+            <i class="fa-solid fa-play"></i>
+            <span>SIMULATE PENDING LEAGUE (<span id="ucl-gate-next-league-name">PREMIER LEAGUE</span>)</span>
+          </button>
+          <button type="button" class="ucl-gate-btn-cancel" id="btn-ucl-gate-cancel">
+            <span>BACK TO UCL HOME</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Real Data Layer & Application Script -->
   <script src="data/real-tournaments.js" defer></script>
   <script src="data/hero-videos.js" defer></script>
