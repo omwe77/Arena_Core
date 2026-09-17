@@ -15,7 +15,7 @@
     if (saved !== null) {
       sfxEnabled = saved === 'true';
     }
-  } catch (e) {
+  } catch {
     sfxEnabled = true;
   }
 
@@ -175,7 +175,7 @@
 
       whiteNoise.start(now);
       whiteNoise.stop(now + 1.45);
-    } catch (e) {}
+    } catch { /* WebAudio API unavailable — suppress */ }
   }
 
   /**
@@ -273,7 +273,7 @@
     sfxEnabled = !!enabled;
     try {
       localStorage.setItem('arena_sfx_enabled', String(sfxEnabled));
-    } catch (e) {}
+    } catch { /* localStorage unavailable — suppress */ }
     updateAudioToggleButton();
   }
 
