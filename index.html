@@ -1535,12 +1535,46 @@
     </div>
   </div>
 
+  <!-- ============================================================
+       METHODOLOGY & DATA PROVENANCE MODAL (/data & /methodology)
+       ============================================================ -->
+  <div id="methodology-modal" class="modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="methodology-modal-title">
+    <div class="modal-backdrop" id="methodology-modal-backdrop" onclick="document.getElementById('methodology-modal').hidden=true;"></div>
+    <div class="modal-dialog" style="max-width: 760px; background: rgba(13, 17, 26, 0.96); border: 1px solid rgba(46, 204, 113, 0.3); border-radius: 16px; padding: 28px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); color: #E2E8F0; font-family: var(--font-body, system-ui);">
+      <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 16px; margin-bottom: 20px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 1.6rem; color: #2ECC71;">📐</span>
+          <div>
+            <h2 id="methodology-modal-title" style="font-family: var(--font-title); font-size: 1.25rem; font-weight: 800; color: #FFFFFF; margin: 0; letter-spacing: 1px;">DATA PROVENANCE &amp; SIMULATION METHODOLOGY</h2>
+            <div style="font-size: 0.75rem; color: #94A3B8; font-family: var(--font-hud);">MODEL: POISSON v1.0.0 // DATASET: 2024.11</div>
+          </div>
+        </div>
+        <button type="button" class="modal-close" style="background: none; border: none; font-size: 1.4rem; color: #94A3B8; cursor: pointer;" onclick="document.getElementById('methodology-modal').hidden=true;">✕</button>
+      </div>
+      <div style="max-height: 60vh; overflow-y: auto; padding-right: 8px; line-height: 1.6; font-size: 0.9rem;">
+        <h3 style="color: #2ECC71; font-size: 1rem; margin-top: 0;"><i class="fa-solid fa-database"></i> 1. Data Provenance &amp; Normalization</h3>
+        <p>Real-world competition metadata, fixtures, standings, and top scorer statistics are acquired through the <strong>API-Football</strong> layer and normalized locally into sanitized offline stores. Team and tournament emblems are retrieved from the FotMob resource network and FlagCDN.</p>
+        
+        <h3 style="color: #2ECC71; font-size: 1rem; margin-top: 20px;"><i class="fa-solid fa-calculator"></i> 2. Mathematical Simulation Engine</h3>
+        <p>Match score generation utilizes an attack/defense-weighted <strong>Poisson Distribution</strong> model ($P(k \text{ goals}) = \frac{\lambda^k e^{-\lambda}}{k!}$). Team baseline parameters $\lambda_{home}$ and $\lambda_{away}$ are calibrated from historical goal tallies, defensive clean-sheet records, and home stadium advantage factors.</p>
+        
+        <h3 style="color: #2ECC71; font-size: 1rem; margin-top: 20px;"><i class="fa-solid fa-shield-halved"></i> 3. State Provenance Integrity</h3>
+        <p>ARENA CORE maintains a strict boundary between <strong>REAL HISTORICAL DATA</strong> and <strong>HYPOTHETICAL SIMULATION</strong>. All simulated results are marked with deterministic simulation IDs and are never presented as official football results.</p>
+      </div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px;">
+        <button type="button" style="background: #2ECC71; color: #0D111A; font-weight: 800; border: none; border-radius: 8px; padding: 10px 22px; cursor: pointer;" onclick="document.getElementById('methodology-modal').hidden=true;">CLOSE</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Vendor Libraries: Anime.js for Spring & Stagger Animations & Canvas-Confetti for Celebrations -->
   <script src="vendor/anime.min.js"></script>
   <script src="vendor/confetti.browser.js"></script>
   <!-- Real Data Layer & Application Script -->
   <script src="data/real-tournaments.js" defer></script>
   <script src="data/hero-videos.js" defer></script>
+  <script src="js/state.js" defer></script>
+  <script src="js/router.js" defer></script>
   <script src="js/audio-fx.js" defer></script>
   <script src="js/motion-fx.js" defer></script>
   <script src="app.js" defer></script>
