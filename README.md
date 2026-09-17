@@ -4,6 +4,7 @@
 
 [![Azure Static Web Apps Deployment](https://img.shields.io/badge/Live%20Demo-Azure%20Static%20Web%20Apps-2ecc71?style=for-the-badge&logo=microsoftazure)](https://lemon-ocean-06aede400.5.azurestaticapps.net)
 [![Tech Stack](https://img.shields.io/badge/Stack-Vanilla%20JS%20%7C%20HTML5%20%7C%20CSS3%20%7C%20Bash-00E5FF?style=for-the-badge)](https://github.com/omwe77/SIEP--arena_coore)
+[![Release](https://img.shields.io/badge/Release-v1.0.0-ff6b35?style=for-the-badge)](https://github.com/omwe77/SIEP--arena_coore/releases/tag/v1.0.0)
 
 ---
 
@@ -25,8 +26,10 @@ Experience the live application on Azure Static Web Apps (auto-deploys on every 
 
 * **Frontend Architecture**: Semantic HTML5, Vanilla CSS3 (Custom Design System & Glassmorphism), Modern Flexbox & CSS Grid.
 * **Scripting & Engine**: Vanilla JavaScript (ES6+), Zero Heavy Framework Dependencies.
+* **Motion & Audio**: Anime.js motion engine, procedural WebAudio API synthesizer (zero audio asset downloads).
 * **Simulation Algorithm**: Poisson Goal Distribution Model ($\lambda$ adjusted for FIFA rankings, home advantage, and attack/defense strength).
 * **Automation & DevOps**: Bash Automation Script (`setup.sh`), Git Version Control, GitHub Actions / Azure Static Web Apps CI/CD.
+* **Testing**: Playwright E2E test suite, custom Node.js validation scripts.
 
 ---
 
@@ -71,6 +74,13 @@ chmod +x setup.sh
   - *International*: FIFA World Cup 2026, UEFA EURO 2024, Copa América.
   - *Continental*: UEFA Champions League (36-team Swiss League Phase).
   - *Domestic Leagues*: Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Liga Portugal, Eredivisie, Süper Lig, Scottish Premiership.
+- [x] **Dynamic Hero Video Backgrounds**:
+  - Each of the 13 competitions has a dedicated, full-viewport looping video background on its hero section.
+  - Auto-play with configurable start offsets and seamless loop behavior.
+- [x] **Liga Portugal Embeddable Highlight Reel**:
+  - Inline YouTube iframe gateway directly within the Liga Portugal hero section.
+- [x] **UCL 9-League Qualification Gateway**:
+  - Interactive panel showing the 9 domestic leagues feeding teams into the UEFA Champions League.
 - [x] **World Cup 48-Team Custom Draw Modal**:
   - Interactive selection of all 48 qualified nations across 6 global confederations (UEFA, CONMEBOL, CONCACAF, CAF, AFC, OFC).
   - Real 2026 confederation allocation presets & FIFA strength tiers.
@@ -78,8 +88,14 @@ chmod +x setup.sh
   - Group Stages (Groups A–L) $\to$ Round of 32 $\to$ Round of 16 $\to$ Quarter-finals $\to$ Semi-finals $\to$ Grand Final.
 - [x] **Live Match Timers & Authentic Player Scorers**:
   - Minute-by-minute live cards, authentic player goal events, extra time (AET), and penalty shootouts.
+- [x] **Anime.js Motion Engine**:
+  - Smooth entrance animations for cards, panels, and stat reveals using Anime.js.
+- [x] **Procedural Audio FX Synthesizer**:
+  - Zero asset downloads — all sound effects (goal cheer, kick, fanfare, UI click) are generated in real-time via the WebAudio API.
+  - Persistent SFX toggle button with `localStorage` preference memory.
 - [x] **High-Stakes Knockout UI & Celebrations**:
   - Championship crowning ceremony with confetti particle physics engine.
+  - Goal celebration banners with animated entrance and timed dismissal.
 - [x] **Mario Striker Interactive Header**:
   - Rigged vector character running on grass turf with power shots and comic celebrations.
 - [x] **Fully Responsive Design**:
@@ -97,10 +113,25 @@ SIEP--arena_coore/
 ├── style.css                   # Custom CSS3 styling, responsive grid & themes
 ├── app.js                      # Core simulation engine & DOM controllers
 ├── setup.sh                    # Automated bash verification & launch script
+├── js/
+│   ├── audio-fx.js             # Procedural WebAudio synthesizer & SFX toggle
+│   └── motion-fx.js            # Anime.js motion orchestration engine
+├── vendor/
+│   ├── anime.min.js            # Anime.js animation library (vendored)
+│   └── confetti.browser.js     # Canvas-confetti particle engine (vendored)
 ├── data/
 │   ├── real-tournaments.js     # API-Football real data cache
+│   ├── hero-videos.js          # Hero video ID & config per competition
 │   └── real-tournaments.json   # Competition metadata index
-├── assets/                     # Stadium & header graphic assets
-├── scratch/                    # Verification test suite & automation checks
+├── assets/                     # Stadium, header graphic & video assets
+├── e2e/                        # Playwright end-to-end test suite
+├── tests/                      # Unit & integration test suite
+├── scripts/                    # Utility & maintenance scripts
 └── README.md                   # Complete showcase documentation
 ```
+
+---
+
+## 📄 License
+
+ISC © [Om Dangol](https://github.com/omwe77) & Contributors
