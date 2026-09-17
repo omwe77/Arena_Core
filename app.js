@@ -1547,6 +1547,9 @@ function setupNavigation() {
   // ---------------------------------------------------------------------------
   function selectTournament(key) {
     if (!TOURNAMENTS_CONFIG[key]) return;
+    if (window.ArenaAudio) {
+      window.ArenaAudio.playClick();
+    }
     cancelAllActiveSimulationTimers();
 
     // Check if the simulator tab is currently selected in top nav or if previously in sim subview
@@ -6599,14 +6602,25 @@ function getUclFeederStatus() {
       match.currentSimMinute = (match.currentSimMinute || 0) + 6;
       const curMin = match.currentSimMinute;
 
+      const prevH = match.currentDisplayScoreHome || 0;
+      const prevA = match.currentDisplayScoreAway || 0;
       match.currentDisplayScoreHome = match.events.filter(e => e.team === 'home' && e.minute <= curMin).length;
       match.currentDisplayScoreAway = match.events.filter(e => e.team === 'away' && e.minute <= curMin).length;
+
+      // Real-time Goal Notification Banner & Horn
+      if (match.currentDisplayScoreHome > prevH) {
+        window.ArenaMotion?.showGoalBanner(match.home, `${match.currentDisplayScoreHome} - ${match.currentDisplayScoreAway}`);
+      } else if (match.currentDisplayScoreAway > prevA) {
+        window.ArenaMotion?.showGoalBanner(match.away, `${match.currentDisplayScoreHome} - ${match.currentDisplayScoreAway}`);
+      }
 
       renderStageViewport();
 
       if (curMin >= 90) {
         clearInterval(activeSingleMatchIntervals[simKey]);
         delete activeSingleMatchIntervals[simKey];
+
+        window.ArenaAudio?.playWhistle('triple');
 
         match.isLive = false;
         match.isSimulated = true;
@@ -7047,8 +7061,17 @@ function getUclFeederStatus() {
       const curMin = match.currentSimMinute;
 
       // Update live display scores
+      const prevH = match.currentDisplayScoreHome || 0;
+      const prevA = match.currentDisplayScoreAway || 0;
       match.currentDisplayScoreHome = match.events.filter(e => e.team === 'home' && e.minute <= curMin).length;
       match.currentDisplayScoreAway = match.events.filter(e => e.team === 'away' && e.minute <= curMin).length;
+
+      // Real-time Goal Notification Banner & Horn
+      if (match.currentDisplayScoreHome > prevH) {
+        window.ArenaMotion?.showGoalBanner(match.home, `${match.currentDisplayScoreHome} - ${match.currentDisplayScoreAway}`);
+      } else if (match.currentDisplayScoreAway > prevA) {
+        window.ArenaMotion?.showGoalBanner(match.away, `${match.currentDisplayScoreHome} - ${match.currentDisplayScoreAway}`);
+      }
 
       // Update ticker with goal event
       const recentGoal = match.events.find(e => e.minute >= curMin - 8 && e.minute <= curMin);
@@ -7071,6 +7094,8 @@ function getUclFeederStatus() {
       if (curMin >= totalTargetMinutes) {
         clearInterval(activeSingleMatchIntervals[simKey]);
         delete activeSingleMatchIntervals[simKey];
+
+        window.ArenaAudio?.playWhistle('triple');
 
         match.isLive = false;
         match.isSimulated = true;
@@ -7457,7 +7482,12 @@ function getUclFeederStatus() {
     }
 
     modal.hidden = false;
-    startConfettiAnimation();
+    if (window.ArenaMotion) {
+      window.ArenaMotion.celebrateChampion(champTeam, config.name);
+      window.ArenaMotion.animateTrophyPresentation(modal.querySelector('.champ-modal-trophy') || modal);
+    } else {
+      startConfettiAnimation();
+    }
   }
 
   function progressToNextStage(stageKey) {
@@ -8089,6 +8119,10 @@ function getUclFeederStatus() {
           </div>
         `).join('');
       }
+    }
+
+    if (window.ArenaMotion) {
+      window.ArenaMotion.staggerStandings();
     }
   }
 
@@ -10122,6 +10156,20 @@ function getUclFeederStatus() {
       isPowerShot = true;
       powerShotProgress = 0;
       actor.classList.add('power-shot');
+
+      // Audio & Confetti burst
+      if (window.ArenaAudio) {
+        window.ArenaAudio.playKick();
+        setTimeout(() => window.ArenaAudio.playGoalHorn(), 150);
+      }
+      if (typeof window.confetti === 'function') {
+        window.confetti({
+          particleCount: 28,
+          spread: 45,
+          origin: { x: Math.max(0.1, Math.min(0.9, posX / 100)), y: 0.08 },
+          colors: ['#E52521', '#FFD700', '#002B7F', '#2ECC71']
+        });
+      }
 
       // Random celebration phrase
       if (bubble) {

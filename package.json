@@ -25,6 +25,8 @@
   },
   "homepage": "https://github.com/omwe77/SIEP--arena_coore#readme",
   "dependencies": {
+    "animejs": "^4.5.0",
+    "canvas-confetti": "^1.9.4",
     "dotenv": "^17.4.2",
     "vite": "^8.3.0"
   },
