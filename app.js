@@ -1389,7 +1389,7 @@
     });
   }
 
-  function switchView(targetViewId) {
+  function switchView(targetViewId, syncUrl = true) {
     if (targetViewId === 'tactical-tracker') {
       const state = tournamentState[activeTournKey];
       const match = (state?.gf?.[0]) || (state?.sf?.[0]) || (state?.r16?.[0]) || (state?.groupMatches?.[0]) || (state?.matchdays?.[0]?.[0]);
@@ -1407,6 +1407,9 @@
       if (simPanel) { simPanel.hidden = true; simPanel.classList.remove('active'); }
       if (standingsPanel) { standingsPanel.hidden = false; standingsPanel.classList.add('active'); }
       renderRealStandings();
+      if (syncUrl && window.ArenaRouter) {
+        window.ArenaRouter.navigate(`/competition/${activeTournKey}/standings`);
+      }
     } else {
       if (standingsPanel) { standingsPanel.hidden = true; standingsPanel.classList.remove('active'); }
       if (simPanel) { simPanel.hidden = false; simPanel.classList.add('active'); }
@@ -1420,6 +1423,9 @@
       leagueAutoSimActive = false;
       cancelAllActiveSimulationTimers();
       renderActiveTournament();
+      if (syncUrl && window.ArenaRouter) {
+        window.ArenaRouter.navigate(`/competition/${activeTournKey}`);
+      }
     } else if (targetViewId === 'tournament-sim') {
       if (activeTournKey === 'ucl') {
         const feederInfo = getUclFeederStatus();
@@ -1433,6 +1439,9 @@
         tournamentState[activeTournKey].subView = 'sim';
       }
       renderActiveTournament();
+      if (syncUrl && window.ArenaRouter) {
+        window.ArenaRouter.navigate(`/competition/${activeTournKey}/simulation`);
+      }
     }
 
     // Animate data badge transitions
@@ -1545,7 +1554,7 @@ function setupNavigation() {
   // ---------------------------------------------------------------------------
   // 7. TOURNAMENT SELECTION & RENDER PIPELINE
   // ---------------------------------------------------------------------------
-  function selectTournament(key) {
+  function selectTournament(key, syncUrl = true) {
     if (!TOURNAMENTS_CONFIG[key]) return;
     if (window.ArenaAudio) {
       window.ArenaAudio.playClick();
@@ -1588,6 +1597,22 @@ function setupNavigation() {
     }
 
     renderActiveTournament();
+
+    if (window.AppState) {
+      window.AppState.setCompetition(activeTournKey, TOURNAMENTS_CONFIG[activeTournKey]?.season);
+    }
+
+    if (syncUrl && window.ArenaRouter) {
+      const isStandings = document.getElementById('view-standings-view')?.classList.contains('active');
+      const isSim = tournamentState[activeTournKey]?.subView === 'sim';
+      if (isStandings) {
+        window.ArenaRouter.navigate(`/competition/${activeTournKey}/standings`);
+      } else if (isSim) {
+        window.ArenaRouter.navigate(`/competition/${activeTournKey}/simulation`);
+      } else {
+        window.ArenaRouter.navigate(`/competition/${activeTournKey}`);
+      }
+    }
   }
 
   function renderActiveTournament() {
