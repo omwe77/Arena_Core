@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.agent/
+.serena/
+.vscode/
+scratch/
+package-lock.json
