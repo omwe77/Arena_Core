@@ -4,10 +4,38 @@
   "description": "ARENA_CORE — Global Football Platform & Multi-Tournament Simulator with real matchdays, live 2D tactical pitch broadcasts, and interactive stats.",
   "main": "app.js",
   "scripts": {
-    "test": "node --check app.js && node --check data/hero-videos.js && node scratch/full-validation.js && node scratch/test-runtime-execution.js && node scratch/test-custom-draw-full.js && node scratch/validate-all.js"
+    "test": "node --check app.js && node --check data/hero-videos.js && node scratch/full-validation.js && node scratch/test-runtime-execution.js && node scratch/test-custom-draw-full.js && node scratch/validate-all.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format-check": "prettier --check ."
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omwe77/SIEP--arena_coore.git"
+  },
+  "bugs": {
+    "url": "https://github.com/omwe77/SIEP--arena_coore/issues"
+  },
+  "homepage": "https://github.com/omwe77/SIEP--arena_coore#readme",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "vite": "^8.3.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.5.1",
+    "concurrently": "^10.0.5",
+    "eslint": "^10.10.0",
+    "globals": "^17.12.0",
+    "nodemon": "^3.1.14",
+    "prettier": "^3.9.6"
+  }
 }

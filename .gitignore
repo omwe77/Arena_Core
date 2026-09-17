@@ -1,3 +1,21 @@
 node_modules/
 .playwright-mcp/
 *.log
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+dist/
+scratch/*.png
+scratch/test_*.js
+scratch/check_*.js
+scratch/verify_*.js
+scratch/inspect_*.js
+scratch/scratch/
+test_raw_yt.cjs
+capture_blended.cjs
+skills-lock.json
+.agents/
