@@ -117,17 +117,27 @@
     notify('CHAMPION_CROWNED', { champion: championName, simulationId });
   }
 
-  function resetSimulation(seed = null) {
+  function resetSimulation(seedValue = null) {
+    const numericSeed = (seedValue !== null && typeof seedValue === 'number')
+      ? (seedValue >>> 0)
+      : (Math.floor(Math.random() * 2147483647) >>> 0);
+
     state.simulation = {
       ...state.simulation,
-      simulationId: `sim_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
-      seed: seed || Math.floor(Math.random() * 1000000),
+      simulationId: `sim_${Date.now()}_${numericSeed.toString(36)}`,
+      seed: numericSeed,
       status: SimulationStatus.READY,
       currentMatch: null,
       currentMinute: 0,
       completed: false,
       champion: null
     };
+
+    // Seed the deterministic PRNG for this simulation
+    if (window.ArenaRandom) {
+      window.ArenaRandom.seed(numericSeed);
+    }
+
     notify('SIMULATION_RESET', state.simulation);
   }
 
