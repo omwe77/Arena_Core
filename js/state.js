@@ -134,9 +134,43 @@
     };
 
     // Seed the deterministic PRNG for this simulation
-    if (window.ArenaRandom) {
-      window.ArenaRandom.seed(numericSeed);
+    if (!window.ArenaRandom) {
+      window.ArenaRandom = {
+        seed: () => {},
+        unseed: () => {},
+        random: Math.random,
+        randomInt: (min, max) => Math.floor(Math.random() * (max - min + 1)) + min,
+        randomRange: (min, max) => Math.random() * (max - min) + min,
+        pick: arr => arr && arr.length ? arr[Math.floor(Math.random() * arr.length)] : undefined,
+        weightedPick: items => {
+          if (!items || items.length === 0) return undefined;
+          if (items.length === 1) return items[0].value;
+          let total = 0;
+          for (const item of items) total += item.weight;
+          let r = Math.random() * total;
+          for (const item of items) { r -= item.weight; if (r <= 0) return item.value; }
+          return items[items.length - 1].value;
+        },
+        shuffle: arr => {
+          const a = arr.slice();
+          for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+          }
+          return a;
+        },
+        chance: p => Math.random() < p,
+        poisson: (lambda) => {
+          const L = Math.exp(-lambda);
+          let k = 0, p = 1;
+          do { k++; p *= Math.random(); } while (p > L);
+          return k - 1;
+        },
+        getSeed: () => null,
+        isSeeded: () => false
+      };
     }
+    window.ArenaRandom.seed(numericSeed);
 
     notify('SIMULATION_RESET', state.simulation);
   }
