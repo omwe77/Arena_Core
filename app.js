@@ -767,7 +767,7 @@
     const L = Math.exp(-lambda);
     let k = 0;
     let p = 1;
-    do { k++; p *= Math.random(); } while (p > L);
+    do { k++; p *= window.ArenaRandom.random(); } while (p > L);
     return k - 1;
   }
 
@@ -999,8 +999,8 @@
         for (let w = 0; w < weight; w++) weightedPool.push(player);
       });
       // Fallback to raw candidate list if weightedPool somehow ended up empty
-      if (weightedPool.length === 0) return candidateList[Math.floor(Math.random() * candidateList.length)];
-      return weightedPool[Math.floor(Math.random() * weightedPool.length)];
+      if (weightedPool.length === 0) return candidateList[window.ArenaRandom.randomInt(0, candidateList.length - 1)];
+      return weightedPool[window.ArenaRandom.randomInt(0, weightedPool.length - 1)];
     }
 
     // Check if team exists in window.REAL_TOURNAMENTS_DATA top scorers
@@ -1013,8 +1013,8 @@
     // Authentic fallback surnames per nation / region
     const defaultSurnames = ['Silva', 'Santos', 'Johnson', 'Smith', 'Müller', 'García', 'Martínez', 'Kovács', 'Popescu', 'Novak', 'Tanaka', 'Kim', 'Ali', 'Diallo', 'Mendoza', 'Rossi', 'Larsson', 'Jensen', 'Nielsen'];
     const initials = ['A.', 'M.', 'J.', 'D.', 'C.', 'K.', 'R.', 'L.', 'S.', 'E.'];
-    const init = initials[Math.floor(Math.random() * initials.length)];
-    const sur = defaultSurnames[Math.floor(Math.random() * defaultSurnames.length)];
+    const init = window.ArenaRandom.pick(initials);
+    const sur = window.ArenaRandom.pick(defaultSurnames);
     return `${init} ${sur}`;
   }
 
@@ -1098,12 +1098,16 @@
 
     // Generate goal minutes weighted toward the second half with authentic player names
     for (let i = 0; i < scoreHome; i++) {
-      const min = Math.random() < 0.65 ? Math.floor(46 + Math.random() * 44) : Math.floor(5 + Math.random() * 40);
+      const min = window.ArenaRandom.chance(0.65)
+        ? window.ArenaRandom.randomInt(46, 89)
+        : window.ArenaRandom.randomInt(5, 44);
       const player = getRandomPlayerForTeam(homeTeam);
       events.push({ minute: min, team: 'home', teamName: homeTeam, player, type: 'GOAL' });
     }
     for (let i = 0; i < scoreAway; i++) {
-      const min = Math.random() < 0.65 ? Math.floor(46 + Math.random() * 44) : Math.floor(5 + Math.random() * 40);
+      const min = window.ArenaRandom.chance(0.65)
+        ? window.ArenaRandom.randomInt(46, 89)
+        : window.ArenaRandom.randomInt(5, 44);
       const player = getRandomPlayerForTeam(awayTeam);
       events.push({ minute: min, team: 'away', teamName: awayTeam, player, type: 'GOAL' });
     }
@@ -1125,16 +1129,16 @@
     } else if (isKnockout) {
       // Extra Time (30 min)
       hadExtraTime = true;
-      const etHomeGoals = Math.random() < 0.35 ? 1 : 0;
-      const etAwayGoals = Math.random() < 0.35 ? 1 : 0;
+      const etHomeGoals = window.ArenaRandom.chance(0.35) ? 1 : 0;
+      const etAwayGoals = window.ArenaRandom.chance(0.35) ? 1 : 0;
       scoreHomeET += etHomeGoals;
       scoreAwayET += etAwayGoals;
 
       if (etHomeGoals > 0) {
-        events.push({ minute: 104 + Math.floor(Math.random() * 15), team: 'home', teamName: homeTeam, player: getRandomPlayerForTeam(homeTeam), type: 'GOAL (ET)' });
+        events.push({ minute: 104 + window.ArenaRandom.randomInt(0, 14), team: 'home', teamName: homeTeam, player: getRandomPlayerForTeam(homeTeam), type: 'GOAL (ET)' });
       }
       if (etAwayGoals > 0) {
-        events.push({ minute: 106 + Math.floor(Math.random() * 14), team: 'away', teamName: awayTeam, player: getRandomPlayerForTeam(awayTeam), type: 'GOAL (ET)' });
+        events.push({ minute: 106 + window.ArenaRandom.randomInt(0, 13), team: 'away', teamName: awayTeam, player: getRandomPlayerForTeam(awayTeam), type: 'GOAL (ET)' });
       }
       events.sort((a, b) => a.minute - b.minute);
 
@@ -1150,16 +1154,16 @@
         const awayKicks = [];
 
         for (let round = 1; round <= 5; round++) {
-          const hScored = Math.random() < 0.78;
-          const aScored = Math.random() < 0.78;
+          const hScored = window.ArenaRandom.chance(0.78);
+          const aScored = window.ArenaRandom.chance(0.78);
           if (hScored) penHome++;
           if (aScored) penAway++;
           homeKicks.push({ player: getRandomPlayerForTeam(homeTeam), scored: hScored });
           awayKicks.push({ player: getRandomPlayerForTeam(awayTeam), scored: aScored });
         }
         while (penHome === penAway) {
-          const hScored = Math.random() < 0.75;
-          const aScored = Math.random() < 0.75;
+          const hScored = window.ArenaRandom.chance(0.75);
+          const aScored = window.ArenaRandom.chance(0.75);
           if (hScored) penHome++;
           if (aScored) penAway++;
           homeKicks.push({ player: getRandomPlayerForTeam(homeTeam), scored: hScored });
