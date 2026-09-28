@@ -10,6 +10,46 @@
 (function () {
   'use strict';
 
+  // Safety stub: if js/random.js or js/state.js haven't loaded yet,
+  // provide a minimal ArenaRandom so top-level references don't throw.
+  var ArenaRandom = window.ArenaRandom;
+  if (!ArenaRandom) {
+    ArenaRandom = window.ArenaRandom = {
+      seed: () => {},
+      unseed: () => {},
+      random: Math.random,
+      randomInt: (min, max) => Math.floor(Math.random() * (max - min + 1)) + min,
+      randomRange: (min, max) => Math.random() * (max - min) + min,
+      pick: arr => arr && arr.length ? arr[Math.floor(Math.random() * arr.length)] : undefined,
+      weightedPick: items => {
+        if (!items || items.length === 0) return undefined;
+        if (items.length === 1) return items[0].value;
+        let total = 0;
+        for (const item of items) total += item.weight;
+        let r = Math.random() * total;
+        for (const item of items) { r -= item.weight; if (r <= 0) return item.value; }
+        return items[items.length - 1].value;
+      },
+      shuffle: arr => {
+        const a = arr.slice();
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+        }
+        return a;
+      },
+      chance: p => Math.random() < p,
+      poisson: (lambda) => {
+        const L = Math.exp(-lambda);
+        let k = 0, p = 1;
+        do { k++; p *= Math.random(); } while (p > L);
+        return k - 1;
+      },
+      getSeed: () => null,
+      isSeeded: () => false
+    };
+  }
+
   // ---------------------------------------------------------------------------
   // 1. OFFICIAL CRESTS & FLAGS REGISTRY (ALL 10 COMPETITIONS)
   // ---------------------------------------------------------------------------
@@ -1298,9 +1338,9 @@
       // Use custom draw teams if set, otherwise fall back to real data pool (random draw)
       let pool;
       if (wcCustomTeams && wcCustomTeams.length === 48) {
-        pool = [...wcCustomTeams].map(t => t.toUpperCase().trim()).sort(() => Math.random() - 0.5);
+        pool = ArenaRandom.shuffle([...wcCustomTeams].map(t => t.toUpperCase().trim()));
       } else {
-        pool = [...teamList].map(t => t.toUpperCase().trim()).sort(() => Math.random() - 0.5);
+        pool = ArenaRandom.shuffle([...teamList].map(t => t.toUpperCase().trim()));
         // Pad or trim to exactly 48 so group draw always works
         while (pool.length < 48) pool.push(`Nation ${pool.length + 1}`);
         pool = pool.slice(0, 48);
@@ -1336,7 +1376,7 @@
         r16: [], qf: [], sf: [], gf: []
       };
     } else if (config.format === 'euro24') {
-      const pool = [...teamList].sort(() => Math.random() - 0.5);
+      const pool = ArenaRandom.shuffle([...teamList]);
       const groups = {};
       const groupLetters = ['A', 'B', 'C', 'D', 'E', 'F'];
       groupLetters.forEach((letter, idx) => {
@@ -6780,7 +6820,7 @@ function getUclFeederStatus() {
       const thirdBest = [];
       Object.keys(state.groups).forEach(letter => thirdBest.push(state.groups[letter][2]));
       thirdBest.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf).slice(0, 8).forEach(t => qualified.push(t.name));
-      const shuffled = [...qualified].sort(() => Math.random() - 0.5);
+      const shuffled = ArenaRandom.shuffle([...qualified]);
       state.r32 = [];
       for (let i = 0; i < 16; i++) {
         state.r32.push({ home: shuffled[i * 2], away: shuffled[i * 2 + 1], scoreHome: '–', scoreAway: '–', isSimulated: false });
@@ -6792,13 +6832,13 @@ function getUclFeederStatus() {
         thirdBest.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf).slice(0, 4).forEach(t => qualified.push(t.name));
         return qualified;
       })() : qualified;
-      const shuffled = [...pool].sort(() => Math.random() - 0.5);
+      const shuffled = ArenaRandom.shuffle([...pool]);
       state.r16 = [];
       for (let i = 0; i < 8; i++) {
         state.r16.push({ home: shuffled[i * 2], away: shuffled[i * 2 + 1], scoreHome: '–', scoreAway: '–', isSimulated: false });
       }
     } else {
-      const shuffled = [...qualified].sort(() => Math.random() - 0.5);
+      const shuffled = ArenaRandom.shuffle([...qualified]);
       state.qf = [];
       for (let i = 0; i < 4; i++) {
         state.qf.push({ home: shuffled[i * 2], away: shuffled[i * 2 + 1], scoreHome: '–', scoreAway: '–', isSimulated: false });
@@ -7880,7 +7920,7 @@ function getUclFeederStatus() {
           const thirdBest = [];
           Object.keys(state.groups).forEach(letter => thirdBest.push(state.groups[letter][2]));
           thirdBest.sort((a, b) => b.pts - a.pts || b.gd - a.gd).slice(0, 8).forEach(t => qualified.push(t.name));
-          const shuffled = [...qualified].sort(() => Math.random() - 0.5);
+          const shuffled = ArenaRandom.shuffle([...qualified]);
 
           // Simulate R32
           state.r32 = [];
@@ -7905,7 +7945,7 @@ function getUclFeederStatus() {
             thirdBest.sort((a, b) => b.pts - a.pts).slice(0, 4).forEach(t => qualified.push(t.name));
             return qualified;
           })() : qualified;
-          const shuffled = [...pool].sort(() => Math.random() - 0.5);
+          const shuffled = ArenaRandom.shuffle([...pool]);
           state.r16 = [];
           for (let i = 0; i < 8; i++) {
             const m = precomputeMatchResult(shuffled[i * 2], shuffled[i * 2 + 1], true);
@@ -7917,7 +7957,7 @@ function getUclFeederStatus() {
         // Simulate QF
         const r16Winners = (state.r16 && state.r16.length > 0)
           ? state.r16.map(m => m.winner)
-          : [...qualified].sort(() => Math.random() - 0.5).slice(0, 8);
+          : ArenaRandom.shuffle([...qualified]).slice(0, 8);
 
         state.qf = [];
         for (let i = 0; i < 4; i++) {
