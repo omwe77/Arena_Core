@@ -176,7 +176,7 @@
       </button>
       <span class="data-mode-badge" id="global-data-mode">
         <span class="mode-pulse"></span>
-        <span class="mode-text">REAL DATA + SIM ENGINE</span>
+        <span class="mode-text" id="global-data-mode-text">LOADING...</span>
       </span>
     </div>
   </header>
@@ -393,7 +393,7 @@
           <div class="sim-header-info">
             <div class="data-badge-line">
               <span class="data-badge SIMULATION">WORLD B — HYPOTHETICAL SIMULATION</span>
-              <span class="data-badge REAL_DATA" id="hero-season-badge">API SEASON: 2023/2024</span>
+              <span class="data-badge REAL_DATA" id="hero-season-badge">SEASON: --</span>
             </div>
             <h2 id="active-tourn-title" class="tourn-title">FIFA WORLD CUP 2026</h2>
             <p id="active-tourn-desc" class="tourn-desc">
@@ -535,16 +535,16 @@
                 <li><i class="fa-solid fa-chart-line"></i> Poisson Attack/Defense Calibrations</li>
                 <li><i class="fa-solid fa-shield-halved"></i> Live Table Goal Differential Computations</li>
                 <li><i class="fa-solid fa-clapperboard"></i> Highlight Video Replay Center</li>
-                <li><i class="fa-solid fa-tower-broadcast"></i> Real-time 2D Pitch Live Radar</li>
+                <li><i class="fa-solid fa-tower-broadcast"></i> 2D Pitch Tactical View</li>
               </ul>
             </div>
           </div>
 
           <div class="footer-sub-bar">
-            <div class="foot-copy">© 2024 ARENA CORE // MULTI-TOURNAMENT FOOTBALL PLATFORM. ALL RIGHTS RESERVED.</div>
+            <div class="foot-copy" id="foot-copy">© 2026 ARENA CORE // MULTI-TOURNAMENT FOOTBALL PLATFORM.</div>
             <div class="foot-sub-links">
-              <span class="foot-hud-tag">BUILD: 2024.11.STRIKER</span>
-              <span class="foot-hud-tag">STATUS: 100% OPERATIONAL</span>
+              <span class="foot-hud-tag" id="foot-build-tag">BUILD: --</span>
+              <span class="foot-hud-tag" id="foot-status-tag">STATUS: RUNNING</span>
             </div>
           </div>
         </footer>
@@ -556,11 +556,10 @@
       <section id="view-standings-view" class="view-panel" aria-label="Official Standings" hidden>
         <div class="section-banner">
           <div class="data-badge-line">
-            <span class="data-badge SIM_DATA"><i class="fa-solid fa-bolt"></i> LIVE SIMULATION DATA</span>
+            <span class="data-badge ARCHIVE_DATA" id="standings-provenance-badge">ARCHIVE DATA</span>
           </div>
           <h2 id="standings-banner-title">LEAGUE STANDINGS</h2>
-          <p id="standings-banner-desc">Live standings updated from your simulation. Simulate matchdays to see standings
-            update in real time.</p>
+          <p id="standings-banner-desc">Historical standings from bundled competition data. Simulate matches to generate projected tables.</p>
         </div>
 
         <!-- Back to LaLiga Home (shown only when coming from LaLiga Explore Teams) -->
@@ -575,8 +574,8 @@
           <!-- Standings Table Card -->
           <div class="tech-card table-card">
             <div class="card-header-bar">
-              <h3 class="card-title" id="standings-table-title">LIVE STANDINGS TABLE</h3>
-              <span class="data-badge SIM_DATA"><i class="fa-solid fa-bolt"></i> SIMULATION</span>
+              <h3 class="card-title" id="standings-table-title">STANDINGS TABLE</h3>
+              <span class="data-badge ARCHIVE_DATA">ARCHIVE</span>
             </div>
             <div class="table-responsive">
               <table class="tech-table">
@@ -606,7 +605,7 @@
           <div class="tech-card leaders-card">
             <div class="card-header-bar">
               <h3 class="card-title" id="scorers-table-title">GOLDEN BOOT LEADERS</h3>
-              <span class="data-badge REAL_DATA">REAL SCORERS</span>
+              <span class="data-badge ARCHIVE_DATA">HISTORICAL TOP SCORERS</span>
             </div>
             <div class="leaders-list" id="top-scorers-list">
               <!-- Injected dynamically -->
@@ -664,16 +663,16 @@
                 <li><i class="fa-solid fa-chart-simple"></i> Real-time Points & GD Recalibration</li>
                 <li><i class="fa-solid fa-trophy"></i> Golden Boot & Top Scorer Leaderboards</li>
                 <li><i class="fa-solid fa-flag-checkered"></i> Qualification Zone Highlights</li>
-                <li><i class="fa-solid fa-tower-broadcast"></i> Real-time 2D Pitch Live Radar</li>
+                <li><i class="fa-solid fa-tower-broadcast"></i> 2D Pitch Tactical View</li>
               </ul>
             </div>
           </div>
 
           <div class="footer-sub-bar">
-            <div class="foot-copy">© 2024 ARENA CORE // OFFICIAL FOOTBALL DATA LAYER. ALL RIGHTS RESERVED.</div>
+            <div class="foot-copy" id="foot-copy-2">© 2026 ARENA CORE // OFFICIAL FOOTBALL DATA LAYER.</div>
             <div class="foot-sub-links">
-              <span class="foot-hud-tag">LAYER: STANDINGS ENGINE</span>
-              <span class="foot-hud-tag">STATUS: 100% OPERATIONAL</span>
+              <span class="foot-hud-tag" id="foot-build-tag-2">BUILD: --</span>
+              <span class="foot-hud-tag" id="foot-status-tag-2">STATUS: RUNNING</span>
             </div>
           </div>
         </footer>
@@ -692,7 +691,7 @@
       <!-- 1. Top Deep Purple Header -->
       <div class="dstats-header-banner" id="dstats-header-banner">
         <div class="dstats-meta-line" id="dstats-meta-line">
-          <span class="dstats-venue-text" id="dstats-venue">📍 Official Match Arena</span>
+          <span class="dstats-venue-text" id="dstats-venue">📍 Match Visualizer</span>
           <span class="dstats-comp-stage" id="dstats-comp-stage">FIFA WORLD CUP · KNOCKOUT STAGE</span>
         </div>
 
@@ -882,7 +881,7 @@
 
           <!-- Live Tactical Action Ticker -->
           <div class="dstats-live-ticker-wrap">
-            <span class="dstats-ticker-badge"><i class="fa-solid fa-circle-dot"></i> LIVE BROADCAST</span>
+            <span class="dstats-ticker-badge"><i class="fa-solid fa-circle-dot"></i> SIMULATION VIEW</span>
             <span class="dstats-ticker-text" id="dstats-pitch-ticker">Match ready for kickoff. Track player movements and ball possession live on the 2D pitch!</span>
           </div>
         </div>
@@ -999,10 +998,10 @@
       <!-- Broadcast Live Header HUD -->
       <div class="holo-header-hud">
         <div class="holo-badge-group">
-          <span class="holo-live-tag"><span class="holo-pulse-dot"></span> 3D LIVE BROADCAST</span>
+          <span class="holo-live-tag"><span class="holo-pulse-dot"></span> 3D VIEW</span>
           <span class="holo-tourn-tag" id="holo-tourn-tag">FIFA WORLD CUP 2026</span>
         </div>
-        <h2 class="holo-title" id="holo-broadcast-title">3D HOLOGRAPHIC MATCH ARENA</h2>
+        <h2 class="holo-title" id="holo-broadcast-title">TACTICAL 3D VISUALIZER</h2>
       </div>
 
       <!-- Match Scoreboard Ribbon -->
@@ -1081,7 +1080,7 @@
       <div class="holo-tactical-footer">
         <div class="holo-status-stream">
           <span class="holo-status-icon">📍</span>
-          <span class="holo-status-text" id="holo-status-text">Match in progress • Real-time 3D ball tracking synchronized</span>
+          <span class="holo-status-text" id="holo-status-text">Simulation visualizer • Ball position generated by ARENA simulation</span>
         </div>
         
         <div class="holo-events-ticker" id="holo-events-ticker">
@@ -1113,7 +1112,7 @@
             <span class="tac-dot yellow"></span>
             <span class="tac-dot green"></span>
           </span>
-          <span class="tac-brand-title" id="tac-header-brand">KINEXON <span>PRO TRACKER</span></span>
+          <span class="tac-brand-title" id="tac-header-brand">ARENA TACTICAL TRACKER</span>
           <div class="tac-nav-tabs">
             <button type="button" class="tac-nav-tab active">STATISTICS</button>
             <button type="button" class="tac-nav-tab">POST</button>
@@ -1123,7 +1122,7 @@
         <div class="tac-nav-right">
           <div class="tac-session-pill">
             <span class="tac-status-dot"></span>
-            <span id="tac-session-status">SESSION ACTIVE: MATCH LIVE</span>
+            <span id="tac-session-status">SESSION: TACTICAL VIEW OPEN</span>
           </div>
           <button type="button" class="tac-back-btn" id="tac-modal-close" aria-label="Close Tactical Tracker">
             ❮ Back to tournament
@@ -1249,8 +1248,8 @@
               <span class="tac-clock-pill" id="tac-hud-clock">⏱ 0'</span>
             </div>
 
-            <div class="tac-action-feed" id="tac-hud-action">
-              📍 Match in progress • KINEXON Real-time player vector tracking active
+            <span class="tac-action-feed" id="tac-hud-action">
+              📍 ARENA TACTICAL VIEW • Ball position generated by simulation
             </div>
 
             <div class="tac-playback-btns">
@@ -1303,7 +1302,7 @@
             </div>
             <div class="tac-ball-status-row">
               <span class="tac-ball-status-num">99</span>
-              <span class="tac-ball-status-text" id="tac-ball-status-text">Ball (Live tracking 84 km/h)</span>
+              <span class="tac-ball-status-text" id="tac-ball-status-text">Ball (simulated position)</span>
             </div>
           </div>
         </aside>
@@ -1553,7 +1552,7 @@
       </div>
       <div style="max-height: 60vh; overflow-y: auto; padding-right: 8px; line-height: 1.6; font-size: 0.9rem;">
         <h3 style="color: #2ECC71; font-size: 1rem; margin-top: 0;"><i class="fa-solid fa-database"></i> 1. Data Provenance &amp; Normalization</h3>
-        <p>Real-world competition metadata, fixtures, standings, and top scorer statistics are acquired through the <strong>API-Football</strong> layer and normalized locally into sanitized offline stores. Team and tournament emblems are retrieved from the FotMob resource network and FlagCDN.</p>
+        <p>Competition metadata, team rosters, standings, and top-scorer statistics are bundled as static local snapshots in the application. Team and tournament emblems are referenced from public flag and logo resources. No live API connection is made from the browser.</p>
         
         <h3 style="color: #2ECC71; font-size: 1rem; margin-top: 20px;"><i class="fa-solid fa-calculator"></i> 2. Mathematical Simulation Engine</h3>
         <p>Match score generation utilizes an attack/defense-weighted <strong>Poisson Distribution</strong> model ($P(k \text{ goals}) = \frac{\lambda^k e^{-\lambda}}{k!}$). Team baseline parameters $\lambda_{home}$ and $\lambda_{away}$ are calibrated from historical goal tallies, defensive clean-sheet records, and home stadium advantage factors.</p>
