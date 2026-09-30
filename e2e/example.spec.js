@@ -6,7 +6,7 @@ test.describe('ARENA_CORE Platform Tests', () => {
     await page.goto('/');
 
     // Expect page title
-    await expect(page).toHaveTitle(/ARENA_CORE/);
+    await expect(page).toHaveTitle(/ARENA CORE/);
 
     // Expect Header pitch track and Mario striker runner
     const pitchTrack = page.locator('#header-pitch-track');

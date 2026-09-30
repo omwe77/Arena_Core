@@ -1,6 +1,6 @@
 # ARENA_CORE // Global Football Platform & Tournament Simulator
 
-> A high-performance, responsive football platform combining official competition data, live standings, match centers, media highlights, and a 10-competition Poisson mathematical tournament simulation engine.
+> A high-performance, responsive football platform combining archived competition data, simulated standings, match centers, media highlights, and a 10-competition Poisson mathematical tournament simulation engine.
 
 [![Azure Static Web Apps Deployment](https://img.shields.io/badge/Live%20Demo-Azure%20Static%20Web%20Apps-2ecc71?style=for-the-badge&logo=microsoftazure)](https://lemon-ocean-06aede400.5.azurestaticapps.net)
 [![Tech Stack](https://img.shields.io/badge/Stack-Vanilla%20JS%20%7C%20HTML5%20%7C%20CSS3%20%7C%20Bash-00E5FF?style=for-the-badge)](https://github.com/omwe77/SIEP--arena_coore)
@@ -86,12 +86,12 @@ chmod +x setup.sh
   - Real 2026 confederation allocation presets & FIFA strength tiers.
 - [x] **Full Knockout & Group Simulation Progression**:
   - Group Stages (Groups A–L) $\to$ Round of 32 $\to$ Round of 16 $\to$ Quarter-finals $\to$ Semi-finals $\to$ Grand Final.
-- [x] **Live Match Timers & Authentic Player Scorers**:
-  - Minute-by-minute live cards, authentic player goal events, extra time (AET), and penalty shootouts.
+- [x] **Match Timers & Player Scorers During Simulation**:
+  - Minute-by-minute simulation cards, authentic player goal events, extra time (AET), and penalty shootouts.
 - [x] **Anime.js Motion Engine**:
   - Smooth entrance animations for cards, panels, and stat reveals using Anime.js.
 - [x] **Procedural Audio FX Synthesizer**:
-  - Zero asset downloads — all sound effects (goal cheer, kick, fanfare, UI click) are generated in real-time via the WebAudio API.
+  - Zero asset downloads — all sound effects (goal cheer, kick, fanfare, UI click) are generated procedurally via the WebAudio API.
   - Persistent SFX toggle button with `localStorage` preference memory.
 - [x] **High-Stakes Knockout UI & Celebrations**:
   - Championship crowning ceremony with confetti particle physics engine.

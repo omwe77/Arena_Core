@@ -492,7 +492,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // 2. 10 COMPETITIONS CONFIGURATION (WORLD A REAL DATA + WORLD B SIMULATION)
+  // 2. 10 COMPETITIONS CONFIGURATION (WORLD A ARCHIVED DATA + WORLD B SIMULATION)
   // ---------------------------------------------------------------------------
   const TOURNAMENTS_CONFIG = {
     wc: {
@@ -529,7 +529,7 @@
     },
     serieA: {
       key: 'serieA',
-      name: 'SERIE A ENILIVE',
+      name: 'SERIE A',
       desc: 'Simulate 20 Italian clubs, Milan and Rome derbies, and the historic race for the official Scudetto trophy!',
       format: 'leagueSeason',
       type: 'league',
@@ -545,7 +545,7 @@
     },
     ligue1: {
       key: 'ligue1',
-      name: 'LIGUE 1 MCDONALD’S',
+      name: 'LIGUE 1',
       desc: 'Simulate 18 French clubs across 34 matchdays with true double round-robin scheduling, Le Classique derbies, and European spots!',
       format: 'leagueSeason',
       type: 'league',
@@ -553,7 +553,7 @@
     },
     ligaPortugal: {
       key: 'ligaPortugal',
-      name: 'LIGA PORTUGAL BETCLIC',
+      name: 'LIGA PORTUGAL',
       desc: 'Simulate 18 Portuguese clubs across 34 matchdays with O Clássico derbies, European qualification spots, and the title race!',
       format: 'leagueSeason',
       type: 'league',
@@ -569,7 +569,7 @@
     },
     superLig: {
       key: 'superLig',
-      name: 'TRENDYOL SÜPER LİG',
+      name: 'SÜPER LİG',
       desc: 'Simulate 18 Turkish powerhouses through 34 intense matchdays, Istanbul derbies, and the race for European glory!',
       format: 'leagueSeason',
       type: 'league',
@@ -1686,7 +1686,7 @@ function setupNavigation() {
     if (descEl) descEl.textContent = config.desc;
     if (seasonBadge && realData) seasonBadge.textContent = `API SEASON: ${realData.actualSeason}`;
     if (sidebarName) sidebarName.textContent = config.name;
-    if (sidebarSeason && realData) sidebarSeason.textContent = `SEASON: ${realData.actualSeason} REAL DATA`;
+    if (sidebarSeason && realData) sidebarSeason.textContent = `SEASON: ${realData.actualSeason} ARCHIVED SNAPSHOT`;
 
     if (sidebarFormat) {
       if (config.format === 'worldcup48') sidebarFormat.textContent = '48 TEAMS • 12 GROUPS & KNOCKOUTS';
@@ -3510,7 +3510,7 @@ function getUclFeederStatus() {
       const isFinished = st && curMd >= totalMd && (st.matchdays || []).every(md => md.every(m => m.isSimulated));
       if (isFinished) finishedCount++;
 
-      // Pull strictly live data from state.leagueTable
+      // Pull data from state.leagueTable
       let top4 = [];
       if (st?.leagueTable && st.leagueTable.length >= 4) {
         top4 = st.leagueTable.slice(0, 4).map((r, idx) => ({
@@ -4127,7 +4127,7 @@ function getUclFeederStatus() {
               <div class="seriea-hero-left">
                 <div class="seriea-brand-badge">
                   <span class="seriea-icon"><i class="fa-solid fa-shield-halved"></i></span>
-                  <span>SERIE A ENILIVE</span>
+                  <span>SERIE A</span>
                   <span class="seriea-tag-sub">🇮🇹 OFFICIAL BROADCAST</span>
                 </div>
                 <h1 class="seriea-hero-title">
@@ -4459,7 +4459,7 @@ function getUclFeederStatus() {
               <div class="ligue1-hero-left">
                 <div class="ligue1-brand-badge">
                   <span class="ligue1-icon"><i class="fa-solid fa-trophy"></i></span>
-                  <span>LIGUE 1 MCDONALD’S</span>
+                  <span>LIGUE 1</span>
                   <span class="ligue1-tag-sub">🇫🇷 OFFICIAL BROADCAST</span>
                 </div>
                 <h1 class="ligue1-hero-title">
@@ -4625,7 +4625,7 @@ function getUclFeederStatus() {
               <div class="ligaportugal-hero-left">
                 <div class="ligaportugal-brand-badge">
                   <span class="ligaportugal-icon"><i class="fa-solid fa-shield-halved"></i></span>
-                  <span>LIGA PORTUGAL BETCLIC</span>
+                  <span>LIGA PORTUGAL</span>
                   <span class="ligaportugal-tag-sub">🇵🇹 OFFICIAL BROADCAST</span>
                 </div>
                 <h1 class="ligaportugal-hero-title">
@@ -4955,7 +4955,7 @@ function getUclFeederStatus() {
               <div class="superlig-hero-left">
                 <div class="superlig-brand-badge">
                   <span class="superlig-icon"><i class="fa-solid fa-fire-flame-curved"></i></span>
-                  <span>TRENDYOL SÜPER LİG</span>
+                  <span>SÜPER LİG</span>
                   <span class="superlig-tag-sub">🇹🇷 RESMÎ YAYIN</span>
                 </div>
                 <h1 class="superlig-hero-title">
@@ -5293,7 +5293,7 @@ function getUclFeederStatus() {
                 </h1>
                 <p class="laliga-hero-desc">
                   Experience the passion, the rivalries, and the glory of the best league on earth.
-                  Simulate every matchday with real-time match engines and live standings.
+                  Simulate every matchday with match engines and simulated standings.
                 </p>
                 <div class="laliga-hero-actions">
                   <button type="button" class="laliga-btn-primary" id="btn-go-to-simulation">
@@ -5485,7 +5485,7 @@ function getUclFeederStatus() {
           timerHtml = `
             <div class="card-live-timer">
               <div class="card-live-header">
-                <span>🔴 LIVE SIMULATION • ${curMin <= 45 ? '1ST HALF' : '2ND HALF'}</span>
+                <span>SIMULATION • ${curMin <= 45 ? '1ST HALF' : '2ND HALF'}</span>
                 <span>⏱ ${curMin}'</span>
               </div>
               <div class="card-live-progress">
@@ -6594,7 +6594,7 @@ function getUclFeederStatus() {
           if (tickerEl) tickerEl.textContent = `MD${mdIdx + 1}: ${allGoals.join(' | ')} // `;
         }
 
-        // Render live table on every tick so standings update in real time
+        // Render table on every tick so standings update during simulation
         renderStageViewport();
 
         if (curMin >= 90) {
@@ -8043,7 +8043,7 @@ function getUclFeederStatus() {
   }
 
   // ---------------------------------------------------------------------------
-  // 10. REAL DATA RENDERERS (WORLD A)
+  // 10. ARCHIVED DATA RENDERERS (WORLD A)
   // ---------------------------------------------------------------------------
   function renderRealStandings() {
     const config = TOURNAMENTS_CONFIG[activeTournKey];
@@ -8099,7 +8099,7 @@ function getUclFeederStatus() {
       : 0;
     const totalMatchdays = state.totalMatchdays || 38;
 
-    if (bannerTitle) bannerTitle.textContent = `${leagueName.toUpperCase()} — LIVE SIMULATION STANDINGS`;
+    if (bannerTitle) bannerTitle.textContent = `${leagueName.toUpperCase()} — SIMULATED STANDINGS`;
     if (tableTitle) tableTitle.textContent = `MATCHDAY ${completedMatchdays} OF ${totalMatchdays} COMPLETED`;
     if (scorersTitle) scorersTitle.textContent = `${leagueName.toUpperCase()} — SIMULATION SCOREBOARD`;
 
@@ -9235,7 +9235,7 @@ function getUclFeederStatus() {
   }
 
   // ---------------------------------------------------------------------------
-  // 12. KINEXON PRO TACTICAL MATCH TRACKER CONTROLLER (REFERENCE THEME)
+  // 12. ARENA TACTICAL TRACKER — 2D PITCH VISUALIZER
   // ---------------------------------------------------------------------------
   let activeTacInterval = null;
   let tacSpeed = 1;
@@ -9561,7 +9561,7 @@ function getUclFeederStatus() {
     if (holoCloseBtn) holoCloseBtn.addEventListener('click', closeHoloModal);
     if (holoBackdrop) holoBackdrop.addEventListener('click', closeHoloModal);
 
-    // KINEXON Pro Tactical Tracker Close Handlers
+    // ARENA Pro Tactical Tracker Close Handlers
     const tacCloseBtn = document.getElementById('tac-modal-close');
     const tacBackdrop = document.getElementById('tac-modal-backdrop');
     function closeTacModal() {
@@ -10258,7 +10258,7 @@ function getUclFeederStatus() {
       }, 400);
     }
 
-    // Click on Mario or Ball triggers super strike & opens KINEXON Tactical Radar
+    // Click on Mario or Ball triggers super strike & opens ARENA Tactical Radar
     actor.addEventListener('click', (e) => {
       e.stopPropagation();
       launchTacticalRadarFromBall();

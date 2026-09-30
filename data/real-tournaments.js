@@ -1,7 +1,8 @@
 /* ==========================================================================
-   PITCH_CORE — REAL FOOTBALL DATA LAYER (OFFICIAL 10 COMPETITIONS DATASET)
+   PITCH_CORE — ARCHIVED FOOTBALL DATA LAYER (COMPETITION SNAPSHOTS)
    Sanitized local cache for API-Football integration.
-   Labeled as "REAL DATA" in the UI.
+   Contains archived competition snapshots (team rosters, historical standings, top scorers)
+   from known seasons. Used as input data for simulation and displayed as ARCHIVED DATA in the UI.
    ========================================================================== */
 
 (function () {
