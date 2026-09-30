@@ -1,55 +1,153 @@
 /* ==========================================================================
-   ARENA_CORE_V2.0 Ã¢â‚¬â€ GLOBAL FOOTBALL BROADCAST & SIMULATOR STYLESHEET
-   Authentic Stadium Pitch-Night Theme with Pitch Green (#2ECC71),
-   Trophy Gold (#FFC94A), Red Card Accent (#E74C3C), and Deep Turf Surfaces.
+   ARENA_CORE — GLOBAL FOOTBALL PLATFORM & MULTI-TOURNAMENT SIMULATOR STYLESHEET
+   Design token system + component standards.
    ========================================================================== */
 
+/* ==========================================================================
+   DESIGN TOKENS — semantic CSS custom properties
+   Competition themes override --accent and --accent-subtle only.
+   ========================================================================== */
 :root {
-  /* Pitch Night Surfaces - Lightened & Elevated for Crisp Readability */
-  --bg-pitch: #E9FFDB;               /* light background */
-  --bg-sidebar: #C8F0B0;             /* light sidebar */
-  --bg-card: rgba(233,255,219,0.92);   /* glassâ€‘card base */
-  --bg-card-hover: rgba(233,255,219,0.97); /* hover */
-  --bg-surface: #D6FFB7;             /* subtle surface */
-  --bg-glass: rgba(233,255,219,0.85); /* light glass */
-  
-  /* Turf & Stadium Floodlights */
-  --pitch-green: #2ECC71;            /* vivid pitch green "under the lights" */
-  --pitch-green-light: #58D68D;      /* grass blade highlight */
-  --pitch-green-glow: rgba(46, 204, 113, 0.4);
-  --pitch-green-subtle: rgba(46, 204, 113, 0.18);
-  
-  /* Champions & Trophy Accents */
-  --champions-gold: #FFC94A;          /* trophy/medal gold */
-  --champions-gold-light: #FFE082;   /* glint sheen */
-  --champions-gold-glow: rgba(255, 201, 74, 0.35);
-  
-  /* Tactical Sub-accents */
-  --floodlight-cyan: #38EF7D;         /* pitch electric turf highlight */
-  --floodlight-cyan-glow: rgba(56, 239, 125, 0.28);
-  
-  /* Referee & Match Action Accents */
-  --danger-red: #E74C3C;              /* red card / elimination */
-  --danger-red-glow: rgba(231, 76, 60, 0.35);
-  
-  /* Stadium Lines & Pitch Chalk */
-  --border-subtle: #2F453C;           /* crisp lighter border */
-  --border-focus: rgba(46, 204, 113, 0.6);
-  --border-gold: rgba(255, 201, 74, 0.6);
+  /* ==========================================================================
+     COLOR — neutrals (dark premium command center base)
+     ========================================================================== */
+  --color-bg-base: #080C14;            /* page background — deep navy/charcoal */
+  --color-bg-elevated: #0F1622;        /* raised surfaces, panels */
+  --color-bg-card: #141C2B;            /* card surface */
+  --color-bg-card-hover: #1A2438;      /* card hover */
+  --color-bg-muted: #1C2740;           /* inactive/disabled surfaces */
+  --color-bg-overlay: rgba(8, 12, 20, 0.82);  /* modal/dialog backdrop */
 
-  /* Reduced motion — respects user accessibility preference */
+  /* ==========================================================================
+     COLOR — text
+     ========================================================================== */
+  --color-text-primary: #F0F4F8;       /* primary text — near white */
+  --color-text-secondary: #B0BED0;     /* secondary text — blue-gray */
+  --color-text-muted: #6B7FA0;         /* muted/caption text */
+  --color-text-inverse: #080C14;       /* text on accent-colored backgrounds */
 
-  /* Broadcast Typography */
-  --text-white: #FFFFFF;
-  --text-main: #F7FAF8;              /* bright crisp text */
-  --text-muted: #A3B5AC;             /* lightened sage-gray for high contrast */
-  --font-hud: 'Share Tech Mono', monospace;
-  --font-title: 'Chakra Petch', sans-serif;
+  /* ==========================================================================
+     COLOR — borders
+     ========================================================================== */
+  --color-border-subtle: rgba(120, 150, 200, 0.12);  /* default dividers */
+  --color-border-default: rgba(120, 150, 200, 0.20); /* standard borders */
+  --color-border-strong: rgba(120, 150, 200, 0.35);  /* emphasized borders */
+  --color-border-focus: rgba(0, 212, 255, 0.60);      /* focus rings */
+
+  /* ==========================================================================
+     COLOR — accent (ARENA primary — cyan/teal)
+     Competition themes override these two tokens.
+     ========================================================================== */
+  --color-accent: #00D4FF;             /* primary accent — ARENA cyan */
+  --color-accent-hover: #00BFFF;       /* accent hover */
+  --color-accent-subtle: rgba(0, 212, 255, 0.12);     /* accent backgrounds */
+  --color-accent-glow: rgba(0, 212, 255, 0.22);       /* accent glow */
+
+  /* ==========================================================================
+     COLOR — semantic status
+     ========================================================================== */
+  --color-success: #4ADE80;            /* win / completed / positive */
+  --color-success-subtle: rgba(74, 222, 128, 0.12);
+  --color-warning: #FBBF24;            /* caution / pending */
+  --color-warning-subtle: rgba(251, 191, 36, 0.12);
+  --color-danger: #F87171;             /* error / elimination / red card */
+  --color-danger-subtle: rgba(248, 113, 113, 0.12);
+  --color-info: #60A5FA;               /* informational */
+  --color-info-subtle: rgba(96, 165, 250, 0.12);
+
+  /* ==========================================================================
+     COLOR — data provenance (used in badges)
+     ========================================================================== */
+  --color-simulation: #00D4FF;         /* simulated data accent */
+  --color-simulation-subtle: rgba(0, 212, 255, 0.10);
+  --color-archive: #9CA3AF;            /* archived/historical data */
+  --color-archive-subtle: rgba(156, 163, 175, 0.12);
+  --color-live: #4ADE80;               /* live data (only if genuinely live) */
+  --color-live-subtle: rgba(74, 222, 128, 0.12);
+
+  /* ==========================================================================
+     COLOR — competition-brand accents (defaults, overridden per competition)
+     ========================================================================== */
+  --color-team-accent: var(--color-accent);
+  --color-team-accent-subtle: var(--color-accent-subtle);
+
+  /* ==========================================================================
+     TYPOGRAPHY — scale
+     ========================================================================== */
+  --font-display: 'Chakra Petch', sans-serif;
+  --font-heading: 'Chakra Petch', sans-serif;
   --font-body: 'Outfit', sans-serif;
-  /* Light‑theme glass card utility */
-  .glass-card { backdrop-filter: blur(8px); background: var(--bg-glass); border: 1px solid var(--border-focus); box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 8px; padding: 1rem; }
+  --font-mono: 'Share Tech Mono', monospace;
+
+  --text-xs: 0.75rem;      /* 12px — caption / metadata */
+  --text-sm: 0.8125rem;    /* 13px — secondary labels */
+  --text-base: 0.875rem;   /* 14px — body default */
+  --text-lg: 1rem;         /* 16px — readable body */
+  --text-xl: 1.125rem;     /* 18px — card titles */
+  --text-2xl: 1.375rem;    /* 22px — section titles */
+  --text-3xl: 1.75rem;     /* 28px — page titles */
+  --text-4xl: 2.25rem;     /* 36px — display / hero */
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-black: 800;
+
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.7;
+
+  /* ==========================================================================
+     SPACING — 4px base scale
+     ========================================================================== */
+  --space-1: 0.25rem;    /* 4px */
+  --space-2: 0.5rem;     /* 8px */
+  --space-3: 0.75rem;    /* 12px */
+  --space-4: 1rem;       /* 16px */
+  --space-5: 1.25rem;    /* 20px */
+  --space-6: 1.5rem;     /* 24px */
+  --space-8: 2rem;       /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+  --space-20: 5rem;      /* 80px */
+
+  /* ==========================================================================
+     RADIUS — controlled system
+     ========================================================================== */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-full: 9999px;
+
+  /* ==========================================================================
+     SHADOW — subtle depth
+     ========================================================================== */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.30);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.40);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.50);
+  --shadow-glow: 0 0 20px var(--color-accent-glow);
+
+  /* ==========================================================================
+     TRANSITIONS — motion tokens
+     ========================================================================== */
+  --transition-fast: 150ms ease-out;
+  --transition-base: 220ms ease-out;
+  --transition-slow: 350ms ease-out;
+
+  /* ==========================================================================
+     LAYOUT
+     ========================================================================== */
+  --container-max: 1400px;
+  --header-height: 56px;
 }
 
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -60,8 +158,374 @@
 }
 
 /* ==========================================================================
-   DYNAMIC TOURNAMENT THEMES
+   BASE — reset and defaults
    ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar — subtle */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(120, 150, 200, 0.25);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(120, 150, 200, 0.40);
+}
+
+/* Selection */
+::selection {
+  background: var(--color-accent-subtle);
+  color: var(--color-text-primary);
+}
+
+/* Focus — global default */
+:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   COMPONENT — buttons
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  height: 36px;
+  padding: 0 var(--space-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast),
+    color var(--transition-fast), box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: var(--color-text-inverse);
+  border-color: var(--color-accent);
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-secondary {
+  background: var(--color-bg-card);
+  color: var(--color-text-primary);
+  border-color: var(--color-border-default);
+}
+.btn-secondary:hover:not(:disabled) {
+  background: var(--color-bg-card-hover);
+  border-color: var(--color-border-strong);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-text-secondary);
+  border-color: transparent;
+}
+.btn-ghost:hover:not(:disabled) {
+  background: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+}
+
+.btn-danger {
+  background: var(--color-danger);
+  color: #fff;
+  border-color: var(--color-danger);
+}
+.btn-danger:hover:not(:disabled) {
+  background: #ef4444;
+  border-color: #ef4444;
+}
+
+.btn-sm {
+  height: 28px;
+  font-size: var(--text-xs);
+  padding: 0 var(--space-3);
+}
+
+.btn-lg {
+  height: 44px;
+  font-size: var(--text-base);
+  padding: 0 var(--space-6);
+}
+
+/* ==========================================================================
+   COMPONENT — badges
+   ========================================================================== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge-simulation {
+  background: var(--color-simulation-subtle);
+  color: var(--color-simulation);
+  border: 1px solid rgba(0, 212, 255, 0.25);
+}
+.badge-archive {
+  background: var(--color-archive-subtle);
+  color: var(--color-archive);
+  border: 1px solid rgba(156, 163, 175, 0.20);
+}
+.badge-live {
+  background: var(--color-live-subtle);
+  color: var(--color-live);
+  border: 1px solid rgba(74, 222, 128, 0.25);
+}
+.badge-success {
+  background: var(--color-success-subtle);
+  color: var(--color-success);
+  border: 1px solid rgba(74, 222, 128, 0.20);
+}
+.badge-warning {
+  background: var(--color-warning-subtle);
+  color: var(--color-warning);
+  border: 1px solid rgba(251, 191, 36, 0.20);
+}
+.badge-danger {
+  background: var(--color-danger-subtle);
+  color: var(--color-danger);
+  border: 1px solid rgba(248, 113, 113, 0.20);
+}
+
+/* ==========================================================================
+   COMPONENT — cards
+   ========================================================================== */
+.card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+}
+
+.card-elevated {
+  box-shadow: var(--shadow-md);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.card-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: var(--line-height-tight);
+}
+
+/* ==========================================================================
+   COMPONENT — tabs
+   ========================================================================== */
+.tab-list {
+  display: inline-flex;
+  gap: var(--space-1);
+  border-bottom: 1px solid var(--color-border-default);
+  padding-bottom: 0;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.tab:hover:not(.tab[aria-selected="true"]) {
+  color: var(--color-text-primary);
+  background: var(--color-bg-elevated);
+}
+
+.tab[aria-selected="true"] {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ==========================================================================
+   COMPONENT — metric
+   ========================================================================== */
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.metric-value {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.metric-label {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.metric-accent .metric-value {
+  color: var(--color-accent);
+}
+
+/* ==========================================================================
+   UTILITY
+   ========================================================================== */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.text-muted { color: var(--color-text-muted); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-accent { color: var(--color-accent); }
+.text-success { color: var(--color-success); }
+.text-danger { color: var(--color-danger); }
+
+/* ==========================================================================
+   DYNAMIC TOURNAMENT THEMES
+   Competition themes override ONLY accent tokens.
+   ========================================================================== */
+[data-theme="ucl"] {
+  --color-accent: #00F0FF;
+  --color-accent-hover: #00B8E8;
+  --color-accent-subtle: rgba(0, 240, 255, 0.12);
+  --color-accent-glow: rgba(0, 240, 255, 0.25);
+}
+
+[data-theme="laliga"] {
+  --color-accent: #FF2B44;
+  --color-accent-hover: #E02035;
+  --color-accent-subtle: rgba(255, 43, 68, 0.12);
+  --color-accent-glow: rgba(255, 43, 68, 0.22);
+}
+
+[data-theme="pl"] {
+  --color-accent: #00FF87;
+  --color-accent-hover: #00D972;
+  --color-accent-subtle: rgba(0, 255, 135, 0.12);
+  --color-accent-glow: rgba(0, 255, 135, 0.22);
+}
+
+[data-theme="bundesliga"] {
+  --color-accent: #FFEC00;
+  --color-accent-hover: #E6D800;
+  --color-accent-subtle: rgba(255, 236, 0, 0.12);
+  --color-accent-glow: rgba(255, 236, 0, 0.20);
+}
+
+[data-theme="serieA"] {
+  --color-accent: #00B5E2;
+  --color-accent-hover: #00A0CC;
+  --color-accent-subtle: rgba(0, 181, 226, 0.12);
+  --color-accent-glow: rgba(0, 181, 226, 0.22);
+}
+
+[data-theme="ligue1"] {
+  --color-accent: #0066FF;
+  --color-accent-hover: #0052D9;
+  --color-accent-subtle: rgba(0, 102, 255, 0.12);
+  --color-accent-glow: rgba(0, 102, 255, 0.22);
+}
+
+[data-theme="copa"] {
+  --color-accent: #FFD700;
+  --color-accent-hover: #E6C200;
+  --color-accent-subtle: rgba(255, 215, 0, 0.12);
+  --color-accent-glow: rgba(255, 215, 0, 0.20);
+}
+
+[data-theme="euro"] {
+  --color-accent: #00AEEF;
+  --color-accent-hover: #0099CC;
+  --color-accent-subtle: rgba(0, 174, 239, 0.12);
+  --color-accent-glow: rgba(0, 174, 239, 0.22);
+}
 /* 1. UEFA Champions League Theme */
 [data-theme="ucl"], [data-theme="europaLeague"] {
   --pitch-green: #00F0FF;
