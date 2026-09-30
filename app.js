@@ -1619,30 +1619,37 @@ function setupNavigation() {
   // ---------------------------------------------------------------------------
   function renderProductHome() {
     const tournaments = Object.keys(TOURNAMENTS_CONFIG);
+    const formatTeamMap = { worldcup48: 48, uclLeaguePhase: 36, leagueSeason: 20, euro24: 24, copa16: 16 };
+    const formatDrawMap = { worldcup48: 48, uclLeaguePhase: 36, leagueSeason: 0, euro24: 24, copa16: 16 };
+    const formatLabelMap = { worldcup48: '12 GROUPS + KNOCKOUT', uclLeaguePhase: 'SWISS LEAGUE + PLAYOFF', leagueSeason: '38 MATCHDAYS', euro24: '6 GROUPS + KNOCKOUT', copa16: '4 GROUPS + KNOCKOUT' };
+    const iconMap = { cup: '🏆', league: '⚽' };
+
     const totalTeams = tournaments.reduce((acc, key) => {
       const cfg = TOURNAMENTS_CONFIG[key];
-      return acc + (cfg?.teamCount || 0);
+      return acc + (formatTeamMap[cfg?.format] || 0);
     }, 0);
-    const maxDraw = Math.max(...tournaments.map(k => TOURNAMENTS_CONFIG[k]?.drawSize || 0));
+    const maxDraw = Math.max(...tournaments.map(k => formatDrawMap[TOURNAMENTS_CONFIG[k]?.format] || 0));
 
     document.getElementById('home-active-tournaments').textContent = tournaments.length;
     document.getElementById('home-active-teams').textContent = totalTeams;
     document.getElementById('home-active-matches').textContent = '0';
-    document.getElementById('home-draw-size').textContent = maxDraw;
+    document.getElementById('home-draw-size').textContent = maxDraw || '—';
 
     const grid = document.getElementById('home-comp-grid');
     if (grid) {
       grid.innerHTML = tournaments.map(key => {
         const cfg = TOURNAMENTS_CONFIG[key];
         const active = key === activeTournKey;
+        const icon = iconMap[cfg?.type] || '🏆';
+        const label = formatLabelMap[cfg?.format] || cfg?.format || '';
         return `
           <div class="home-comp-card ${active ? 'home-comp-card-active' : ''}" role="listitem">
-            <div class="home-comp-icon" aria-hidden="true">${cfg.icon || '<i class="fa-solid fa-trophy"></i>'}</div>
+            <div class="home-comp-icon" aria-hidden="true">${icon}</div>
             <div class="home-comp-info">
               <span class="home-comp-name">${cfg.name}</span>
-              <span class="home-comp-detail">${cfg.formatLabel || cfg.format}</span>
+              <span class="home-comp-detail">${label}</span>
             </div>
-            <span class="home-comp-season">${cfg.season || ''}</span>
+            <span class="home-comp-season">SIMULATION</span>
           </div>
         `;
       }).join('');
