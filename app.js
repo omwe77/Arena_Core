@@ -1470,6 +1470,19 @@
       if (syncUrl && window.ArenaRouter) {
         window.ArenaRouter.navigate(`/competition/${activeTournKey}`);
       }
+    } else if (targetViewId === 'product-home') {
+      // Product-level command center: hide sim panel, show nothing special
+      // The view-product-home section is a sibling panel — show it
+      const homePanel = document.getElementById('view-product-home');
+      const simPanel = document.getElementById('view-tournament-sim');
+      const standingsPanel = document.getElementById('view-standings-view');
+      if (homePanel) { homePanel.hidden = false; homePanel.classList.add('active'); }
+      if (simPanel) { simPanel.hidden = true; simPanel.classList.remove('active'); }
+      if (standingsPanel) { standingsPanel.hidden = true; standingsPanel.classList.remove('active'); }
+      renderProductHome();
+      if (syncUrl && window.ArenaRouter) {
+        window.ArenaRouter.navigate('/');
+      }
     } else if (targetViewId === 'tournament-sim') {
       if (activeTournKey === 'ucl') {
         const feederInfo = getUclFeederStatus();
@@ -1549,6 +1562,12 @@ function setupNavigation() {
         if (link.dataset.nav) switchView(link.dataset.nav);
       });
     });
+    // Home nav: route to product-level command center
+    const homeNavBtn = document.querySelector('.top-nav-link[data-nav="tournament-home"]');
+    if (homeNavBtn) {
+      homeNavBtn.dataset.nav = 'product-home';
+      homeNavBtn.innerHTML = '<i class="fa-solid fa-house"></i> HOME';
+    }
 
     // Keyboard navigation shortcuts
     document.addEventListener('keydown', (e) => {
@@ -1593,6 +1612,41 @@ function setupNavigation() {
         }
       }
     });
+  }
+
+  // ---------------------------------------------------------------------------
+  // 7. PRODUCT HOME RENDER
+  // ---------------------------------------------------------------------------
+  function renderProductHome() {
+    const tournaments = Object.keys(TOURNAMENTS_CONFIG);
+    const totalTeams = tournaments.reduce((acc, key) => {
+      const cfg = TOURNAMENTS_CONFIG[key];
+      return acc + (cfg?.teamCount || 0);
+    }, 0);
+    const maxDraw = Math.max(...tournaments.map(k => TOURNAMENTS_CONFIG[k]?.drawSize || 0));
+
+    document.getElementById('home-active-tournaments').textContent = tournaments.length;
+    document.getElementById('home-active-teams').textContent = totalTeams;
+    document.getElementById('home-active-matches').textContent = '0';
+    document.getElementById('home-draw-size').textContent = maxDraw;
+
+    const grid = document.getElementById('home-comp-grid');
+    if (grid) {
+      grid.innerHTML = tournaments.map(key => {
+        const cfg = TOURNAMENTS_CONFIG[key];
+        const active = key === activeTournKey;
+        return `
+          <div class="home-comp-card ${active ? 'home-comp-card-active' : ''}" role="listitem">
+            <div class="home-comp-icon" aria-hidden="true">${cfg.icon || '<i class="fa-solid fa-trophy"></i>'}</div>
+            <div class="home-comp-info">
+              <span class="home-comp-name">${cfg.name}</span>
+              <span class="home-comp-detail">${cfg.formatLabel || cfg.format}</span>
+            </div>
+            <span class="home-comp-season">${cfg.season || ''}</span>
+          </div>
+        `;
+      }).join('');
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -10304,7 +10358,8 @@ function getUclFeederStatus() {
     setupCustomDrawModalHandlers();
     init3DCardParallaxEngine();
     initMarioStrikerEngine();
-    // Start on HOME view — selectTournament will set subView='home' via initTournamentState
+    // Start on product-level HOME — then select default competition
+    switchView('product-home');
     selectTournament('wc');
     switchView('tournament-home');
   });

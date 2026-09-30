@@ -1971,6 +1971,361 @@ html, body {
 }
 
 /* ==========================================================================
+   PRODUCT HOME — COMMAND CENTER
+   ========================================================================== */
+#view-product-home {
+  padding: 28px 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Identity pillar */
+.home-identity {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.home-identity-lockup {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.home-brand-icon {
+  width: 48px;
+  height: 48px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.home-brand-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.home-brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.home-brand-name {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.home-brand-core {
+  color: var(--accent-1);
+}
+
+.home-brand-tag {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.home-identity-divider {
+  height: 1px;
+  background: var(--border-subtle);
+  width: 100%;
+  opacity: 0.6;
+}
+
+.home-identity-sub {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 560px;
+  line-height: 1.5;
+}
+
+/* Status dashboard */
+.home-status-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.home-status-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.home-status-card:hover {
+  border-color: var(--accent-1);
+  box-shadow: 0 0 0 1px var(--accent-1-glow);
+}
+
+.home-status-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-muted);
+  border-radius: 8px;
+  color: var(--accent-1);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.home-status-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.home-status-value {
+  font-family: var(--font-hud);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.home-status-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* CTA block */
+.home-cta-block {
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.home-cta-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.home-cta-heading {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 6px 0;
+  letter-spacing: 0.01em;
+}
+
+.home-cta-sub {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.home-cta-actions {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.home-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--accent-1);
+  color: var(--text-on-accent);
+  border: 1px solid var(--accent-1);
+  border-radius: 8px;
+  padding: 12px 22px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+.home-cta-btn:hover {
+  background: var(--accent-1-hover);
+  border-color: var(--accent-1-hover);
+  box-shadow: 0 0 12px var(--accent-1-glow);
+}
+
+.home-cta-btn:active {
+  background: var(--accent-1-active);
+}
+
+.home-cta-btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border-color: var(--border-default);
+}
+
+.home-cta-btn-secondary:hover {
+  background: var(--surface-muted);
+  border-color: var(--border-default);
+  box-shadow: none;
+}
+
+/* Competition grid */
+.home-competitions-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.home-section-heading {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.home-comp-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.home-comp-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  cursor: default;
+}
+
+.home-comp-card-active {
+  border-color: var(--accent-1);
+  background: var(--surface-muted);
+}
+
+.home-comp-card-active .home-comp-name {
+  color: var(--accent-1);
+}
+
+.home-comp-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+.home-comp-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.home-comp-name {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.home-comp-detail {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.home-comp-season {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+  margin-top: auto;
+  padding-top: 6px;
+  border-top: 1px solid var(--border-subtle);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Responsive: 2-col on tablet */
+@media (max-width: 900px) {
+  .home-status-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .home-comp-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .home-cta-block {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+  }
+  .home-cta-actions {
+    flex-direction: column;
+  }
+  #view-product-home {
+    padding: 20px 16px;
+  }
+}
+
+/* Responsive: single col on small */
+@media (max-width: 520px) {
+  .home-status-grid {
+    grid-template-columns: 1fr;
+  }
+  .home-comp-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
    HERO CARD & SIMULATION CONTROLS
    ========================================================================== */
 .sim-header-card {
