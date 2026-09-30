@@ -36,7 +36,9 @@
   --border-subtle: #2F453C;           /* crisp lighter border */
   --border-focus: rgba(46, 204, 113, 0.6);
   --border-gold: rgba(255, 201, 74, 0.6);
-  
+
+  /* Reduced motion — respects user accessibility preference */
+
   /* Broadcast Typography */
   --text-white: #FFFFFF;
   --text-main: #F7FAF8;              /* bright crisp text */
@@ -44,8 +46,17 @@
   --font-hud: 'Share Tech Mono', monospace;
   --font-title: 'Chakra Petch', sans-serif;
   --font-body: 'Outfit', sans-serif;
-  /* Lightâ€‘theme glass card utility */
+  /* Light‑theme glass card utility */
   .glass-card { backdrop-filter: blur(8px); background: var(--bg-glass); border: 1px solid var(--border-focus); box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 8px; padding: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ==========================================================================

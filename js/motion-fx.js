@@ -2,16 +2,27 @@
    ARENA_CORE — Anime.js Motion & Confetti Celebration Engine
    Delivers broadcast-grade animations: multi-burst confetti cannons,
    trophy spring presentations, goal notification banners, and table row staggers.
+   Respects prefers-reduced-motion for accessibility.
    ========================================================================== */
 
 (function () {
   'use strict';
 
+  // Detect reduced-motion preference once at load
+  const prefersReducedMotion = (function () {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return true;
+    }
+    return false;
+  })();
+
   /**
    * Universal Anime.js wrapper supporting v4 (anime.animate) and v3 (anime({...}))
+   * No-op when reduced motion is preferred.
    */
   function runAnime(options) {
     if (!window.anime) return null;
+    if (prefersReducedMotion) return null;
     try {
       if (typeof window.anime.animate === 'function') {
         const targets = options.targets;
@@ -36,9 +47,20 @@
 
   /**
    * Multi-stage Confetti Cannon for Tournament Champions
+   * Reduced for accessibility when prefers-reduced-motion is set.
    */
   function launchChampionConfetti(primaryColor = '#00f2fe') {
     if (typeof window.confetti !== 'function') return;
+    if (prefersReducedMotion) {
+      // Single small burst instead of three waves
+      window.confetti({
+        particleCount: 20,
+        spread: 90,
+        origin: { x: 0.5, y: 0.5 },
+        colors: ['#ffd700', '#ffffff', primaryColor]
+      });
+      return;
+    }
 
     const colors = ['#ffd700', '#ffffff', primaryColor, '#00ff87', '#60efff'];
 
@@ -204,8 +226,8 @@
       window.ArenaAudio.playGoalHorn();
     }
 
-    // Mini confetti burst on goal
-    if (typeof window.confetti === 'function') {
+    // Mini confetti burst on goal (reduced for accessibility)
+    if (typeof window.confetti === 'function' && !prefersReducedMotion) {
       window.confetti({
         particleCount: 35,
         spread: 60,
@@ -276,6 +298,18 @@
     celebrateChampion,
     showGoalBanner,
     staggerStandings,
-    staggerFixtures
+    staggerFixtures,
+
+    /** Announce a status message to screen readers via the aria-live region. */
+    announce: function (message) {
+      const region = document.getElementById('arena-status-region');
+      if (!region) return;
+      // Set textContent to announce; clear after a short delay so repeated identical
+      // messages are still announced (SRs often ignore identical consecutive text).
+      region.textContent = '';
+      setTimeout(() => {
+        region.textContent = message;
+      }, 30);
+    }
   };
 })();
