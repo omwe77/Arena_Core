@@ -233,6 +233,93 @@
     </button>
   </nav>
 
+  <!-- ===== PRODUCT-LEVEL COMMAND CENTER : HOME VIEW ===== -->
+  <section id="view-product-home" class="view-panel" hidden aria-label="ARENA CORE Home">
+    <div class="home-shell">
+
+      <!-- Brand identity pillar -->
+      <div class="home-identity">
+        <div class="home-identity-lockup">
+          <span class="home-brand-icon" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="16" r="15" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M16 6 L19.5 12 L16 14 L12.5 12 Z" fill="currentColor"/>
+              <circle cx="16" cy="16" r="5" stroke="currentColor" stroke-width="1.2" fill="none"/>
+            </svg>
+          </span>
+          <div class="home-brand-text">
+            <span class="home-brand-name">ARENA <span class="home-brand-core">CORE</span></span>
+            <span class="home-brand-tag">football simulation command center</span>
+          </div>
+        </div>
+        <div class="home-identity-divider" aria-hidden="true"></div>
+        <p class="home-identity-sub">
+          Multi-competition simulation. Seeded deterministic engine. Archive + projection side by side.
+        </p>
+      </div>
+
+      <!-- Product status dashboard -->
+      <div class="home-status-grid" role="region" aria-label="Platform status">
+        <div class="home-status-card">
+          <span class="home-status-icon" aria-hidden="true"><i class="fa-solid fa-trophy"></i></span>
+          <div class="home-status-body">
+            <span class="home-status-value" id="home-active-tournaments">0</span>
+            <span class="home-status-label">ACTIVE COMPETITIONS</span>
+          </div>
+        </div>
+        <div class="home-status-card">
+          <span class="home-status-icon" aria-hidden="true"><i class="fa-solid fa-arrows-spin"></i></span>
+          <div class="home-status-body">
+            <span class="home-status-value" id="home-active-teams">0</span>
+            <span class="home-status-label">TEAMS LOADED</span>
+          </div>
+        </div>
+        <div class="home-status-card">
+          <span class="home-status-icon" aria-hidden="true"><i class="fa-solid fa-diagram-project"></i></span>
+          <div class="home-status-body">
+            <span class="home-status-value" id="home-active-matches">0</span>
+            <span class="home-status-label">SIMULATED MATCHES</span>
+          </div>
+        </div>
+        <div class="home-status-card">
+          <span class="home-status-icon" aria-hidden="true"><i class="fa-solid fa-sliders"></i></span>
+          <div class="home-status-body">
+            <span class="home-status-value" id="home-draw-size">0</span>
+            <span class="home-status-label">MAX DRAW SIZE</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary call to action -->
+      <div class="home-cta-block">
+        <div class="home-cta-text">
+          <h3 class="home-cta-heading">Pick a competition. Run the simulation.</h3>
+          <p class="home-cta-sub">Select a tournament above and press SIMULATE to advance through the stages.</p>
+        </div>
+        <div class="home-cta-actions">
+          <button type="button" class="home-cta-btn" id="home-btn-simulate" data-nav="tournament-sim">
+            <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+            <span>SIMULATE</span>
+          </button>
+          <button type="button" class="home-cta-btn home-cta-btn-secondary" data-nav="standings-view">
+            <i class="fa-solid fa-table" aria-hidden="true"></i>
+            <span>STANDINGS</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Competition grid -->
+      <div class="home-competitions-section">
+        <h3 class="home-section-heading">AVAILABLE COMPETITIONS</h3>
+        <div class="home-comp-grid" id="home-comp-grid" role="list">
+          <!-- populated by renderHomeCompetitionGrid() -->
+        </div>
+      </div>
+
+    </div>
+  </section>
+  <!-- ===== END PRODUCT-LEVEL HOME VIEW ===== -->
+
   <!-- App Main Content Container -->
   <div class="app-layout">
 
