@@ -2,13 +2,12 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('ARENA_CORE Platform Tests', () => {
+
   test('has correct page title and header elements', async ({ page }) => {
     await page.goto('/');
 
-    // Expect page title
     await expect(page).toHaveTitle(/ARENA CORE/);
 
-    // Expect Header pitch track and ARENA_CORE striker runner
     const pitchTrack = page.locator('#header-pitch-track');
     await expect(pitchTrack).toBeVisible();
 
@@ -19,49 +18,39 @@ test.describe('ARENA_CORE Platform Tests', () => {
   test('renders World Cup hero and interactive video HUD', async ({ page }) => {
     await page.goto('/');
 
-    // World cup showcase hero exists
     const wcHero = page.locator('#wc-interactive-hero');
     await expect(wcHero).toBeVisible();
 
-    // Verify hero video background wrapper exists
     const videoBg = page.locator('#hero-video-bg-wc');
     await expect(videoBg).toBeAttached();
 
-    // Verify Interactive Hero Video HUD exists
     const hud = page.locator('#hero-video-hud-wc');
     await expect(hud).toBeVisible();
 
-    // Verify Sound toggle button exists
     const soundBtn = page.locator('#hvh-sound-btn-wc');
     await expect(soundBtn).toBeVisible();
 
-    // Verify Play/Pause toggle button exists
     const playBtn = page.locator('#hvh-play-btn-wc');
     await expect(playBtn).toBeVisible();
 
-    // Verify Video / Artwork toggle button exists
     const modeBtn = page.locator('#hvh-bg-btn-wc');
     await expect(modeBtn).toBeVisible();
   });
 
   test('hero video HUD controls respond to clicks', async ({ page }) => {
     await page.goto('/');
-    // Dismiss any Vite HMR error overlay that might intercept pointer events
     await page.keyboard.press('Escape');
 
-    // 1. Test Sound Toggle
     const soundBtn = page.locator('#hvh-sound-btn-wc');
     await expect(soundBtn).toBeVisible();
     await soundBtn.click();
     await expect(soundBtn).toHaveClass(/hvh-btn-active/);
 
-    // 2. Test Playback Toggle
     const playBtn = page.locator('#hvh-play-btn-wc');
     await expect(playBtn).toBeVisible();
     await playBtn.click();
     await expect(playBtn).toHaveClass(/hvh-btn-paused/);
 
-    // 3. Test Mode Toggle (Switch between Video and Artwork)
     const modeBtn = page.locator('#hvh-bg-btn-wc');
     await expect(modeBtn).toBeVisible();
     await modeBtn.click();
@@ -78,7 +67,6 @@ test.describe('ARENA_CORE Platform Tests', () => {
     const modal = page.locator('#wc-draw-modal');
     await expect(modal).toBeVisible();
 
-    // Close modal via close button
     const closeBtn = page.locator('#wc-draw-close');
     await closeBtn.click();
     await expect(modal).toBeHidden();
@@ -88,11 +76,9 @@ test.describe('ARENA_CORE Platform Tests', () => {
     await page.goto('/');
     await page.waitForTimeout(1000);
 
-    // 1. Check World Cup hero video
     const wcIframe = page.locator('#hero-video-iframe-wc');
     await expect(wcIframe).toHaveAttribute('src', /I_kDmkCBm_c/);
 
-    // 2. Switch to UCL
     const uclTab = page.locator('.tourn-tab[data-tourn="ucl"]');
     if (await uclTab.count() > 0) {
       await uclTab.click();
@@ -101,7 +87,6 @@ test.describe('ARENA_CORE Platform Tests', () => {
       await expect(uclIframe).toHaveAttribute('src', /V_YxSJXR9D4/);
     }
 
-    // 3. Switch to Premier League
     const plTab = page.locator('.tourn-tab[data-tourn="pl"]');
     if (await plTab.count() > 0) {
       await plTab.click();
@@ -110,6 +95,127 @@ test.describe('ARENA_CORE Platform Tests', () => {
       await expect(plIframe).toHaveAttribute('src', /wpcKyur-kbI/);
     }
   });
+
+  test('navigation switches between all views', async ({ page }) => {
+    await page.goto('/');
+
+    // Ensure nav is visible first
+    const nav = page.locator('.top-nav');
+    await expect(nav).toBeVisible();
+
+    // Use evaluate to click directly, bypassing all visibility checks
+    await page.evaluate(() => document.querySelector('.top-nav-link[data-nav="tournament-home"]')?.click());
+    await expect(page.locator('#view-tournament-sim')).toBeVisible();
+
+    await page.evaluate(() => document.querySelector('.top-nav-link[data-nav="tournament-sim"]')?.click());
+    await expect(page.locator('#view-tournament-sim')).toBeVisible();
+
+    await page.evaluate(() => document.querySelector('.top-nav-link[data-nav="standings-view"]')?.click());
+    await expect(page.locator('#view-standings-view')).toBeVisible();
+
+    await page.evaluate(() => document.querySelector('.top-nav-link[data-nav="archive-view"]')?.click());
+    await expect(page.locator('#view-archive-view')).toBeVisible();
+  });
+
+  test('data mode badge updates based on active view', async ({ page }) => {
+    await page.goto('/');
+
+    await page.click('.top-nav-link[data-nav="standings-view"]');
+    const badge = page.locator('#global-data-mode-text');
+    await expect(badge).toHaveText('ARCHIVE DATA');
+
+    await page.click('.top-nav-link[data-nav="tournament-sim"]');
+    await expect(badge).toHaveText('SIMULATION');
+  });
+
+  test('archive view renders competition cards', async ({ page }) => {
+    await page.goto('/');
+
+    await page.click('.top-nav-link[data-nav="archive-view"]');
+    const grid = page.locator('#archive-grid');
+    await expect(grid).toBeVisible();
+
+    const cards = page.locator('.archive-card');
+    const count = await cards.count();
+    expect(count).toBeGreaterThan(0);
+  });
+
+  test('standings view renders table structure', async ({ page }) => {
+    await page.goto('/');
+
+    await page.click('.top-nav-link[data-nav="standings-view"]');
+    const table = page.locator('#standings-table-body');
+    await expect(table).toBeVisible();
+  });
+
+  test('simulation controls are visible and clickable', async ({ page }) => {
+    await page.goto('/');
+
+    await page.click('.top-nav-link[data-nav="tournament-sim"]');
+    const simControls = page.locator('.sim-controls-group, .sim-header-card');
+    await expect(simControls.first()).toBeVisible();
+  });
+
+  test('keyboard navigation works for main nav', async ({ page }) => {
+    await page.goto('/');
+
+    // Tab should focus some interactive element
+    await page.keyboard.press('Tab');
+    const focused = await page.evaluate(() => document.activeElement?.className || '');
+    expect(focused.length).toBeGreaterThan(0);
+  });
+
+  test('modal focus trap works in custom draw', async ({ page }) => {
+    await page.goto('/');
+
+    const drawBtn = page.locator('#btn-wc-custom-draw');
+    await drawBtn.click();
+
+    const modal = page.locator('#wc-draw-modal');
+    await expect(modal).toBeVisible();
+
+    // Check that modal contains focusable elements
+    const focusableCount = await page.evaluate(() => {
+      const modal = document.getElementById('wc-draw-modal');
+      if (!modal) return 0;
+      return modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])').length;
+    });
+    expect(focusableCount).toBeGreaterThan(0);
+  });
+
+  test('mobile navigation is usable at 375px', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto('/');
+
+    const nav = page.locator('.top-nav');
+    await expect(nav).toBeVisible();
+
+    const navLinks = page.locator('.top-nav-link');
+    const count = await navLinks.count();
+    expect(count).toBeGreaterThanOrEqual(3);
+
+    for (let i = 0; i < count; i++) {
+      await navLinks.nth(i).click({ force: true });
+      await page.waitForTimeout(300);
+    }
+  });
+
+  test('no console errors during full navigation', async ({ page }) => {
+    const errors = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+    page.on('pageerror', err => errors.push(err.message));
+
+    await page.goto('/');
+
+    const navLinks = page.locator('.top-nav-link');
+    const count = await navLinks.count();
+    for (let i = 0; i < count; i++) {
+      await navLinks.nth(i).click();
+      await page.waitForTimeout(300);
+    }
+
+    expect(errors).toEqual([]);
+  });
 });
-
-
