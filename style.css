@@ -1916,6 +1916,46 @@ html, body {
     padding: var(--space-4) var(--space-4);
   }
 
+  .home-shell {
+    gap: var(--space-5);
+  }
+
+  .home-status-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3) var(--space-4);
+  }
+
+  .home-cta-block {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  .home-cta-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .home-cta-btn {
+    width: 100%;
+  }
+
+  .home-comp-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sim-header-card {
+    flex-direction: column;
+  }
+
+  .sim-controls-group {
+    width: 100%;
+  }
+
+  .archive-grid {
+    grid-template-columns: 1fr;
+  }
+
   .footer-main-grid {
     grid-template-columns: 1fr;
     gap: var(--space-6);
