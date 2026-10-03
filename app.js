@@ -8085,6 +8085,33 @@ function getUclFeederStatus() {
         startConfettiAnimation();
       });
     }
+    const champExportBtn = document.getElementById('champ-export-btn');
+    if (champExportBtn) {
+      champExportBtn.addEventListener('click', () => {
+        const config = TOURNAMENTS_CONFIG[activeTournKey] || { name: 'TOURNAMENT' };
+        const state = tournamentState[activeTournKey] || {};
+        const champion = document.getElementById('champ-modal-name')?.textContent || 'Unknown';
+        const result = {
+          competition: config.name,
+          champion: champion,
+          model: 'Poisson v1.0.0',
+          timestamp: new Date().toISOString(),
+          status: 'HYPOTHETICAL RESULT',
+          matches: (state.matchdays || []).flat().filter(m => m.isSimulated).map(m => ({
+            home: m.home, away: m.away,
+            scoreHome: m.scoreHome, scoreAway: m.scoreAway,
+            stage: m.stage || 'league'
+          }))
+        };
+        const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `arena-core-simulation-${activeTournKey}-${Date.now()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+    }
 
     // Global modal close fallback listener
     document.addEventListener('click', (e) => {
