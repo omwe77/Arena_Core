@@ -1,8 +1,8 @@
 /* ==========================================================================
-   PITCH_CORE — API-FOOTBALL MULTI-TOURNAMENT DATA FETCH & CACHE LAYER
-   Node.js data acquisition script for 10 top global football competitions.
+   ARENA_CORE — MULTI-TOURNAMENT DATA FETCH & CACHE LAYER
+   Node.js data acquisition script for top global football competitions.
    - Reads process.env.API_FOOTBALL_KEY securely (never exposed to browser)
-   - Discovers valid seasons, rate-limits requests (10 req/min free plan)
+   - Discovers valid seasons, rate-limits requests
    - Generates sanitized local data/real-tournaments.json & data/real-tournaments.js
    ========================================================================== */
 
