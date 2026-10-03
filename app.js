@@ -486,9 +486,9 @@
                     OFFICIAL_LOGOS[strippedKey];
 
     if (logoUrl) {
-      return `<img src="${logoUrl}" class="team-logo" alt="${teamName}" loading="lazy" onerror="this.outerHTML='<span class=\\'team-logo-emoji\\'>⚽</span>'">`;
+      return `<img src="${logoUrl}" class="team-logo" alt="${teamName}" loading="lazy" onerror="this.outerHTML='<span class=\\'team-logo-emoji\\'><i class=\\'fa-solid fa-futbol\\'></i></span>'">`;
     }
-    return '<span class="team-logo-emoji">⚽</span>';
+    return '<span class="team-logo-emoji"><i class="fa-solid fa-futbol"></i></span>';
   }
 
   // ---------------------------------------------------------------------------
@@ -1633,7 +1633,7 @@ function setupNavigation() {
     const formatTeamMap = { worldcup48: 48, uclLeaguePhase: 36, leagueSeason: 20, euro24: 24, copa16: 16 };
     const formatDrawMap = { worldcup48: 48, uclLeaguePhase: 36, leagueSeason: 0, euro24: 24, copa16: 16 };
     const formatLabelMap = { worldcup48: '12 GROUPS + KNOCKOUT', uclLeaguePhase: 'SWISS LEAGUE + PLAYOFF', leagueSeason: '38 MATCHDAYS', euro24: '6 GROUPS + KNOCKOUT', copa16: '4 GROUPS + KNOCKOUT' };
-    const iconMap = { cup: '🏆', league: '⚽' };
+    const iconMap = { cup: 'TROPHY', league: 'LEAGUE' };
 
     const totalTeams = tournaments.reduce((acc, key) => {
       const cfg = TOURNAMENTS_CONFIG[key];
@@ -1771,26 +1771,26 @@ function setupNavigation() {
       if (config.format === 'leagueSeason') {
         const pendingMd = getFirstPendingMatchdayIdx(state);
         stageActionBtn.textContent = pendingMd >= state.totalMatchdays
-          ? '🏆 SEASON DONE'
-          : `⚡ MATCHDAY ${pendingMd + 1}`;
+          ? 'SEASON COMPLETE'
+          : `MATCHDAY ${pendingMd + 1}`;
         stageActionBtn.disabled = pendingMd >= state.totalMatchdays;
       } else if (state.groups && !state.groupsPlayed) {
-        stageActionBtn.textContent = '⚡ SIMULATE GROUP STAGE';
+        stageActionBtn.textContent = 'SIMULATE GROUP STAGE';
         stageActionBtn.disabled = false;
       } else if (state.r32 && state.r32.length > 0 && state.r32.some(m => !m.isSimulated)) {
-        stageActionBtn.textContent = '⚡ SIMULATE ROUND OF 32';
+        stageActionBtn.textContent = 'SIMULATE ROUND OF 32';
         stageActionBtn.disabled = false;
       } else if (state.r16 && state.r16.length > 0 && state.r16.some(m => !m.isSimulated)) {
-        stageActionBtn.textContent = '⚡ SIMULATE ROUND OF 16';
+        stageActionBtn.textContent = 'SIMULATE ROUND OF 16';
         stageActionBtn.disabled = false;
       } else if (state.qf && state.qf.length > 0 && state.qf.some(m => !m.isSimulated)) {
-        stageActionBtn.textContent = '⚡ SIMULATE QUARTERFINALS';
+        stageActionBtn.textContent = 'SIMULATE QUARTERFINALS';
         stageActionBtn.disabled = false;
       } else if (state.sf && state.sf.length > 0 && state.sf.some(m => !m.isSimulated)) {
-        stageActionBtn.textContent = '⚡ SIMULATE SEMIFINALS';
+        stageActionBtn.textContent = 'SIMULATE SEMIFINALS';
         stageActionBtn.disabled = false;
       } else if (state.gf && state.gf.length > 0 && !state.champion) {
-        stageActionBtn.textContent = '⚡ SIMULATE GRAND FINAL';
+        stageActionBtn.textContent = 'SIMULATE GRAND FINAL';
         stageActionBtn.disabled = false;
       } else {
         stageActionBtn.textContent = '🏆 TOURNAMENT COMPLETED';
@@ -2202,10 +2202,10 @@ function setupNavigation() {
       const pendingBanner = `
         <div class="stage-pending-banner">
           <div class="stage-pending-text">
-            <span>⏳</span>
+            <span><i class="fa-solid fa-clock"></i></span>
             <span>${meta.title} PENDING — ${meta.count} FIXTURE SLOTS (Awaiting ${meta.prevStage} Qualification)</span>
           </div>
-          <button type="button" class="btn-stage-quick-action" data-stage="${stageKey}" data-action="advance-stage">⚡ ${prevActionText}</button>
+          <button type="button" class="btn-stage-quick-action" data-stage="${stageKey}" data-action="advance-stage">${prevActionText}</button>
         </div>
       `;
 
@@ -2215,7 +2215,7 @@ function setupNavigation() {
         contentHtml = `
           <div class="bracket-column expanded-stage" id="col-${stageKey}">
             <div class="bracket-column-header-bar">
-              <div class="column-header">⏳ ${meta.title} (${meta.count} FIXTURES)</div>
+              <div class="column-header"><i class="fa-solid fa-clock"></i> ${meta.title} (${meta.count} FIXTURES)</div>
             </div>
             ${pendingBanner}
             <div class="bracket-cards-grid">
@@ -3719,7 +3719,7 @@ function getUclFeederStatus() {
             <div class="ucl-gate-league-top">
               <span class="ucl-gate-league-title">${f.flag} ${f.name}</span>
               <span class="ucl-gate-league-badge ${f.isFinished ? 'done' : 'pending'}">
-                ${f.isFinished ? '✅ FINISHED' : `⏳ MD ${f.curMd}/${f.totalMd}`}
+                ${f.isFinished ? 'FINISHED' : `MD ${f.curMd}/${f.totalMd}`}
               </span>
             </div>
             <div class="ucl-gate-league-leader">
@@ -3909,7 +3909,7 @@ function getUclFeederStatus() {
                   <div class="ucl-feeder-card-top">
                     <span class="ucl-feeder-name">${f.flag} ${f.name.toUpperCase()}</span>
                     <span class="ucl-feeder-badge ${f.isFinished ? 'done' : 'pending'}">
-                      ${f.isFinished ? '✅ 4/4 CONFIRMED' : (f.curMd > 0 ? `⏳ MD ${f.curMd}/${f.totalMd}` : '⭐ OFFICIAL SEEDS')}
+                      ${f.isFinished ? '4/4 CONFIRMED' : (f.curMd > 0 ? `MD ${f.curMd}/${f.totalMd}` : 'OFFICIAL SEEDS')}
                     </span>
                   </div>
                   <div class="ucl-feeder-teams">
@@ -5803,7 +5803,7 @@ function getUclFeederStatus() {
             </div>
             <div class="gq-actions-row">
               <button type="button" class="btn-gq-resim" id="btn-gq-resim"><i class="fa-solid fa-rotate"></i> Re-Simulate Groups</button>
-              <button type="button" class="btn-gq-advance" id="btn-gq-goto-r32">⚡ VIEW ${nextStageName} BRACKET →</button>
+              <button type="button" class="btn-gq-advance" id="btn-gq-goto-r32">VIEW ${nextStageName} BRACKET</button>
             </div>
           </div>
           <div class="gq-teams-pills-wrap">
@@ -5821,14 +5821,14 @@ function getUclFeederStatus() {
       summaryHubHtml = `
         <div class="groups-command-hub-banner">
           <div class="gch-info">
-            <div class="gch-icon">⚡</div>
+            <div class="gch-icon"><i class="fa-solid fa-bolt"></i></div>
             <div>
               <h3 class="gch-heading">GROUP STAGE FIXTURES READY (12 GROUPS • 48 TEAMS)</h3>
               <p class="gch-desc">Simulate all 36 group matches to determine the top 2 from each group plus the 8 best 3rd-placed teams advancing to the Round of 32.</p>
             </div>
           </div>
           <button type="button" class="btn-sim-all-groups-hero" id="btn-sim-all-groups">
-            <i class="fa-solid fa-play"></i> ⚡ SIMULATE ALL 12 GROUPS
+            <i class="fa-solid fa-play"></i> SIMULATE ALL 12 GROUPS
           </button>
         </div>
       `;
@@ -5863,9 +5863,9 @@ function getUclFeederStatus() {
 
                 let qualBadge = '';
                 if (state.groupsPlayed) {
-                  if (idx === 0) qualBadge = '<span class="qual-badge-pill rank-1">🏆 1ST • QUALIFIED</span>';
-                  else if (idx === 1) qualBadge = '<span class="qual-badge-pill rank-2">✅ 2ND • QUALIFIED</span>';
-                  else if (isBest3rd) qualBadge = '<span class="qual-badge-pill rank-3-qual">⚡ 3RD • QUALIFIED</span>';
+                  if (idx === 0) qualBadge = '<span class="qual-badge-pill rank-1">1ST • QUALIFIED</span>';
+                  else if (idx === 1) qualBadge = '<span class="qual-badge-pill rank-2">2ND • QUALIFIED</span>';
+                  else if (isBest3rd) qualBadge = '<span class="qual-badge-pill rank-3-qual">3RD • QUALIFIED</span>';
                   else qualBadge = '<span class="elim-badge-pill">ELIMINATED</span>';
                 }
 
@@ -5969,19 +5969,19 @@ function getUclFeederStatus() {
   function renderPlaceholderMatchCard(p, stage, idx, isFinal = false) {
     return `
       <div class="bracket-match-card placeholder-card ${isFinal ? 'final-match' : ''}" data-match-id="${stage}_placeholder_${idx}">
-        ${isFinal ? '<div class="live-now-badge">🏆 GRAND FINAL FIXTURE</div>' : ''}
+        ${isFinal ? '<div class="live-now-badge">GRAND FINAL FIXTURE</div>' : ''}
         <div class="match-meta-tag">FIXTURE #${idx + 1} • ${p.fixture || 'KNOCKOUT FIXTURE'}</div>
         <div class="bracket-team-row">
-          <span class="b-team-name"><span class="team-logo-emoji">⏳</span> ${p.home}</span>
+          <span class="b-team-name"><span class="team-logo-emoji"><i class="fa-solid fa-clock"></i></span> ${p.home}</span>
           <span class="b-team-score">–</span>
         </div>
         <div class="bracket-team-row">
-          <span class="b-team-name"><span class="team-logo-emoji">⏳</span> ${p.away}</span>
+          <span class="b-team-name"><span class="team-logo-emoji"><i class="fa-solid fa-clock"></i></span> ${p.away}</span>
           <span class="b-team-score">–</span>
         </div>
         <div class="match-card-actions">
-          <span class="empty-stage-hint-tag">⏳ QUALIFICATION PENDING</span>
-          <button type="button" class="sfc-action-btn btn-open-detailed-stats" data-stage="${stage}" data-idx="${idx}" data-home="${p.home}" data-away="${p.away}" style="font-size:0.65rem;padding:3px 8px;">📊 Detailed Stats</button>
+          <span class="empty-stage-hint-tag">QUALIFICATION PENDING</span>
+          <button type="button" class="sfc-action-btn btn-open-detailed-stats" data-stage="${stage}" data-idx="${idx}" data-home="${p.home}" data-away="${p.away}" style="font-size:0.65rem;padding:3px 8px;">Detailed Stats</button>
         </div>
       </div>
 
@@ -6007,13 +6007,13 @@ function getUclFeederStatus() {
     let stageHeaderBadge = '';
     if (stage === 'qf') {
       stageClass = 'stage-qf';
-      stageHeaderBadge = `<div class="stage-badge-qf">⚡ QUARTERFINAL #${idx + 1}</div>`;
+      stageHeaderBadge = `<div class="stage-badge-qf">QUARTERFINAL #${idx + 1}</div>`;
     } else if (stage === 'sf') {
       stageClass = 'stage-sf';
-      stageHeaderBadge = `<div class="stage-badge-sf">🔥 SEMIFINAL CLASH • ROAD TO GLORY</div>`;
+      stageHeaderBadge = `<div class="stage-badge-sf">SEMIFINAL CLASH • ROAD TO GLORY</div>`;
     } else if (stage === 'gf' || isFinal) {
       stageClass = 'stage-gf final-match';
-      stageHeaderBadge = `<div class="stage-badge-gf">🏆 THE WORLD CHAMPIONSHIP FINAL</div>`;
+      stageHeaderBadge = `<div class="stage-badge-gf">THE WORLD CHAMPIONSHIP FINAL</div>`;
     }
 
     let liveTimerHtml = '';
@@ -6053,13 +6053,13 @@ function getUclFeederStatus() {
           ballX = 93;
           ballY = 46;
           ballZ = 22;
-          actionLabel = `⚽ GOAL! ${goalEvent.player} (${goalEvent.minute}') — ${m.home}`;
+          actionLabel = `GOAL! ${goalEvent.player} (${goalEvent.minute}') — ${m.home}`;
         } else {
           // Away goal: ball curves into home net on left
           ballX = 7;
           ballY = 46;
           ballZ = 22;
-          actionLabel = `⚽ GOAL! ${goalEvent.player} (${goalEvent.minute}') — ${m.away}`;
+          actionLabel = `GOAL! ${goalEvent.player} (${goalEvent.minute}') — ${m.away}`;
         }
       } else if (simMin < 10) {
         ballX = 50 + Math.sin(simMin * 0.8) * 8;
@@ -6072,14 +6072,14 @@ function getUclFeederStatus() {
         ballX = 55 + prog * 30 + Math.sin(simMin * 1.2) * 5;
         ballY = 32 + Math.cos(simMin * 0.9) * 36;
         ballZ = 8 + Math.sin(simMin * 1.5) * 6;
-        actionLabel = `⚡ Attacking Build-up into Final Third · ${m.home}`;
+        actionLabel = `Attacking Build-up into Final Third · ${m.home}`;
       } else {
         // Away attacking towards left
         const prog = ((simMin - 12) % 12) / 12;
         ballX = 45 - prog * 30 - Math.sin(simMin * 1.2) * 5;
         ballY = 32 + Math.sin(simMin * 0.9) * 36;
         ballZ = 8 + Math.cos(simMin * 1.5) * 6;
-        actionLabel = `⚡ Counter Attack & Wing Penetration · ${m.away}`;
+        actionLabel = `Counter Attack & Wing Penetration · ${m.away}`;
       }
 
       pitch3dRadarHtml = `
@@ -6099,7 +6099,7 @@ function getUclFeederStatus() {
                 <div class="ball-pentagons"></div>
               </div>
               <div class="pitch-3d-ball-shadow"></div>
-              ${isGoalNow ? `<div class="pitch-3d-goal-flash">⚽ GOLAZO!</div>` : ''}
+              ${isGoalNow ? `<div class="pitch-3d-goal-flash">GOLAZO!</div>` : ''}
             </div>
           </div>
           <div class="pitch-3d-tactical-banner">
@@ -6148,7 +6148,7 @@ function getUclFeederStatus() {
 
     const timelineHtml = allEvents.length > 0 ? allEvents.map(e => {
       const isHome = e.team === 'home';
-      const eventIcon = '⚽';
+      const eventIcon = '<i class="fa-solid fa-futbol"></i>';
       return `
         <div class="sfc-event-row ${isHome ? 'ev-home' : 'ev-away'}">
           ${isHome ? `
@@ -6292,7 +6292,7 @@ function getUclFeederStatus() {
 
                 <!-- Left: Timeline -->
                 <div class="sfc-timeline-col">
-                  <div class="sfc-section-title">⚽ Match Timeline & Goals</div>
+                  <div class="sfc-section-title">Match Timeline & Goals</div>
                   <div class="sfc-timeline">
                     ${timelineHtml}
                   </div>
@@ -6301,11 +6301,11 @@ function getUclFeederStatus() {
                 <!-- Right: Top Performers + Chance Dist -->
                 <div class="sfc-performers-col">
                   ${motm ? `
-                    <div class="sfc-section-title">⭐ Top Performers</div>
+                    <div class="sfc-section-title">Top Performers</div>
                     <div class="sfc-performers-bar">
                       ${homeTopScorer ? `
                         <div class="sfc-performer home-performer">
-                          <div class="sfc-perf-jersey">⚽</div>
+                          <div class="sfc-perf-jersey"><i class="fa-solid fa-futbol"></i></div>
                           <div class="sfc-perf-info">
                             <div class="sfc-perf-name">${homeTopScorer.player}</div>
                             <div class="sfc-perf-team">${m.home}</div>
@@ -6314,7 +6314,7 @@ function getUclFeederStatus() {
                       ` : ''}
                       ${awayTopScorer ? `
                         <div class="sfc-performer away-performer">
-                          <div class="sfc-perf-jersey">⚽</div>
+                          <div class="sfc-perf-jersey"><i class="fa-solid fa-futbol"></i></div>
                           <div class="sfc-perf-info">
                             <div class="sfc-perf-name">${awayTopScorer.player}</div>
                             <div class="sfc-perf-team">${m.away}</div>
@@ -6648,7 +6648,7 @@ function getUclFeederStatus() {
         const allGoals = [];
         matches.forEach(m => {
           const ev = (m.events || []).find(e => e.minute >= curMin - SIM_STEP && e.minute <= curMin);
-          if (ev) allGoals.push(`⚽ ${ev.teamName}: ${ev.player} (${ev.minute}')`);
+          if (ev) allGoals.push(`GOAL: ${ev.teamName}: ${ev.player} (${ev.minute}')`);
         });
         if (allGoals.length > 0) {
           const tickerEl = document.getElementById('bracket-ticker-text');
@@ -7146,7 +7146,7 @@ function getUclFeederStatus() {
       const currentGoals = [];
       matches.forEach(m => {
         const ev = m.events.find(e => e.minute >= curMin - 3 && e.minute <= curMin);
-        if (ev) currentGoals.push(`⚽ GOAL! ${ev.teamName}: ${ev.player} (${ev.minute}')`);
+        if (ev) currentGoals.push(`GOAL! ${ev.teamName}: ${ev.player} (${ev.minute}')`);
       });
       if (currentGoals.length > 0) {
         const tickerEl = document.getElementById('bracket-ticker-text');
@@ -7209,7 +7209,7 @@ function getUclFeederStatus() {
         const tickerEl = document.getElementById('bracket-ticker-text');
         if (tickerEl) {
           const goalType = (recentGoal.type && recentGoal.type.includes('ET')) || recentGoal.minute > 90 ? ' (ET)' : '';
-          tickerEl.textContent = `⚡ GOAL! ${recentGoal.teamName || 'Goal'}: ${recentGoal.player || 'Player'}${goalType} (${recentGoal.minute}') // `;
+          tickerEl.textContent = `GOAL! ${recentGoal.teamName || 'Goal'}: ${recentGoal.player || 'Player'}${goalType} (${recentGoal.minute}) // `;
         }
       }
 
@@ -7303,16 +7303,16 @@ function getUclFeederStatus() {
     if (!toast || !toastTitle || !toastDesc) return;
 
     if (stageKey === 'r32') {
-      toastTitle.textContent = '✨ ROUND OF 32 RESOLVED!';
+      toastTitle.textContent = 'ROUND OF 32 RESOLVED!';
       toastDesc.textContent = '16 Contenders advance to the Round of 16!';
     } else if (stageKey === 'r16') {
-      toastTitle.textContent = '⚡ ROUND OF 16 RESOLVED!';
+      toastTitle.textContent = 'ROUND OF 16 RESOLVED!';
       toastDesc.textContent = '8 Elite teams advance to the Quarterfinals!';
     } else if (stageKey === 'qf') {
-      toastTitle.textContent = '🔥 QUARTERFINALS COMPLETED!';
+      toastTitle.textContent = 'QUARTERFINALS COMPLETED!';
       toastDesc.textContent = '4 Titans advance to the Semifinals!';
     } else if (stageKey === 'sf') {
-      toastTitle.textContent = '🏆 SEMIFINALS COMPLETED!';
+      toastTitle.textContent = 'SEMIFINALS COMPLETED!';
       toastDesc.textContent = 'The Grand Final matchup is set for World Glory!';
     }
 
@@ -7468,7 +7468,7 @@ function getUclFeederStatus() {
     }
 
     if (trophyEl) {
-      trophyEl.textContent = activeTournKey === 'ucl' ? '⭐' : '🏆';
+      trophyEl.textContent = activeTournKey === 'ucl' ? 'UCL' : 'CHAMPION';
     }
 
     // Comprehensive goal and scorer statistics across all formats
@@ -7600,14 +7600,14 @@ function getUclFeederStatus() {
     if (heroStatsEl) {
       heroStatsEl.innerHTML = `
         <div class="champ-hero-stat-badge">
-          <span class="badge-icon">⚡</span>
+          <span class="badge-icon"><i class="fa-solid fa-bolt"></i></span>
           <div class="badge-info">
             <span class="badge-val">${avgGoalsPerMatch} <span style="font-size:0.75rem; color:var(--text-muted);">(${champTotalGoals}G)</span></span>
             <span class="badge-label">AVG GOALS / MATCH</span>
           </div>
         </div>
         <div class="champ-hero-stat-badge">
-          <span class="badge-icon">⚽</span>
+          <span class="badge-icon"><i class="fa-solid fa-futbol"></i></span>
           <div class="badge-info">
             <span class="badge-val">${champTopScorerName} (${champTopScorerGoals})</span>
             <span class="badge-label">TEAM TOP SCORER</span>
@@ -7625,7 +7625,7 @@ function getUclFeederStatus() {
         </div>
         <div class="champ-stat-pill">
           <div class="champ-stat-val">${totalGoals > 0 ? totalGoals : (isLeague ? '940+' : '142')}</div>
-          <div class="champ-stat-lbl">⚽ TOTAL TOURNAMENT GOALS</div>
+          <div class="champ-stat-lbl">TOTAL TOURNAMENT GOALS</div>
         </div>
       `;
     }
@@ -8410,7 +8410,7 @@ function getUclFeederStatus() {
       <article class="media-card">
         <div class="thumb-wrap" data-play="${h.id}">
           <img src="${h.thumbnail}" alt="${h.title}" class="thumb-img" loading="lazy">
-          <div class="play-overlay">▶</div>
+          <div class="play-overlay"><i class="fa-solid fa-play"></i></div>
           <span class="duration-tag">${h.duration}</span>
         </div>
         <div class="card-content">
@@ -8610,7 +8610,7 @@ function getUclFeederStatus() {
       const events = matchObj?.events || [];
       scrubberEvents.innerHTML = events.map(ev => {
         const pct = Math.min(100, Math.max(0, (ev.minute / totalMinutes) * 100));
-        const icon = ev.type?.includes('GOAL') ? '⚽' : (ev.type?.includes('CARD') ? '🟨' : '⚡');
+        const icon = ev.type?.includes('GOAL') ? '<i class="fa-solid fa-futbol"></i>' : (ev.type?.includes('CARD') ? '<i class="fa-solid fa-square"></i>' : '<i class="fa-solid fa-bolt"></i>');
         return `<div class="dstats-event-dot" style="left: ${pct}%;" title="${ev.minute}' ${ev.teamName}: ${ev.player}">${icon}</div>`;
       }).join('');
     }
@@ -8657,24 +8657,24 @@ function getUclFeederStatus() {
       let ballX = 50;
       let ballY = 50;
       let actionTitle = '';
-      let actionIcon = '⚡';
+      let actionIcon = '<i class="fa-solid fa-bolt"></i>';
       let tickerMsg = '';
 
       if (currentEvent) {
         const isHomeGoal = currentEvent.team === 'home';
         ballX = isHomeGoal ? 92 : 8; // near goal net
         ballY = 48 + (Math.sin(min) * 12);
-        actionIcon = '⚽';
+        actionIcon = '<i class="fa-solid fa-futbol"></i>';
         actionTitle = `GOAL! ${currentEvent.teamName} — ${currentEvent.player} (${currentEvent.minute}')`;
-        tickerMsg = `⚽ GOLAZO! ${currentEvent.player} scores for ${currentEvent.teamName}!`;
+        tickerMsg = `GOLAZO! ${currentEvent.player} scores for ${currentEvent.teamName}!`;
       } else if (min % 10 < 3) {
         // Attack Left / Right
         const isHomeAtt = (min % 20 < 10);
         ballX = isHomeAtt ? 72 + (min % 5) * 3 : 28 - (min % 5) * 3;
         ballY = 30 + ((min * 17) % 40);
-        actionIcon = '⚡';
+        actionIcon = '<i class="fa-solid fa-bolt"></i>';
         actionTitle = isHomeAtt ? `${homeTeam.substring(0, 3).toUpperCase()} DANGEROUS ATTACK` : `${awayTeam.substring(0, 3).toUpperCase()} ATTACKING SURGE`;
-        tickerMsg = isHomeAtt ? `⚡ ${homeTeam} pushing numbers forward down the wing!` : `⚡ ${awayTeam} carving out space through the middle!`;
+        tickerMsg = isHomeAtt ? `${homeTeam} pushing numbers forward down the wing!` : `${awayTeam} carving out space through the middle!`;
       } else if (min % 10 < 6) {
         // Midfield Passing
         ballX = 42 + ((min * 13) % 18);
@@ -8918,13 +8918,13 @@ function getUclFeederStatus() {
               <span class="dstats-ev-min">${ev.minute}'</span>
               <div class="dstats-ev-body ${isHome ? 'home-align' : 'away-align'}">
                 ${isHome ? `
-                  <span class="dstats-ev-icon-pill">⚽</span>
+                  <span class="dstats-ev-icon-pill"><i class="fa-solid fa-futbol"></i></span>
                   <span class="dstats-ev-player-main">${ev.player}</span>
                   ${ev.assist ? `<span class="dstats-ev-assist">(${ev.assist})</span>` : ''}
                 ` : `
                   ${ev.assist ? `<span class="dstats-ev-assist">(${ev.assist})</span>` : ''}
                   <span class="dstats-ev-player-main">${ev.player}</span>
-                  <span class="dstats-ev-icon-pill">⚽</span>
+                  <span class="dstats-ev-icon-pill"><i class="fa-solid fa-futbol"></i></span>
                 `}
               </div>
             </div>
@@ -8959,9 +8959,8 @@ function getUclFeederStatus() {
 
         <div class="dstats-player-performer star-performer">
           <div class="dstats-performer-jersey-wrap">
-            <span class="dstats-perf-rating-pill">⭐ 7.4</span>
-            <span class="dstats-perf-goal-ball">⚽</span>
-            🎽
+            <span class="dstats-perf-rating-pill">7.4</span>
+            <span class="dstats-perf-goal-ball"><i class="fa-solid fa-futbol"></i></span>
           </div>
           <span class="dstats-perf-name">${p2}</span>
           <span class="dstats-perf-role">FW | ${homeTeam.substring(0, 3).toUpperCase()}</span>
@@ -8970,8 +8969,7 @@ function getUclFeederStatus() {
         <div class="dstats-player-performer">
           <div class="dstats-performer-jersey-wrap">
             <span class="dstats-perf-rating-pill">7.1</span>
-            <span class="dstats-perf-goal-ball">⚽</span>
-            👕
+            <span class="dstats-perf-goal-ball"><i class="fa-solid fa-futbol"></i></span>
           </div>
           <span class="dstats-perf-name">${p3}</span>
           <span class="dstats-perf-role">MF | ${awayTeam.substring(0, 3).toUpperCase()}</span>
@@ -9274,8 +9272,8 @@ function getUclFeederStatus() {
     if (awayLogo) awayLogo.innerHTML = getTeamLogoHtml(awayTeam);
     if (awayName) awayName.textContent = awayTeam.toUpperCase();
     if (eventsTicker) eventsTicker.innerHTML = '';
-    if (pauseBtn) pauseBtn.textContent = '⏸ PAUSE';
-    if (speedBtn) speedBtn.textContent = '⚡ 1x SPEED';
+    if (pauseBtn) pauseBtn.textContent = 'PAUSE';
+    if (speedBtn) speedBtn.textContent = '1x SPEED';
 
     modal.hidden = false;
 
@@ -9309,18 +9307,18 @@ function getUclFeederStatus() {
       let posX = 50;
       let posY = 50;
       let posZ = 12;
-      let bubbleText = 'POSSESSION ⚽';
+      let bubbleText = 'POSSESSION';
       let statusStr = 'Midfield battle • Dynamic 3D ball tracking active';
 
       if (goal) {
         if (goal.team === 'home') {
           posX = 86; posY = 46; posZ = 42;
-          bubbleText = `⚽ GOLAZO! ${goal.player} ${goal.minute}'`;
-          statusStr = `⚡ GOAL! ${homeTeam} scores! Spectacular strike by ${goal.player}!`;
+          bubbleText = `GOLAZO! ${goal.player} ${goal.minute}'`;
+          statusStr = `GOAL! ${homeTeam} scores! Spectacular strike by ${goal.player}!`;
         } else {
           posX = 14; posY = 46; posZ = 42;
-          bubbleText = `⚽ GOLAZO! ${goal.player} ${goal.minute}'`;
-          statusStr = `⚡ GOAL! ${awayTeam} scores! Masterclass finish by ${goal.player}!`;
+          bubbleText = `GOLAZO! ${goal.player} ${goal.minute}'`;
+          statusStr = `GOAL! ${awayTeam} scores! Masterclass finish by ${goal.player}!`;
         }
         if (ballSphere) ballSphere.classList.add('goal-strike');
 
@@ -9328,7 +9326,7 @@ function getUclFeederStatus() {
           const chip = document.createElement('div');
           chip.className = 'holo-event-chip';
           chip.dataset.min = goal.minute;
-          chip.textContent = `⚽ ${goal.minute}' ${goal.teamName}: ${goal.player}`;
+          chip.textContent = `GOAL ${goal.minute}' ${goal.teamName}: ${goal.player}`;
           eventsTicker.appendChild(chip);
         }
       } else {
@@ -9337,7 +9335,7 @@ function getUclFeederStatus() {
           posX = 50 + Math.sin(curMin) * 8;
           posY = 50 + Math.cos(curMin) * 6;
           posZ = 10;
-          bubbleText = 'KICKOFF ⚽';
+          bubbleText = 'KICKOFF';
           statusStr = 'Kickoff • Opening minutes tactical feeling-out';
         } else if (curMin % 20 < 10) {
           posX = 65 + Math.sin(curMin * 0.8) * 16;
@@ -9349,7 +9347,7 @@ function getUclFeederStatus() {
           posX = 35 - Math.sin(curMin * 0.8) * 16;
           posY = 42 + Math.sin(curMin * 0.6) * 18;
           posZ = 18;
-          bubbleText = `COUNTER ⚡ · ${awayTeam}`;
+          bubbleText = `COUNTER ATTACK · ${awayTeam}`;
           statusStr = `${awayTeam} surging forward with rapid counter-attacking pace`;
         }
       }
@@ -9391,13 +9389,13 @@ function getUclFeederStatus() {
     if (pauseBtn) {
       pauseBtn.onclick = () => {
         holoPaused = !holoPaused;
-        pauseBtn.textContent = holoPaused ? '▶ RESUME' : '⏸ PAUSE';
+        pauseBtn.textContent = holoPaused ? 'RESUME' : 'PAUSE';
       };
     }
     if (speedBtn) {
       speedBtn.onclick = () => {
         holoSpeed = holoSpeed === 1 ? 2 : (holoSpeed === 2 ? 4 : 1);
-        speedBtn.textContent = `⚡ ${holoSpeed}x SPEED`;
+        speedBtn.textContent = `${holoSpeed}x SPEED`;
       };
     }
     if (skipBtn) {
@@ -9475,8 +9473,8 @@ function getUclFeederStatus() {
     if (t2Name) t2Name.textContent = awayTeam.toUpperCase();
     if (hudT1) hudT1.textContent = homeTeam.toUpperCase();
     if (hudT2) hudT2.textContent = awayTeam.toUpperCase();
-    if (pauseBtn) pauseBtn.textContent = '⏸ PAUSE';
-    if (speedBtn) speedBtn.textContent = '⚡ 1x SPEED';
+    if (pauseBtn) pauseBtn.textContent = 'PAUSE';
+    if (speedBtn) speedBtn.textContent = '1x SPEED';
     if (goalBanner) goalBanner.hidden = true;
 
     // Inject Rosters into sidebars
@@ -9623,10 +9621,10 @@ function getUclFeederStatus() {
       if (goal) {
         if (goal.team === 'home') {
           ballX = 94; ballY = 48;
-          actionText = `⚡ GOAL! ${homeTeam} scores! Powerful strike by ${goal.player} (${goal.minute}')`;
+          actionText = `GOAL! ${homeTeam} scores! Powerful strike by ${goal.player} (${goal.minute}')`;
         } else {
           ballX = 6; ballY = 48;
-          actionText = `⚡ GOAL! ${awayTeam} scores! Spectacular finish by ${goal.player} (${goal.minute}')`;
+          actionText = `GOAL! ${awayTeam} scores! Spectacular finish by ${goal.player} (${goal.minute}')`;
         }
         ballSpeed = 104;
         if (goalBanner) {
@@ -9692,13 +9690,13 @@ function getUclFeederStatus() {
     if (pauseBtn) {
       pauseBtn.onclick = () => {
         tacPaused = !tacPaused;
-        pauseBtn.textContent = tacPaused ? '▶ RESUME' : '⏸ PAUSE';
+        pauseBtn.textContent = tacPaused ? 'RESUME' : 'PAUSE';
       };
     }
     if (speedBtn) {
       speedBtn.onclick = () => {
         tacSpeed = tacSpeed === 1 ? 2 : (tacSpeed === 2 ? 4 : 1);
-        speedBtn.textContent = `⚡ ${tacSpeed}x SPEED`;
+        speedBtn.textContent = `${tacSpeed}x SPEED`;
       };
     }
     if (skipBtn) {
@@ -10345,11 +10343,11 @@ function getUclFeederStatus() {
     let isPaused = false;
 
     const phrases = [
-      'GOAL!', 'SUPER STRIKE! ⚡', 'HAT-TRICK! 🎩🎩🎩',
+      'GOAL!', 'SUPER STRIKE!', 'HAT-TRICK!',
       'MAMA MIA! 🍄', 'ITS-A ME, SCORER! 🎉',
       'WAHOOOO! 🌟', 'POISSON CURVE! 📐💥',
       'ARENA CHAMP! 🏆', 'LET\'S-A GO! 🚀',
-      'TOP BINS! 🎯', 'BELLISSIMO! 🇮🇹✨',
+      'TOP BINS!', 'BELLISSIMO!',
       'GOLAZO! 🥇🔥', '1-UP! 💚', 'GAME OVER? NEVER! 😤'
     ];
 
