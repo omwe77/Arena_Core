@@ -129,7 +129,7 @@ Each team's goals are sampled independently. The match result is the pair of sam
 
 - **Group Stage**: Round-robin within groups. Top teams advance based on points, then goal difference, then goals scored.
 - **Knockout Rounds**: Single-elimination. If tied after 90 minutes, extra time (30 min) is simulated. If still tied, a penalty shootout is simulated.
-- **Poisson Simulation**: Goals are sampled from a Poisson distribution based on team attack/defense ratings. Each run produces a different outcome.
+- **Seeded PRNG**: ARENA_CORE uses a seeded Mulberry32 PRNG for reproducible simulations. Each tournament session generates a fresh seed, while reusing the same seed reproduces the same random sequence.
 
 ### What the Model Does NOT Claim
 
