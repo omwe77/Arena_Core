@@ -253,7 +253,7 @@ Every push to `main` triggers:
 - **Vendored libraries** — Anime.js and canvas-confetti are bundled locally
 - **On-demand media** — Hero videos load only when a competition is selected
 - **Content visibility** — Off-screen panels use `content-visibility: auto`
-- **GPU acceleration** — Animations use `transform` and `opacity` for compositing
+- **Composited animations** — Animations use `transform` and `opacity` for GPU compositing
 - **Procedural audio** — No audio file downloads
 
 ---
@@ -305,7 +305,7 @@ Arena_Core/
 - [ ] Implement a "season mode" with save/load
 - [ ] Add more detailed match statistics (xG, possession, etc.)
 - [ ] Implement a proper state management pattern (e.g., Redux-like)
-- [ ] Add unit tests for the simulation engine
+- [ ] Add CSV export for standings and simulation results
 - [ ] Implement a proper component-based architecture
 - [ ] Add PWA support for offline use
 
