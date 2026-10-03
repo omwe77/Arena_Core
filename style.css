@@ -154,6 +154,29 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+
+  /* Disable decorative infinite animations */
+  .grass-sway-dark,
+  .grass-sway-mid,
+  .grass-sway-light,
+  .flag-flutter,
+  .arena-arm-left-swing,
+  .arena-arm-right-swing,
+  .arena-leg-left-stride,
+  .arena-leg-right-stride,
+  .arena-torso-stride,
+  .arena-shadow-pulse,
+  .turf-fly-1,
+  .turf-fly-2,
+  .turf-fly-3,
+  .soccer-ball-roll,
+  .sim-fullsim-pulse,
+  .crownPulse,
+  .auraPulse,
+  .trophyBob,
+  .pulseGold {
+    animation: none !important;
+  }
 }
 
 /* ==========================================================================
@@ -924,6 +947,7 @@ html, body {
 
 .grass-blade-path.g-dark {
   animation: grass-sway-dark 3.2s ease-in-out infinite alternate;
+  /* Reduced motion: disable decorative animations */
   transform-origin: bottom center;
 }
 .grass-blade-path.g-mid {
