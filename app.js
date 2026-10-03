@@ -1433,6 +1433,13 @@
     });
   }
 
+  function updateDataModeBadge(mode) {
+    const badge = document.getElementById('global-data-mode-text');
+    if (badge) {
+      badge.textContent = mode;
+    }
+  }
+
   function switchView(targetViewId, syncUrl = true) {
     if (targetViewId === 'tactical-tracker') {
       const state = tournamentState[activeTournKey];
@@ -1453,6 +1460,7 @@
       if (simPanel) { simPanel.hidden = true; simPanel.classList.remove('active'); }
       if (standingsPanel) { standingsPanel.hidden = false; standingsPanel.classList.add('active'); }
       if (archivePanel) { archivePanel.hidden = true; archivePanel.classList.remove('active'); }
+      updateDataModeBadge('ARCHIVE DATA');
       renderRealStandings();
       if (syncUrl && window.ArenaRouter) {
         window.ArenaRouter.navigate(`/competition/${activeTournKey}/standings`);
@@ -1461,6 +1469,7 @@
       if (simPanel) { simPanel.hidden = true; simPanel.classList.remove('active'); }
       if (standingsPanel) { standingsPanel.hidden = true; standingsPanel.classList.remove('active'); }
       if (archivePanel) { archivePanel.hidden = false; archivePanel.classList.add('active'); }
+      updateDataModeBadge('ARCHIVE DATA');
       renderArchiveView();
       if (syncUrl && window.ArenaRouter) {
         window.ArenaRouter.navigate('/archive');
@@ -1469,6 +1478,7 @@
       if (standingsPanel) { standingsPanel.hidden = true; standingsPanel.classList.remove('active'); }
       if (archivePanel) { archivePanel.hidden = true; archivePanel.classList.remove('active'); }
       if (simPanel) { simPanel.hidden = false; simPanel.classList.add('active'); }
+      updateDataModeBadge('SIMULATION');
     }
 
     if (targetViewId === 'tournament-home') {
