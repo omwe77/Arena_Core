@@ -7397,6 +7397,14 @@ function getUclFeederStatus() {
     if (timestampEl) {
       timestampEl.textContent = new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
     }
+    const competitionEl = document.getElementById('champ-sim-competition');
+    if (competitionEl) {
+      competitionEl.textContent = config.name;
+    }
+    const runIdEl = document.getElementById('champ-sim-runid');
+    if (runIdEl) {
+      runIdEl.textContent = 'run-' + Date.now().toString(36) + '-' + Math.random().toString(36).substring(2, 8);
+    }
 
     // Dynamic Context-Aware Headlines and Taglines per Competition
     const isLeague = config.type === 'league' || config.format === 'leagueSeason';
