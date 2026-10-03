@@ -129,7 +129,7 @@ Each team's goals are sampled independently. The match result is the pair of sam
 
 - **Group Stage**: Round-robin within groups. Top teams advance based on points, then goal difference, then goals scored.
 - **Knockout Rounds**: Single-elimination. If tied after 90 minutes, extra time (30 min) is simulated. If still tied, a penalty shootout is simulated.
-- **Deterministic Seed**: The PRNG is seeded, so the same tournament configuration produces the same results. This allows reproducible simulations.
+- **Poisson Simulation**: Goals are sampled from a Poisson distribution based on team attack/defense ratings. Each run produces a different outcome.
 
 ### What the Model Does NOT Claim
 
@@ -205,7 +205,7 @@ The application uses a strict labeling system:
 
 ### Accessibility
 
-- WCAG-compliant color contrast
+- Accessibility-focused design with keyboard navigation, focus management, and reduced-motion support
 - Keyboard navigation throughout
 - Focus-visible indicators
 - ARIA labels and roles
@@ -251,7 +251,7 @@ Every push to `main` triggers:
 
 - **Zero framework overhead** — vanilla JS with no runtime dependencies
 - **Vendored libraries** — Anime.js and canvas-confetti are bundled locally
-- **Lazy loading** — Images and videos load on demand
+- **On-demand media** — Hero videos load only when a competition is selected
 - **Content visibility** — Off-screen panels use `content-visibility: auto`
 - **GPU acceleration** — Animations use `transform` and `opacity` for compositing
 - **Procedural audio** — No audio file downloads
