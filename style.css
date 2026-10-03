@@ -12898,12 +12898,12 @@ html, body {
 
 /* 1. Header Banner (Deep Purple SofaScore Design) */
 .dstats-header-banner {
-  background: linear-gradient(180deg, #1c0738 0%, #2e0854 45%, #240644 100%);
-  padding: 24px 28px 18px;
-  color: #ffffff;
+  background: var(--color-bg-elevated);
+  padding: var(--space-5) var(--space-6);
+  color: var(--color-text-primary);
   text-align: center;
   position: relative;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .dstats-meta-line {
@@ -12911,41 +12911,41 @@ html, body {
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  margin-bottom: 10px;
+  margin-bottom: var(--space-3);
 }
 
 .dstats-venue-text {
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.6);
-  letter-spacing: 0.3px;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  letter-spacing: 0.02em;
 }
 
 .dstats-comp-stage {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: rgba(255, 255, 255, 0.85);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
   text-transform: uppercase;
 }
 
 .dstats-status-pill-wrap {
-  margin-bottom: 14px;
+  margin-bottom: var(--space-4);
 }
 
 .dstats-status-pill {
   display: inline-block;
-  background: #facc15;
-  color: #111827;
-  font-size: 0.7rem;
-  font-weight: 900;
-  letter-spacing: 0.5px;
-  padding: 3px 12px;
-  border-radius: 6px;
+  background: var(--color-warning);
+  color: var(--color-text-inverse);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-black);
+  letter-spacing: 0.05em;
+  padding: 2px var(--space-3);
+  border-radius: var(--radius-sm);
   text-transform: uppercase;
 }
 
 .dstats-status-pill.live {
-  background: #ef4444;
+  background: var(--color-danger);
   color: #ffffff;
   animation: dstatsLivePulse 1.2s infinite ease-in-out;
 }
@@ -12960,15 +12960,15 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 32px;
-  margin-bottom: 18px;
+  gap: var(--space-8);
+  margin-bottom: var(--space-5);
 }
 
 .dstats-team-box {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-2);
   flex: 1;
   max-width: 180px;
 }
