@@ -818,7 +818,7 @@ html, body {
 }
 
 /* ==========================================================================
-   HEADER & TOP NAV WITH REALISTIC STADIUM GRASS PITCH & MARIO STRIKER
+   HEADER & TOP NAV WITH REALISTIC STADIUM GRASS PITCH & ARENA_CORE STRIKER
    ========================================================================== */
 .site-header {
   height: var(--header-height);
@@ -834,7 +834,7 @@ html, body {
   overflow: visible;
 }
 
-/* Mario header pitch track — decorative, reduces to still image in reduced-motion */
+/* Arena header pitch track — decorative, reduces to still image in reduced-motion */
 .header-pitch-track {
   position: absolute;
   top: 0;
@@ -865,7 +865,7 @@ html, body {
   display: none;
 }
 
-.mario-pitch-actor {
+.arena-pitch-actor {
   display: none;
 }
 
@@ -882,7 +882,7 @@ html, body {
   inset: 0;
   background-image: 
     linear-gradient(180deg, rgba(8, 18, 14, 0.45) 0%, rgba(14, 46, 26, 0.3) 40%, rgba(20, 80, 42, 0.65) 100%),
-    url('assets/mario_stadium_header.jpg');
+    url('assets/arena_stadium_header.jpg');
   background-size: cover;
   background-position: center 68%;
   background-repeat: no-repeat;
@@ -1018,8 +1018,8 @@ html, body {
 .pitch-floodlight.left-floodlight { left: 18%; }
 .pitch-floodlight.right-floodlight { right: 18%; }
 
-/* Mario Pitch Actor Container */
-.mario-pitch-actor {
+/* Arena Pitch Actor Container */
+.arena-pitch-actor {
   position: absolute;
   bottom: 4px;
   left: 20%;
@@ -1031,11 +1031,11 @@ html, body {
   transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.mario-pitch-actor:hover {
+.arena-pitch-actor:hover {
   transform: scale(1.1);
 }
 
-.mario-sprite-container {
+.arena-sprite-container {
   position: relative;
   width: 50px;
   height: 50px;
@@ -1044,89 +1044,89 @@ html, body {
   justify-content: center;
 }
 
-/* Rigged Mario Limbs Animation (Shoulder & Hip Joints) */
-.mario-pitch-actor.running .mario-arm-left {
-  animation: mario-arm-left-swing 0.32s ease-in-out infinite alternate;
+/* Rigged Arena Limbs Animation (Shoulder & Hip Joints) */
+.arena-pitch-actor.running .arena-arm-left {
+  animation: arena-arm-left-swing 0.32s ease-in-out infinite alternate;
   transform-origin: 25px 38px;
 }
 
-.mario-pitch-actor.running .mario-arm-right {
-  animation: mario-arm-right-swing 0.32s ease-in-out infinite alternate;
+.arena-pitch-actor.running .arena-arm-right {
+  animation: arena-arm-right-swing 0.32s ease-in-out infinite alternate;
   transform-origin: 42px 39px;
 }
 
-.mario-pitch-actor.running .mario-leg-left {
-  animation: mario-leg-left-stride 0.32s ease-in-out infinite alternate;
+.arena-pitch-actor.running .arena-leg-left {
+  animation: arena-leg-left-stride 0.32s ease-in-out infinite alternate;
   transform-origin: 26px 48px;
 }
 
-.mario-pitch-actor.running .mario-leg-right {
-  animation: mario-leg-right-stride 0.32s ease-in-out infinite alternate;
+.arena-pitch-actor.running .arena-leg-right {
+  animation: arena-leg-right-stride 0.32s ease-in-out infinite alternate;
   transform-origin: 40px 48px;
 }
 
-.mario-pitch-actor.running .mario-torso-head {
-  animation: mario-torso-stride 0.32s ease-in-out infinite alternate;
+.arena-pitch-actor.running .arena-torso-head {
+  animation: arena-torso-stride 0.32s ease-in-out infinite alternate;
   transform-origin: 35px 45px;
 }
 
 /* Natural Running Stride Keyframes */
-@keyframes mario-arm-left-swing {
+@keyframes arena-arm-left-swing {
   0% { transform: rotate(32deg); }
   100% { transform: rotate(-38deg); }
 }
 
-@keyframes mario-arm-right-swing {
+@keyframes arena-arm-right-swing {
   0% { transform: rotate(-40deg); }
   100% { transform: rotate(30deg); }
 }
 
-@keyframes mario-leg-left-stride {
+@keyframes arena-leg-left-stride {
   0% { transform: rotate(-36deg); }
   100% { transform: rotate(38deg); }
 }
 
-@keyframes mario-leg-right-stride {
+@keyframes arena-leg-right-stride {
   0% { transform: rotate(38deg); }
   100% { transform: rotate(-36deg); }
 }
 
-@keyframes mario-torso-stride {
+@keyframes arena-torso-stride {
   0% { transform: translateY(0px) rotate(-2deg); }
   100% { transform: translateY(-4px) rotate(3deg); }
 }
 
 /* Power Shot Dynamic Kicking Pose */
-.mario-pitch-actor.power-shot .mario-leg-right {
-  animation: mario-kick-strike 0.4s ease-out;
+.arena-pitch-actor.power-shot .arena-leg-right {
+  animation: arena-kick-strike 0.4s ease-out;
   transform-origin: 40px 48px;
 }
 
-.mario-pitch-actor.power-shot .mario-arm-right {
-  animation: mario-arm-windup 0.4s ease-out;
+.arena-pitch-actor.power-shot .arena-arm-right {
+  animation: arena-arm-windup 0.4s ease-out;
   transform-origin: 42px 39px;
 }
 
-@keyframes mario-kick-strike {
+@keyframes arena-kick-strike {
   0% { transform: rotate(-50deg); }
   45% { transform: rotate(60deg) scale(1.15); }
   100% { transform: rotate(0deg); }
 }
 
-@keyframes mario-arm-windup {
+@keyframes arena-arm-windup {
   0% { transform: rotate(-40deg); }
   45% { transform: rotate(65deg) scale(1.1); }
   100% { transform: rotate(0deg); }
 }
 
-.mario-svg {
+.arena-svg {
   width: 100%;
   height: 100%;
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.7));
   transition: filter 0.3s ease;
 }
 
-.mario-drop-shadow {
+.arena-drop-shadow {
   position: absolute;
   bottom: -2px;
   left: 50%;
@@ -1136,10 +1136,10 @@ html, body {
   background: rgba(0, 0, 0, 0.6);
   border-radius: 50%;
   filter: blur(1.5px);
-  animation: mario-shadow-pulse 0.35s ease-in-out infinite alternate;
+  animation: arena-shadow-pulse 0.35s ease-in-out infinite alternate;
 }
 
-@keyframes mario-shadow-pulse {
+@keyframes arena-shadow-pulse {
   0% { transform: translateX(-50%) scale(1); opacity: 0.7; }
   100% { transform: translateX(-50%) scale(0.75); opacity: 0.35; }
 }
@@ -1177,13 +1177,13 @@ html, body {
   filter: blur(1.5px);
 }
 
-.mario-pitch-actor.running .grass-blade.b1 {
+.arena-pitch-actor.running .grass-blade.b1 {
   animation: turf-fly-1 0.42s infinite ease-out;
 }
-.mario-pitch-actor.running .grass-blade.b2 {
+.arena-pitch-actor.running .grass-blade.b2 {
   animation: turf-fly-2 0.38s 0.08s infinite ease-out;
 }
-.mario-pitch-actor.running .grass-blade.b3 {
+.arena-pitch-actor.running .grass-blade.b3 {
   animation: turf-fly-3 0.46s 0.16s infinite ease-out;
 }
 
@@ -1201,7 +1201,7 @@ html, body {
 }
 
 /* Soccer Ball Component */
-.mario-soccer-ball-wrap {
+.arena-soccer-ball-wrap {
   position: relative;
   width: 22px;
   height: 22px;
@@ -1212,7 +1212,7 @@ html, body {
   justify-content: center;
 }
 
-.mario-ball-element {
+.arena-ball-element {
   width: 18px;
   height: 18px;
   border-radius: 50%;
@@ -1224,7 +1224,7 @@ html, body {
   animation: soccer-ball-roll 0.6s linear infinite;
 }
 
-.mario-ball-element::before {
+.arena-ball-element::before {
   content: '';
   position: absolute;
   top: 50%;
@@ -1260,21 +1260,21 @@ html, body {
   transform: translateY(-50%);
   width: 0px;
   height: 12px;
-  background: linear-gradient(90deg, transparent, var(--mario-glow, rgba(255, 201, 74, 0.8)));
+  background: linear-gradient(90deg, transparent, var(--arena-glow, rgba(255, 201, 74, 0.8)));
   border-radius: 10px;
   opacity: 0;
   transition: all 0.2s ease;
   pointer-events: none;
 }
 
-.mario-pitch-actor.power-shot .ball-fire-trail {
+.arena-pitch-actor.power-shot .ball-fire-trail {
   width: 60px;
   opacity: 1;
   filter: blur(1px);
 }
 
-/* Mario Power Shot Comic Speech Bubble */
-.mario-action-bubble {
+/* Arena Power Shot Comic Speech Bubble */
+.arena-action-bubble {
   position: absolute;
   top: -42px;
   left: 50%;
@@ -1297,7 +1297,7 @@ html, body {
 }
 
 /* Comic speech bubble pointer tail */
-.mario-action-bubble::after {
+.arena-action-bubble::after {
   content: '';
   position: absolute;
   bottom: -9px;
@@ -1307,7 +1307,7 @@ html, body {
   border-right: 7px solid transparent;
   border-top: 9px solid #FFC94A;
 }
-.mario-action-bubble::before {
+.arena-action-bubble::before {
   content: '';
   position: absolute;
   bottom: -12px;
@@ -1318,7 +1318,7 @@ html, body {
   border-top: 10px solid #111;
 }
 
-.mario-pitch-actor.power-shot .mario-action-bubble {
+.arena-pitch-actor.power-shot .arena-action-bubble {
   transform: translateX(-50%) scale(1) rotate(-3deg) translateY(-4px);
   opacity: 1;
   animation: bubble-bounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.5) forwards;
