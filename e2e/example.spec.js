@@ -6,7 +6,7 @@ test.describe('ARENA_CORE Platform Tests', () => {
   test('has correct page title and header elements', async ({ page }) => {
     await page.goto('/');
 
-    await expect(page).toHaveTitle(/ARENA CORE/);
+    await expect(page).toHaveTitle(/ARENA_CORE/);
 
     const pitchTrack = page.locator('#header-pitch-track');
     await expect(pitchTrack).toBeVisible();
