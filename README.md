@@ -1,137 +1,316 @@
-# ARENA_CORE // Global Football Platform & Tournament Simulator
+# ARENA_CORE — Global Football Platform & Tournament Simulator
 
-> A high-performance, responsive football platform combining archived competition data, simulated standings, match centers, media highlights, and a 10-competition Poisson mathematical tournament simulation engine.
+> A premium football analytics and multi-tournament simulation platform. Browse archived competition data, simulate hypothetical tournament outcomes with a Poisson-based model, explore match centers with 2D pitch visualizations, and interact with a World Cup custom draw — all in a single-page application.
 
-[![Azure Static Web Apps Deployment](https://img.shields.io/badge/Live%20Demo-Azure%20Static%20Web%20Apps-2ecc71?style=for-the-badge&logo=microsoftazure)](https://lemon-ocean-06aede400.5.azurestaticapps.net)
-[![Tech Stack](https://img.shields.io/badge/Stack-Vanilla%20JS%20%7C%20HTML5%20%7C%20CSS3%20%7C%20Bash-00E5FF?style=for-the-badge)](https://github.com/omwe77/SIEP--arena_coore)
-[![Release](https://img.shields.io/badge/Release-v1.0.0-ff6b35?style=for-the-badge)](https://github.com/omwe77/SIEP--arena_coore/releases/tag/v1.0.0)
-
----
-
-## 🌐 Live Demo
-Experience the live application on Azure Static Web Apps (auto-deploys on every push to `main`):  
-👉 **[https://lemon-ocean-06aede400.5.azurestaticapps.net](https://lemon-ocean-06aede400.5.azurestaticapps.net)**
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Azure%20Static%20Web%20Apps-2ecc71?style=for-the-badge&logo=microsoftazure)](https://lemon-ocean-06aede400.5.azurestaticapps.net)
+[![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions)](https://github.com/omwe77/Arena_Core/actions)
+[![Tests](https://img.shields.io/badge/Tests-Playwright%20%2B%20Node-4EA140?style=for-the-badge)](https://github.com/omwe77/Arena_Core/tree/main/e2e)
+[![License](https://img.shields.io/badge/License-ISC-blue?style=for-the-badge)](https://github.com/omwe77/Arena_Core/blob/main/LICENSE)
 
 ---
 
-## 📸 Showcase & Screenshots
+## What is ARENA_CORE?
 
-| Desktop Command Center | Mario Striker Header & Custom Draw |
-| :---: | :---: |
-| ![ARENA_CORE Desktop](bundesliga_hero_bg.jpg) | ![Mario Striker Pitch](assets/mario_stadium_header.jpg) |
+ARENA_CORE is a single-page football platform that combines **archived historical competition data** with a **hypothetical tournament simulation engine**. It covers 13 major football competitions — from the FIFA World Cup to domestic leagues — and lets users:
 
----
+- Browse historical standings and top scorers
+- Simulate entire tournaments using a Poisson goal-distribution model
+- Draw custom World Cup brackets with 48 teams
+- Explore match centers with 2D pitch visualizations and minute-by-minute timelines
+- Switch between competitions with themed accent colors
 
-## 🛠️ Tech Stack
-
-* **Frontend Architecture**: Semantic HTML5, Vanilla CSS3 (Custom Design System & Glassmorphism), Modern Flexbox & CSS Grid.
-* **Scripting & Engine**: Vanilla JavaScript (ES6+), Zero Heavy Framework Dependencies.
-* **Motion & Audio**: Anime.js motion engine, procedural WebAudio API synthesizer (zero audio asset downloads).
-* **Simulation Algorithm**: Poisson Goal Distribution Model ($\lambda$ adjusted for FIFA rankings, home advantage, and attack/defense strength).
-* **Automation & DevOps**: Bash Automation Script (`setup.sh`), Git Version Control, GitHub Actions / Azure Static Web Apps CI/CD.
-* **Testing**: Playwright E2E test suite, custom Node.js validation scripts.
+**Live demo:** [https://lemon-ocean-06aede400.5.azurestaticapps.net](https://lemon-ocean-06aede400.5.azurestaticapps.net)
 
 ---
 
-## ⚡ Quick Start
-
-Clone and run the project locally in under 30 seconds:
+## Quick Start
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/omwe77/SIEP--arena_coore.git
+# Clone the repository
+git clone https://github.com/omwe77/Arena_Core.git
 
-# 2. Navigate to the project directory
-cd SIEP--arena_coore
+# Navigate to the project
+cd Arena_Core
 
-# 3. Make setup script executable & run automated setup
-chmod +x setup.sh
-./setup.sh
+# Run locally (any static server works)
+python3 -m http.server 8080
+# Open http://localhost:8080
 ```
 
-### Running the Web App:
-* **Option A**: Double-click `index.html` to open directly in any web browser.
-* **Option B (Recommended Local Server)**:
-  ```bash
-  python3 -m http.server 8080
-  # Open http://localhost:8080 in your browser
-  ```
+No build step required for development. The app is vanilla HTML/CSS/JS.
 
 ---
 
-## 👥 Team & Roles
+## Technology Stack
 
-| Contributor | GitHub Username | Role & Responsibilities |
-| :--- | :--- | :--- |
-| **Om Dangol** | [@omwe77](https://github.com/omwe77) | Full-Stack Lead, Poisson Sim Engine, Custom Draw UI & Navigation |
-| **Team Member** | [@np01ai4a250216](https://github.com/np01ai4a250216) | Frontend Architecture, Mario Striker Engine, Responsive Styling & QA |
-
----
-
-## 🏆 Key Features
-
-- [x] **13 Major Football Competitions**:
-  - *International*: FIFA World Cup 2026, UEFA EURO 2024, Copa América.
-  - *Continental*: UEFA Champions League (36-team Swiss League Phase).
-  - *Domestic Leagues*: Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Liga Portugal, Eredivisie, Süper Lig, Scottish Premiership.
-- [x] **Dynamic Hero Video Backgrounds**:
-  - Each of the 13 competitions has a dedicated, full-viewport looping video background on its hero section.
-  - Auto-play with configurable start offsets and seamless loop behavior.
-- [x] **Liga Portugal Embeddable Highlight Reel**:
-  - Inline YouTube iframe gateway directly within the Liga Portugal hero section.
-- [x] **UCL 9-League Qualification Gateway**:
-  - Interactive panel showing the 9 domestic leagues feeding teams into the UEFA Champions League.
-- [x] **World Cup 48-Team Custom Draw Modal**:
-  - Interactive selection of all 48 qualified nations across 6 global confederations (UEFA, CONMEBOL, CONCACAF, CAF, AFC, OFC).
-  - Real 2026 confederation allocation presets & FIFA strength tiers.
-- [x] **Full Knockout & Group Simulation Progression**:
-  - Group Stages (Groups A–L) $\to$ Round of 32 $\to$ Round of 16 $\to$ Quarter-finals $\to$ Semi-finals $\to$ Grand Final.
-- [x] **Match Timers & Player Scorers During Simulation**:
-  - Minute-by-minute simulation cards, authentic player goal events, extra time (AET), and penalty shootouts.
-- [x] **Anime.js Motion Engine**:
-  - Smooth entrance animations for cards, panels, and stat reveals using Anime.js.
-- [x] **Procedural Audio FX Synthesizer**:
-  - Zero asset downloads — all sound effects (goal cheer, kick, fanfare, UI click) are generated procedurally via the WebAudio API.
-  - Persistent SFX toggle button with `localStorage` preference memory.
-- [x] **High-Stakes Knockout UI & Celebrations**:
-  - Championship crowning ceremony with confetti particle physics engine.
-  - Goal celebration banners with animated entrance and timed dismissal.
-- [x] **Mario Striker Interactive Header**:
-  - Rigged vector character running on grass turf with power shots and comic celebrations.
-- [x] **Fully Responsive Design**:
-  - Tested and optimized from **375px mobile** up to **1280px+ desktop** viewports.
-- [x] **Zero Console Errors**:
-  - 100% clean runtime lifecycle with no third-party bundle bloat.
+| Layer | Technology |
+|-------|-----------|
+| Markup | Semantic HTML5 |
+| Styling | Vanilla CSS3 with custom design-token system (CSS custom properties) |
+| Scripting | Vanilla JavaScript (ES6+), zero framework dependencies |
+| Motion | Anime.js (vendored), CSS transitions |
+| Audio | Procedural WebAudio API synthesizer (zero audio assets) |
+| Testing | Playwright E2E, Node.js validation scripts |
+| CI/CD | GitHub Actions → Azure Static Web Apps |
+| Build | Vite (for production bundling) |
 
 ---
 
-## 📁 Repository Structure
+## Architecture
 
-```text
-SIEP--arena_coore/
-├── index.html                  # Semantic HTML5 root entry point
-├── style.css                   # Custom CSS3 styling, responsive grid & themes
-├── app.js                      # Core simulation engine & DOM controllers
-├── setup.sh                    # Automated bash verification & launch script
+```
+┌─────────────────────────────────────────────────────┐
+│                    index.html                        │
+│  ┌─────────┐  ┌──────────┐  ┌───────────────────┐  │
+│  │  Home   │  │   Sim    │  │  Standings/Archive│  │
+│  │  View   │  │  View    │  │      Views        │  │
+│  └────┬────┘  └────┬─────┘  └────────┬──────────┘  │
+│       │            │                  │              │
+│  ┌────┴────────────┴──────────────────┴──────────┐  │
+│  │              app.js (Core Engine)              │  │
+│  │  ┌─────────┐ ┌──────────┐ ┌────────────────┐  │  │
+│  │  │  State  │ │  Router  │ │  Tournament    │  │  │
+│  │  │  Store  │ │          │ │  Config        │  │  │
+│  │  └─────────┘ └──────────┘ └────────────────┘  │  │
+│  │  ┌─────────┐ ┌──────────┐ ┌────────────────┐  │  │
+│  │  │  Match  │ │  Custom  │ │  Simulation    │  │  │
+│  │  │  Center │ │  Draw    │ │  Engine        │  │  │
+│  │  └─────────┘ └──────────┘ └────────────────┘  │  │
+│  └────────────────────────────────────────────────┘  │
+│  ┌──────────────┐  ┌──────────────┐  ┌────────────┐  │
+│  │  motion-fx   │  │  audio-fx    │  │  random    │  │
+│  │  (Anime.js)  │  │  (WebAudio)  │  │  (seeded)  │  │
+│  └──────────────┘  └──────────────┘  └────────────┘  │
+└─────────────────────────────────────────────────────┘
+```
+
+### Module Responsibilities
+
+| Module | File | Responsibility |
+|--------|------|----------------|
+| Core Engine | `app.js` | State management, routing, simulation, DOM rendering |
+| Motion | `js/motion-fx.js` | Anime.js orchestration, entrance animations, stagger effects |
+| Audio | `js/audio-fx.js` | Procedural WebAudio SFX (goal cheer, kick, fanfare, UI click) |
+| Randomness | `js/random.js` | Seeded PRNG for deterministic simulation |
+| Data | `data/real-tournaments.js` | Archived competition snapshots (teams, standings, top scorers) |
+| Config | `data/hero-videos.js` | Hero video IDs and per-competition config |
+
+---
+
+## Simulation Methodology
+
+The simulation engine uses a **Poisson goal-distribution model** to generate hypothetical match outcomes.
+
+### Core Model
+
+For each match, the expected goals (lambda) for each team are calculated as:
+
+```
+lambda_home = base_attack_home * defense_factor_away * home_advantage
+lambda_away = base_attack_away * defense_factor_home
+```
+
+Where:
+- **base_attack** is derived from the team's historical goal-scoring rate
+- **defense_factor** adjusts for the opponent's defensive strength
+- **home_advantage** is a multiplier applied to the home team (typically 1.1–1.3)
+
+### Goal Sampling
+
+Goals are sampled from a Poisson distribution:
+
+```
+P(X = k) = (lambda^k * e^(-lambda)) / k!
+```
+
+Each team's goals are sampled independently. The match result is the pair of sampled goal counts.
+
+### Knockout Progression
+
+- **Group Stage**: Round-robin within groups. Top teams advance based on points, then goal difference, then goals scored.
+- **Knockout Rounds**: Single-elimination. If tied after 90 minutes, extra time (30 min) is simulated. If still tied, a penalty shootout is simulated.
+- **Deterministic Seed**: The PRNG is seeded, so the same tournament configuration produces the same results. This allows reproducible simulations.
+
+### What the Model Does NOT Claim
+
+- It does **not** predict real football outcomes
+- It does **not** account for injuries, form, tactics, or weather
+- It is a **mathematical simulation** for educational and entertainment purposes
+
+---
+
+## Data Provenance
+
+### Archived Data
+
+The `data/real-tournaments.js` file contains **historical snapshots** of competition data:
+
+- **Source**: Publicly available football statistics (league tables, top scorers)
+- **Season**: Varies by competition (typically 2022–2024)
+- **What it includes**: Team rosters, final standings, top scorers
+- **What it does NOT include**: Live data, real-time updates, play-by-play events
+
+### Simulated Data
+
+All simulation results are **hypothetical** and generated by the Poisson model. They are clearly labeled as "SIMULATION" throughout the UI.
+
+### Data Labels
+
+The application uses a strict labeling system:
+
+| Label | Meaning |
+|-------|---------|
+| `ARCHIVE DATA` | Historical, bundled competition data |
+| `SIMULATION` | Hypothetical, model-generated result |
+| `HISTORICAL` | Past season data |
+
+---
+
+## Features
+
+### 13 Major Football Competitions
+
+- **International**: FIFA World Cup 2026, UEFA EURO 2024, Copa América 2024
+- **Continental**: UEFA Champions League (36-team Swiss League Phase)
+- **Domestic Leagues**: Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Liga Portugal, Eredivisie, Süper Lig, Scottish Premiership
+
+### World Cup Custom Draw
+
+- Interactive 48-team selection across 6 confederations
+- Preset confederation allocations
+- Randomize, clear, and validation (exactly 48 teams)
+- Keyboard accessible
+
+### Match Center
+
+- 2D pitch visualization with player formations
+- Minute-by-minute timeline with goal/card events
+- Stats panels (possession, shots, passes)
+- Lineups with player names
+- Scrubber for replaying simulation
+
+### Standings & Archive
+
+- Live simulation standings with zone badges (UCL, UEL, Relegation)
+- Historical standings from archived data
+- Top scorers leaderboard
+- Archive browser for all competitions
+
+### Responsive Design
+
+- Tested from 375px mobile to 1280px+ desktop
+- Touch-friendly controls (44px minimum targets)
+- Readable tables on mobile
+- Adaptive grid layouts
+
+### Accessibility
+
+- WCAG-compliant color contrast
+- Keyboard navigation throughout
+- Focus-visible indicators
+- ARIA labels and roles
+- Reduced motion support
+- Skip-to-content link
+
+---
+
+## Testing
+
+### Automated Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run Playwright E2E tests
+npx playwright test
+
+# Run lint
+npm run lint
+```
+
+### Test Coverage
+
+| Test Type | What it covers |
+|-----------|---------------|
+| Engine Validation | CSS braces, HTML structure, tournament data, formations |
+| Runtime Execution | DOMContentLoaded, startup cycle, console errors |
+| Custom Draw | Modal open/close, team selection, validation |
+| E2E (Playwright) | Home, competition selection, simulation, custom draw, standings, archive, match modal |
+
+### CI/CD
+
+Every push to `main` triggers:
+1. **Playwright Tests** — E2E test suite
+2. **Build** — Vite production build
+3. **Deploy** — Azure Static Web Apps (only if tests pass)
+
+---
+
+## Performance
+
+- **Zero framework overhead** — vanilla JS with no runtime dependencies
+- **Vendored libraries** — Anime.js and canvas-confetti are bundled locally
+- **Lazy loading** — Images and videos load on demand
+- **Content visibility** — Off-screen panels use `content-visibility: auto`
+- **GPU acceleration** — Animations use `transform` and `opacity` for compositing
+- **Procedural audio** — No audio file downloads
+
+---
+
+## Project Structure
+
+```
+Arena_Core/
+├── index.html                  # Main entry point
+├── style.css                   # Design tokens + all component styles
+├── app.js                      # Core engine (state, routing, simulation)
+├── package.json
+├── vite.config.js
 ├── js/
-│   ├── audio-fx.js             # Procedural WebAudio synthesizer & SFX toggle
-│   └── motion-fx.js            # Anime.js motion orchestration engine
-├── vendor/
-│   ├── anime.min.js            # Anime.js animation library (vendored)
-│   └── confetti.browser.js     # Canvas-confetti particle engine (vendored)
+│   ├── audio-fx.js             # Procedural WebAudio synthesizer
+│   ├── motion-fx.js            # Anime.js motion orchestration
+│   └── random.js               # Seeded PRNG
 ├── data/
-│   ├── real-tournaments.js     # API-Football real data cache
-│   ├── hero-videos.js          # Hero video ID & config per competition
-│   └── real-tournaments.json   # Competition metadata index
-├── assets/                     # Stadium, header graphic & video assets
-├── e2e/                        # Playwright end-to-end test suite
-├── tests/                      # Unit & integration test suite
-├── scripts/                    # Utility & maintenance scripts
-└── README.md                   # Complete showcase documentation
+│   ├── real-tournaments.js     # Archived competition data
+│   └── hero-videos.js          # Hero video config
+├── vendor/
+│   ├── anime.min.js            # Anime.js (vendored)
+│   └── confetti.browser.js     # canvas-confetti (vendored)
+├── e2e/                        # Playwright E2E tests
+├── tests/                      # Unit & integration tests
+├── scripts/                    # Utility scripts
+├── docs/                       # Technical documentation
+├── assets/                     # Images, videos, graphics
+└── README.md
 ```
 
 ---
 
-## 📄 License
+## Known Limitations
+
+- **No real-time data** — All data is archived/historical
+- **Simulation accuracy** — The Poisson model is a simplification; it does not predict real outcomes
+- **No backend** — All data is bundled client-side
+- **No user accounts** — No persistence of user preferences beyond localStorage
+- **Video dependencies** — Hero videos require internet connection
+
+---
+
+## Future Engineering Directions
+
+- [ ] Add more competitions (EFL Championship, Primeira Liga, etc.)
+- [ ] Implement a more sophisticated simulation model (e.g., Dixon-Coles)
+- [ ] Add head-to-head comparison between teams
+- [ ] Implement a "season mode" with save/load
+- [ ] Add more detailed match statistics (xG, possession, etc.)
+- [ ] Implement a proper state management pattern (e.g., Redux-like)
+- [ ] Add unit tests for the simulation engine
+- [ ] Implement a proper component-based architecture
+- [ ] Add PWA support for offline use
+
+---
+
+## License
 
 ISC © [Om Dangol](https://github.com/omwe77) & Contributors
