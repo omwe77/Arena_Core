@@ -2375,20 +2375,15 @@ html, body {
   font-weight: 700;
   letter-spacing: 1px;
 }
-.data-badge.REAL_DATA {
-  background: rgba(46, 204, 113, 0.2);
-  border: 1px solid var(--pitch-green);
-  color: #58D68D;
-}
 .data-badge.SIM_DATA {
-  background: rgba(255, 201, 74, 0.18);
-  border: 1px solid var(--champions-gold);
-  color: #FFE082;
+  background: var(--color-simulation-subtle);
+  color: var(--color-simulation);
+  border: 1px solid rgba(0, 212, 255, 0.25);
 }
 .data-badge.SIMULATION {
-  background: rgba(56, 239, 125, 0.2);
-  border: 1px solid var(--floodlight-cyan);
-  color: #6eff9f;
+  background: var(--color-simulation-subtle);
+  color: var(--color-simulation);
+  border: 1px solid rgba(0, 212, 255, 0.25);
 }
 
 .tourn-desc {
@@ -2401,116 +2396,179 @@ html, body {
   overflow: hidden;
 }
 
-/* Controls column â€” stacks primary action, live controls, and instant btn vertically */
+/* Controls column — stacks primary action, live controls, and instant btn vertically */
 .sim-controls-group {
   display: flex;
   flex-direction: column;
   align-items: stretch;
   gap: 7px;
   flex-shrink: 0;
-  width: 200px;
+  width: 190px;
 }
 
+/* Shared sim button base — icon-only, no emoji, consistent with token system */
 .sim-action-btn {
-  font-family: var(--font-title);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  padding: 8px 12px;
-  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 9px 12px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 7px;
   white-space: nowrap;
   width: 100%;
+  min-height: 40px;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.sim-action-btn .btn-label {
+  display: inline-block;
+}
+
+.sim-action-btn .btn-icon {
+  font-size: 0.9rem;
+  line-height: 1;
 }
 
 .sim-action-btn.outline {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-white);
+  background: var(--surface-muted);
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
 }
+
 .sim-action-btn.outline:hover {
-  border-color: var(--pitch-green);
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--surface-card);
+  border-color: var(--accent-1);
+  color: var(--accent-1);
+}
+
+.sim-action-btn.outline:active {
+  background: var(--surface-muted);
 }
 
 .sim-action-btn.primary {
-  background: var(--pitch-green);
-  border: 1px solid var(--pitch-green);
-  color: #080E0C;
-  font-weight: 800;
-  box-shadow: 0 0 14px var(--pitch-green-glow);
+  background: var(--accent-1);
+  border: 1px solid var(--accent-1);
+  color: var(--text-on-accent);
+  font-weight: 700;
 }
+
 .sim-action-btn.primary:hover:not(:disabled) {
-  background: var(--pitch-green-light);
-  transform: translateY(-1px);
+  background: var(--accent-1-hover);
+  border-color: var(--accent-1-hover);
+  box-shadow: 0 0 12px var(--accent-1-glow);
 }
+
+.sim-action-btn.primary:active:not(:disabled) {
+  background: var(--accent-1-active);
+  transform: translateY(0);
+}
+
 .sim-action-btn.primary:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+  filter: grayscale(0.4);
+}
+
+.sim-action-btn.ghost {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+.sim-action-btn.ghost:hover {
+  background: var(--surface-muted);
+  border-color: var(--border-default);
+  color: var(--text-primary);
 }
 
 .sim-action-btn.gold {
   background: var(--champions-gold);
   border: 1px solid var(--champions-gold);
-  color: #080E0C;
-  font-weight: 800;
-  box-shadow: 0 0 14px var(--champions-gold-glow);
+  color: #0f172a;
+  font-weight: 700;
 }
+
 .sim-action-btn.gold:hover {
   background: var(--champions-gold-light);
+  box-shadow: 0 0 12px var(--champions-gold-glow);
 }
+
+.sim-action-btn.gold:active {
+  background: var(--champions-gold);
+}
+
 .sim-action-btn.active-full-sim {
-  background: linear-gradient(135deg, #e53e3e, #c0392b) !important;
-  border-color: #e53e3e !important;
-  color: #fff !important;
-  animation: fullsim-pulse 1.2s ease-in-out infinite;
+  background: var(--accent-danger) !important;
+  border-color: var(--accent-danger) !important;
+  color: var(--text-on-accent) !important;
+  animation: sim-fullsim-pulse 1.4s ease-in-out infinite;
 }
-@keyframes fullsim-pulse {
-  0%, 100% { box-shadow: 0 0 14px rgba(229,62,62,0.5); }
-  50% { box-shadow: 0 0 28px rgba(229,62,62,0.9); }
+
+@keyframes sim-fullsim-pulse {
+  0%, 100% { box-shadow: 0 0 10px var(--accent-danger-glow, rgba(239,68,68,0.4)); }
+  50% { box-shadow: 0 0 24px var(--accent-danger-glow, rgba(239,68,68,0.7)); }
 }
 
 .live-control-bar {
   display: flex;
-  gap: 5px;
+  gap: 6px;
   flex-wrap: wrap;
   width: 100%;
 }
 
 .sim-ctrl-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-white);
-  font-family: var(--font-hud);
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 6px 8px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 7px 10px;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   white-space: nowrap;
-  flex: 1 1 auto;
+  flex: 1 1 0;
   text-align: center;
-}
-.sim-ctrl-btn:hover {
-  border-color: var(--floodlight-cyan);
-}
-.sim-ctrl-btn.gold {
-  color: var(--champions-gold);
-  border-color: rgba(255, 201, 74, 0.5);
+  min-height: 34px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
-/* Top two-button row inside controls column */
+.sim-ctrl-btn:hover {
+  background: var(--surface-card);
+  border-color: var(--accent-1);
+  color: var(--accent-1);
+}
+
+.sim-ctrl-btn:active {
+  background: var(--surface-muted);
+}
+
+.sim-ctrl-btn.gold {
+  color: var(--champions-gold);
+  border-color: rgba(255, 201, 74, 0.35);
+}
+
+.sim-ctrl-btn.gold:hover {
+  color: var(--champions-gold);
+  border-color: var(--champions-gold);
+}
+
+/* Two-button row inside controls column */
 .sim-top-btns {
   display: flex;
   gap: 6px;
   width: 100%;
 }
+
 .sim-top-btns .sim-action-btn {
   flex: 1 1 0;
 }
@@ -2519,12 +2577,12 @@ html, body {
    SIMULATION CLOCK HUD
    ========================================================================== */
 .sim-clock-hud {
-  background: rgba(24, 38, 33, 0.98);
-  border: 1.5px solid var(--pitch-green);
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
   border-radius: 10px;
   padding: 14px 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 18px var(--pitch-green-glow);
+  margin-bottom: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
 }
 
 .clock-display-wrap {
@@ -2532,64 +2590,92 @@ html, body {
   justify-content: space-between;
   align-items: center;
   font-family: var(--font-hud);
-  font-size: 0.98rem;
+  font-size: 0.88rem;
   font-weight: 700;
-  color: #58D68D;
+  color: var(--text-secondary);
   margin-bottom: 8px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.clock-icon {
+  color: var(--accent-1);
+  font-size: 1rem;
+  opacity: 0.75;
+}
+
+.clock-stage-label {
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.82rem;
+}
+
+.clock-timer {
+  color: var(--accent-1);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
 }
 
 .clock-progress-track {
   width: 100%;
-  height: 7px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
+  height: 5px;
+  background: var(--surface-muted);
+  border-radius: 3px;
   overflow: hidden;
 }
 
 .clock-progress-fill {
   width: 0%;
   height: 100%;
-  background: linear-gradient(90deg, var(--pitch-green), var(--pitch-green-light));
-  box-shadow: 0 0 12px var(--pitch-green);
-  transition: width 0.8s ease;
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-1-hover));
+  box-shadow: 0 0 8px var(--accent-1-glow);
+  transition: width 0.6s ease;
 }
 
 /* ==========================================================================
    CHAMPION BANNER
    ========================================================================== */
 .champion-banner {
-  background: linear-gradient(90deg, rgba(255, 201, 74, 0.22), rgba(255, 201, 74, 0.08));
-  border: 2px solid var(--champions-gold);
-  border-radius: 12px;
-  padding: 18px 24px;
-  margin-bottom: 20px;
+  background: var(--surface-card);
+  border: 1px solid var(--champions-gold);
+  border-left: 4px solid var(--champions-gold);
+  border-radius: 10px;
+  padding: 16px 22px;
+  margin-bottom: 18px;
   display: flex;
   align-items: center;
-  gap: 18px;
-  box-shadow: 0 0 24px var(--champions-gold-glow);
+  gap: 16px;
+  box-shadow: 0 2px 16px rgba(255,201,74,0.15);
 }
 
 .trophy-icon {
-  font-size: 2.4rem;
+  font-size: 1.8rem;
+  color: var(--champions-gold);
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 .champ-label {
   font-family: var(--font-hud);
-  font-size: 0.82rem;
+  font-size: 0.72rem;
   color: var(--champions-gold);
-  letter-spacing: 2px;
-  font-weight: 800;
+  letter-spacing: 1.5px;
+  font-weight: 700;
   display: block;
+  text-transform: uppercase;
 }
 
 .champ-name {
-  font-family: var(--font-title);
-  font-size: 1.7rem;
-  font-weight: 800;
-  color: var(--text-white);
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 10px;
+  line-height: 1.15;
 }
 
 /* ==========================================================================
@@ -2600,60 +2686,67 @@ html, body {
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--border-subtle);
-  padding-bottom: 12px;
-  margin-bottom: 20px;
+  padding-bottom: 10px;
+  margin-bottom: 18px;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
 }
 
 .bracket-tab-group {
   display: flex;
-  gap: 6px;
+  gap: 5px;
   flex-wrap: wrap;
 }
 
 .bracket-tab {
-  background: rgba(255, 255, 255, 0.04);
+  background: transparent;
   border: 1px solid transparent;
-  color: #B5C6BE;
-  font-family: var(--font-title);
-  font-size: 0.85rem;
-  font-weight: 700;
-  padding: 8px 14px;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 7px 13px;
   cursor: pointer;
   border-radius: 6px;
-  transition: all 0.2s ease;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
 }
 
 .bracket-tab:hover {
-  color: var(--text-white);
-  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  background: var(--surface-muted);
+  border-color: var(--border-subtle);
 }
 
 .bracket-tab.active {
-  color: #080E0C;
-  background: var(--pitch-green);
-  font-weight: 800;
-  box-shadow: 0 0 12px var(--pitch-green-glow);
+  color: var(--text-on-accent);
+  background: var(--accent-1);
+  border-color: var(--accent-1);
+  font-weight: 700;
+  box-shadow: 0 0 10px var(--accent-1-glow);
 }
 
 .stage-badge {
   font-family: var(--font-hud);
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  color: var(--floodlight-cyan);
-  background: rgba(46, 204, 113, 0.1);
+  color: var(--accent-1);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-subtle);
   padding: 4px 10px;
   border-radius: 4px;
-  border: 1px solid rgba(46, 204, 113, 0.25);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
-/* Groups Grid â€” horizontal scroll so cards never get cut off */
+/* Groups Grid — horizontal scroll so cards never get cut off */
 .groups-grid-container {
   display: flex;
   flex-direction: row;
-  gap: 18px;
-  padding: 10px 4px 22px;
+  gap: 16px;
+  padding: 10px 4px 20px;
   overflow-x: auto;
   overflow-y: hidden;
   scroll-behavior: smooth;
