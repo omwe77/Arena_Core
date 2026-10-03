@@ -17766,6 +17766,37 @@ tr:hover .fa-crown {
   margin-top: 0;
 }
 
+.methodology-params {
+  background: var(--color-bg-muted);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.methodology-param {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-1) 0;
+  font-size: var(--text-sm);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.methodology-param:last-child {
+  border-bottom: none;
+}
+
+.methodology-param span:first-child {
+  color: var(--color-text-muted);
+}
+
+.methodology-param span:last-child {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+  font-family: var(--font-mono);
+}
+
 .methodology-footer {
   display: flex;
   justify-content: flex-end;
