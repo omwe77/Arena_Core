@@ -10304,13 +10304,13 @@ function getUclFeederStatus() {
   }
 
   // ---------------------------------------------------------------------------
-  // 14. MARIO STRIKER HEADER PITCH ENGINE
+  // 14. ARENA_CORE STRIKER HEADER PITCH ENGINE
   // ---------------------------------------------------------------------------
-  function initMarioStrikerEngine() {
-    const actor = document.getElementById('mario-pitch-actor');
+  function initArenaStrikerEngine() {
+    const actor = document.getElementById('arena-pitch-actor');
     const pitch = document.getElementById('header-pitch-track');
-    const ballWrap = document.getElementById('mario-soccer-ball-wrap');
-    const bubble = document.getElementById('mario-action-bubble');
+    const ballWrap = document.getElementById('arena-soccer-ball-wrap');
+    const bubble = document.getElementById('arena-action-bubble');
     if (!actor || !pitch) return;
 
     let posX = 15; // percentage across header
@@ -10321,7 +10321,7 @@ function getUclFeederStatus() {
     let isPaused = false;
 
     const phrases = [
-      'GOAL! ⚽🔥', 'SUPER STRIKE! ⚡', 'HAT-TRICK! 🎩🎩🎩',
+      'GOAL!', 'SUPER STRIKE! ⚡', 'HAT-TRICK! 🎩🎩🎩',
       'MAMA MIA! 🍄', 'ITS-A ME, SCORER! 🎉',
       'WAHOOOO! 🌟', 'POISSON CURVE! 📐💥',
       'ARENA CHAMP! 🏆', 'LET\'S-A GO! 🚀',
@@ -10331,7 +10331,7 @@ function getUclFeederStatus() {
 
     actor.classList.add('running');
 
-    function animateMario() {
+    function animateArena() {
       if (!isPaused) {
         if (isPowerShot) {
           powerShotProgress += 1.5;
@@ -10372,7 +10372,7 @@ function getUclFeederStatus() {
         }
       }
 
-      requestAnimationFrame(animateMario);
+      requestAnimationFrame(animateArena);
     }
 
     function triggerDribbleTurn() {
@@ -10402,7 +10402,7 @@ function getUclFeederStatus() {
           particleCount: 28,
           spread: 45,
           origin: { x: Math.max(0.1, Math.min(0.9, posX / 100)), y: 0.08 },
-          colors: ['#E52521', '#FFD700', '#002B7F', '#2ECC71']
+          colors: ['#00D4FF', '#FFD700', '#0066FF', '#2ECC71']
         });
       }
 
@@ -10424,7 +10424,7 @@ function getUclFeederStatus() {
       }, 400);
     }
 
-    // Click on Mario or Ball triggers super strike & opens ARENA Tactical Radar
+    // Click on Striker or Ball triggers super strike & opens ARENA Tactical Radar
     actor.addEventListener('click', (e) => {
       e.stopPropagation();
       launchTacticalRadarFromBall();
@@ -10453,7 +10453,7 @@ function getUclFeederStatus() {
       speed = 0.18;
     });
 
-    requestAnimationFrame(animateMario);
+    requestAnimationFrame(animateArena);
   }
 
   // ---------------------------------------------------------------------------
@@ -10469,7 +10469,7 @@ function getUclFeederStatus() {
     setupModalHandlers();
     setupCustomDrawModalHandlers();
     init3DCardParallaxEngine();
-    initMarioStrikerEngine();
+    initArenaStrikerEngine();
     // Start on product-level HOME — then select default competition
     switchView('product-home');
     selectTournament('wc');

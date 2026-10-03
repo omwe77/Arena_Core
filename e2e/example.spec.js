@@ -8,12 +8,12 @@ test.describe('ARENA_CORE Platform Tests', () => {
     // Expect page title
     await expect(page).toHaveTitle(/ARENA CORE/);
 
-    // Expect Header pitch track and Mario striker runner
+    // Expect Header pitch track and ARENA_CORE striker runner
     const pitchTrack = page.locator('#header-pitch-track');
     await expect(pitchTrack).toBeVisible();
 
-    const marioActor = page.locator('#mario-pitch-actor');
-    await expect(marioActor).toBeVisible();
+    const arenaActor = page.locator('#arena-pitch-actor');
+    await expect(arenaActor).toBeVisible();
   });
 
   test('renders World Cup hero and interactive video HUD', async ({ page }) => {

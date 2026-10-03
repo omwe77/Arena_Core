@@ -69,6 +69,6 @@ All notable changes to ARENA_CORE are documented in this file.
 - World Cup 48-team custom draw modal
 - Match timers, player scorers, extra time, penalty shootouts
 - Anime.js motion engine + procedural WebAudio SFX
-- Mario Striker interactive header
+- ARENA_CORE Striker interactive header
 - Fully responsive (375px mobile → 1280px+ desktop)
 - Azure Static Web Apps CI/CD
