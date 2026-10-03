@@ -290,6 +290,22 @@
     });
   }
 
+  /**
+   * Stagger-in Archive Cards
+   */
+  function staggerArchive() {
+    const cards = document.querySelectorAll('.archive-card');
+    if (!cards.length) return;
+
+    runAnime({
+      targets: cards,
+      opacity: [0, 1],
+      translateY: [20, 0],
+      delay: getStagger(60),
+      duration: 550
+    });
+  }
+
   // Expose on window.ArenaMotion
   window.ArenaMotion = {
     runAnime,
@@ -299,6 +315,7 @@
     showGoalBanner,
     staggerStandings,
     staggerFixtures,
+    staggerArchive,
 
     /** Announce a status message to screen readers via the aria-live region. */
     announce: function (message) {
