@@ -1,7 +1,7 @@
 /* ==========================================================================
-   PITCH_CORE_V2.0 — GLOBAL FOOTBALL PLATFORM & MULTI-TOURNAMENT SIMULATION ENGINE
-   - Dual Worlds: World A (Real Football Data) & World B (Hypothetical Simulation)
-   - 10 Competitions: World Cup, UCL, Premier League, La Liga, Serie A, Bundesliga,
+   ARENA_CORE — GLOBAL FOOTBALL PLATFORM & MULTI-TOURNAMENT SIMULATION ENGINE
+   - Dual Worlds: World A (Archived Football Data) & World B (Hypothetical Simulation)
+   - 13 Competitions: World Cup, UCL, Premier League, La Liga, Serie A, Bundesliga,
      Europa League, Euro 2024, Copa América, Copa Libertadores.
    - Precomputed Poisson Simulation, Shared 60s Knockout Clock, Individual Match Simulation,
      Pause/Resume/Restart/Skip Controls, Extra Time & Penalties, Highlights Hub.
@@ -51,7 +51,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // 1. OFFICIAL CRESTS & FLAGS REGISTRY (ALL 10 COMPETITIONS)
+  // 1. OFFICIAL CRESTS & FLAGS REGISTRY (ALL 13 COMPETITIONS)
   // ---------------------------------------------------------------------------
   const OFFICIAL_LOGOS = {
     // --- PREMIER LEAGUE ---
@@ -492,7 +492,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // 2. 10 COMPETITIONS CONFIGURATION (WORLD A ARCHIVED DATA + WORLD B SIMULATION)
+  // 2. 13 COMPETITIONS CONFIGURATION (ARCHIVED DATA + SIMULATION)
   // ---------------------------------------------------------------------------
   const TOURNAMENTS_CONFIG = {
     wc: {
@@ -3890,8 +3890,8 @@ function getUclFeederStatus() {
                     <span>RESET ALL LEAGUES & DRAWS</span>
                   </button>
                 ` : `
-                  <span class="data-badge REAL_DATA" style="background:rgba(0,240,255,0.15);color:#00F0FF;border:1px solid #00F0FF;">
-                    <i class="fa-solid fa-satellite-dish"></i> LIVE LEAGUE SYNC ACTIVE
+                  <span class="data-badge ARCHIVE_DATA" style="background:rgba(0,240,255,0.15);color:#00F0FF;border:1px solid #00F0FF;">
+                    <i class="fa-solid fa-satellite-dish"></i> ARCHIVE DATA LOADED
                   </span>
                 `}
               </div>
