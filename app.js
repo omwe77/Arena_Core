@@ -1462,18 +1462,12 @@
       if (archivePanel) { archivePanel.hidden = true; archivePanel.classList.remove('active'); }
       updateDataModeBadge('ARCHIVE DATA');
       renderRealStandings();
-      if (syncUrl && window.ArenaRouter) {
-        window.ArenaRouter.navigate(`/competition/${activeTournKey}/standings`);
-      }
     } else if (targetViewId === 'archive-view') {
       if (simPanel) { simPanel.hidden = true; simPanel.classList.remove('active'); }
       if (standingsPanel) { standingsPanel.hidden = true; standingsPanel.classList.remove('active'); }
       if (archivePanel) { archivePanel.hidden = false; archivePanel.classList.add('active'); }
       updateDataModeBadge('ARCHIVE DATA');
       renderArchiveView();
-      if (syncUrl && window.ArenaRouter) {
-        window.ArenaRouter.navigate('/archive');
-      }
     } else {
       if (standingsPanel) { standingsPanel.hidden = true; standingsPanel.classList.remove('active'); }
       if (archivePanel) { archivePanel.hidden = true; archivePanel.classList.remove('active'); }
@@ -1482,19 +1476,13 @@
     }
 
     if (targetViewId === 'tournament-home') {
-      // Set subView to 'home' so league landing pages show
       if (activeTournKey && tournamentState[activeTournKey]) {
         tournamentState[activeTournKey].subView = 'home';
       }
       leagueAutoSimActive = false;
       cancelAllActiveSimulationTimers();
       renderActiveTournament();
-      if (syncUrl && window.ArenaRouter) {
-        window.ArenaRouter.navigate(`/competition/${activeTournKey}`);
-      }
     } else if (targetViewId === 'product-home') {
-      // Product-level command center: hide sim panel, show nothing special
-      // The view-product-home section is a sibling panel — show it
       const homePanel = document.getElementById('view-product-home');
       const simPanel = document.getElementById('view-tournament-sim');
       const standingsPanel = document.getElementById('view-standings-view');
@@ -1502,9 +1490,6 @@
       if (simPanel) { simPanel.hidden = true; simPanel.classList.remove('active'); }
       if (standingsPanel) { standingsPanel.hidden = true; standingsPanel.classList.remove('active'); }
       renderProductHome();
-      if (syncUrl && window.ArenaRouter) {
-        window.ArenaRouter.navigate('/');
-      }
     } else if (targetViewId === 'tournament-sim') {
       if (activeTournKey === 'ucl') {
         const feederInfo = getUclFeederStatus();
@@ -1518,9 +1503,7 @@
         tournamentState[activeTournKey].subView = 'sim';
       }
       renderActiveTournament();
-      if (syncUrl && window.ArenaRouter) {
-        window.ArenaRouter.navigate(`/competition/${activeTournKey}/simulation`);
-      }
+
     }
 
     // Animate data badge transitions
@@ -1729,17 +1712,6 @@ function setupNavigation() {
       window.AppState.setCompetition(activeTournKey, TOURNAMENTS_CONFIG[activeTournKey]?.season);
     }
 
-    if (syncUrl && window.ArenaRouter) {
-      const isStandings = document.getElementById('view-standings-view')?.classList.contains('active');
-      const isSim = tournamentState[activeTournKey]?.subView === 'sim';
-      if (isStandings) {
-        window.ArenaRouter.navigate(`/competition/${activeTournKey}/standings`);
-      } else if (isSim) {
-        window.ArenaRouter.navigate(`/competition/${activeTournKey}/simulation`);
-      } else {
-        window.ArenaRouter.navigate(`/competition/${activeTournKey}`);
-      }
-    }
   }
 
   function renderActiveTournament() {
@@ -10470,6 +10442,26 @@ function getUclFeederStatus() {
     setupCustomDrawModalHandlers();
     init3DCardParallaxEngine();
     initArenaStrikerEngine();
+
+    // Register client-side routes
+    if (window.ArenaRouter) {
+      window.ArenaRouter.addRoute('/', () => switchView('product-home'));
+      window.ArenaRouter.addRoute('/archive', () => switchView('archive-view'));
+      window.ArenaRouter.addRoute('/competition/:competitionId', (params) => {
+        selectTournament(params.competitionId);
+        switchView('tournament-home');
+      });
+      window.ArenaRouter.addRoute('/competition/:competitionId/standings', (params) => {
+        selectTournament(params.competitionId);
+        switchView('standings-view');
+      });
+      window.ArenaRouter.addRoute('/competition/:competitionId/simulation', (params) => {
+        selectTournament(params.competitionId);
+        switchView('tournament-sim');
+      });
+      window.ArenaRouter.init();
+    }
+
     // Start on product-level HOME — then select default competition
     switchView('product-home');
     selectTournament('wc');

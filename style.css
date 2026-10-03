@@ -819,17 +819,18 @@ html, body {
    HEADER & TOP NAV WITH REALISTIC STADIUM GRASS PITCH & ARENA_CORE STRIKER
    ========================================================================== */
 .site-header {
-  height: var(--header-height);
   background: var(--color-bg-elevated);
   border-bottom: 1px solid var(--color-border-default);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--space-6);
+  flex-wrap: wrap;
+  padding: var(--space-2) var(--space-6);
   position: sticky;
   top: 0;
   z-index: 1000;
   overflow: visible;
+  gap: var(--space-2);
 }
 
 /* Arena header pitch track — decorative, reduces to still image in reduced-motion */
@@ -4631,7 +4632,7 @@ html, body {
 @media (max-width: 768px) {
   .main-viewport { padding: 16px; }
   .sim-header-card { flex-direction: column; align-items: flex-start; }
-  .top-nav { display: none; }
+  .top-nav { flex-wrap: wrap; justify-content: center; }
   .champ-stats-row { grid-template-columns: 1fr; }
   .stage-advance-toast { right: 16px; left: 16px; bottom: 16px; }
   .laliga-stats-ribbon { grid-template-columns: 1fr !important; }
