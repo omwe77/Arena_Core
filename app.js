@@ -1447,15 +1447,27 @@
     const simPanel = document.getElementById('view-tournament-sim');
     const standingsPanel = document.getElementById('view-standings-view');
 
+    const archivePanel = document.getElementById('view-archive-view');
+
     if (targetViewId === 'standings-view') {
       if (simPanel) { simPanel.hidden = true; simPanel.classList.remove('active'); }
       if (standingsPanel) { standingsPanel.hidden = false; standingsPanel.classList.add('active'); }
+      if (archivePanel) { archivePanel.hidden = true; archivePanel.classList.remove('active'); }
       renderRealStandings();
       if (syncUrl && window.ArenaRouter) {
         window.ArenaRouter.navigate(`/competition/${activeTournKey}/standings`);
       }
+    } else if (targetViewId === 'archive-view') {
+      if (simPanel) { simPanel.hidden = true; simPanel.classList.remove('active'); }
+      if (standingsPanel) { standingsPanel.hidden = true; standingsPanel.classList.remove('active'); }
+      if (archivePanel) { archivePanel.hidden = false; archivePanel.classList.add('active'); }
+      renderArchiveView();
+      if (syncUrl && window.ArenaRouter) {
+        window.ArenaRouter.navigate('/archive');
+      }
     } else {
       if (standingsPanel) { standingsPanel.hidden = true; standingsPanel.classList.remove('active'); }
+      if (archivePanel) { archivePanel.hidden = true; archivePanel.classList.remove('active'); }
       if (simPanel) { simPanel.hidden = false; simPanel.classList.add('active'); }
     }
 
@@ -8253,6 +8265,89 @@ function getUclFeederStatus() {
 
     if (window.ArenaMotion) {
       window.ArenaMotion.staggerStandings();
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // 10b. ARCHIVE VIEW — BROWSE HISTORICAL COMPETITION DATA
+  // ---------------------------------------------------------------------------
+  function renderArchiveView() {
+    const grid = document.getElementById('archive-grid');
+    if (!grid) return;
+
+    const realData = window.REAL_TOURNAMENTS_DATA || {};
+    const config = TOURNAMENTS_CONFIG;
+
+    const cards = Object.keys(realData).map(key => {
+      const data = realData[key];
+      const cfg = config[key];
+      if (!data || !cfg) return '';
+
+      const teamCount = data.teams?.length || data.teamCount || 0;
+      const standingsCount = data.standings?.length || 0;
+      const scorersCount = data.topScorers?.length || 0;
+      const isLeague = cfg.type === 'league';
+
+      const standingsPreview = (data.standings || []).slice(0, 5).map(s => `
+        <div class="archive-standings-row">
+          <span class="archive-pos">${s.pos}</span>
+          <span class="archive-team-name">${s.club || s.team || s.name}</span>
+          <span class="archive-pts">${s.pts} PTS</span>
+        </div>
+      `).join('');
+
+      const scorersPreview = (data.topScorers || []).slice(0, 3).map(s => `
+        <div class="archive-scorer-row">
+          <span class="archive-scorer-name">${s.name}</span>
+          <span class="archive-scorer-team">${s.team}</span>
+          <span class="archive-scorer-goals">${s.goals} G</span>
+        </div>
+      `).join('');
+
+      return `
+        <article class="archive-card" data-competition="${key}">
+          <div class="archive-card-header">
+            <h3 class="archive-card-title">${data.name || cfg.name}</h3>
+            <span class="archive-card-format">${isLeague ? 'LEAGUE' : 'CUP'}</span>
+          </div>
+          <div class="archive-card-stats">
+            <div class="archive-stat">
+              <span class="archive-stat-value">${teamCount}</span>
+              <span class="archive-stat-label">TEAMS</span>
+            </div>
+            <div class="archive-stat">
+              <span class="archive-stat-value">${standingsCount}</span>
+              <span class="archive-stat-label">STANDINGS</span>
+            </div>
+            <div class="archive-stat">
+              <span class="archive-stat-value">${scorersCount}</span>
+              <span class="archive-stat-label">SCORERS</span>
+            </div>
+          </div>
+          ${standingsCount > 0 ? `
+            <div class="archive-section">
+              <h4 class="archive-section-title">TOP 5 STANDINGS</h4>
+              <div class="archive-standings-list">${standingsPreview}</div>
+            </div>
+          ` : ''}
+          ${scorersCount > 0 ? `
+            <div class="archive-section">
+              <h4 class="archive-section-title">TOP SCORERS</h4>
+              <div class="archive-scorers-list">${scorersPreview}</div>
+            </div>
+          ` : ''}
+          <div class="archive-card-footer">
+            <span class="archive-season">${data.actualSeason || data.requestedSeason || ''}</span>
+            <span class="archive-badge">ARCHIVE</span>
+          </div>
+        </article>
+      `;
+    }).join('');
+
+    grid.innerHTML = cards || '<div class="archive-empty">No archive data available.</div>';
+
+    if (window.ArenaMotion) {
+      window.ArenaMotion.staggerArchive();
     }
   }
 

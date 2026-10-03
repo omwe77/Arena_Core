@@ -167,6 +167,9 @@
       <button type="button" class="top-nav-link" data-nav="standings-view">
         <i class="fa-solid fa-chart-simple"></i> LEAGUE STANDINGS
       </button>
+      <button type="button" class="top-nav-link" data-nav="archive-view">
+        <i class="fa-solid fa-box-archive"></i> ARCHIVE
+      </button>
     </nav>
 
     <div class="header-right">
@@ -766,6 +769,23 @@
             </div>
           </div>
         </footer>
+      </section>
+
+      <!-- ============================================================
+           VIEW 3: ARCHIVE — BROWSE HISTORICAL COMPETITION DATA
+           ============================================================ -->
+      <section id="view-archive-view" class="view-panel" aria-label="Archive" hidden>
+        <div class="section-banner">
+          <div class="data-badge-line">
+            <span class="data-badge ARCHIVE_DATA">ARCHIVE DATA</span>
+          </div>
+          <h2>COMPETITION ARCHIVE</h2>
+          <p>Browse historical standings, top scorers, and team rosters from bundled competition data.</p>
+        </div>
+
+        <div class="archive-grid" id="archive-grid">
+          <!-- Archive cards injected dynamically -->
+        </div>
       </section>
 
 
