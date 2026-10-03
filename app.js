@@ -7392,6 +7392,12 @@ function getUclFeederStatus() {
       flagEl.innerHTML = getTeamLogoHtml(champTeam);
     }
 
+    // Populate simulation receipt
+    const timestampEl = document.getElementById('champ-sim-timestamp');
+    if (timestampEl) {
+      timestampEl.textContent = new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
+    }
+
     // Dynamic Context-Aware Headlines and Taglines per Competition
     const isLeague = config.type === 'league' || config.format === 'leagueSeason';
     const isInternational = config.strengthType === 'national' || activeTournKey === 'wc' || activeTournKey === 'euro' || activeTournKey === 'copa';
