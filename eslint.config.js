@@ -61,5 +61,17 @@ module.exports = [
         ...globals.node
       }
     }
+  },
+
+  // E2E test files — ESM with browser globals (Playwright)
+  {
+    files: ['e2e/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        ...globals.browser
+      }
+    }
   }
 ];
