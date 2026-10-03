@@ -17638,6 +17638,55 @@ tr:hover .fa-crown {
 }
 
 /* ==========================================================================
+   ACCESSIBILITY — TOUCH TARGETS & FOCUS STATES
+   ========================================================================== */
+button, a, input, select, textarea, [role="button"], [role="tab"], [role="link"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Ensure small icon buttons still meet touch target */
+.btn-sim-stage, .sim-action-btn, .sim-ctrl-btn, .top-nav-link, .comp-tab, .bracket-tab {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Focus visible for all interactive elements */
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible,
+textarea:focus-visible, [role="button"]:focus-visible, [role="tab"]:focus-visible,
+[role="link"]:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+/* Skip to main content link */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-accent);
+  color: var(--color-text-inverse);
+  padding: var(--space-2) var(--space-4);
+  font-weight: var(--font-weight-bold);
+  z-index: 10000;
+  transition: top var(--transition-fast);
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --color-border-default: rgba(255, 255, 255, 0.5);
+    --color-border-strong: rgba(255, 255, 255, 0.7);
+    --color-text-secondary: #E0E0E0;
+    --color-text-muted: #C0C0C0;
+  }
+}
+
+/* ==========================================================================
    ARCHIVE VIEW — COMPETITION CARDS
    ========================================================================== */
 .archive-grid {

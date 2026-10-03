@@ -156,19 +156,22 @@
       </div>
     </div>
 
+    <!-- Skip to main content for keyboard users -->
+    <a href="#mainContent" class="skip-to-content">Skip to main content</a>
+
     <!-- Main Navigation Bar -->
     <nav class="top-nav" aria-label="Main Navigation">
-      <button type="button" class="top-nav-link active" data-nav="tournament-home">
-        <i class="fa-solid fa-house"></i> HOME
+      <button type="button" class="top-nav-link active" data-nav="tournament-home" aria-label="Go to home">
+        <i class="fa-solid fa-house" aria-hidden="true"></i> HOME
       </button>
-      <button type="button" class="top-nav-link" data-nav="tournament-sim">
-        <i class="fa-solid fa-bolt"></i> SIMULATOR
+      <button type="button" class="top-nav-link" data-nav="tournament-sim" aria-label="Go to simulator">
+        <i class="fa-solid fa-bolt" aria-hidden="true"></i> SIMULATOR
       </button>
-      <button type="button" class="top-nav-link" data-nav="standings-view">
-        <i class="fa-solid fa-chart-simple"></i> LEAGUE STANDINGS
+      <button type="button" class="top-nav-link" data-nav="standings-view" aria-label="Go to league standings">
+        <i class="fa-solid fa-chart-simple" aria-hidden="true"></i> LEAGUE STANDINGS
       </button>
-      <button type="button" class="top-nav-link" data-nav="archive-view">
-        <i class="fa-solid fa-box-archive"></i> ARCHIVE
+      <button type="button" class="top-nav-link" data-nav="archive-view" aria-label="Go to archive">
+        <i class="fa-solid fa-box-archive" aria-hidden="true"></i> ARCHIVE
       </button>
     </nav>
 
@@ -237,7 +240,7 @@
   </nav>
 
   <!-- ===== PRODUCT-LEVEL COMMAND CENTER : HOME VIEW ===== -->
-  <section id="view-product-home" class="view-panel" hidden aria-label="ARENA CORE Home">
+  <section id="view-product-home" class="view-panel" hidden aria-label="ARENA CORE Home" role="region">
     <div class="home-shell">
 
       <!-- Brand identity pillar -->
@@ -333,7 +336,7 @@
       <!-- ============================================================
            VIEW 1: HYPOTHETICAL TOURNAMENT SIMULATOR (WORLD B)
            ============================================================ -->
-      <section id="view-tournament-sim" class="view-panel" hidden aria-label="Tournament Simulator">
+      <section id="view-tournament-sim" class="view-panel" hidden aria-label="Tournament Simulator" role="region">
 
         <!-- World Cup Simulator Topbar with Return Button -->
         <div id="wc-sim-back-bar" class="wc-sim-topbar" hidden>
@@ -645,7 +648,7 @@
       <!-- ============================================================
            VIEW 2: REAL STANDINGS & TOP SCORERS (WORLD A)
            ============================================================ -->
-      <section id="view-standings-view" class="view-panel" aria-label="Official Standings" hidden>
+      <section id="view-standings-view" class="view-panel" aria-label="Official Standings" role="region" hidden>
         <div class="section-banner">
           <div class="data-badge-line">
             <span class="data-badge ARCHIVE_DATA" id="standings-provenance-badge">ARCHIVE DATA</span>
@@ -774,7 +777,7 @@
       <!-- ============================================================
            VIEW 3: ARCHIVE — BROWSE HISTORICAL COMPETITION DATA
            ============================================================ -->
-      <section id="view-archive-view" class="view-panel" aria-label="Archive" hidden>
+      <section id="view-archive-view" class="view-panel" aria-label="Archive" role="region" hidden>
         <div class="section-banner">
           <div class="data-badge-line">
             <span class="data-badge ARCHIVE_DATA">ARCHIVE DATA</span>
