@@ -1314,6 +1314,12 @@
     const realData = window.REAL_TOURNAMENTS_DATA?.[key];
     const teamList = (realData?.teams || []).map(t => t.name);
 
+    // Generate a fresh seed for this tournament session
+    const sessionSeed = Date.now() ^ (Math.random() * 0xFFFFFFFF);
+    if (window.ArenaRandom) {
+      window.ArenaRandom.seed(sessionSeed);
+    }
+
     // Load saved state from localStorage
     let savedState = null;
     try { savedState = JSON.parse(localStorage.getItem('arena_tournament_state_' + key)); } catch (e) {}
@@ -1739,7 +1745,7 @@ function setupNavigation() {
 
     if (titleEl) titleEl.textContent = config.name;
     if (descEl) descEl.textContent = config.desc;
-    if (seasonBadge && realData) seasonBadge.textContent = `API SEASON: ${realData.actualSeason}`;
+    if (seasonBadge && realData) seasonBadge.textContent = `SEASON: ${realData.actualSeason}`;
     if (sidebarName) sidebarName.textContent = config.name;
     if (sidebarSeason && realData) sidebarSeason.textContent = `SEASON: ${realData.actualSeason} ARCHIVED SNAPSHOT`;
 
@@ -7404,6 +7410,11 @@ function getUclFeederStatus() {
     const runIdEl = document.getElementById('champ-sim-runid');
     if (runIdEl) {
       runIdEl.textContent = 'run-' + Date.now().toString(36) + '-' + Math.random().toString(36).substring(2, 8);
+    }
+    const seedEl = document.getElementById('champ-sim-seed');
+    if (seedEl && window.ArenaRandom) {
+      const s = window.ArenaRandom.getSeed();
+      seedEl.textContent = s !== null ? s.toString(16).toUpperCase().padStart(8, '0') : 'UNSEEDED';
     }
 
     // Dynamic Context-Aware Headlines and Taglines per Competition
