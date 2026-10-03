@@ -17638,6 +17638,42 @@ tr:hover .fa-crown {
 }
 
 /* ==========================================================================
+   PERFORMANCE — RENDER OPTIMIZATIONS
+   ========================================================================== */
+.view-panel {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+.archive-card,
+.tech-card,
+.bracket-match-card,
+.leader-item {
+  contain: layout style;
+}
+
+/* GPU-accelerated animations */
+.archive-card,
+.tech-card,
+.bracket-match-card,
+.leader-item,
+.pos-badge,
+.zone-badge,
+.sim-action-btn,
+.sim-ctrl-btn,
+.btn-sim-stage {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Reduce paint area for large lists */
+.leaders-list,
+.archive-grid,
+.standings-grid {
+  contain: layout;
+}
+
+/* ==========================================================================
    ACCESSIBILITY — TOUCH TARGETS & FOCUS STATES
    ========================================================================== */
 button, a, input, select, textarea, [role="button"], [role="tab"], [role="link"] {
