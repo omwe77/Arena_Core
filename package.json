@@ -1,7 +1,7 @@
 {
-  "name": "worldcup-project",
-  "version": "1.0.0",
-  "description": "ARENA_CORE — Global Football Platform & Multi-Tournament Simulator with real matchdays, live 2D tactical pitch broadcasts, and interactive stats.",
+  "name": "arena-core",
+  "version": "1.1.0",
+  "description": "ARENA_CORE — Global Football Platform & Multi-Tournament Simulator with Poisson-based simulation, archived competition data, and interactive match center.",
   "main": "app.js",
   "scripts": {
     "test": "node --check app.js && node --check data/hero-videos.js && node scratch/full-validation.js && node scratch/test-runtime-execution.js && node scratch/test-custom-draw-full.js && node scratch/validate-all.js",
@@ -18,12 +18,12 @@
   "type": "commonjs",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/omwe77/SIEP--arena_coore.git"
+    "url": "git+https://github.com/omwe77/Arena_Core.git"
   },
   "bugs": {
-    "url": "https://github.com/omwe77/SIEP--arena_coore/issues"
+    "url": "https://github.com/omwe77/Arena_Core/issues"
   },
-  "homepage": "https://github.com/omwe77/SIEP--arena_coore#readme",
+  "homepage": "https://github.com/omwe77/Arena_Core#readme",
   "dependencies": {
     "animejs": "^4.5.0",
     "canvas-confetti": "^1.9.4",
