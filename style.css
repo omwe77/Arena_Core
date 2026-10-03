@@ -1982,26 +1982,26 @@ html, body {
 .home-shell {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: var(--space-8);
 }
 
 /* Identity pillar */
 .home-identity {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 .home-identity-lockup {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--space-4);
 }
 
 .home-brand-icon {
-  width: 48px;
-  height: 48px;
-  color: var(--text-muted);
+  width: 56px;
+  height: 56px;
+  color: var(--accent-1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2021,9 +2021,9 @@ html, body {
 
 .home-brand-name {
   font-family: var(--font-display);
-  font-size: 1.75rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-size: var(--text-3xl);
+  font-weight: var(--font-weight-black);
+  letter-spacing: 0.02em;
   color: var(--text-primary);
   line-height: 1.1;
 }
@@ -2034,7 +2034,7 @@ html, body {
 
 .home-brand-tag {
   font-family: var(--font-body);
-  font-size: 0.875rem;
+  font-size: var(--text-base);
   color: var(--text-muted);
   letter-spacing: 0.02em;
 }
@@ -2048,44 +2048,34 @@ html, body {
 
 .home-identity-sub {
   font-family: var(--font-body);
-  font-size: 0.9rem;
+  font-size: var(--text-base);
   color: var(--text-secondary);
   margin: 0;
   max-width: 560px;
-  line-height: 1.5;
+  line-height: var(--line-height-relaxed);
 }
 
 /* Status dashboard */
 .home-status-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 .home-status-card {
-  background: var(--surface-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 10px;
-  padding: 16px 18px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.home-status-card:hover {
-  border-color: var(--accent-1);
-  box-shadow: 0 0 0 1px var(--accent-1-glow);
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .home-status-icon {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--surface-muted);
-  border-radius: 8px;
   color: var(--accent-1);
   font-size: 1rem;
   flex-shrink: 0;
@@ -2099,9 +2089,9 @@ html, body {
 }
 
 .home-status-value {
-  font-family: var(--font-hud);
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-black);
   color: var(--text-primary);
   line-height: 1;
   letter-spacing: -0.02em;
@@ -2109,7 +2099,7 @@ html, body {
 
 .home-status-label {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: var(--text-xs);
   color: var(--text-muted);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -2120,13 +2110,12 @@ html, body {
 
 /* CTA block */
 .home-cta-block {
-  background: var(--surface-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  padding: 24px 28px;
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: var(--space-6);
+  padding: var(--space-5) 0;
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .home-cta-text {
@@ -2136,24 +2125,24 @@ html, body {
 
 .home-cta-heading {
   font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-bold);
   color: var(--text-primary);
-  margin: 0 0 6px 0;
+  margin: 0 0 var(--space-1) 0;
   letter-spacing: 0.01em;
 }
 
 .home-cta-sub {
   font-family: var(--font-body);
-  font-size: 0.9rem;
+  font-size: var(--text-base);
   color: var(--text-secondary);
   margin: 0;
-  line-height: 1.5;
+  line-height: var(--line-height-relaxed);
 }
 
 .home-cta-actions {
   display: flex;
-  gap: 12px;
+  gap: var(--space-3);
   flex-shrink: 0;
 }
 
@@ -2161,17 +2150,17 @@ html, body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: var(--space-2);
   background: var(--accent-1);
   color: var(--text-on-accent);
   border: 1px solid var(--accent-1);
-  border-radius: 8px;
-  padding: 12px 22px;
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-5);
   font-family: var(--font-body);
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
   min-height: 44px;
   white-space: nowrap;
 }
@@ -2222,19 +2211,16 @@ html, body {
 }
 
 .home-comp-card {
-  background: var(--surface-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 10px;
-  padding: 16px;
+  padding: var(--space-3) var(--space-4);
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  gap: var(--space-1);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background var(--transition-fast);
   cursor: default;
 }
 
 .home-comp-card-active {
-  border-color: var(--accent-1);
   background: var(--surface-muted);
 }
 
@@ -2243,28 +2229,22 @@ html, body {
 }
 
 .home-comp-icon {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
-  font-size: 1.1rem;
+  display: none;
 }
 
 .home-comp-info {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
 }
 
 .home-comp-name {
-  font-family: var(--font-display);
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
   letter-spacing: 0.01em;
-  line-height: 1.2;
+  line-height: 1.3;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2272,7 +2252,7 @@ html, body {
 
 .home-comp-detail {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: var(--text-xs);
   color: var(--text-muted);
   letter-spacing: 0.05em;
   text-transform: uppercase;
