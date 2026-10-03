@@ -542,35 +542,35 @@ body {
 }
 
 [data-theme="ucl"] .sim-header-card {
-  background: linear-gradient(135deg, rgba(5, 12, 35, 0.95) 0%, rgba(3, 8, 22, 0.98) 100%);
-  border-color: rgba(0, 240, 255, 0.4);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 240, 255, 0.15);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
+  border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px color-mix(in srgb, var(--pitch-green) 15%, transparent);
 }
 
 [data-theme="ucl"] .btn-sim-stage {
-  background: linear-gradient(135deg, #00F0FF 0%, #0066FF 100%) !important;
-  color: #030816 !important;
-  font-weight: 900 !important;
-  border-color: #00F0FF !important;
-  box-shadow: 0 4px 20px rgba(0, 240, 255, 0.5) !important;
+  background: linear-gradient(135deg, var(--pitch-green) 0%, color-mix(in srgb, var(--pitch-green) 60%, #0066FF) 100%) !important;
+  color: var(--color-text-inverse) !important;
+  font-weight: var(--font-weight-black) !important;
+  border-color: var(--pitch-green) !important;
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--pitch-green) 50%, transparent) !important;
 }
 
 [data-theme="ucl"] .bracket-tab.active {
-  background: #00F0FF !important;
-  color: #030816 !important;
-  border-color: #00F0FF !important;
-  font-weight: 900 !important;
-  box-shadow: 0 0 12px rgba(0, 240, 255, 0.4) !important;
+  background: var(--pitch-green) !important;
+  color: var(--color-text-inverse) !important;
+  border-color: var(--pitch-green) !important;
+  font-weight: var(--font-weight-black) !important;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--pitch-green) 40%, transparent) !important;
 }
 
 [data-theme="ucl"] .group-card {
-  background: rgba(5, 12, 35, 0.85);
-  border-color: rgba(0, 240, 255, 0.3);
-  box-shadow: 0 0 16px rgba(0, 240, 255, 0.1);
+  background: color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card));
+  border-color: color-mix(in srgb, var(--pitch-green) 30%, transparent);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--pitch-green) 10%, transparent);
 }
 [data-theme="ucl"] .group-title {
-  color: #00F0FF;
-  border-bottom-color: rgba(0, 240, 255, 0.25);
+  color: var(--pitch-green);
+  border-bottom-color: color-mix(in srgb, var(--pitch-green) 25%, transparent);
 }
 
 /* 2. La Liga EA Sports Theme */
@@ -582,23 +582,23 @@ body {
 }
 
 [data-theme="laliga"] .sim-header-card {
-  background: linear-gradient(135deg, rgba(14, 23, 20, 0.96) 0%, rgba(8, 14, 12, 0.98) 100%);
-  border-color: rgba(255, 43, 68, 0.4);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 43, 68, 0.15);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
+  border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px color-mix(in srgb, var(--pitch-green) 15%, transparent);
 }
 
 [data-theme="laliga"] .btn-sim-stage {
-  background: linear-gradient(135deg, #FF2B44 0%, #D63031 100%) !important;
+  background: linear-gradient(135deg, var(--pitch-green) 0%, color-mix(in srgb, var(--pitch-green) 70%, #D63031) 100%) !important;
   color: #FFFFFF !important;
-  border-color: #FF6B81 !important;
-  box-shadow: 0 4px 20px rgba(255, 43, 68, 0.5) !important;
+  border-color: color-mix(in srgb, var(--pitch-green) 60%, #FF6B81) !important;
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--pitch-green) 50%, transparent) !important;
 }
 
 [data-theme="laliga"] .bracket-tab.active {
-  background: #FF2B44 !important;
+  background: var(--pitch-green) !important;
   color: #FFFFFF !important;
-  border-color: #FF2B44 !important;
-  box-shadow: 0 0 12px rgba(255, 43, 68, 0.4) !important;
+  border-color: var(--pitch-green) !important;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--pitch-green) 40%, transparent) !important;
 }
 
 /* 3. Premier League Theme */
@@ -610,8 +610,8 @@ body {
 }
 
 [data-theme="pl"] .sim-header-card {
-  background: linear-gradient(135deg, rgba(56, 0, 60, 0.8) 0%, rgba(14, 23, 20, 0.95) 100%);
-  border-color: rgba(0, 255, 135, 0.4);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
+  border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
 }
 
 /* 4. Ligue 1 McDonald's Theme */
@@ -623,24 +623,24 @@ body {
 }
 
 [data-theme="ligue1"] .sim-header-card {
-  background: linear-gradient(135deg, rgba(9, 28, 62, 0.92) 0%, rgba(14, 23, 20, 0.96) 100%);
-  border-color: rgba(0, 240, 255, 0.4);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 240, 255, 0.15);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
+  border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px color-mix(in srgb, var(--pitch-green) 15%, transparent);
 }
 
 [data-theme="ligue1"] .btn-sim-stage {
-  background: linear-gradient(135deg, #00F0FF 0%, #0066FF 100%) !important;
-  color: #030816 !important;
-  font-weight: 900 !important;
-  border-color: #00F0FF !important;
-  box-shadow: 0 4px 20px rgba(0, 240, 255, 0.5) !important;
+  background: linear-gradient(135deg, var(--pitch-green) 0%, color-mix(in srgb, var(--pitch-green) 60%, #0066FF) 100%) !important;
+  color: var(--color-text-inverse) !important;
+  font-weight: var(--font-weight-black) !important;
+  border-color: var(--pitch-green) !important;
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--pitch-green) 50%, transparent) !important;
 }
 
 [data-theme="ligue1"] .bracket-tab.active {
-  background: #00F0FF !important;
-  color: #030816 !important;
-  border-color: #00F0FF !important;
-  box-shadow: 0 0 12px rgba(0, 240, 255, 0.4) !important;
+  background: var(--pitch-green) !important;
+  color: var(--color-text-inverse) !important;
+  border-color: var(--pitch-green) !important;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--pitch-green) 40%, transparent) !important;
 }
 
 /* 5. Liga Portugal Betclic Theme */
@@ -652,25 +652,25 @@ body {
 }
 
 [data-theme="ligaPortugal"] .sim-header-card {
-  background: linear-gradient(135deg, rgba(14, 38, 25, 0.95) 0%, rgba(28, 12, 16, 0.96) 100%);
-  border-color: rgba(0, 208, 108, 0.4);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 208, 108, 0.15);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
+  border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px color-mix(in srgb, var(--pitch-green) 15%, transparent);
 }
 
 [data-theme="ligaPortugal"] .btn-sim-stage {
-  background: linear-gradient(135deg, #00D06C 0%, #00994D 100%) !important;
+  background: linear-gradient(135deg, var(--pitch-green) 0%, color-mix(in srgb, var(--pitch-green) 70%, #00994D) 100%) !important;
   color: #FFFFFF !important;
-  font-weight: 900 !important;
-  border-color: #00FF85 !important;
-  box-shadow: 0 4px 20px rgba(0, 208, 108, 0.5) !important;
+  font-weight: var(--font-weight-black) !important;
+  border-color: color-mix(in srgb, var(--pitch-green) 60%, #00FF85) !important;
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--pitch-green) 50%, transparent) !important;
 }
 
 [data-theme="ligaPortugal"] .bracket-tab.active {
-  background: #00D06C !important;
-  color: #030816 !important;
-  border-color: #00D06C !important;
-  font-weight: 900 !important;
-  box-shadow: 0 0 12px rgba(0, 208, 108, 0.4) !important;
+  background: var(--pitch-green) !important;
+  color: var(--color-text-inverse) !important;
+  border-color: var(--pitch-green) !important;
+  font-weight: var(--font-weight-black) !important;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--pitch-green) 40%, transparent) !important;
 }
 
 /* 6. Eredivisie (Netherlands) Theme */
@@ -682,25 +682,25 @@ body {
 }
 
 [data-theme="eredivisie"] .sim-header-card {
-  background: linear-gradient(135deg, rgba(40, 20, 10, 0.95) 0%, rgba(14, 23, 20, 0.96) 100%);
-  border-color: rgba(255, 119, 0, 0.4);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 119, 0, 0.15);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
+  border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px color-mix(in srgb, var(--pitch-green) 15%, transparent);
 }
 
 [data-theme="eredivisie"] .btn-sim-stage {
-  background: linear-gradient(135deg, #FF7700 0%, #CC5500 100%) !important;
+  background: linear-gradient(135deg, var(--pitch-green) 0%, color-mix(in srgb, var(--pitch-green) 70%, #CC5500) 100%) !important;
   color: #FFFFFF !important;
-  font-weight: 900 !important;
-  border-color: #FFAA44 !important;
-  box-shadow: 0 4px 20px rgba(255, 119, 0, 0.5) !important;
+  font-weight: var(--font-weight-black) !important;
+  border-color: color-mix(in srgb, var(--pitch-green) 60%, #FFAA44) !important;
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--pitch-green) 50%, transparent) !important;
 }
 
 [data-theme="eredivisie"] .bracket-tab.active {
-  background: #FF7700 !important;
+  background: var(--pitch-green) !important;
   color: #FFFFFF !important;
-  border-color: #FF7700 !important;
-  font-weight: 900 !important;
-  box-shadow: 0 0 12px rgba(255, 119, 0, 0.4) !important;
+  border-color: var(--pitch-green) !important;
+  font-weight: var(--font-weight-black) !important;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--pitch-green) 40%, transparent) !important;
 }
 
 /* 7. Trendyol SÃ¼per Lig (Turkey) Theme */
@@ -712,25 +712,25 @@ body {
 }
 
 [data-theme="superLig"] .sim-header-card {
-  background: linear-gradient(135deg, rgba(45, 10, 15, 0.95) 0%, rgba(14, 23, 20, 0.96) 100%);
-  border-color: rgba(227, 10, 23, 0.4);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(227, 10, 23, 0.15);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
+  border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px color-mix(in srgb, var(--pitch-green) 15%, transparent);
 }
 
 [data-theme="superLig"] .btn-sim-stage {
-  background: linear-gradient(135deg, #E30A17 0%, #A0000C 100%) !important;
+  background: linear-gradient(135deg, var(--pitch-green) 0%, color-mix(in srgb, var(--pitch-green) 70%, #A0000C) 100%) !important;
   color: #FFFFFF !important;
-  font-weight: 900 !important;
-  border-color: #FF4D58 !important;
-  box-shadow: 0 4px 20px rgba(227, 10, 23, 0.5) !important;
+  font-weight: var(--font-weight-black) !important;
+  border-color: color-mix(in srgb, var(--pitch-green) 60%, #FF4D58) !important;
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--pitch-green) 50%, transparent) !important;
 }
 
 [data-theme="superLig"] .bracket-tab.active {
-  background: #E30A17 !important;
+  background: var(--pitch-green) !important;
   color: #FFFFFF !important;
-  border-color: #E30A17 !important;
-  font-weight: 900 !important;
-  box-shadow: 0 0 12px rgba(227, 10, 23, 0.4) !important;
+  border-color: var(--pitch-green) !important;
+  font-weight: var(--font-weight-black) !important;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--pitch-green) 40%, transparent) !important;
 }
 
 /* 8. Scottish Premiership Theme */
@@ -742,25 +742,25 @@ body {
 }
 
 [data-theme="scottishPrem"] .sim-header-card {
-  background: linear-gradient(135deg, rgba(8, 25, 55, 0.95) 0%, rgba(14, 23, 20, 0.96) 100%);
-  border-color: rgba(0, 94, 184, 0.4);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 94, 184, 0.15);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
+  border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px color-mix(in srgb, var(--pitch-green) 15%, transparent);
 }
 
 [data-theme="scottishPrem"] .btn-sim-stage {
-  background: linear-gradient(135deg, #005EB8 0%, #003875 100%) !important;
+  background: linear-gradient(135deg, var(--pitch-green) 0%, color-mix(in srgb, var(--pitch-green) 70%, #003875) 100%) !important;
   color: #FFFFFF !important;
-  font-weight: 900 !important;
-  border-color: #3388FF !important;
-  box-shadow: 0 4px 20px rgba(0, 94, 184, 0.5) !important;
+  font-weight: var(--font-weight-black) !important;
+  border-color: color-mix(in srgb, var(--pitch-green) 60%, #3388FF) !important;
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--pitch-green) 50%, transparent) !important;
 }
 
 [data-theme="scottishPrem"] .bracket-tab.active {
-  background: #005EB8 !important;
+  background: var(--pitch-green) !important;
   color: #FFFFFF !important;
-  border-color: #005EB8 !important;
-  font-weight: 900 !important;
-  box-shadow: 0 0 12px rgba(0, 94, 184, 0.4) !important;
+  border-color: var(--pitch-green) !important;
+  font-weight: var(--font-weight-black) !important;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--pitch-green) 40%, transparent) !important;
 }
 
 /* 9. Serie A Enilive Theme */
@@ -3171,16 +3171,16 @@ html, body {
 
 
 .bracket-match-card {
-  background: linear-gradient(180deg, #253830 0%, #1F2F28 100%);
-  border: 1px solid #3B564B;
-  border-radius: 10px;
-  padding: 14px 16px;
+  background: linear-gradient(180deg, var(--color-bg-elevated) 0%, var(--color-bg-card) 100%);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  transition: all 0.2s ease;
+  gap: var(--space-2);
+  transition: all var(--transition-base);
   position: relative;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-md);
 }
 
 .bracket-match-card:hover {
@@ -3191,13 +3191,13 @@ html, body {
 .bracket-match-card.live-now {
   border-color: var(--pitch-green);
   box-shadow: 0 0 16px var(--pitch-green-glow);
-  background: linear-gradient(180deg, #2B4239 0%, #20332B 100%);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--pitch-green) 8%, var(--color-bg-elevated)) 0%, var(--color-bg-card) 100%);
 }
 
 .bracket-match-card.final-match {
   border-color: var(--champions-gold);
   box-shadow: 0 0 18px var(--champions-gold-glow);
-  background: linear-gradient(180deg, #303D2E 0%, #253325 100%);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--champions-gold) 8%, var(--color-bg-elevated)) 0%, var(--color-bg-card) 100%);
 }
 
 .live-now-badge {
@@ -4203,82 +4203,82 @@ html, body {
 
 /* High-Stakes Knockout Stage Theming (QF, SF, Grand Final) */
 .bracket-match-card.stage-qf {
-  background: linear-gradient(145deg, rgba(18, 30, 25, 0.9), rgba(12, 20, 17, 0.95));
-  border: 1px solid rgba(56, 239, 125, 0.35);
-  box-shadow: 0 4px 18px rgba(46, 204, 113, 0.1);
+  background: linear-gradient(145deg, color-mix(in srgb, var(--pitch-green) 6%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
+  border: 1px solid color-mix(in srgb, var(--pitch-green) 35%, transparent);
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--pitch-green) 10%, transparent);
 }
 .bracket-match-card.stage-qf:hover {
   border-color: var(--pitch-green);
-  box-shadow: 0 0 20px rgba(46, 204, 113, 0.25);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--pitch-green) 25%, transparent);
 }
 
 .bracket-match-card.stage-sf {
-  background: linear-gradient(145deg, rgba(32, 26, 14, 0.9), rgba(18, 22, 19, 0.95));
-  border: 1px solid rgba(255, 201, 74, 0.45);
-  box-shadow: 0 4px 22px rgba(255, 201, 74, 0.12);
+  background: linear-gradient(145deg, color-mix(in srgb, var(--champions-gold) 6%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
+  border: 1px solid color-mix(in srgb, var(--champions-gold) 45%, transparent);
+  box-shadow: 0 4px 22px color-mix(in srgb, var(--champions-gold) 12%, transparent);
 }
 .bracket-match-card.stage-sf:hover {
   border-color: var(--champions-gold);
-  box-shadow: 0 0 25px rgba(255, 201, 74, 0.3);
+  box-shadow: 0 0 25px color-mix(in srgb, var(--champions-gold) 30%, transparent);
 }
 
 .bracket-match-card.stage-gf,
 .bracket-match-card.final-match {
-  background: linear-gradient(145deg, rgba(38, 30, 12, 0.95), rgba(20, 26, 22, 0.98));
+  background: linear-gradient(145deg, color-mix(in srgb, var(--champions-gold) 8%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
   border: 2px solid var(--champions-gold);
-  box-shadow: 0 0 30px rgba(255, 201, 74, 0.3), inset 0 0 15px rgba(255, 201, 74, 0.1);
+  box-shadow: 0 0 30px color-mix(in srgb, var(--champions-gold) 30%, transparent), inset 0 0 15px color-mix(in srgb, var(--champions-gold) 10%, transparent);
   transform: scale(1.02);
 }
 .bracket-match-card.stage-gf:hover,
 .bracket-match-card.final-match:hover {
-  box-shadow: 0 0 40px rgba(255, 201, 74, 0.5), inset 0 0 25px rgba(255, 201, 74, 0.18);
+  box-shadow: 0 0 40px color-mix(in srgb, var(--champions-gold) 50%, transparent), inset 0 0 25px color-mix(in srgb, var(--champions-gold) 18%, transparent);
 }
 
 .stage-badge-qf {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  background: rgba(46, 204, 113, 0.15);
+  gap: var(--space-1);
+  background: color-mix(in srgb, var(--pitch-green) 15%, transparent);
   border: 1px solid var(--pitch-green);
   color: var(--pitch-green);
-  font-family: var(--font-hud);
-  font-size: 0.68rem;
-  font-weight: 700;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-bold);
   padding: 2px 7px;
-  border-radius: 3px;
-  margin-bottom: 6px;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-1);
 }
 
 .stage-badge-sf {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  background: rgba(255, 201, 74, 0.18);
+  gap: var(--space-1);
+  background: color-mix(in srgb, var(--champions-gold) 18%, transparent);
   border: 1px solid var(--champions-gold);
   color: var(--champions-gold);
-  font-family: var(--font-hud);
-  font-size: 0.68rem;
-  font-weight: 700;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-bold);
   padding: 2px 7px;
-  border-radius: 3px;
-  margin-bottom: 6px;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-1);
 }
 
 .stage-badge-gf {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  background: linear-gradient(90deg, rgba(255, 201, 74, 0.3), rgba(255, 180, 0, 0.2));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--champions-gold) 30%, transparent), color-mix(in srgb, var(--champions-gold) 20%, transparent));
   border: 1px solid var(--champions-gold);
   color: var(--champions-gold);
-  font-family: var(--font-title);
-  font-size: 0.72rem;
-  font-weight: 800;
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-black);
   letter-spacing: 0.8px;
   padding: 3px 10px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   margin-bottom: 8px;
-  box-shadow: 0 0 10px rgba(255, 201, 74, 0.3);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--champions-gold) 30%, transparent);
 }
 
 /* ==========================================================================
@@ -9688,7 +9688,10 @@ html, body {
 /* Focus visible for keyboard navigation */
 .top-nav-link:focus-visible,
 .comp-tab:focus-visible,
-.bracket-tab:focus-visible {
+.bracket-tab:focus-visible,
+.sim-action-btn:focus-visible,
+.sim-ctrl-btn:focus-visible,
+.btn-sim-stage:focus-visible {
   outline: 2px var(--pitch-green) solid;
   outline-offset: 2px;
 }
@@ -9893,15 +9896,6 @@ html, body {
   padding: 3px 8px;
   border-radius: 4px;
   border: 1px solid rgba(46, 204, 113, 0.2);
-}
-
-/* Reduced motion preference */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
 }
 
 /* ==========================================================================
