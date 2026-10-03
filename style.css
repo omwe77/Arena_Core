@@ -62,8 +62,6 @@
   --color-simulation-subtle: rgba(0, 212, 255, 0.10);
   --color-archive: #9CA3AF;            /* archived/historical data */
   --color-archive-subtle: rgba(156, 163, 175, 0.12);
-  --color-live: #4ADE80;               /* live data (only if genuinely live) */
-  --color-live-subtle: rgba(74, 222, 128, 0.12);
 
   /* ==========================================================================
      COLOR — competition-brand accents (defaults, overridden per competition)

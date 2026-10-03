@@ -1,6 +1,6 @@
 /* ==========================================================================
    PITCH_CORE — ARCHIVED FOOTBALL DATA LAYER (COMPETITION SNAPSHOTS)
-   Sanitized local cache for API-Football integration.
+   Archived competition snapshots from public football statistics.
    Contains archived competition snapshots (team rosters, historical standings, top scorers)
    from known seasons. Used as input data for simulation and displayed as ARCHIVED DATA in the UI.
    ========================================================================== */
@@ -71,10 +71,10 @@
         { name: 'SOUTH KOREA', code: 'KOR', country: 'South Korea', logo: 'https://flagcdn.com/w40/kr.png' }
       ],
       topScorers: [
-        { rank: 1, name: 'Kylian Mbappé', team: 'FRANCE', goals: 8, assists: 2, photo: 'https://media.api-sports.io/football/players/278.png' },
-        { rank: 2, name: 'Lionel Messi', team: 'ARGENTINA', goals: 7, assists: 3, photo: 'https://media.api-sports.io/football/players/154.png' },
-        { rank: 3, name: 'Julián Álvarez', team: 'ARGENTINA', goals: 4, assists: 0, photo: 'https://media.api-sports.io/football/players/6157.png' },
-        { rank: 4, name: 'Olivier Giroud', team: 'FRANCE', goals: 4, assists: 0, photo: 'https://media.api-sports.io/football/players/874.png' }
+        { rank: 1, name: 'Kylian Mbappé', team: 'FRANCE', goals: 8, assists: 2, photo: 'https://images.fotmob.com/image_resources/logo/player/278.png' },
+        { rank: 2, name: 'Lionel Messi', team: 'ARGENTINA', goals: 7, assists: 3, photo: 'https://images.fotmob.com/image_resources/logo/player/154.png' },
+        { rank: 3, name: 'Julián Álvarez', team: 'ARGENTINA', goals: 4, assists: 0, photo: 'https://images.fotmob.com/image_resources/logo/player/6157.png' },
+        { rank: 4, name: 'Olivier Giroud', team: 'FRANCE', goals: 4, assists: 0, photo: 'https://images.fotmob.com/image_resources/logo/player/874.png' }
       ]
     },
 
