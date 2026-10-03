@@ -1335,7 +1335,7 @@
 
     // Fresh initialization based on tournament format
     if (config.format === 'worldcup48') {
-      // Use custom draw teams if set, otherwise fall back to real data pool (random draw)
+      // Use custom draw teams if set, otherwise fall back to archived data pool (random draw)
       let pool;
       if (wcCustomTeams && wcCustomTeams.length === 48) {
         pool = ArenaRandom.shuffle([...wcCustomTeams].map(t => t.toUpperCase().trim()));
