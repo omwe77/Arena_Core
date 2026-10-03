@@ -2,7 +2,7 @@
 
 > **Document Version:** 1.0.0  
 > **Date:** September 17, 2026  
-> **Audited Repository:** `worldcup-project` (`omwe77/SIEP--arena_coore`)  
+> **Audited Repository:** `arena-core` (`omwe77/Arena_Core`)  
 > **Audited Target:** [https://lemon-ocean-06aede400.5.azurestaticapps.net/](https://lemon-ocean-06aede400.5.azurestaticapps.net/)  
 > **Status:** Baselined & Verified
 
@@ -64,7 +64,7 @@ This audit establishes the comprehensive technical baseline required before emba
 
 ### 4.1 What Works Well ✅
 1. **Rich Simulation Depth**: High-fidelity Poisson probability modeling across 10 global tournaments.
-2. **Visual Excitement**: Custom interactive Mario striker pitch track, dynamic video background player with 1080p highlights, responsive goal celebrations, and confetti cannons.
+2. **Visual Excitement**: Custom interactive ARENA_CORE striker pitch track, dynamic video background player with 1080p highlights, responsive goal celebrations, and confetti cannons.
 3. **Audio Synthesis**: High-performance Web Audio synthesizer generating authentic stadium whistles, kick acoustics, and goal horns without external MP3 dependencies.
 4. **Data Coverage**: Real standings, top scorers, and club crests for Europe's top leagues and international cups.
 5. **Zero Lint Errors**: Modernized ESLint flat config passing cleanly.

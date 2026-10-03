@@ -3,7 +3,7 @@
 > **Last Updated:** 2026-09-17  
 > **Active Branch:** `main`  
 > **Live Site:** https://lemon-ocean-06aede400.5.azurestaticapps.net/  
-> **Repo:** `omwe77/SIEP--arena_coore`  
+> **Repo:** `omwe77/Arena_Core`  
 > **Deployed via:** GitHub Actions → Azure Static Web Apps (auto on push to `main`)
 
 ---
@@ -56,7 +56,7 @@ ARENA_CORE must clearly distinguish between REAL (bundled static snapshot), ARCH
 ## 📂 Key Files & Architecture
 
 ```
-worldcup-project/
+arena-core/
 ├── index.html          # Main SPA shell (~1540 lines)
 ├── app.js              # Core IIFE: simulation engine + renderers (~10,271 lines)
 ├── style.css           # Design system + components (~16,400 lines / 413KB)
