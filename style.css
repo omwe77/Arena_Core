@@ -1981,6 +1981,22 @@ html, body {
     padding: var(--space-4) var(--space-4);
   }
 
+  /* Mobile: keep the ARENA signature, drop the animated stadium game banner.
+     The decorative striker, ball and effects are removed; brand, navigation
+     and current context read first. */
+  .header-pitch-track {
+    opacity: 0.08;
+  }
+
+  .arena-sprite-container,
+  .arena-soccer-ball-wrap,
+  .grass-kick-burst,
+  .arena-action-bubble,
+  .pitch-corner-flag,
+  .pitch-floodlight {
+    display: none;
+  }
+
   .home-shell {
     gap: var(--space-6);
   }
