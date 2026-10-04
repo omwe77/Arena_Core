@@ -3,6 +3,16 @@ import { test, expect } from '@playwright/test';
 
 test.describe('ARENA_CORE Platform Tests', () => {
 
+  // Helper: the app now boots on the product Home. Each competition's hero and
+  // Custom Draw live on its showcase, reached from a Featured competition card.
+  async function goToSimulator(page) {
+    await page.evaluate(() => {
+      const card = document.querySelector('#home-featured-grid .home-comp-card[data-tourn="wc"]');
+      if (card) card.click();
+    });
+    await page.waitForTimeout(700);
+  }
+
   test('has correct page title and header elements', async ({ page }) => {
     await page.goto('/');
 
@@ -15,8 +25,42 @@ test.describe('ARENA_CORE Platform Tests', () => {
     await expect(arenaActor).toBeVisible();
   });
 
+  test('home is a single focused panel with contextual competition control', async ({ page }) => {
+    await page.goto('/');
+
+    // Exactly one top-level panel renders.
+    await expect(page.locator('#view-product-home')).toBeVisible();
+    await expect(page.locator('#view-tournament-sim')).toBeHidden();
+
+    // No duplicated brand identity or implementation status metrics on Home.
+    await expect(page.locator('.home-identity')).toHaveCount(0);
+    await expect(page.locator('.home-status-card')).toHaveCount(0);
+
+    // Curated competition selection, not all 13.
+    await expect(page.locator('#home-featured-grid .home-comp-card')).toHaveCount(4);
+
+    // Competition control is contextual: hidden on Home.
+    await expect(page.locator('#competition-selector-bar')).toBeHidden();
+  });
+
+  test('competition control appears on views where switching is relevant', async ({ page }) => {
+    await page.goto('/');
+
+    // Global Home is competition-agnostic: no control.
+    await expect(page.locator('#competition-selector-bar')).toBeHidden();
+
+    // Competition-scoped views expose it.
+    await goToSimulator(page);
+    await expect(page.locator('#competition-selector-bar')).toBeVisible();
+    await expect(page.locator('#comp-current-name')).toHaveText(/WORLD CUP/);
+
+    await page.evaluate(() => document.querySelector('.top-nav-link[data-nav="product-home"]')?.click());
+    await expect(page.locator('#competition-selector-bar')).toBeHidden();
+  });
+
   test('renders World Cup hero and interactive video HUD', async ({ page }) => {
     await page.goto('/');
+    await goToSimulator(page);
 
     const wcHero = page.locator('#wc-interactive-hero');
     await expect(wcHero).toBeVisible();
@@ -39,6 +83,7 @@ test.describe('ARENA_CORE Platform Tests', () => {
 
   test('hero video HUD controls respond to clicks', async ({ page }) => {
     await page.goto('/');
+    await goToSimulator(page);
     await page.keyboard.press('Escape');
 
     const soundBtn = page.locator('#hvh-sound-btn-wc');
@@ -59,6 +104,7 @@ test.describe('ARENA_CORE Platform Tests', () => {
 
   test('custom draw modal opens and closes correctly', async ({ page }) => {
     await page.goto('/');
+    await goToSimulator(page);
 
     const customDrawBtn = page.locator('#btn-wc-custom-draw');
     await expect(customDrawBtn).toBeVisible();
@@ -74,23 +120,27 @@ test.describe('ARENA_CORE Platform Tests', () => {
 
   test('each tournament has its own distinct hero video', async ({ page }) => {
     await page.goto('/');
+    await goToSimulator(page);
     await page.waitForTimeout(1000);
 
     const wcIframe = page.locator('#hero-video-iframe-wc');
     await expect(wcIframe).toHaveAttribute('src', /I_kDmkCBm_c/);
 
-    const uclTab = page.locator('.tourn-tab[data-tourn="ucl"]');
-    if (await uclTab.count() > 0) {
-      await uclTab.click();
-      await page.waitForTimeout(500);
+    // Switch competition via the contextual control
+    const uclOpt = page.locator('.comp-option[data-tourn="ucl"]');
+    if (await uclOpt.count() > 0) {
+      await page.locator('#comp-dropdown-trigger').click();
+      await uclOpt.click();
+      await page.waitForTimeout(600);
       const uclIframe = page.locator('#hero-video-iframe-ucl');
       await expect(uclIframe).toHaveAttribute('src', /V_YxSJXR9D4/);
     }
 
-    const plTab = page.locator('.tourn-tab[data-tourn="pl"]');
-    if (await plTab.count() > 0) {
-      await plTab.click();
-      await page.waitForTimeout(500);
+    const plOpt = page.locator('.comp-option[data-tourn="pl"]');
+    if (await plOpt.count() > 0) {
+      await page.locator('#comp-dropdown-trigger').click();
+      await plOpt.click();
+      await page.waitForTimeout(600);
       const plIframe = page.locator('#hero-video-iframe-pl');
       await expect(plIframe).toHaveAttribute('src', /wpcKyur-kbI/);
     }
@@ -104,8 +154,8 @@ test.describe('ARENA_CORE Platform Tests', () => {
     await expect(nav).toBeVisible();
 
     // Use evaluate to click directly, bypassing all visibility checks
-    await page.evaluate(() => document.querySelector('.top-nav-link[data-nav="tournament-home"]')?.click());
-    await expect(page.locator('#view-tournament-sim')).toBeVisible();
+    await page.evaluate(() => document.querySelector('.top-nav-link[data-nav="product-home"]')?.click());
+    await expect(page.locator('#view-product-home')).toBeVisible();
 
     await page.evaluate(() => document.querySelector('.top-nav-link[data-nav="tournament-sim"]')?.click());
     await expect(page.locator('#view-tournament-sim')).toBeVisible();
@@ -167,6 +217,7 @@ test.describe('ARENA_CORE Platform Tests', () => {
 
   test('modal focus trap works in custom draw', async ({ page }) => {
     await page.goto('/');
+    await goToSimulator(page);
 
     const drawBtn = page.locator('#btn-wc-custom-draw');
     await drawBtn.click();

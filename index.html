@@ -190,142 +190,61 @@
   </header>
 
 
-  <nav class="competition-selector-bar" role="tablist" aria-label="Select Competition">
-    <button type="button" class="comp-nav-arrow arrow-left" id="comp-nav-left" aria-label="Scroll left" title="Scroll left">
-      <i class="fa-solid fa-chevron-left"></i>
-    </button>
-    <div class="comp-bar-inner" id="comp-bar-inner">
-      <button type="button" class="comp-tab active" data-tourn="wc" role="tab" aria-selected="true">
-        🌍 FIFA WORLD CUP
-      </button>
-      <button type="button" class="comp-tab" data-tourn="euro" role="tab" aria-selected="false">
-        🇪🇺 UEFA EURO
-      </button>
-      <button type="button" class="comp-tab" data-tourn="copa" role="tab" aria-selected="false">
-        COPA AMÉRICA
-      </button>
-      <button type="button" class="comp-tab" data-tourn="ucl" role="tab" aria-selected="false">
-        UEFA CHAMPIONS LEAGUE
-      </button>
-      <button type="button" class="comp-tab" data-tourn="pl" role="tab" aria-selected="false">
-        PREMIER LEAGUE
-      </button>
-      <button type="button" class="comp-tab" data-tourn="laliga" role="tab" aria-selected="false">
-        LA LIGA
-      </button>
-      <button type="button" class="comp-tab" data-tourn="serieA" role="tab" aria-selected="false">
-        SERIE A
-      </button>
-      <button type="button" class="comp-tab" data-tourn="bundesliga" role="tab" aria-selected="false">
-        BUNDESLIGA
-      </button>
-      <button type="button" class="comp-tab" data-tourn="ligue1" role="tab" aria-selected="false">
-        LIGUE 1
-      </button>
-      <button type="button" class="comp-tab" data-tourn="ligaPortugal" role="tab" aria-selected="false">
-        LIGA PORTUGAL
-      </button>
-      <button type="button" class="comp-tab" data-tourn="eredivisie" role="tab" aria-selected="false">
-        EREDIVISIE
-      </button>
-      <button type="button" class="comp-tab" data-tourn="superLig" role="tab" aria-selected="false">
-        SÜPER LİG
-      </button>
-      <button type="button" class="comp-tab" data-tourn="scottishPrem" role="tab" aria-selected="false">
-        🏴󠁧󠁢󠁳󠁣󠁴󠁿 SCOTTISH PREM
-      </button>
+  <!-- Contextual competition control: shown only on views where competition switching is relevant -->
+  <nav class="competition-selector-bar" id="competition-selector-bar" aria-label="Competition selector" hidden>
+    <div class="comp-selector-inner">
+      <span class="comp-selector-label" id="comp-selector-label">COMPETITION</span>
+      <div class="comp-dropdown" id="comp-dropdown">
+        <button type="button" class="comp-dropdown-trigger" id="comp-dropdown-trigger" aria-haspopup="listbox"
+          aria-expanded="false" aria-controls="comp-dropdown-menu" aria-labelledby="comp-selector-label comp-current-name">
+          <span class="comp-mark" id="comp-current-mark" aria-hidden="true"></span>
+          <span class="comp-current-name" id="comp-current-name">FIFA WORLD CUP</span>
+          <i class="fa-solid fa-chevron-down comp-caret" aria-hidden="true"></i>
+        </button>
+        <div class="comp-dropdown-menu" id="comp-dropdown-menu" role="listbox" aria-label="Select competition" hidden>
+          <!-- populated by updateCompetitionSelector() -->
+        </div>
+      </div>
     </div>
-    <button type="button" class="comp-nav-arrow arrow-right" id="comp-nav-right" aria-label="Scroll right" title="Scroll right">
-      <i class="fa-solid fa-chevron-right"></i>
-    </button>
   </nav>
 
-  <!-- ===== PRODUCT-LEVEL COMMAND CENTER : HOME VIEW ===== -->
+  <!-- ===== PRODUCT HOME VIEW ===== -->
   <section id="view-product-home" class="view-panel" hidden aria-label="ARENA CORE Home" role="region">
     <div class="home-shell">
 
-      <!-- Brand identity pillar -->
-      <div class="home-identity">
-        <div class="home-identity-lockup">
-          <span class="home-brand-icon" aria-hidden="true">
-            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="16" cy="16" r="15" stroke="currentColor" stroke-width="1.6"/>
-              <path d="M16 6 L19.5 12 L16 14 L12.5 12 Z" fill="currentColor"/>
-              <circle cx="16" cy="16" r="5" stroke="currentColor" stroke-width="1.2" fill="none"/>
-            </svg>
-          </span>
-          <div class="home-brand-text">
-            <span class="home-brand-name">ARENA <span class="home-brand-core">CORE</span></span>
-            <span class="home-brand-tag">football simulation command center</span>
-          </div>
-        </div>
-        <div class="home-identity-divider" aria-hidden="true"></div>
-        <p class="home-identity-sub">
-          Multi-competition simulation. Seeded deterministic engine. Archive + projection side by side.
-        </p>
+      <!-- Hero: single clear focal point -->
+      <div class="home-hero">
+        <h1 class="home-hero-title">What do you want to simulate?</h1>
+        <p class="home-hero-sub">Run a seeded tournament projection, or explore archived competition data.</p>
       </div>
 
-      <!-- Product status dashboard -->
-      <div class="home-status-grid" role="region" aria-label="Platform status">
-        <div class="home-status-card">
-          <span class="home-status-icon" aria-hidden="true"><i class="fa-solid fa-trophy"></i></span>
-          <div class="home-status-body">
-            <span class="home-status-value" id="home-active-tournaments">0</span>
-            <span class="home-status-label">ACTIVE COMPETITIONS</span>
-          </div>
-        </div>
-        <div class="home-status-card">
-          <span class="home-status-icon" aria-hidden="true"><i class="fa-solid fa-arrows-spin"></i></span>
-          <div class="home-status-body">
-            <span class="home-status-value" id="home-active-teams">0</span>
-            <span class="home-status-label">TEAMS LOADED</span>
-          </div>
-        </div>
-        <div class="home-status-card">
-          <span class="home-status-icon" aria-hidden="true"><i class="fa-solid fa-diagram-project"></i></span>
-          <div class="home-status-body">
-            <span class="home-status-value" id="home-active-matches">0</span>
-            <span class="home-status-label">SIMULATED MATCHES</span>
-          </div>
-        </div>
-        <div class="home-status-card">
-          <span class="home-status-icon" aria-hidden="true"><i class="fa-solid fa-sliders"></i></span>
-          <div class="home-status-body">
-            <span class="home-status-value" id="home-draw-size">0</span>
-            <span class="home-status-label">MAX DRAW SIZE</span>
-          </div>
-        </div>
+      <!-- One primary + one secondary action -->
+      <div class="home-actions">
+        <button type="button" class="home-cta-btn" id="home-btn-simulate">
+          <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+          <span>RUN SIMULATION</span>
+        </button>
+        <button type="button" class="home-cta-btn home-cta-btn-secondary" id="home-btn-archive">
+          <i class="fa-solid fa-box-archive" aria-hidden="true"></i>
+          <span>EXPLORE ARCHIVE</span>
+        </button>
       </div>
 
-      <!-- Primary call to action -->
-      <div class="home-cta-block">
-        <div class="home-cta-text">
-          <h3 class="home-cta-heading">Pick a competition. Run the simulation.</h3>
-          <p class="home-cta-sub">Select a tournament above and press SIMULATE to advance through the stages.</p>
-        </div>
-        <div class="home-cta-actions">
-          <button type="button" class="home-cta-btn" id="home-btn-simulate" data-nav="tournament-sim">
-            <i class="fa-solid fa-bolt" aria-hidden="true"></i>
-            <span>SIMULATE</span>
-          </button>
-          <button type="button" class="home-cta-btn home-cta-btn-secondary" data-nav="standings-view">
-            <i class="fa-solid fa-table" aria-hidden="true"></i>
-            <span>STANDINGS</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Competition grid -->
+      <!-- Curated competition selection -->
       <div class="home-competitions-section">
-        <h3 class="home-section-heading">AVAILABLE COMPETITIONS</h3>
-        <div class="home-comp-grid" id="home-comp-grid" role="list">
-          <!-- populated by renderHomeCompetitionGrid() -->
+        <h2 class="home-section-heading">FEATURED COMPETITIONS</h2>
+        <div class="home-comp-grid" id="home-featured-grid" role="list">
+          <!-- populated by renderProductHome() -->
         </div>
+        <button type="button" class="home-view-all" id="home-view-all">
+          <span>View all competitions</span>
+          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
       </div>
 
     </div>
   </section>
-  <!-- ===== END PRODUCT-LEVEL HOME VIEW ===== -->
+  <!-- ===== END PRODUCT HOME VIEW ===== -->
 
   <!-- App Main Content Container -->
   <div class="app-layout">
