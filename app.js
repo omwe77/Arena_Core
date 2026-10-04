@@ -7290,6 +7290,16 @@ function getUclFeederStatus() {
       const s = window.ArenaRandom.getSeed();
       seedEl.textContent = s !== null ? s.toString(16).toUpperCase().padStart(8, '0') : 'UNSEEDED';
     }
+    const resultEl = document.getElementById('champ-sim-result');
+    if (resultEl) {
+      const finalMatch = (state.gf && state.gf[0]) || (state.matchdays && state.matchdays[state.matchdays.length - 1] && state.matchdays[state.matchdays.length - 1][0]);
+      if (finalMatch && typeof finalMatch.scoreHome === 'number' && finalMatch.home && finalMatch.away) {
+        const pens = finalMatch.hadPenalties ? ` (pens ${finalMatch.penHome}-${finalMatch.penAway})` : '';
+        resultEl.textContent = `${finalMatch.home} ${finalMatch.scoreHome}-${finalMatch.scoreAway} ${finalMatch.away}${pens}`;
+      } else if (champTeam) {
+        resultEl.textContent = `${champTeam} — champion`;
+      }
+    }
 
     // Dynamic Context-Aware Headlines and Taglines per Competition
     const isLeague = config.type === 'league' || config.format === 'leagueSeason';
@@ -7942,8 +7952,6 @@ function getUclFeederStatus() {
     const champCloseBtn = document.getElementById('champ-modal-close');
     const champBackdrop = document.getElementById('champ-modal-backdrop');
     const champViewBracketBtn = document.getElementById('champ-view-bracket-btn');
-    const champConfettiBtn = document.getElementById('champ-confetti-btn');
-
     function closeChampModal(e) {
       if (e && e.preventDefault) e.preventDefault();
       const modalEl = document.getElementById('champion-modal');
@@ -7965,11 +7973,6 @@ function getUclFeederStatus() {
     if (champViewBracketBtn) {
       champViewBracketBtn.addEventListener('click', closeChampModal);
       champViewBracketBtn.addEventListener('pointerdown', closeChampModal);
-    }
-    if (champConfettiBtn) {
-      champConfettiBtn.addEventListener('click', () => {
-        startConfettiAnimation();
-      });
     }
     const champExportBtn = document.getElementById('champ-export-btn');
     if (champExportBtn) {
@@ -8718,25 +8721,31 @@ function getUclFeederStatus() {
     const compName = (config.name || 'FIFA WORLD CUP 2026').toUpperCase();
     const stageTitle = STAGE_META[stageKey]?.title || (stageKey ? stageKey.toUpperCase() : 'MATCH FIXTURE');
 
-    // 1. Meta Line
+    // 1. Meta Line — venue only when real (no fabricated "Official Match Arena")
     const venueEl = document.getElementById('dstats-venue');
     const compStageEl = document.getElementById('dstats-comp-stage');
-    if (venueEl) venueEl.textContent = `📍 ${matchObj?.stadium ? `${matchObj.stadium}, ${matchObj.city}` : 'Official Match Arena'}`;
+    if (venueEl) {
+      const venue = matchObj?.stadium ? `${matchObj.stadium}${matchObj.city ? `, ${matchObj.city}` : ''}` : '';
+      venueEl.textContent = venue;
+      venueEl.hidden = !venue;
+    }
     if (compStageEl) compStageEl.textContent = `${compName} · ${stageTitle}`;
 
-    // 2. Status Badge
+    // 2. Status Badge — ONE simulation-state treatment (no repeated "SIMULATION" labels)
     const statusBadge = document.getElementById('dstats-status-badge');
     if (statusBadge) {
+      let stateLabel = 'READY';
+      let cls = 'dstats-status-pill';
       if (matchObj?.isLive) {
-        statusBadge.textContent = `LIVE ${matchObj.currentSimMinute || 0}'`;
-        statusBadge.className = 'dstats-status-pill live';
+        stateLabel = `LIVE ${matchObj.currentSimMinute || 0}'`;
+        cls = 'dstats-status-pill live';
       } else if (matchObj?.isSimulated) {
-        statusBadge.textContent = matchObj.hadPenalties ? `FT (PENS ${matchObj.penHome}-${matchObj.penAway})` : (matchObj.hadExtraTime ? 'AET' : 'FT');
-        statusBadge.className = 'dstats-status-pill';
-      } else {
-        statusBadge.textContent = 'UPCOMING';
-        statusBadge.className = 'dstats-status-pill';
+        stateLabel = matchObj.hadPenalties
+          ? `FULL TIME · PENS ${matchObj.penHome}-${matchObj.penAway}`
+          : (matchObj.hadExtraTime ? 'FULL TIME · AET' : 'FULL TIME');
       }
+      statusBadge.textContent = `SIMULATION • ${stateLabel}`;
+      statusBadge.className = cls;
     }
 
     // 3. Team Shields & Names
@@ -8780,16 +8789,19 @@ function getUclFeederStatus() {
         const sorted = [...events].sort((a, b) => b.minute - a.minute);
         timelineItemsHtml = sorted.map(ev => {
           const isHome = ev.team === 'home';
+          const isET = (ev.type || '').includes('ET');
           return `
-            <div class="dstats-event-item">
+            <div class="dstats-event-item${isET ? ' ev-extra-time' : ' ev-major'}">
               <span class="dstats-ev-min">${ev.minute}'</span>
               <div class="dstats-ev-body ${isHome ? 'home-align' : 'away-align'}">
                 ${isHome ? `
                   <span class="dstats-ev-icon-pill"><i class="fa-solid fa-futbol"></i></span>
                   <span class="dstats-ev-player-main">${ev.player}</span>
+                  ${isET ? '<span class="dstats-ev-tag">ET</span>' : ''}
                   ${ev.assist ? `<span class="dstats-ev-assist">(${ev.assist})</span>` : ''}
                 ` : `
                   ${ev.assist ? `<span class="dstats-ev-assist">(${ev.assist})</span>` : ''}
+                  ${isET ? '<span class="dstats-ev-tag">ET</span>' : ''}
                   <span class="dstats-ev-player-main">${ev.player}</span>
                   <span class="dstats-ev-icon-pill"><i class="fa-solid fa-futbol"></i></span>
                 `}
@@ -8888,6 +8900,7 @@ function getUclFeederStatus() {
     }
 
     // 8. Stats Comparison Container
+    // 8. Key Metrics — only the most useful numbers (6), not every available stat
     const statsContainer = document.getElementById('dstats-stats-container');
     if (statsContainer) {
       const homePoss = 52 + ((homeTeam.charCodeAt(0) % 15) - 7);
@@ -8896,24 +8909,24 @@ function getUclFeederStatus() {
       const aShots = (matchObj?.scoreAway || 0) * 3 + 5;
       const hxG = ((matchObj?.scoreHome || 0) * 0.72 + 0.54).toFixed(2);
       const axG = ((matchObj?.scoreAway || 0) * 0.68 + 0.42).toFixed(2);
+      const hOnTarget = Math.round(hShots * 0.45);
+      const aOnTarget = Math.round(aShots * 0.4);
+      const hCorners = 6, aCorners = 4;
 
       const statMetrics = [
-        { lbl: 'Ball Possession', h: `${homePoss}%`, a: `${awayPoss}%`, hp: homePoss },
-        { lbl: 'Expected Goals (xG)', h: hxG, a: axG, hp: Math.round((parseFloat(hxG)/(parseFloat(hxG)+parseFloat(axG)+0.01))*100) },
-        { lbl: 'Total Shots', h: hShots, a: aShots, hp: Math.round((hShots/(hShots+aShots))*100) },
-        { lbl: 'Shots on Target', h: Math.round(hShots * 0.45), a: Math.round(aShots * 0.4), hp: 50 },
-        { lbl: 'Corner Kicks', h: 6, a: 4, hp: 60 },
-        { lbl: 'Fouls Committed', h: 11, a: 13, hp: 45 },
-        { lbl: 'Yellow Cards', h: 1, a: 2, hp: 33 },
-        { lbl: 'Pass Accuracy', h: '88%', a: '84%', hp: 52 }
+        { lbl: 'Possession', h: `${homePoss}%`, a: `${awayPoss}%`, hp: homePoss },
+        { lbl: 'Expected Goals', h: hxG, a: axG, hp: Math.round((parseFloat(hxG) / (parseFloat(hxG) + parseFloat(axG) + 0.01)) * 100) },
+        { lbl: 'Shots', h: hShots, a: aShots, hp: Math.round((hShots / (hShots + aShots)) * 100) },
+        { lbl: 'On Target', h: hOnTarget, a: aOnTarget, hp: Math.round((hOnTarget / (hOnTarget + aOnTarget)) * 100) },
+        { lbl: 'Corners', h: hCorners, a: aCorners, hp: Math.round((hCorners / (hCorners + aCorners)) * 100) }
       ];
 
       statsContainer.innerHTML = statMetrics.map(sm => `
         <div class="dstats-stat-compare-row">
           <div class="dstats-stat-nums-line">
-            <span>${sm.h}</span>
+            <span class="dstats-stat-val">${sm.h}</span>
             <span class="dstats-stat-center-lbl">${sm.lbl}</span>
-            <span>${sm.a}</span>
+            <span class="dstats-stat-val">${sm.a}</span>
           </div>
           <div class="dstats-stat-dual-bar">
             <div class="dstats-stat-left-bar" style="width: ${sm.hp}%"></div>
@@ -8986,33 +8999,42 @@ function getUclFeederStatus() {
       `;
     }
 
-    // 11. Info Tab
+    // 11. Info Tab — real implementation values only
     const infoContainer = document.getElementById('dstats-info-container');
     if (infoContainer) {
+      const seedVal = window.ArenaRandom && typeof window.ArenaRandom.getSeed === 'function'
+        ? (window.ArenaRandom.getSeed() !== null ? window.ArenaRandom.getSeed().toString(16).toUpperCase().padStart(8, '0') : 'UNSEEDED')
+        : 'N/A';
+      const isLeagueInfo = config.type === 'league' || config.format === 'leagueSeason';
+      const modelNote = isLeagueInfo
+        ? 'Poisson goal distribution · attack/defence ratings from archived standings · home advantage 1.15'
+        : 'Poisson goal distribution · attack/defence ratings from seeded team order · home advantage 1.15';
+
       infoContainer.innerHTML = `
         <div class="dstats-info-item">
           <span class="dstats-info-lbl">Competition</span>
           <span class="dstats-info-val">${compName}</span>
         </div>
         <div class="dstats-info-item">
-          <span class="dstats-info-lbl">Stage / Round</span>
+          <span class="dstats-info-lbl">Stage</span>
           <span class="dstats-info-val">${stageTitle}</span>
         </div>
+        ${matchObj?.stadium ? `
         <div class="dstats-info-item">
-          <span class="dstats-info-lbl">Stadium Venue</span>
-          <span class="dstats-info-val">${matchObj?.stadium || 'MetLife Stadium, New Jersey'}</span>
+          <span class="dstats-info-lbl">Venue</span>
+          <span class="dstats-info-val">${matchObj.stadium}${matchObj.city ? `, ${matchObj.city}` : ''}</span>
+        </div>` : ''}
+        <div class="dstats-info-item">
+          <span class="dstats-info-lbl">Model</span>
+          <span class="dstats-info-val">Poisson v1.0.0</span>
         </div>
         <div class="dstats-info-item">
-          <span class="dstats-info-lbl">Capacity</span>
-          <span class="dstats-info-val">82,500 Spectators</span>
+          <span class="dstats-info-lbl">Seed</span>
+          <span class="dstats-info-val">${seedVal}</span>
         </div>
         <div class="dstats-info-item">
-          <span class="dstats-info-lbl">Referee</span>
-          <span class="dstats-info-val">Szymon Marciniak (POL)</span>
-        </div>
-        <div class="dstats-info-item">
-          <span class="dstats-info-lbl">Simulation Engine</span>
-          <span class="dstats-info-val">Poisson xG Tactical Radar v2.0</span>
+          <span class="dstats-info-lbl">Method</span>
+          <span class="dstats-info-val">${modelNote}</span>
         </div>
       `;
     }

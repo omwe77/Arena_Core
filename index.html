@@ -661,7 +661,6 @@
 
           <!-- Live Tactical Action Ticker -->
           <div class="dstats-live-ticker-wrap">
-            <span class="dstats-ticker-badge"><i class="fa-solid fa-circle-dot"></i> SIMULATION VIEW</span>
             <span class="dstats-ticker-text" id="dstats-pitch-ticker">Match ready for kickoff. Track player movements and ball possession live on the 2D pitch!</span>
           </div>
         </div>
@@ -1127,18 +1126,17 @@
         </div>
 
         <div class="champ-sim-receipt" id="champ-sim-receipt">
-          <div class="sim-receipt-title">SIMULATION RECEIPT</div>
+          <div class="sim-receipt-title">SIMULATION RUN RECORD</div>
           <div class="sim-receipt-row"><span>Competition</span><span id="champ-sim-competition">--</span></div>
           <div class="sim-receipt-row"><span>Model</span><span>Poisson v1.0.0</span></div>
           <div class="sim-receipt-row"><span>Seed</span><span id="champ-sim-seed">--</span></div>
           <div class="sim-receipt-row"><span>Run ID</span><span id="champ-sim-runid">--</span></div>
           <div class="sim-receipt-row"><span>Timestamp</span><span id="champ-sim-timestamp">--</span></div>
-          <div class="sim-receipt-row"><span>Status</span><span>HYPOTHETICAL RESULT</span></div>
+          <div class="sim-receipt-row"><span>Result</span><span id="champ-sim-result">--</span></div>
         </div>
         <div class="champ-modal-actions">
-          <button type="button" class="champ-btn-primary" id="champ-confetti-btn">🎉 MORE CONFETTI</button>
-          <button type="button" class="champ-btn-secondary" id="champ-export-btn">📥 EXPORT JSON</button>
-          <button type="button" class="champ-btn-secondary" id="champ-view-bracket-btn" onclick="document.getElementById('champion-modal').hidden=true;">🏆 BACK TO TOURNAMENT</button>
+          <button type="button" class="champ-btn-secondary" id="champ-export-btn">EXPORT JSON</button>
+          <button type="button" class="champ-btn-secondary" id="champ-view-bracket-btn" onclick="document.getElementById('champion-modal').hidden=true;">BACK TO TOURNAMENT</button>
         </div>
       </div>
     </div>
