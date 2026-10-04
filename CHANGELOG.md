@@ -29,7 +29,14 @@ A visual/UX refactor. No simulation, RNG, routing or data-structure changes.
   and per-competition neon glow on the sim header, group cards, stage button and
   bracket tabs. Competition colour remains as an accent only.
 
-CSS 325.5 kB → 314.9 kB · index.html 85.1 kB → 76.4 kB.
+### Simulation & Mobile
+- **Simulation top bars consolidated**: 13 near-identical per-competition top
+  bars (the literal "13 mini websites" pattern) replaced by one contextual
+  `.sim-context-bar`. ~60 lines of duplicated JS and ~67 dead CSS rules removed.
+- **Mobile header simplified**: at ≤768px the animated striker, ball and
+  decorative pitch effects are removed; brand, navigation and context read first.
+
+CSS 325.5 kB → 304.9 kB · index.html 85.1 kB → 76.4 kB.
 
 ## [v1.1.0] — 2026-10-03
 

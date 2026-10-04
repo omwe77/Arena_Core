@@ -52,6 +52,13 @@ Shipped as four focused commits (`3c4da46`, `428face`, `9def9fc`, `f272d65`):
 6. **Restrained motion** — removed the `!important` hover-stunt system.
 7. **Unified themes** — removed the UCL whole-app background override and
    per-competition neon glow; competition colour is an accent only.
+8. **Simulation consolidated** — 13 per-competition top bars replaced by one
+   contextual bar; ~60 lines of duplicated JS and ~67 dead CSS rules removed.
+9. **Mobile header** — animated striker/ball/pitch effects removed at ≤768px.
+
+Commit map: `3c4da46` (shell + home), `428face` (motion/glow), `9def9fc`
+(footer + data mode), `f272d65` (themes), `d40d45f` (simulation), `26fb0f1`
+(mobile), `ab5465f` (docs).
 
 See `CHANGELOG.md` [v1.2.0] for details. `npm run lint`, `npm test`,
 `npm run build` and `npx playwright test` (16/16) all pass.
