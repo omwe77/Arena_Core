@@ -406,7 +406,6 @@
         <div class="sim-header-card">
           <div class="sim-header-info">
             <div class="data-badge-line">
-              <span class="data-badge SIMULATION">WORLD B — HYPOTHETICAL SIMULATION</span>
               <span class="data-badge ARCHIVE_DATA" id="hero-season-badge">SEASON: --</span>
             </div>
             <h2 id="active-tourn-title" class="tourn-title">FIFA WORLD CUP 2026</h2>
@@ -499,70 +498,7 @@
           </div>
         </div>
 
-        <!-- Modern Stadium Broadcast Footer -->
-        <footer class="stadium-broadcast-footer">
-          <div class="footer-glow-silhouette"></div>
-          <div class="footer-main-grid">
-            <div class="footer-brand-col">
-              <div class="footer-logo">
-                <span class="logo-ball-icon" aria-hidden="true">
-                  <svg class="brand-ball-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8" fill="rgba(46, 204, 113, 0.15)"/>
-                    <polygon points="12,7 15.5,9.5 14,14 10,14 8.5,9.5" fill="currentColor"/>
-                    <line x1="12" y1="7" x2="12" y2="2" stroke="currentColor" stroke-width="1.4"/>
-                    <line x1="15.5" y1="9.5" x2="20" y2="7.5" stroke="currentColor" stroke-width="1.4"/>
-                    <line x1="14" y1="14" x2="18" y2="18" stroke="currentColor" stroke-width="1.4"/>
-                    <line x1="10" y1="14" x2="6" y2="18" stroke="currentColor" stroke-width="1.4"/>
-                    <line x1="8.5" y1="9.5" x2="4" y2="7.5" stroke="currentColor" stroke-width="1.4"/>
-                  </svg>
-                </span>
-                <span class="foot-logo-txt">ARENA <span class="logo-core">CORE</span></span>
-              </div>
-              <p class="foot-desc">
-                High-performance global football simulation nexus powered by Poisson probability
-                matrices, bundled historical team data, and interactive tournament simulation.
-              </p>
-              <div class="foot-status-pill">
-                <span class="status-indicator-dot"></span>
-                <span>ENGINE ONLINE // SIMULATION READY</span>
-              </div>
-            </div>
-
-            <div class="footer-links-col">
-              <h4 class="foot-col-title"><i class="fa-solid fa-trophy"></i> COMPETITIONS</h4>
-              <div class="foot-comp-tags">
-                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'wc\']')?.click();">World Cup</button>
-                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'ucl\']')?.click();">UCL</button>
-                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'pl\']')?.click();">Premier League</button>
-                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'laliga\']')?.click();">La Liga</button>
-                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'serieA\']')?.click();">Serie A</button>
-                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'bundesliga\']')?.click();">Bundesliga</button>
-                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'ligue1\']')?.click();">Ligue 1</button>
-                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'ligaPortugal\']')?.click();">Liga Portugal</button>
-                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'eredivisie\']')?.click();">Eredivisie</button>
-                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'superLig\']')?.click();">Süper Lig</button>
-              </div>
-            </div>
-
-            <div class="footer-tactical-col">
-              <h4 class="foot-col-title"><i class="fa-solid fa-bolt"></i> TACTICAL NEXUS</h4>
-              <ul class="foot-tactical-list">
-                <li><i class="fa-solid fa-chart-line"></i> Poisson Attack/Defense Calibrations</li>
-                <li><i class="fa-solid fa-shield-halved"></i> Live Table Goal Differential Computations</li>
-                <li><i class="fa-solid fa-clapperboard"></i> Highlight Video Replay Center</li>
-                <li><i class="fa-solid fa-tower-broadcast"></i> 2D Pitch Tactical View</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="footer-sub-bar">
-            <div class="foot-copy" id="foot-copy">© 2026 ARENA CORE // MULTI-TOURNAMENT FOOTBALL PLATFORM.</div>
-            <div class="foot-sub-links">
-              <span class="foot-hud-tag" id="foot-build-tag">BUILD: --</span>
-              <span class="foot-hud-tag" id="foot-status-tag">STATUS: RUNNING</span>
-            </div>
-          </div>
-        </footer>
+        <!-- Footer is global (single instance at end of main) -->
       </section>
 
       <!-- ============================================================
@@ -570,9 +506,6 @@
            ============================================================ -->
       <section id="view-standings-view" class="view-panel" aria-label="Official Standings" role="region" hidden>
         <div class="section-banner">
-          <div class="data-badge-line">
-            <span class="data-badge ARCHIVE_DATA" id="standings-provenance-badge">ARCHIVE DATA</span>
-          </div>
           <h2 id="standings-banner-title">LEAGUE STANDINGS</h2>
           <p id="standings-banner-desc">Historical standings from bundled competition data. Simulate matches to generate projected tables.</p>
         </div>
@@ -628,70 +561,7 @@
           </div>
         </div>
 
-        <!-- Modern Stadium Broadcast Footer -->
-        <footer class="stadium-broadcast-footer">
-          <div class="footer-glow-silhouette"></div>
-          <div class="footer-main-grid">
-            <div class="footer-brand-col">
-              <div class="footer-logo">
-                <span class="logo-ball-icon" aria-hidden="true">
-                  <svg class="brand-ball-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8" fill="rgba(46, 204, 113, 0.15)"/>
-                    <polygon points="12,7 15.5,9.5 14,14 10,14 8.5,9.5" fill="currentColor"/>
-                    <line x1="12" y1="7" x2="12" y2="2" stroke="currentColor" stroke-width="1.4"/>
-                    <line x1="15.5" y1="9.5" x2="20" y2="7.5" stroke="currentColor" stroke-width="1.4"/>
-                    <line x1="14" y1="14" x2="18" y2="18" stroke="currentColor" stroke-width="1.4"/>
-                    <line x1="10" y1="14" x2="6" y2="18" stroke="currentColor" stroke-width="1.4"/>
-                    <line x1="8.5" y1="9.5" x2="4" y2="7.5" stroke="currentColor" stroke-width="1.4"/>
-                  </svg>
-                </span>
-                <span class="foot-logo-txt">ARENA <span class="logo-core">CORE</span></span>
-              </div>
-              <p class="foot-desc">
-                Official standings tables & top goalscorer statistics from bundled competition
-                snapshots. Use the simulator to generate projected tables.
-              </p>
-              <div class="foot-status-pill">
-                <span class="status-indicator-dot"></span>
-                <span>STANDINGS LAYER // ARCHIVED SNAPSHOT</span>
-              </div>
-            </div>
-
-            <div class="footer-links-col">
-              <h4 class="foot-col-title"><i class="fa-solid fa-trophy"></i> COMPETITIONS</h4>
-              <div class="foot-comp-tags">
-                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'wc\']')?.click();">World Cup</button>
-                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'ucl\']')?.click();">UCL</button>
-                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'pl\']')?.click();">Premier League</button>
-                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'laliga\']')?.click();">La Liga</button>
-                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'serieA\']')?.click();">Serie A</button>
-                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'bundesliga\']')?.click();">Bundesliga</button>
-                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'ligue1\']')?.click();">Ligue 1</button>
-                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'ligaPortugal\']')?.click();">Liga Portugal</button>
-                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'eredivisie\']')?.click();">Eredivisie</button>
-                <button type="button" class="foot-pill-btn" onclick="document.querySelector('[data-tourn=\'superLig\']')?.click();">Süper Lig</button>
-              </div>
-            </div>
-
-            <div class="footer-tactical-col">
-              <h4 class="foot-col-title"><i class="fa-solid fa-bolt"></i> TACTICAL NEXUS</h4>
-              <ul class="foot-tactical-list">
-                <li><i class="fa-solid fa-chart-simple"></i> Real-time Points & GD Recalibration</li>
-                <li><i class="fa-solid fa-trophy"></i> Golden Boot & Top Scorer Leaderboards</li>
-                <li><i class="fa-solid fa-flag-checkered"></i> Qualification Zone Highlights</li>
-                <li><i class="fa-solid fa-tower-broadcast"></i> 2D Pitch Tactical View</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="footer-sub-bar">
-            <div class="foot-copy" id="foot-copy-2">© 2026 ARENA CORE // OFFICIAL FOOTBALL DATA LAYER.</div>
-            <div class="foot-sub-links">
-              <span class="foot-hud-tag" id="foot-build-tag-2">BUILD: --</span>
-              <span class="foot-hud-tag" id="foot-status-tag-2">STATUS: RUNNING</span>
-            </div>
-          </div>
-        </footer>
+        <!-- Footer is global (single instance at end of main) -->
       </section>
 
       <!-- ============================================================
@@ -699,9 +569,6 @@
            ============================================================ -->
       <section id="view-archive-view" class="view-panel" aria-label="Archive" role="region" hidden>
         <div class="section-banner">
-          <div class="data-badge-line">
-            <span class="data-badge ARCHIVE_DATA">ARCHIVE DATA</span>
-          </div>
           <h2>COMPETITION ARCHIVE</h2>
           <p>Browse historical standings, top scorers, and team rosters from bundled competition data.</p>
         </div>
@@ -712,6 +579,19 @@
       </section>
 
 
+      <!-- Global footer (single instance) -->
+      <footer class="site-footer" role="contentinfo">
+        <div class="site-footer-inner">
+          <div class="site-footer-brand">
+            <span class="foot-logo-txt">ARENA <span class="logo-core">CORE</span></span>
+            <span class="foot-copy">© 2026 — Football simulation &amp; analytics.</span>
+          </div>
+          <div class="site-footer-links">
+            <button type="button" class="foot-link-btn" onclick="document.getElementById('methodology-modal').hidden=false;">Methodology</button>
+            <button type="button" class="foot-link-btn" data-nav="archive-view">Archive</button>
+          </div>
+        </div>
+      </footer>
     </main>
   </div>
 
