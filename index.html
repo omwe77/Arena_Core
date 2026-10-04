@@ -1367,6 +1367,9 @@
   <!-- Real Data Layer & Application Script -->
   <script src="data/real-tournaments.js" defer></script>
   <script src="data/hero-videos.js" defer></script>
+  <!-- Seeded PRNG (mulberry32). Must load before state.js/app.js so that
+       window.ArenaRandom is the real implementation, not the Math.random stub. -->
+  <script src="js/random.js" defer></script>
   <script src="js/state.js" defer></script>
   <script src="js/router.js" defer></script>
   <script src="js/audio-fx.js" defer></script>
