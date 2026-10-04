@@ -1868,207 +1868,24 @@ function setupNavigation() {
       if (stageTabsWrap) stageTabsWrap.hidden = false;
     }
 
-    // World Cup Simulator Back-Bar
-    const wcBackBar = document.getElementById('wc-sim-back-bar');
-    if (wcBackBar) {
-      if (activeTournKey === 'wc' && state.subView === 'sim') {
-        wcBackBar.hidden = false;
-        const wcBackBtn = document.getElementById('btn-back-to-wc-home');
-        if (wcBackBtn) {
-          wcBackBtn.onclick = () => {
+    // Unified competition context bar
+    const simContextBar = document.getElementById('sim-context-bar');
+    if (simContextBar) {
+      if (state.subView === 'sim') {
+        simContextBar.hidden = false;
+        const labelEl = document.getElementById('sim-context-label');
+        if (labelEl) labelEl.textContent = `${config.name} // SIMULATION`;
+        const backLabel = document.getElementById('sim-context-back-label');
+        if (backLabel) backLabel.textContent = `BACK TO ${config.name}`;
+        const backBtn = document.getElementById('btn-back-to-comp-home');
+        if (backBtn) {
+          backBtn.onclick = () => {
             state.subView = 'home';
             renderActiveTournament();
           };
         }
       } else {
-        wcBackBar.hidden = true;
-      }
-    }
-
-    // UEFA Champions League Simulator Back-Bar
-    const uclBackBar = document.getElementById('ucl-sim-back-bar');
-    if (uclBackBar) {
-      if (activeTournKey === 'ucl' && state.subView === 'sim') {
-        uclBackBar.hidden = false;
-        const uclBackBtn = document.getElementById('btn-back-to-ucl-home');
-        if (uclBackBtn) {
-          uclBackBtn.onclick = () => {
-            state.subView = 'home';
-            renderActiveTournament();
-          };
-        }
-      } else {
-        uclBackBar.hidden = true;
-      }
-    }
-
-    // UEFA EURO Simulator Back-Bar
-    const euroBackBar = document.getElementById('euro-sim-back-bar');
-    if (euroBackBar) {
-      if (activeTournKey === 'euro' && state.subView === 'sim') {
-        euroBackBar.hidden = false;
-        const euroBackBtn = document.getElementById('btn-back-to-euro-home');
-        if (euroBackBtn) {
-          euroBackBtn.onclick = () => {
-            state.subView = 'home';
-            renderActiveTournament();
-          };
-        }
-      } else {
-        euroBackBar.hidden = true;
-      }
-    }
-
-    // Copa América Simulator Back-Bar
-    const copaBackBar = document.getElementById('copa-sim-back-bar');
-    if (copaBackBar) {
-      if (activeTournKey === 'copa' && state.subView === 'sim') {
-        copaBackBar.hidden = false;
-        const copaBackBtn = document.getElementById('btn-back-to-copa-home');
-        if (copaBackBtn) {
-          copaBackBtn.onclick = () => {
-            state.subView = 'home';
-            renderActiveTournament();
-          };
-        }
-      } else {
-        copaBackBar.hidden = true;
-      }
-    }
-
-    // Premier League Simulator Back-Bar
-    const plBackBar = document.getElementById('pl-sim-back-bar');
-    if (plBackBar) {
-      if (activeTournKey === 'pl' && state.subView === 'sim') {
-        plBackBar.hidden = false;
-        const plBackBtn = document.getElementById('btn-back-to-pl-home');
-        if (plBackBtn) {
-          plBackBtn.onclick = () => {
-            state.subView = 'home';
-            renderActiveTournament();
-          };
-        }
-      } else {
-        plBackBar.hidden = true;
-      }
-    }
-
-    // Serie A Simulator Back-Bar
-    const saBackBar = document.getElementById('seriea-sim-back-bar');
-    if (saBackBar) {
-      if (activeTournKey === 'serieA' && state.subView === 'sim') {
-        saBackBar.hidden = false;
-        const saBackBtn = document.getElementById('btn-back-to-seriea-home');
-        if (saBackBtn) {
-          saBackBtn.onclick = () => {
-            state.subView = 'home';
-            renderActiveTournament();
-          };
-        }
-      } else {
-        saBackBar.hidden = true;
-      }
-    }
-
-    // Bundesliga Simulator Back-Bar
-    const blBackBar = document.getElementById('bundesliga-sim-back-bar');
-    if (blBackBar) {
-      if (activeTournKey === 'bundesliga' && state.subView === 'sim') {
-        blBackBar.hidden = false;
-        const blBackBtn = document.getElementById('btn-back-to-bundesliga-home');
-        if (blBackBtn) {
-          blBackBtn.onclick = () => {
-            state.subView = 'home';
-            renderActiveTournament();
-          };
-        }
-      } else {
-        blBackBar.hidden = true;
-      }
-    }
-
-    // Ligue 1 Simulator Back-Bar
-    const l1BackBar = document.getElementById('ligue1-sim-back-bar');
-    if (l1BackBar) {
-      if (activeTournKey === 'ligue1' && state.subView === 'sim') {
-        l1BackBar.hidden = false;
-        const l1BackBtn = document.getElementById('btn-back-to-ligue1-home');
-        if (l1BackBtn) {
-          l1BackBtn.onclick = () => {
-            state.subView = 'home';
-            renderActiveTournament();
-          };
-        }
-      } else {
-        l1BackBar.hidden = true;
-      }
-    }
-
-    // Liga Portugal Simulator Back-Bar
-    const lpBackBar = document.getElementById('ligaportugal-sim-back-bar');
-    if (lpBackBar) {
-      if (activeTournKey === 'ligaPortugal' && state.subView === 'sim') {
-        lpBackBar.hidden = false;
-        const lpBackBtn = document.getElementById('btn-back-to-ligaportugal-home');
-        if (lpBackBtn) {
-          lpBackBtn.onclick = () => {
-            state.subView = 'home';
-            renderActiveTournament();
-          };
-        }
-      } else {
-        lpBackBar.hidden = true;
-      }
-    }
-
-    // Eredivisie Simulator Back-Bar
-    const edBackBar = document.getElementById('eredivisie-sim-back-bar');
-    if (edBackBar) {
-      if (activeTournKey === 'eredivisie' && state.subView === 'sim') {
-        edBackBar.hidden = false;
-        const edBackBtn = document.getElementById('btn-back-to-eredivisie-home');
-        if (edBackBtn) {
-          edBackBtn.onclick = () => {
-            state.subView = 'home';
-            renderActiveTournament();
-          };
-        }
-      } else {
-        edBackBar.hidden = true;
-      }
-    }
-
-    // Trendyol Süper Lig Simulator Back-Bar
-    const slBackBar = document.getElementById('superlig-sim-back-bar');
-    if (slBackBar) {
-      if (activeTournKey === 'superLig' && state.subView === 'sim') {
-        slBackBar.hidden = false;
-        const slBackBtn = document.getElementById('btn-back-to-superlig-home');
-        if (slBackBtn) {
-          slBackBtn.onclick = () => {
-            state.subView = 'home';
-            renderActiveTournament();
-          };
-        }
-      } else {
-        slBackBar.hidden = true;
-      }
-    }
-
-    // Scottish Premiership Simulator Back-Bar
-    const spBackBar = document.getElementById('scottishprem-sim-back-bar');
-    if (spBackBar) {
-      if (activeTournKey === 'scottishPrem' && state.subView === 'sim') {
-        spBackBar.hidden = false;
-        const spBackBtn = document.getElementById('btn-back-to-scottishprem-home');
-        if (spBackBtn) {
-          spBackBtn.onclick = () => {
-            state.subView = 'home';
-            renderActiveTournament();
-          };
-        }
-      } else {
-        spBackBar.hidden = true;
+        simContextBar.hidden = true;
       }
     }
 
