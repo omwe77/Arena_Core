@@ -1560,6 +1560,9 @@ function setupNavigation() {
         if (link.dataset.nav) switchView(link.dataset.nav);
       });
     });
+    document.querySelectorAll('.foot-link-btn[data-nav]').forEach(btn => {
+      btn.addEventListener('click', () => switchView(btn.dataset.nav));
+    });
     // Home nav: route to product-level command center
     const homeNavBtn = document.querySelector('.top-nav-link[data-nav="tournament-home"]');
     if (homeNavBtn) {
