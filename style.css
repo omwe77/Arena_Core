@@ -557,16 +557,10 @@ body {
   --color-border-subtle: rgba(0, 240, 255, 0.2);
 }
 
-[data-theme="ucl"] html, [data-theme="ucl"] body,
-[data-theme="ucl"].view-panel, [data-theme="ucl"] .main-viewport {
-  background-color: #050b18 !important;
-  background-image: none !important;
-}
-
 [data-theme="ucl"] .sim-header-card {
   background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
   border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px color-mix(in srgb, var(--pitch-green) 15%, transparent);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
 }
 
 [data-theme="ucl"] .btn-sim-stage {
@@ -574,7 +568,7 @@ body {
   color: var(--color-text-inverse) !important;
   font-weight: var(--font-weight-black) !important;
   border-color: var(--pitch-green) !important;
-  box-shadow: 0 4px 20px color-mix(in srgb, var(--pitch-green) 50%, transparent) !important;
+
 }
 
 [data-theme="ucl"] .bracket-tab.active {
@@ -582,13 +576,13 @@ body {
   color: var(--color-text-inverse) !important;
   border-color: var(--pitch-green) !important;
   font-weight: var(--font-weight-black) !important;
-  box-shadow: 0 0 12px color-mix(in srgb, var(--pitch-green) 40%, transparent) !important;
+
 }
 
 [data-theme="ucl"] .group-card {
   background: color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card));
   border-color: color-mix(in srgb, var(--pitch-green) 30%, transparent);
-  box-shadow: 0 0 16px color-mix(in srgb, var(--pitch-green) 10%, transparent);
+
 }
 [data-theme="ucl"] .group-title {
   color: var(--pitch-green);
@@ -606,21 +600,21 @@ body {
 [data-theme="laliga"] .sim-header-card {
   background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
   border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px color-mix(in srgb, var(--pitch-green) 15%, transparent);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
 }
 
 [data-theme="laliga"] .btn-sim-stage {
   background: linear-gradient(135deg, var(--pitch-green) 0%, color-mix(in srgb, var(--pitch-green) 70%, #D63031) 100%) !important;
   color: #FFFFFF !important;
   border-color: color-mix(in srgb, var(--pitch-green) 60%, #FF6B81) !important;
-  box-shadow: 0 4px 20px color-mix(in srgb, var(--pitch-green) 50%, transparent) !important;
+
 }
 
 [data-theme="laliga"] .bracket-tab.active {
   background: var(--pitch-green) !important;
   color: #FFFFFF !important;
   border-color: var(--pitch-green) !important;
-  box-shadow: 0 0 12px color-mix(in srgb, var(--pitch-green) 40%, transparent) !important;
+
 }
 
 /* 3. Premier League Theme */
@@ -647,7 +641,7 @@ body {
 [data-theme="ligue1"] .sim-header-card {
   background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
   border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px color-mix(in srgb, var(--pitch-green) 15%, transparent);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
 }
 
 [data-theme="ligue1"] .btn-sim-stage {
@@ -655,14 +649,14 @@ body {
   color: var(--color-text-inverse) !important;
   font-weight: var(--font-weight-black) !important;
   border-color: var(--pitch-green) !important;
-  box-shadow: 0 4px 20px color-mix(in srgb, var(--pitch-green) 50%, transparent) !important;
+
 }
 
 [data-theme="ligue1"] .bracket-tab.active {
   background: var(--pitch-green) !important;
   color: var(--color-text-inverse) !important;
   border-color: var(--pitch-green) !important;
-  box-shadow: 0 0 12px color-mix(in srgb, var(--pitch-green) 40%, transparent) !important;
+
 }
 
 /* 5. Liga Portugal Betclic Theme */
@@ -676,7 +670,7 @@ body {
 [data-theme="ligaPortugal"] .sim-header-card {
   background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
   border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px color-mix(in srgb, var(--pitch-green) 15%, transparent);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
 }
 
 [data-theme="ligaPortugal"] .btn-sim-stage {
@@ -684,7 +678,7 @@ body {
   color: #FFFFFF !important;
   font-weight: var(--font-weight-black) !important;
   border-color: color-mix(in srgb, var(--pitch-green) 60%, #00FF85) !important;
-  box-shadow: 0 4px 20px color-mix(in srgb, var(--pitch-green) 50%, transparent) !important;
+
 }
 
 [data-theme="ligaPortugal"] .bracket-tab.active {
@@ -692,7 +686,7 @@ body {
   color: var(--color-text-inverse) !important;
   border-color: var(--pitch-green) !important;
   font-weight: var(--font-weight-black) !important;
-  box-shadow: 0 0 12px color-mix(in srgb, var(--pitch-green) 40%, transparent) !important;
+
 }
 
 /* 6. Eredivisie (Netherlands) Theme */
@@ -706,7 +700,7 @@ body {
 [data-theme="eredivisie"] .sim-header-card {
   background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
   border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px color-mix(in srgb, var(--pitch-green) 15%, transparent);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
 }
 
 [data-theme="eredivisie"] .btn-sim-stage {
@@ -714,7 +708,7 @@ body {
   color: #FFFFFF !important;
   font-weight: var(--font-weight-black) !important;
   border-color: color-mix(in srgb, var(--pitch-green) 60%, #FFAA44) !important;
-  box-shadow: 0 4px 20px color-mix(in srgb, var(--pitch-green) 50%, transparent) !important;
+
 }
 
 [data-theme="eredivisie"] .bracket-tab.active {
@@ -722,7 +716,7 @@ body {
   color: #FFFFFF !important;
   border-color: var(--pitch-green) !important;
   font-weight: var(--font-weight-black) !important;
-  box-shadow: 0 0 12px color-mix(in srgb, var(--pitch-green) 40%, transparent) !important;
+
 }
 
 /* 7. Trendyol SÃ¼per Lig (Turkey) Theme */
@@ -736,7 +730,7 @@ body {
 [data-theme="superLig"] .sim-header-card {
   background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
   border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px color-mix(in srgb, var(--pitch-green) 15%, transparent);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
 }
 
 [data-theme="superLig"] .btn-sim-stage {
@@ -744,7 +738,7 @@ body {
   color: #FFFFFF !important;
   font-weight: var(--font-weight-black) !important;
   border-color: color-mix(in srgb, var(--pitch-green) 60%, #FF4D58) !important;
-  box-shadow: 0 4px 20px color-mix(in srgb, var(--pitch-green) 50%, transparent) !important;
+
 }
 
 [data-theme="superLig"] .bracket-tab.active {
@@ -752,7 +746,7 @@ body {
   color: #FFFFFF !important;
   border-color: var(--pitch-green) !important;
   font-weight: var(--font-weight-black) !important;
-  box-shadow: 0 0 12px color-mix(in srgb, var(--pitch-green) 40%, transparent) !important;
+
 }
 
 /* 8. Scottish Premiership Theme */
@@ -766,7 +760,7 @@ body {
 [data-theme="scottishPrem"] .sim-header-card {
   background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
   border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px color-mix(in srgb, var(--pitch-green) 15%, transparent);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
 }
 
 [data-theme="scottishPrem"] .btn-sim-stage {
@@ -774,7 +768,7 @@ body {
   color: #FFFFFF !important;
   font-weight: var(--font-weight-black) !important;
   border-color: color-mix(in srgb, var(--pitch-green) 60%, #3388FF) !important;
-  box-shadow: 0 4px 20px color-mix(in srgb, var(--pitch-green) 50%, transparent) !important;
+
 }
 
 [data-theme="scottishPrem"] .bracket-tab.active {
@@ -782,7 +776,7 @@ body {
   color: #FFFFFF !important;
   border-color: var(--pitch-green) !important;
   font-weight: var(--font-weight-black) !important;
-  box-shadow: 0 0 12px color-mix(in srgb, var(--pitch-green) 40%, transparent) !important;
+
 }
 
 /* 9. Serie A Enilive Theme */
