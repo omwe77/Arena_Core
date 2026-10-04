@@ -9560,7 +9560,8 @@ html, body {
 
 /* Focus visible for keyboard navigation */
 .top-nav-link:focus-visible,
-.comp-tab:focus-visible,
+.comp-dropdown-trigger:focus-visible,
+.comp-option:focus-visible,
 .bracket-tab:focus-visible,
 .sim-action-btn:focus-visible,
 .sim-ctrl-btn:focus-visible,
@@ -16485,10 +16486,11 @@ border-color: #facc15;
   color: #FFFFFF !important;
 }
 .group-table tbody tr:hover .team-name {
-  text-shadow: 0 0 8px rgba(0, 230, 118, 0.7);
+  color: #FFFFFF !important;
 }
 
-/* Smooth motion for club & team cells across all tables */
+/* Table rows — no slide motion */
+
 .copa-cyber-table td.team-col > div,
 .euro-cyber-table td.team-col > div,
 .ucl-cyber-table td.team-col,
@@ -16517,50 +16519,10 @@ tr:hover .superlig-widget-club-cell,
 tr:hover .scottishprem-widget-club-cell,
 tr:hover .widget-club-cell,
 tr:hover .team-cell {
-  transform: translateX(4px);
+  color: var(--color-text-primary);
 }
 
-/* Micro-interactions for table row icons, crests & position badges */
-tr:hover img.team-crest,
-tr:hover img.league-crest,
-tr:hover .team-logo-img,
-.copa-cyber-table tbody tr:hover img,
-.euro-cyber-table tbody tr:hover img,
-.ucl-cyber-table tbody tr:hover img,
-.pl-widget-table tbody tr:hover img,
-.seriea-widget-table tbody tr:hover img,
-.bundesliga-widget-table tbody tr:hover img,
-.ligue1-widget-table tbody tr:hover img,
-.ligaportugal-widget-table tbody tr:hover img,
-.eredivisie-widget-table tbody tr:hover img,
-.superlig-widget-table tbody tr:hover img,
-.scottishprem-widget-table tbody tr:hover img,
-.widget-table tbody tr:hover img,
-.group-table tbody tr:hover img {
-  transform: scale(1.14);
-  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.4));
-  transition: transform 0.2s ease, filter 0.2s ease;
-}
-
-tr:hover .pos-badge,
-tr:hover .pl-pos-badge {
-  transform: scale(1.15);
-  box-shadow: 0 0 10px currentColor;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.copa-cyber-table tbody tr:hover .widget-crown-icon,
-.euro-cyber-table tbody tr:hover .widget-crown-icon,
-.ucl-cyber-table tbody tr:hover .widget-crown-icon,
-.pl-widget-table tbody tr:hover .pl-widget-crown-icon,
-.widget-table tbody tr:hover .widget-crown-icon,
-tr:hover .fa-crown {
-  transform: scale(1.28) rotate(8deg);
-  filter: drop-shadow(0 0 8px #FFD700);
-  transition: transform 0.2s ease, filter 0.2s ease;
-}
-
-/* --- 2. TABLE / CARD CONTAINERS ELEVATION & GLOW --- */
+/* --- 2. TABLE / CARD CONTAINERS — restrained hover (border only, no lift/glow) --- */
 .copa-cyber-card,
 .euro-cyber-card,
 .ucl-cyber-card,
@@ -16576,27 +16538,12 @@ tr:hover .fa-crown {
 .widget-card,
 .group-card,
 .tech-card {
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease !important;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
 }
 
-.copa-cyber-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(245, 158, 11, 0.8) !important;
-  box-shadow: 0 0 32px rgba(245, 158, 11, 0.35), inset 0 0 20px rgba(200, 16, 46, 0.15), 0 20px 48px rgba(0, 0, 0, 0.85) !important;
-}
-
-.euro-cyber-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(0, 153, 255, 0.85) !important;
-  box-shadow: 0 0 32px rgba(0, 102, 255, 0.45), inset 0 0 20px rgba(255, 215, 0, 0.12), 0 20px 48px rgba(0, 0, 0, 0.85) !important;
-}
-
-.ucl-cyber-card:hover {
-  transform: translateY(-3px);
-  border-color: #00F0FF !important;
-  box-shadow: 0 0 32px rgba(0, 240, 255, 0.45), inset 0 0 20px rgba(255, 0, 128, 0.18), 0 20px 48px rgba(0, 0, 0, 0.85) !important;
-}
-
+.copa-cyber-card:hover,
+.euro-cyber-card:hover,
+.ucl-cyber-card:hover,
 .pl-standings-widget:hover,
 .seriea-standings-widget:hover,
 .bundesliga-standings-widget:hover,
@@ -16609,12 +16556,10 @@ tr:hover .fa-crown {
 .widget-card:hover,
 .group-card:hover,
 .tech-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.85), 0 0 25px rgba(255, 255, 255, 0.08) !important;
-  border-color: rgba(255, 255, 255, 0.25) !important;
+  border-color: var(--color-border-strong);
 }
 
-/* --- 3. ALL BUTTONS RESPONSIVE & DYNAMIC HOVER SYSTEM --- */
+/* --- 3. BUTTONS — restrained hover (color/border only) --- */
 .wc-btn-primary,
 .euro-btn-primary,
 .copa-btn-primary,
@@ -16628,51 +16573,7 @@ tr:hover .fa-crown {
 .superlig-btn-primary,
 .scottishprem-btn-primary,
 .laliga-btn-primary {
-  position: relative !important;
-  overflow: hidden !important;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-.wc-btn-primary::before,
-.euro-btn-primary::before,
-.copa-btn-primary::before,
-.ucl-btn-primary::before,
-.pl-btn-primary::before,
-.seriea-btn-primary::before,
-.bundesliga-btn-primary::before,
-.ligue1-btn-primary::before,
-.ligaportugal-btn-primary::before,
-.eredivisie-btn-primary::before,
-.superlig-btn-primary::before,
-.scottishprem-btn-primary::before,
-.laliga-btn-primary::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -120%;
-  width: 70%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
-  transform: skewX(-20deg);
-  transition: none;
-  pointer-events: none;
-}
-
-.wc-btn-primary:hover::before,
-.euro-btn-primary:hover::before,
-.copa-btn-primary:hover::before,
-.ucl-btn-primary:hover::before,
-.pl-btn-primary:hover::before,
-.seriea-btn-primary:hover::before,
-.bundesliga-btn-primary:hover::before,
-.ligue1-btn-primary:hover::before,
-.ligaportugal-btn-primary:hover::before,
-.eredivisie-btn-primary:hover::before,
-.superlig-btn-primary:hover::before,
-.scottishprem-btn-primary:hover::before,
-.laliga-btn-primary:hover::before {
-  left: 180%;
-  transition: left 0.75s ease-in-out;
+  transition: background var(--transition-fast), border-color var(--transition-fast), filter var(--transition-fast);
 }
 
 .wc-btn-primary:hover,
@@ -16688,59 +16589,7 @@ tr:hover .fa-crown {
 .superlig-btn-primary:hover,
 .scottishprem-btn-primary:hover,
 .laliga-btn-primary:hover {
-  transform: translateY(-3px) scale(1.02) !important;
   filter: brightness(1.08);
-}
-
-.wc-btn-primary:active,
-.euro-btn-primary:active,
-.copa-btn-primary:active,
-.ucl-btn-primary:active,
-.pl-btn-primary:active,
-.seriea-btn-primary:active,
-.bundesliga-btn-primary:active,
-.ligue1-btn-primary:active,
-.ligaportugal-btn-primary:active,
-.eredivisie-btn-primary:active,
-.superlig-btn-primary:active,
-.scottishprem-btn-primary:active,
-.laliga-btn-primary:active {
-  transform: translateY(0) scale(0.98) !important;
-}
-
-/* Primary Button Icon Micro-interactions */
-.wc-btn-primary:hover i.fa-play,
-.euro-btn-primary:hover i.fa-play,
-.copa-btn-primary:hover i.fa-play,
-.ucl-btn-primary:hover i.fa-play,
-.pl-btn-primary:hover i.fa-chevron-right,
-.seriea-btn-primary:hover i.fa-chevron-right,
-.bundesliga-btn-primary:hover i.fa-chevron-right,
-.ligue1-btn-primary:hover i.fa-chevron-right,
-.ligaportugal-btn-primary:hover i.fa-chevron-right,
-.eredivisie-btn-primary:hover i.fa-chevron-right,
-.superlig-btn-primary:hover i.fa-chevron-right,
-.scottishprem-btn-primary:hover i.fa-chevron-right,
-.laliga-btn-primary:hover i.fa-chevron-right {
-  transform: translateX(4px);
-  transition: transform 0.2s ease;
-}
-
-.wc-btn-primary:hover i.fa-bolt,
-.euro-btn-primary:hover i.fa-bolt,
-.copa-btn-primary:hover i.fa-bolt,
-.ucl-btn-primary:hover i.fa-bolt,
-.pl-btn-primary:hover i.fa-bolt,
-.seriea-btn-primary:hover i.fa-bolt,
-.bundesliga-btn-primary:hover i.fa-bolt,
-.ligue1-btn-primary:hover i.fa-bolt,
-.ligaportugal-btn-primary:hover i.fa-bolt,
-.eredivisie-btn-primary:hover i.fa-bolt,
-.superlig-btn-primary:hover i.fa-bolt,
-.scottishprem-btn-primary:hover i.fa-bolt,
-.laliga-btn-primary:hover i.fa-bolt {
-  transform: scale(1.2) rotate(-6deg);
-  transition: transform 0.2s ease;
 }
 
 /* Secondary Action Buttons */
@@ -16758,7 +16607,7 @@ tr:hover .fa-crown {
 .superlig-btn-secondary,
 .scottishprem-btn-secondary,
 .laliga-btn-secondary {
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
 }
 
 .wc-btn-custom-draw:hover,
@@ -16775,111 +16624,19 @@ tr:hover .fa-crown {
 .superlig-btn-secondary:hover,
 .scottishprem-btn-secondary:hover,
 .laliga-btn-secondary:hover {
-  transform: translateY(-3px) scale(1.02) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45) !important;
-  border-color: rgba(255, 255, 255, 0.6) !important;
+  border-color: var(--color-border-strong);
 }
 
-.wc-btn-custom-draw:active,
-.wc-btn-secondary:active,
-.euro-btn-secondary:active,
-.copa-btn-secondary:active,
-.ucl-btn-secondary:active,
-.pl-btn-secondary:active,
-.seriea-btn-secondary:active,
-.bundesliga-btn-secondary:active,
-.ligue1-btn-secondary:active,
-.ligaportugal-btn-secondary:active,
-.eredivisie-btn-secondary:active,
-.superlig-btn-secondary:active,
-.scottishprem-btn-secondary:active,
-.laliga-btn-secondary:active {
-  transform: translateY(0) scale(0.98) !important;
-}
-
-/* Secondary Button Icon Micro-interactions */
-.wc-btn-custom-draw:hover i,
-.wc-btn-secondary:hover i,
-.euro-btn-secondary:hover i,
-.copa-btn-secondary:hover i,
-.ucl-btn-secondary:hover i,
-.pl-btn-secondary:hover i,
-.seriea-btn-secondary:hover i,
-.bundesliga-btn-secondary:hover i,
-.ligue1-btn-secondary:hover i,
-.ligaportugal-btn-secondary:hover i,
-.eredivisie-btn-secondary:hover i,
-.superlig-btn-secondary:hover i,
-.scottishprem-btn-secondary:hover i,
-.laliga-btn-secondary:hover i {
-  transform: scale(1.15);
-  transition: transform 0.2s ease;
-}
-
-/* Competition Tabs & Navigation */
-.comp-tab {
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-.comp-tab:hover {
-  background: var(--bg-card-hover) !important;
-  color: var(--text-white) !important;
-  border-color: rgba(255, 255, 255, 0.35) !important;
-  transform: translateY(-2px) scale(1.02) !important;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4) !important;
-}
-
-.comp-tab:active {
-  transform: translateY(0) scale(0.98) !important;
-}
-
-.comp-tab.active:hover {
-  box-shadow: 0 0 16px var(--pitch-green-glow), 0 4px 16px rgba(0, 0, 0, 0.35) !important;
-}
-
-.comp-nav-arrow {
-  transition: all 0.2s ease !important;
-}
-
-.comp-nav-arrow:hover {
-  background: rgba(255, 255, 255, 0.15) !important;
-  transform: scale(1.1) !important;
+/* Competition dropdown (no hover stunt) */
+.comp-dropdown-trigger {
+  transition: background var(--transition-fast), border-color var(--transition-fast);
 }
 
 .top-nav-link {
-  transition: all 0.2s ease !important;
+  transition: color var(--transition-fast), background var(--transition-fast);
 }
 
-.top-nav-link:hover {
-  transform: translateY(-2px);
-}
-
-.pl-standings-view-all,
-.seriea-standings-view-all,
-.bundesliga-standings-view-all,
-.ligue1-standings-view-all,
-.ligaportugal-standings-view-all,
-.eredivisie-standings-view-all,
-.superlig-standings-view-all,
-.scottishprem-standings-view-all,
-.standings-view-all {
-  transition: all 0.2s ease !important;
-}
-
-.pl-standings-view-all:hover,
-.seriea-standings-view-all:hover,
-.bundesliga-standings-view-all:hover,
-.ligue1-standings-view-all:hover,
-.ligaportugal-standings-view-all:hover,
-.eredivisie-standings-view-all:hover,
-.superlig-standings-view-all:hover,
-.scottishprem-standings-view-all:hover,
-.standings-view-all:hover {
-  transform: translateX(4px) !important;
-  filter: brightness(1.25);
-}
-
-/* --- 4. INFO ELEMENTS & STATS RIBBON HOVER SYSTEM --- */
+/* --- 4. STATS RIBBON — static, no hover stunt --- */
 .wc-ribbon-card,
 .euro-ribbon-card,
 .copa-ribbon-card,
@@ -16893,112 +16650,17 @@ tr:hover .fa-crown {
 .superlig-ribbon-stat-item,
 .scottishprem-ribbon-stat-item,
 .ribbon-stat-item {
-  cursor: pointer;
   padding: 6px 14px;
   border-radius: 10px;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.25s ease, box-shadow 0.25s ease !important;
 }
 
-.wc-ribbon-card:hover,
-.euro-ribbon-card:hover,
-.copa-ribbon-card:hover,
-.ucl-ribbon-card:hover,
-.pl-ribbon-stat-item:hover,
-.seriea-ribbon-stat-item:hover,
-.bundesliga-ribbon-stat-item:hover,
-.ligue1-ribbon-stat-item:hover,
-.ligaportugal-ribbon-stat-item:hover,
-.eredivisie-ribbon-stat-item:hover,
-.superlig-ribbon-stat-item:hover,
-.scottishprem-ribbon-stat-item:hover,
-.ribbon-stat-item:hover {
-  transform: translateY(-3px) scale(1.03) !important;
-  background: rgba(255, 255, 255, 0.08) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35) !important;
-}
-
-/* Ribbon Icon Wrappers */
-.wc-ribbon-icon-wrap,
-.euro-ribbon-icon-wrap,
-.copa-ribbon-icon-wrap,
-.ucl-ribbon-icon-wrap,
-.pl-ribbon-icon,
-.seriea-ribbon-icon,
-.bundesliga-ribbon-icon,
-.ligue1-ribbon-icon,
-.ligaportugal-ribbon-icon,
-.eredivisie-ribbon-icon,
-.superlig-ribbon-icon,
-.scottishprem-ribbon-icon,
-.ribbon-icon {
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, filter 0.25s ease !important;
-}
-
-.wc-ribbon-card:hover .wc-ribbon-icon-wrap,
-.euro-ribbon-card:hover .euro-ribbon-icon-wrap,
-.copa-ribbon-card:hover .copa-ribbon-icon-wrap,
-.ucl-ribbon-card:hover .ucl-ribbon-icon-wrap {
-  transform: scale(1.14) rotate(-3deg) !important;
-  box-shadow: 0 0 18px currentColor !important;
-}
-
-.pl-ribbon-stat-item:hover .pl-ribbon-icon,
-.seriea-ribbon-stat-item:hover .seriea-ribbon-icon,
-.bundesliga-ribbon-stat-item:hover .bundesliga-ribbon-icon,
-.ligue1-ribbon-stat-item:hover .ligue1-ribbon-icon,
-.ligaportugal-ribbon-stat-item:hover .ligaportugal-ribbon-icon,
-.eredivisie-ribbon-stat-item:hover .eredivisie-ribbon-icon,
-.superlig-ribbon-stat-item:hover .superlig-ribbon-icon,
-.scottishprem-ribbon-stat-item:hover .scottishprem-ribbon-icon,
-.ribbon-stat-item:hover .ribbon-icon {
-  transform: scale(1.18) rotate(-4deg) !important;
-  filter: drop-shadow(0 0 10px currentColor) !important;
-}
-
-/* Ribbon Numbers */
-.wc-ribbon-card:hover .wc-ribbon-number,
-.euro-ribbon-card:hover .euro-ribbon-number,
-.copa-ribbon-card:hover .copa-ribbon-number,
-.ucl-ribbon-card:hover .ucl-ribbon-number,
-.pl-ribbon-stat-item:hover .pl-ribbon-num,
-.seriea-ribbon-stat-item:hover .seriea-ribbon-num,
-.bundesliga-ribbon-stat-item:hover .bundesliga-ribbon-num,
-.ligue1-ribbon-stat-item:hover .ligue1-ribbon-num,
-.ligaportugal-ribbon-stat-item:hover .ligaportugal-ribbon-num,
-.eredivisie-ribbon-stat-item:hover .eredivisie-ribbon-num,
-.superlig-ribbon-stat-item:hover .superlig-ribbon-num,
-.scottishprem-ribbon-stat-item:hover .scottishprem-ribbon-num,
-.ribbon-stat-item:hover .ribbon-num {
-  filter: drop-shadow(0 0 10px currentColor) brightness(1.25) !important;
-  transition: filter 0.25s ease !important;
-}
-
-/* Top Hero Badges */
+/* Top Hero Badges — static */
 .wc-badge-top,
 .euro-badge-top,
 .copa-badge-top,
 .ucl-starball-badge,
 .pl-brand-badge {
-  cursor: pointer;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease !important;
-}
-
-.wc-badge-top:hover,
-.euro-badge-top:hover,
-.copa-badge-top:hover,
-.ucl-starball-badge:hover,
-.pl-brand-badge:hover {
-  transform: translateY(-2px) scale(1.03) !important;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
-}
-
-.wc-badge-top:hover i,
-.euro-badge-top:hover i,
-.copa-badge-top:hover i,
-.ucl-starball-badge:hover i,
-.pl-brand-badge:hover .pl-lion-icon {
-  transform: scale(1.16);
-  transition: transform 0.2s ease !important;
+  cursor: default;
 }
 
 /* ============================================================
@@ -17739,7 +17401,7 @@ button, a, input, select, textarea, [role="button"], [role="tab"], [role="link"]
 }
 
 /* Ensure small icon buttons still meet touch target */
-.btn-sim-stage, .sim-action-btn, .sim-ctrl-btn, .top-nav-link, .comp-tab, .bracket-tab {
+.btn-sim-stage, .sim-action-btn, .sim-ctrl-btn, .top-nav-link, .comp-dropdown-trigger, .bracket-tab {
   min-height: 44px;
   min-width: 44px;
 }
