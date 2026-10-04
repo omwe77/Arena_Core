@@ -2,6 +2,35 @@
 
 All notable changes to ARENA_CORE are documented in this file.
 
+## [v1.2.0] — 2026-10-04
+
+### UI De-clutter & Theme Consolidation
+A visual/UX refactor. No simulation, RNG, routing or data-structure changes.
+
+- **Contextual competition control**: the permanently-visible 13-tab competition
+  bar is replaced by one compact dropdown, shown only on competition-scoped
+  views (showcase, simulation, standings, archive) and hidden on the global Home.
+- **Home simplified**: removed the duplicated ARENA identity lockup and the four
+  implementation status metrics (ACTIVE COMPETITIONS / TEAMS LOADED / SIMULATED
+  MATCHES / MAX DRAW SIZE). Home is now a single hero ("What do you want to
+  simulate?"), one primary action (RUN SIMULATION), one secondary action
+  (EXPLORE ARCHIVE) and four curated Featured Competitions.
+- **Shell fix**: `switchView()` now renders exactly one top-level panel. Home and
+  the tournament panel previously rendered simultaneously on load.
+- **Single global footer**: removed two duplicated stadium-broadcast footers
+  (repeated branding, a 10-button competition list, a feature list, and fake
+  BUILD/STATUS telemetry). One compact footer with Methodology + Archive links.
+- **One data-mode indicator**: collapsed the repeated ARCHIVE DATA /
+  HYPOTHETICAL SIMULATION badges to the single global header badge.
+- **Restrained motion**: removed the `!important` hover-stunt system (button
+  lift/scale/shine-sweep, card lift + neon glow, ribbon/badge lift + rotate,
+  table-row slide, crest zoom, crown spin). Hover is now colour/border only.
+- **Unified competition themes**: removed the UCL whole-app background override
+  and per-competition neon glow on the sim header, group cards, stage button and
+  bracket tabs. Competition colour remains as an accent only.
+
+CSS 325.5 kB → 314.9 kB · index.html 85.1 kB → 76.4 kB.
+
 ## [v1.1.0] — 2026-10-03
 
 ### Design System & Token Migration
