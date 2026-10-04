@@ -11,7 +11,12 @@ function createMockElement(id, tag = 'div') {
       _classes: new Set(),
       add(...c) { c.forEach(x => this._classes.add(x)); },
       remove(...c) { c.forEach(x => this._classes.delete(x)); },
-      contains(x) { return this._classes.has(x); }
+      contains(x) { return this._classes.has(x); },
+      toggle(x, force) {
+        const on = force === undefined ? !this._classes.has(x) : !!force;
+        if (on) this._classes.add(x); else this._classes.delete(x);
+        return on;
+      }
     },
     style: {},
     dataset: {},

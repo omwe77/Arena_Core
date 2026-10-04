@@ -1456,28 +1456,34 @@
       return;
     }
 
-    // Make the tournament-sim panel visible for home/sim views
     const simPanel = document.getElementById('view-tournament-sim');
     const standingsPanel = document.getElementById('view-standings-view');
-
     const archivePanel = document.getElementById('view-archive-view');
+    const homePanel = document.getElementById('view-product-home');
+
+    // Exactly one top-level panel is visible at a time.
+    function showPanel(panel) {
+      [simPanel, standingsPanel, archivePanel, homePanel].forEach(p => {
+        if (!p) return;
+        const on = p === panel;
+        p.hidden = !on;
+        p.classList.toggle('active', on);
+      });
+    }
 
     if (targetViewId === 'standings-view') {
-      if (simPanel) { simPanel.hidden = true; simPanel.classList.remove('active'); }
-      if (standingsPanel) { standingsPanel.hidden = false; standingsPanel.classList.add('active'); }
-      if (archivePanel) { archivePanel.hidden = true; archivePanel.classList.remove('active'); }
+      showPanel(standingsPanel);
       updateDataModeBadge('ARCHIVE DATA');
       renderRealStandings();
     } else if (targetViewId === 'archive-view') {
-      if (simPanel) { simPanel.hidden = true; simPanel.classList.remove('active'); }
-      if (standingsPanel) { standingsPanel.hidden = true; standingsPanel.classList.remove('active'); }
-      if (archivePanel) { archivePanel.hidden = false; archivePanel.classList.add('active'); }
+      showPanel(archivePanel);
       updateDataModeBadge('ARCHIVE DATA');
       renderArchiveView();
+    } else if (targetViewId === 'product-home') {
+      showPanel(homePanel);
+      updateDataModeBadge('SIMULATION');
     } else {
-      if (standingsPanel) { standingsPanel.hidden = true; standingsPanel.classList.remove('active'); }
-      if (archivePanel) { archivePanel.hidden = true; archivePanel.classList.remove('active'); }
-      if (simPanel) { simPanel.hidden = false; simPanel.classList.add('active'); }
+      showPanel(simPanel);
       updateDataModeBadge('SIMULATION');
     }
 
@@ -1489,12 +1495,6 @@
       cancelAllActiveSimulationTimers();
       renderActiveTournament();
     } else if (targetViewId === 'product-home') {
-      const homePanel = document.getElementById('view-product-home');
-      const simPanel = document.getElementById('view-tournament-sim');
-      const standingsPanel = document.getElementById('view-standings-view');
-      if (homePanel) { homePanel.hidden = false; homePanel.classList.add('active'); }
-      if (simPanel) { simPanel.hidden = true; simPanel.classList.remove('active'); }
-      if (standingsPanel) { standingsPanel.hidden = true; standingsPanel.classList.remove('active'); }
       renderProductHome();
     } else if (targetViewId === 'tournament-sim') {
       if (activeTournKey === 'ucl') {
@@ -1523,46 +1523,33 @@
     }
 
     syncPrimaryNavState(targetViewId);
+    updateCompetitionBarVisibility(targetViewId);
   }
 
 function setupNavigation() {
-    // Scroll chevrons & indicator for competition selector bar
-    const compInner = document.getElementById('comp-bar-inner');
-    const compLeft = document.getElementById('comp-nav-left');
-    const compRight = document.getElementById('comp-nav-right');
-
-    function updateCompNavArrows() {
-      if (!compInner) return;
-      const atStart = compInner.scrollLeft <= 4;
-      const atEnd = compInner.scrollLeft + compInner.clientWidth >= compInner.scrollWidth - 4;
-      if (compLeft) {
-        compLeft.disabled = atStart;
-        compLeft.classList.toggle('disabled', atStart);
-      }
-      if (compRight) {
-        compRight.disabled = atEnd;
-        compRight.classList.toggle('disabled', atEnd);
-      }
-    }
-
-    if (compLeft && compInner) {
-      compLeft.addEventListener('click', () => {
-        compInner.scrollBy({ left: -260, behavior: 'smooth' });
-        setTimeout(updateCompNavArrows, 320);
+    // Contextual competition dropdown
+    const compTrigger = document.getElementById('comp-dropdown-trigger');
+    const compMenu = document.getElementById('comp-dropdown-menu');
+    if (compTrigger && compMenu) {
+      compTrigger.addEventListener('click', () => {
+        if (compMenu.hidden) openCompetitionDropdown();
+        else closeCompetitionDropdown();
       });
-    }
-
-    if (compRight && compInner) {
-      compRight.addEventListener('click', () => {
-        compInner.scrollBy({ left: 260, behavior: 'smooth' });
-        setTimeout(updateCompNavArrows, 320);
+      compTrigger.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown' && compMenu.hidden) {
+          e.preventDefault();
+          openCompetitionDropdown();
+        }
       });
-    }
-
-    if (compInner) {
-      compInner.addEventListener('scroll', updateCompNavArrows, { passive: true });
-      window.addEventListener('resize', updateCompNavArrows);
-      setTimeout(updateCompNavArrows, 150);
+      compMenu.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeCompetitionDropdown();
+          compTrigger.focus();
+        }
+      });
+      document.addEventListener('click', (e) => {
+        if (!compMenu.hidden && !e.target.closest('#comp-dropdown')) closeCompetitionDropdown();
+      });
     }
 
     document.querySelectorAll('.side-item').forEach(btn => {
@@ -1629,42 +1616,117 @@ function setupNavigation() {
   // 7. PRODUCT HOME RENDER
   // ---------------------------------------------------------------------------
   function renderProductHome() {
-    const tournaments = Object.keys(TOURNAMENTS_CONFIG);
-    const formatTeamMap = { worldcup48: 48, uclLeaguePhase: 36, leagueSeason: 20, euro24: 24, copa16: 16 };
-    const formatDrawMap = { worldcup48: 48, uclLeaguePhase: 36, leagueSeason: 0, euro24: 24, copa16: 16 };
+    const featured = ['wc', 'ucl', 'pl', 'laliga'];
     const formatLabelMap = { worldcup48: '12 GROUPS + KNOCKOUT', uclLeaguePhase: 'SWISS LEAGUE + PLAYOFF', leagueSeason: '38 MATCHDAYS', euro24: '6 GROUPS + KNOCKOUT', copa16: '4 GROUPS + KNOCKOUT' };
-    const iconMap = { cup: 'TROPHY', league: 'LEAGUE' };
 
-    const totalTeams = tournaments.reduce((acc, key) => {
-      const cfg = TOURNAMENTS_CONFIG[key];
-      return acc + (formatTeamMap[cfg?.format] || 0);
-    }, 0);
-    const maxDraw = Math.max(...tournaments.map(k => formatDrawMap[TOURNAMENTS_CONFIG[k]?.format] || 0));
-
-    document.getElementById('home-active-tournaments').textContent = tournaments.length;
-    document.getElementById('home-active-teams').textContent = totalTeams;
-    document.getElementById('home-active-matches').textContent = '0';
-    document.getElementById('home-draw-size').textContent = maxDraw || '—';
-
-    const grid = document.getElementById('home-comp-grid');
+    const grid = document.getElementById('home-featured-grid');
     if (grid) {
-      grid.innerHTML = tournaments.map(key => {
-        const cfg = TOURNAMENTS_CONFIG[key];
-        const active = key === activeTournKey;
-        const icon = iconMap[cfg?.type] || '🏆';
-        const label = formatLabelMap[cfg?.format] || cfg?.format || '';
-        return `
-          <div class="home-comp-card ${active ? 'home-comp-card-active' : ''}" role="listitem">
-            <div class="home-comp-icon" aria-hidden="true">${icon}</div>
-            <div class="home-comp-info">
-              <span class="home-comp-name">${cfg.name}</span>
-              <span class="home-comp-detail">${label}</span>
-            </div>
-            <span class="home-comp-season">SIMULATION</span>
-          </div>
+      grid.innerHTML = featured
+        .filter(key => TOURNAMENTS_CONFIG[key])
+        .map(key => {
+          const cfg = TOURNAMENTS_CONFIG[key];
+          const label = formatLabelMap[cfg?.format] || cfg?.format || '';
+          return `
+          <button type="button" class="home-comp-card" role="listitem" data-tourn="${key}">
+            <span class="home-comp-name">${cfg.name}</span>
+            <span class="home-comp-detail">${label}</span>
+          </button>
         `;
-      }).join('');
+        })
+        .join('');
+
+      grid.querySelectorAll('.home-comp-card').forEach(card => {
+        card.addEventListener('click', () => {
+          // Land on the competition's showcase/home, where its hero, format and
+          // Custom Draw live — not directly into a running simulation.
+          selectTournament(card.dataset.tourn);
+          switchView('tournament-home');
+        });
+      });
     }
+
+    const viewAllBtn = document.getElementById('home-view-all');
+    if (viewAllBtn) {
+      viewAllBtn.addEventListener('click', () => switchView('archive-view'));
+    }
+
+    const simBtn = document.getElementById('home-btn-simulate');
+    if (simBtn) {
+      simBtn.addEventListener('click', () => switchView('tournament-sim'));
+    }
+
+    const archiveBtn = document.getElementById('home-btn-archive');
+    if (archiveBtn) {
+      archiveBtn.addEventListener('click', () => switchView('archive-view'));
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // 7. CONTEXTUAL COMPETITION CONTROL
+  // ---------------------------------------------------------------------------
+  function updateCompetitionSelector() {
+    const cfg = TOURNAMENTS_CONFIG[activeTournKey];
+    if (!cfg) return;
+
+    const nameEl = document.getElementById('comp-current-name');
+    if (nameEl) nameEl.textContent = cfg.name;
+
+    const menu = document.getElementById('comp-dropdown-menu');
+    if (menu) {
+      menu.innerHTML = Object.keys(TOURNAMENTS_CONFIG)
+        .map(key => {
+          const c = TOURNAMENTS_CONFIG[key];
+          const selected = key === activeTournKey;
+          return `<button type="button" class="comp-option" role="option" data-tourn="${key}" aria-selected="${selected}">
+            <span class="comp-option-mark" aria-hidden="true"></span>
+            <span>${c.name}</span>
+          </button>`;
+        })
+        .join('');
+
+      menu.querySelectorAll('.comp-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+          selectTournament(opt.dataset.tourn);
+          closeCompetitionDropdown();
+        });
+      });
+    }
+  }
+
+  function openCompetitionDropdown() {
+    const menu = document.getElementById('comp-dropdown-menu');
+    const trigger = document.getElementById('comp-dropdown-trigger');
+    if (!menu || !trigger) return;
+    menu.hidden = false;
+    trigger.setAttribute('aria-expanded', 'true');
+    const current = menu.querySelector('.comp-option[aria-selected="true"]');
+    if (current && typeof current.focus === 'function') current.focus();
+  }
+
+  function closeCompetitionDropdown() {
+    const menu = document.getElementById('comp-dropdown-menu');
+    const trigger = document.getElementById('comp-dropdown-trigger');
+    if (!menu || !trigger) return;
+    menu.hidden = true;
+    trigger.setAttribute('aria-expanded', 'false');
+  }
+
+  /**
+   * The competition control is contextual: it appears on competition-scoped
+   * views (competition showcase, simulation, standings, archive) and is hidden
+   * on the global product Home, which is competition-agnostic. Match Center
+   * never shows it because the active match already establishes its competition.
+   */
+  function updateCompetitionBarVisibility(targetViewId) {
+    const bar = document.getElementById('competition-selector-bar');
+    if (!bar) return;
+    const relevant =
+      targetViewId === 'tournament-home' ||
+      targetViewId === 'tournament-sim' ||
+      targetViewId === 'standings-view' ||
+      targetViewId === 'archive-view';
+    bar.hidden = !relevant;
+    if (!relevant) closeCompetitionDropdown();
   }
 
   // ---------------------------------------------------------------------------
@@ -1688,16 +1750,8 @@ function setupNavigation() {
     document.documentElement.setAttribute('data-theme', activeTournKey);
     document.body.setAttribute('data-theme', activeTournKey);
 
-    // Update competition tabs in header & auto-scroll active tab into view
-    const compInner = document.getElementById('comp-bar-inner');
-    document.querySelectorAll('.comp-tab').forEach(t => {
-      const isMatch = t.dataset.tourn === activeTournKey;
-      t.classList.toggle('active', isMatch);
-      t.setAttribute('aria-selected', String(isMatch));
-      if (isMatch && compInner && typeof t.scrollIntoView === 'function') {
-        t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
-      }
-    });
+    // Update the contextual competition control
+    updateCompetitionSelector();
 
     // Initialize/reset tournament state for fresh simulation
     initTournamentState(activeTournKey);
@@ -7718,13 +7772,6 @@ function getUclFeederStatus() {
   // 9. INSTANT & STAGE SIMULATION BUTTON TRIGGERS
   // ---------------------------------------------------------------------------
   function setupSimulationControls() {
-    // 10-Competition Selection Bar
-    document.querySelectorAll('.comp-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        selectTournament(tab.dataset.tourn);
-      });
-    });
-
     // Stage Filter Tabs - Direct Navigation & Smooth Scroll
     document.querySelectorAll('#stage-tabs-group .bracket-tab').forEach(tab => {
       tab.addEventListener('click', (e) => {
@@ -10512,10 +10559,10 @@ function getUclFeederStatus() {
       window.ArenaRouter.init();
     }
 
-    // Start on product-level HOME — then select default competition
+    // Start on product-level HOME. Initialize the default competition's state
+    // (and pre-render its home) without navigating away from Home.
     switchView('product-home');
     selectTournament('wc');
-    switchView('tournament-home');
   });
 
 })();
