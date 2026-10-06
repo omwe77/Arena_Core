@@ -1,4 +1,4 @@
-﻿# ARENA_CORE — Deterministic Football Simulation Engine & Match Center
+# ARENA_CORE — Deterministic Football Simulation Engine & Match Center
 
 > An interactive football simulation platform and analytics dashboard. Features archived historical competition datasets, a seeded Poisson-based tournament simulation engine, interactive 2D tactical pitch visualizations, and custom 48-team World Cup bracket generation—built with vanilla web standards and zero framework overhead.
 
@@ -175,7 +175,37 @@ npm run lint
 
 ---
 
-## 9. Known Limitations
+## 9. Current Implementation Status
+
+### Implemented (Verified in Active Codebase)
+- **Tournament Navigation:** Single-page view router switching seamlessly between Home, Tournament Simulator, Official Standings, and Competition Archive.
+- **Mathematical Simulation Engine:** Poisson goal-distribution model parameterized by relative historical offensive/defensive ratings and home advantage constants.
+- **Seeded PRNG Determinism:** Seeded Mulberry32 32-bit PRNG providing reproducible tournament simulations and deterministic match events.
+- **Unified Match Center:** 6-panel analytical modal featuring:
+  - *Live 2D Pitch:* 22 dynamic player nodes, animated ball physics, broadcast banner alerts, and tactical formation overlays.
+  - *Playback Scrubber:* Scrubber timeline with play/pause, restart, skip-to-end, previous event jump, and 1x/2x playback speeds.
+  - *Summary:* Goal and card chronological timeline, pitch-based top performers, and chance distribution bars.
+  - *Feed:* Real-time minute-by-minute simulated commentary stream.
+  - *Stats:* Detailed telemetry (possession percentage, expected goals xG, shots, on-target, corners, fouls).
+  - *Lineups:* Full starting 11 formations and bench rosters.
+  - *Info:* Official venue, competition metadata, and model parameters.
+- **World Cup Custom Draw:** Interactive 48-nation selector across 6 confederations with search filter, automated validation, and preset draws (Real 2026, Elite 48, Random).
+- **Audio Synthesizer:** Pure WebAudio API synthesizer generating dynamic stadium audio without external MP3 dependencies.
+- **State & Bookmark Persistence:** In-browser state management with match bookmarking persisted in `localStorage`.
+- **Automated QA Pipeline:** Full Node.js syntax and structural validation, ESLint conformance, and 16 Playwright E2E browser tests passing in CI/CD.
+- **Cloud Deployment:** Live continuous deployment via GitHub Actions to Azure Static Web Apps.
+
+### In Progress
+- **Deep Linking:** Routing currently dispatches through internal state; URL hash-based direct links to specific tournament brackets are being finalized.
+- **Dataset Update Pipeline:** Automated data-fetching script (`scripts/fetch-football-data.js`) to refresh historical snapshot files from upstream sports data APIs safely within rate limits.
+
+### Planned (Future Roadmap)
+- **Dixon-Coles Model Upgrade:** Enhancing the Poisson model to account for low-score correlation parameters ($\tau$).
+- **Data Export:** Downloadable JSON and CSV exports for generated tournament brackets and final standings.
+- **PWA Capabilities:** Progressive Web App manifest and service worker caching for standalone mobile installation and offline operation.
+
+---
+## 10. Known Limitations
 
 - **Dataset Snapshots:** Tournament data represents historical baselines rather than a live-polling API feed.
 - **State Persistence:** Custom draws and simulation results persist within browser `localStorage`; no cloud account sync.
@@ -183,6 +213,6 @@ npm run lint
 
 ---
 
-## 10. License
+## 11. License
 
 ISC License © [Om Dangol](https://github.com/omwe77) & Contributors.
