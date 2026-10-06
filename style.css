@@ -11060,3 +11060,31 @@ tr:hover .team-cell {color: var(--color-text-primary);}
   padding: var(--space-10);
   color: var(--color-text-muted);
   font-size: var(--text-lg);}
+
+/* === H5 Responsive: prevent overflow on narrow viewports === */
+@media (max-width: 600px) {
+  .bracket-column {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+    flex-shrink: 1;
+    flex-basis: auto;
+  }
+  .bracket-column.expanded-stage {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+    flex-shrink: 1;
+    flex-basis: auto;
+  }
+}
+
+@media (max-width: 350px) {
+  .group-card {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+    flex-shrink: 1;
+    flex-basis: auto;
+  }
+}
