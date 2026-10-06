@@ -3660,7 +3660,7 @@ function getUclFeederStatus() {
   function renderUclHomePage(state, container) {
     const feederInfo = getUclFeederStatus();
     
-    // Dynamic top qualifiers strictly synced with live tournament points
+    // Dynamic top qualifiers strictly synced with archived competition standings
     const allLiveQualifiers = [];
     feederInfo.feeders.forEach(f => {
       f.top4.forEach(t => {
@@ -4072,7 +4072,7 @@ function getUclFeederStatus() {
                 <p class="seriea-hero-desc">
                   Where passion meets perfection. Relive the Milan derbies,
                   Rome rivalries, and the relentless chase for the
-                  iconic <strong>Scudetto</strong>. Italy's beautiful game, live.
+                  iconic <strong>Scudetto</strong>. Italy's beautiful game, archived snapshot.
                 </p>
                 <div class="seriea-hero-actions">
                   <button type="button" class="seriea-btn-primary" id="seriea-btn-go-to-simulation">
@@ -5065,7 +5065,7 @@ function getUclFeederStatus() {
                 </h1>
                 <p class="scottishprem-hero-desc">
                   Experience fierce rivalries, legendary Old Firm derbies, and the historic battle for the Scottish crown.
-                  Simulate every matchday with live standings and European qualification race.
+                  Simulate every matchday with archived standings and European qualification race.
                 </p>
                 <div class="scottishprem-hero-actions">
                   <button type="button" class="scottishprem-btn-primary" id="scottishprem-btn-go-to-simulation">
@@ -8062,7 +8062,7 @@ function getUclFeederStatus() {
         <tr><td colspan="9" style="text-align:center;padding:32px 16px;color:var(--text-secondary);">
           <i class="fa-solid fa-sitemap" style="font-size:2rem;margin-bottom:12px;display:block;color:var(--accent-green);"></i>
           <strong style="color:var(--text-primary);font-size:1.1rem;">${leagueName} is a knockout competition</strong><br>
-          <span style="font-size:0.85rem;">This competition does not have a league standings table.<br>Select a league format competition (Premier League, La Liga, Serie A, or Bundesliga) to view live simulation standings.</span>
+          <span style="font-size:0.85rem;">This competition does not have a league standings table.<br>Select a league format competition (Premier League, La Liga, Serie A, or Bundesliga) to view archived simulation standings.</span>
         </td></tr>
       `;
       if (scorersList) scorersList.innerHTML = '';
@@ -8070,7 +8070,7 @@ function getUclFeederStatus() {
       return;
     }
 
-    // --- Live simulation standings ---
+    // --- Archived simulation standings ---
     const completedMatchdays = state.matchdays
       ? state.matchdays.filter(md => md.every(m => m.isSimulated)).length
       : 0;

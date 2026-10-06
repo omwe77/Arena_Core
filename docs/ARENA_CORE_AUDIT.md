@@ -12,7 +12,7 @@
 
 ARENA_CORE is a hybrid web application uniting archived football competition statistics (bundled as static local snapshots) with an in-browser mathematical Poisson tournament simulation engine.
 
-While feature-dense with rich animations, video highlights, and multi-tournament formats (World Cup 48, UEFA Champions League, Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Liga Portugal, Eredivisie, Süper Lig, Scottish Premiership), the application has evolved organically into a monolithic single-file architecture (`app.js` ~9,800 lines; `style.css` ~16,400 lines; `index.html` ~1,540 lines). Multiple competing modals, pseudo-3D layers, synthetic player algorithms branded with external trademarked technology names (e.g., KINEXON), and lack of true URL routing prevent it from functioning as a cohesive, production-grade football software platform.
+While feature-dense with rich animations, video highlights, and multi-tournament formats (World Cup 48, UEFA Champions League, Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Liga Portugal, Eredivisie, Süper Lig, Scottish Premiership), the application has evolved organically into a monolithic single-file architecture (`app.js` ~9,800 lines; `style.css` ~16,400 lines; `index.html` ~1,540 lines). Multiple competing modals, pseudo-3D layers, synthetic player algorithms branded with external trademarked technology names, and lack of true URL routing prevent it from functioning as a cohesive, production-grade football software platform.
 
 This audit establishes the comprehensive technical baseline required before embarking on subsequent architectural milestones.
 
