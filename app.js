@@ -9093,6 +9093,14 @@ function getUclFeederStatus() {
     const saveBtn = document.getElementById('dstats-btn-save');
     if (saveBtn) {
       saveBtn.onclick = () => {
+        try {
+          const saved = JSON.parse(localStorage.getItem('arena_saved_matches') || '[]');
+          const matchKey = `${compName}_${homeTeam}_vs_${awayTeam}`;
+          if (!saved.some(m => m.key === matchKey)) {
+            saved.push({ key: matchKey, comp: compName, home: homeTeam, away: awayTeam, savedAt: new Date().toISOString() });
+            localStorage.setItem('arena_saved_matches', JSON.stringify(saved));
+          }
+        } catch (err) {}
         saveBtn.innerHTML = '<i class="fa-solid fa-check"></i> <span>Saved!</span>';
         setTimeout(() => {
           saveBtn.innerHTML = '<i class="fa-regular fa-bookmark"></i> <span>Save</span>';

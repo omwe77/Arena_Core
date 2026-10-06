@@ -304,7 +304,7 @@
         <!-- Simulation Progress & Live Clock HUD -->
         <div class="sim-clock-hud" id="sim-clock-hud" hidden>
           <div class="clock-display-wrap">
-            <span class="clock-icon">⏱</span>
+            <span class="clock-icon"><i class="fa-solid fa-stopwatch" aria-hidden="true"></i></span>
             <span class="clock-stage-label" id="clock-stage-label">ROUND OF 16</span>
             <span class="clock-timer" id="clock-minute-text">45' (FIRST HALF)</span>
           </div>
@@ -315,7 +315,7 @@
 
         <!-- Champion Celebration Banner -->
         <div id="champion-banner" class="champion-banner" hidden>
-          <span class="trophy-icon">🏆</span>
+          <span class="trophy-icon"><i class="fa-solid fa-trophy" aria-hidden="true"></i></span>
           <div class="champion-text">
             <span class="champ-label">HYPOTHETICAL CHAMPION CROWNED!</span>
             <h3 id="champion-team-name" class="champ-name">ARGENTINA</h3>
@@ -359,7 +359,7 @@
 
         <!-- Ticker Bar -->
         <div class="ticker-bar bottom-callout">
-          <span class="ticker-badge">📢 ARENA CORE NEWS</span>
+          <span class="ticker-badge"><i class="fa-solid fa-bullhorn" aria-hidden="true"></i> ARENA CORE NEWS</span>
           <div class="ticker-scroll" id="bracket-ticker-text">
             SELECT A COMPETITION OR PRESS SIMULATE TO ADVANCE THROUGH THE ROUNDS //
           </div>
@@ -466,7 +466,7 @@
   <div id="detailed-stats-modal" class="modal detailed-stats-modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="dstats-home-name">
     <div class="modal-backdrop dstats-backdrop" id="dstats-backdrop"></div>
     <div class="modal-dialog dstats-dialog">
-      <button type="button" id="dstats-close-btn" class="dstats-close-btn" aria-label="Close details">✕</button>
+      <button type="button" id="dstats-close-btn" class="dstats-close-btn" aria-label="Close details">&times;</button>
 
       <!-- 1. Top Deep Purple Header -->
       <div class="dstats-header-banner" id="dstats-header-banner">
@@ -542,9 +542,7 @@
         <button type="button" class="dstats-tab-pill" data-tab="lineups">
           <i class="fa-solid fa-users"></i> Lineups
         </button>
-        <button type="button" class="dstats-tab-pill" data-tab="comments">
-          <i class="fa-regular fa-comments"></i> Comments <span class="dstats-comments-badge">0</span>
-        </button>
+        
         <button type="button" class="dstats-tab-pill" data-tab="info">
           <i class="fa-solid fa-circle-info"></i> Info
         </button>
@@ -716,13 +714,7 @@
           <div class="dstats-lineups-container" id="dstats-lineups-container"></div>
         </div>
 
-        <!-- TAB 5: COMMENTS -->
-        <div class="dstats-panel dstats-panel-comments" id="dstats-panel-comments">
-          <div class="dstats-comments-empty">
-            <i class="fa-regular fa-comment-dots"></i>
-            <p>No fan comments yet. Be the first to analyze this match!</p>
-          </div>
-        </div>
+        
 
         <!-- TAB 6: INFO -->
         <div class="dstats-panel dstats-panel-info" id="dstats-panel-info">
@@ -738,7 +730,7 @@
     aria-labelledby="modal-match-title">
     <div class="modal-backdrop" id="modal-backdrop"></div>
     <div class="modal-dialog">
-      <button type="button" id="modal-close" class="modal-close-btn" aria-label="Close match details">✕</button>
+      <button type="button" id="modal-close" class="modal-close-btn" aria-label="Close match details">&times;</button>
 
 
       <div class="modal-header-bar">
@@ -772,7 +764,7 @@
   <div id="broadcast-hologram-modal" class="modal broadcast-modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="holo-broadcast-title">
     <div class="modal-backdrop holo-backdrop" id="holo-modal-backdrop"></div>
     <div class="modal-dialog holo-dialog">
-      <button type="button" id="holo-modal-close" class="holo-close-btn" aria-label="Close 3D Broadcast">✕</button>
+      <button type="button" id="holo-modal-close" class="holo-close-btn" aria-label="Close 3D Broadcast">&times;</button>
 
       <!-- Broadcast Live Header HUD -->
       <div class="holo-header-hud">
@@ -1097,7 +1089,7 @@
     <div class="modal-backdrop" id="champ-modal-backdrop" onclick="document.getElementById('champion-modal').hidden=true;"></div>
     <div class="modal-dialog champ-dialog">
       <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
-      <button type="button" id="champ-modal-close" class="modal-close-btn" aria-label="Close celebration" onclick="document.getElementById('champion-modal').hidden=true;">✕</button>
+      <button type="button" id="champ-modal-close" class="modal-close-btn" aria-label="Close celebration" onclick="document.getElementById('champion-modal').hidden=true;">&times;</button>
 
       <div class="champ-modal-content">
         <div class="trophy-sparkle-wrap">
@@ -1106,14 +1098,14 @@
             <div class="trophy-3d-pedestal"></div>
             <div class="trophy-3d-orbital-ring"></div>
             <div class="trophy-3d-orbital-ring ring-secondary"></div>
-            <span class="champ-giant-trophy" id="champ-modal-trophy">🏆</span>
+            <span class="champ-giant-trophy" id="champ-modal-trophy"><i class="fa-solid fa-trophy" aria-hidden="true"></i></span>
           </div>
         </div>
         <div class="champ-headline" id="champ-modal-headline">CHAMPIONS CROWNED!</div>
         <div class="champ-tourn-name" id="champ-modal-tourn">FIFA WORLD CUP 2026</div>
 
         <div class="champ-team-card" id="champ-modal-team-card">
-          <div class="champ-team-flag" id="champ-modal-flag">🇦🇷</div>
+          <div class="champ-team-flag" id="champ-modal-flag"></div>
           <h2 class="champ-team-title" id="champ-modal-name">ARGENTINA</h2>
           <div class="champ-tagline" id="champ-modal-tagline">GLORIOUS CHAMPIONS</div>
           <div class="champ-hero-stats" id="champ-hero-stats">
@@ -1168,7 +1160,7 @@
             <h2 class="wc-draw-title" id="wc-draw-title">CUSTOM TOURNAMENT DRAW</h2>
           </div>
         </div>
-        <button type="button" class="wc-draw-close-btn" id="wc-draw-close" aria-label="Close draw" onclick="window.closeCustomDrawModal &amp;&amp; window.closeCustomDrawModal()">✕</button>
+        <button type="button" class="wc-draw-close-btn" id="wc-draw-close" aria-label="Close draw" onclick="window.closeCustomDrawModal &amp;&amp; window.closeCustomDrawModal()">&times;</button>
       </div>
 
       <!-- Top HUD Toolbar: Progress Bar + Presets -->
@@ -1218,19 +1210,19 @@
             🇪🇺 UEFA <span class="conf-pill" id="pill-uefa">0</span>
           </button>
           <button type="button" class="wc-draw-tab" data-conf="CONMEBOL" role="tab">
-            🌎 CONMEBOL <span class="conf-pill" id="pill-conmebol">0</span>
+            <i class="fa-solid fa-earth-americas" aria-hidden="true"></i> CONMEBOL <span class="conf-pill" id="pill-conmebol">0</span>
           </button>
           <button type="button" class="wc-draw-tab" data-conf="CONCACAF" role="tab">
-            🌐 CONCACAF <span class="conf-pill" id="pill-concacaf">0</span>
+            <i class="fa-solid fa-earth-americas" aria-hidden="true"></i> CONCACAF <span class="conf-pill" id="pill-concacaf">0</span>
           </button>
           <button type="button" class="wc-draw-tab" data-conf="CAF" role="tab">
-            🌍 CAF <span class="conf-pill" id="pill-caf">0</span>
+            <i class="fa-solid fa-earth-africa" aria-hidden="true"></i> CAF <span class="conf-pill" id="pill-caf">0</span>
           </button>
           <button type="button" class="wc-draw-tab" data-conf="AFC" role="tab">
-            🌏 AFC <span class="conf-pill" id="pill-afc">0</span>
+            <i class="fa-solid fa-earth-asia" aria-hidden="true"></i> AFC <span class="conf-pill" id="pill-afc">0</span>
           </button>
           <button type="button" class="wc-draw-tab" data-conf="OFC" role="tab">
-            🏝️ OFC <span class="conf-pill" id="pill-ofc">0</span>
+            <i class="fa-solid fa-earth-oceania" aria-hidden="true"></i> OFC <span class="conf-pill" id="pill-ofc">0</span>
           </button>
         </div>
       </div>
@@ -1265,7 +1257,7 @@
   <div id="ucl-gate-modal" class="modal ucl-gate-modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="ucl-gate-title">
     <div class="modal-backdrop ucl-gate-backdrop" id="ucl-gate-backdrop"></div>
     <div class="modal-dialog ucl-gate-dialog">
-      <button type="button" id="ucl-gate-close" class="modal-close-btn" aria-label="Close modal">✕</button>
+      <button type="button" id="ucl-gate-close" class="modal-close-btn" aria-label="Close modal">&times;</button>
 
       <!-- Header -->
       <div class="ucl-gate-header">
@@ -1330,13 +1322,13 @@
     <div class="modal-dialog methodology-dialog">
       <div class="methodology-header">
         <div class="methodology-header-left">
-          <span class="methodology-icon">📐</span>
+          <span class="methodology-icon"><i class="fa-solid fa-scale-balanced" aria-hidden="true"></i></span>
           <div>
             <h2 id="methodology-modal-title" class="methodology-title">DATA PROVENANCE &amp; SIMULATION METHODOLOGY</h2>
             <div class="methodology-meta">MODEL: POISSON v1.0.0 // DATASET: 2024.11</div>
           </div>
         </div>
-        <button type="button" class="modal-close methodology-close" aria-label="Close methodology" onclick="document.getElementById('methodology-modal').hidden=true;">✕</button>
+        <button type="button" class="modal-close methodology-close" aria-label="Close methodology" onclick="document.getElementById('methodology-modal').hidden=true;">&times;</button>
       </div>
       <div class="methodology-body">
         <h3 class="methodology-heading"><i class="fa-solid fa-database"></i> 1. Data Provenance &amp; Normalization</h3>
