@@ -794,9 +794,9 @@ body {
 .pitch-turf-stripes {position: absolute;
   inset: 0;
   background: radial-gradient(ellipse at 50% 100%, rgba(0, 212, 255, 0.08) 0%, transparent 70%);}
-
 .pitch-grass-texture-real {
   position: absolute;
+  opacity: 0.85; }
 
 .pitch-touchline,
 .pitch-marking-center,
@@ -11894,6 +11894,8 @@ tr:hover .team-cell {color: var(--color-text-primary);}
 .header-pitch-track,
 .pitch-turf-stripes,
 .pitch-grass-texture-real {
+  display: none !important;
+}
 
 .site-header {
   position: sticky;
