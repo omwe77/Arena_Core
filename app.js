@@ -1447,6 +1447,12 @@
   }
 
   function switchView(targetViewId, syncUrl = true) {
+    if (targetViewId === 'competitions-view') {
+      targetViewId = 'archive-view';
+    } else if (targetViewId === 'analytics-view') {
+      targetViewId = 'tactical-tracker';
+    }
+
     if (targetViewId === 'tactical-tracker') {
       const state = tournamentState[activeTournKey];
       const match = (state?.gf?.[0]) || (state?.sf?.[0]) || (state?.r16?.[0]) || (state?.groupMatches?.[0]) || (state?.matchdays?.[0]?.[0]);

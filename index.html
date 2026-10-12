@@ -165,14 +165,20 @@
       <button type="button" class="top-nav-link active" data-nav="tournament-home" aria-label="Go to home">
         <i class="fa-solid fa-house" aria-hidden="true"></i> HOME
       </button>
+      <button type="button" class="top-nav-link" data-nav="competitions-view" aria-label="Explore competitions">
+        <i class="fa-solid fa-trophy" aria-hidden="true"></i> COMPETITIONS
+      </button>
       <button type="button" class="top-nav-link" data-nav="tournament-sim" aria-label="Go to simulator">
         <i class="fa-solid fa-bolt" aria-hidden="true"></i> SIMULATOR
       </button>
       <button type="button" class="top-nav-link" data-nav="standings-view" aria-label="Go to league standings">
-        <i class="fa-solid fa-chart-simple" aria-hidden="true"></i> LEAGUE STANDINGS
+        <i class="fa-solid fa-chart-simple" aria-hidden="true"></i> STANDINGS
       </button>
       <button type="button" class="top-nav-link" data-nav="archive-view" aria-label="Go to archive">
         <i class="fa-solid fa-box-archive" aria-hidden="true"></i> ARCHIVE
+      </button>
+      <button type="button" class="top-nav-link" data-nav="analytics-view" aria-label="Go to tactical analytics">
+        <i class="fa-solid fa-chart-line" aria-hidden="true"></i> ANALYTICS
       </button>
     </nav>
 
@@ -214,20 +220,48 @@
 
       <!-- Hero: single clear focal point -->
       <div class="home-hero">
-        <h1 class="home-hero-title">What do you want to simulate?</h1>
-        <p class="home-hero-sub">Run a seeded tournament projection, or explore archived competition data.</p>
+        <div class="home-hero-badge">DETERMINISTIC SIMULATION ENGINE // MULBERRY32 PRNG</div>
+        <h1 class="home-hero-title">ARENA CORE</h1>
+        <div class="home-hero-sub-title">Football Simulation Engine & Match Analytics</div>
+        <p class="home-hero-sub">
+          Pure client-side mathematical simulation platform using Mulberry32 seeded pseudo-random number generation and dual-parameter Poisson distribution modeling across 15+ domestic and cup competitions.
+        </p>
       </div>
 
       <!-- One primary + one secondary action -->
       <div class="home-actions">
         <button type="button" class="home-cta-btn" id="home-btn-simulate">
           <i class="fa-solid fa-bolt" aria-hidden="true"></i>
-          <span>RUN SIMULATION</span>
+          <span>SIMULATE TOURNAMENT</span>
         </button>
         <button type="button" class="home-cta-btn home-cta-btn-secondary" id="home-btn-archive">
-          <i class="fa-solid fa-box-archive" aria-hidden="true"></i>
-          <span>EXPLORE ARCHIVE</span>
+          <i class="fa-solid fa-trophy" aria-hidden="true"></i>
+          <span>EXPLORE COMPETITIONS</span>
         </button>
+      </div>
+
+      <!-- Verified Mathematical & Architectural Pillars -->
+      <div class="home-pillars-grid">
+        <div class="home-pillar-card">
+          <div class="home-pillar-tag">ENGINE ARCHITECTURE</div>
+          <div class="home-pillar-title">DETERMINISTIC PRNG</div>
+          <div class="home-pillar-desc">Mulberry32 32-bit state generator ensures bitwise reproducible outcomes for any integer seed.</div>
+        </div>
+        <div class="home-pillar-card">
+          <div class="home-pillar-tag">MATHEMATICAL MODEL</div>
+          <div class="home-pillar-title">POISSON DISTRIBUTION</div>
+          <div class="home-pillar-desc">Dual-parameter Poisson model calibrated to historical competition goals, ratings, and extra time.</div>
+        </div>
+        <div class="home-pillar-card">
+          <div class="home-pillar-tag">COMPETITION COVERAGE</div>
+          <div class="home-pillar-title">15+ TOURNAMENTS</div>
+          <div class="home-pillar-desc">Full tournament formats: 48-team FIFA World Cup, Swiss-model UCL, and European domestic leagues.</div>
+        </div>
+        <div class="home-pillar-card">
+          <div class="home-pillar-tag">PROCEDURAL DRAW</div>
+          <div class="home-pillar-title">CUSTOM DRAW ENGINE</div>
+          <div class="home-pillar-desc">Interactive pot-seeded tournament draw with confederation separation rules and live brackets.</div>
+        </div>
       </div>
 
       <!-- Curated competition selection -->
@@ -931,28 +965,28 @@
           </div>
 
           <div class="tac-roster-group">
-            <div class="tac-pos-heading">TORWART</div>
+            <div class="tac-pos-heading">GOALKEEPER</div>
             <div class="tac-player-list" id="tac-t1-gk">
               <!-- Dynamically injected -->
             </div>
           </div>
 
           <div class="tac-roster-group">
-            <div class="tac-pos-heading">ABWEHR</div>
+            <div class="tac-pos-heading">DEFENSE</div>
             <div class="tac-player-list" id="tac-t1-def">
               <!-- Dynamically injected -->
             </div>
           </div>
 
           <div class="tac-roster-group">
-            <div class="tac-pos-heading">MITTELFELD</div>
+            <div class="tac-pos-heading">MIDFIELD</div>
             <div class="tac-player-list" id="tac-t1-mid">
               <!-- Dynamically injected -->
             </div>
           </div>
 
           <div class="tac-roster-group">
-            <div class="tac-pos-heading">STURM</div>
+            <div class="tac-pos-heading">ATTACK</div>
             <div class="tac-player-list" id="tac-t1-fwd">
               <!-- Dynamically injected -->
             </div>
@@ -1019,7 +1053,7 @@
               <span class="tac-clock-pill" id="tac-hud-clock">⏱ 0'</span>
             </div>
 
-            <span class="tac-action-feed" id="tac-hud-action">
+            <div class="tac-action-feed" id="tac-hud-action">
               📍 ARENA TACTICAL VIEW • Ball position generated by simulation
             </div>
 
@@ -1039,28 +1073,28 @@
           </div>
 
           <div class="tac-roster-group">
-            <div class="tac-pos-heading">TORWART</div>
+            <div class="tac-pos-heading">GOALKEEPER</div>
             <div class="tac-player-list" id="tac-t2-gk">
               <!-- Dynamically injected -->
             </div>
           </div>
 
           <div class="tac-roster-group">
-            <div class="tac-pos-heading">ABWEHR</div>
+            <div class="tac-pos-heading">DEFENSE</div>
             <div class="tac-player-list" id="tac-t2-def">
               <!-- Dynamically injected -->
             </div>
           </div>
 
           <div class="tac-roster-group">
-            <div class="tac-pos-heading">MITTELFELD</div>
+            <div class="tac-pos-heading">MIDFIELD</div>
             <div class="tac-player-list" id="tac-t2-mid">
               <!-- Dynamically injected -->
             </div>
           </div>
 
           <div class="tac-roster-group">
-            <div class="tac-pos-heading">STURM</div>
+            <div class="tac-pos-heading">ATTACK</div>
             <div class="tac-player-list" id="tac-t2-fwd">
               <!-- Dynamically injected -->
             </div>
