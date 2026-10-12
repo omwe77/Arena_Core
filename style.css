@@ -1,3 +1,696 @@
+/* ==========================================================================
+   ARENA_CORE DESIGN SYSTEM — BROADCAST CONTROL ROOM × FOOTBALL ANALYTICS
+   All CSS custom properties are defined here. Style.css imports them all.
+   ========================================================================== */
+
+:root {
+  /* === BACKGROUND SURFACE LEVELS ===
+     Layered dark foundation: base < elevated < card < muted */
+  --color-bg-base:     #080C0A;
+  --color-bg-elevated: #0E1512;
+  --color-bg-card:     #141C19;
+  --color-bg-muted:    #1B2622;
+  --color-bg-overlay:  rgba(6, 10, 8, 0.94);
+
+  /* === ACCENT COLORS === */
+  --color-accent:          #00E87A;       /* Simulation green — primary CTA */
+  --color-accent-hover:    #00FF88;
+  --color-accent-active:   #00CC6A;
+  --color-accent-subtle:   rgba(0, 232, 122, 0.10);
+  --color-accent-glow:     rgba(0, 232, 122, 0.20);
+
+  /* === SEMANTIC COLORS === */
+  --color-success:         #2ECC71;
+  --color-success-subtle:  rgba(46, 204, 113, 0.12);
+  --color-danger:          #E53935;
+  --color-danger-subtle:   rgba(229, 57, 53, 0.12);
+  --color-warning:         #F59E0B;
+  --color-warning-subtle:  rgba(245, 158, 11, 0.12);
+  --color-info:            #38BDF8;
+  --color-info-subtle:     rgba(56, 189, 248, 0.12);
+  --color-simulation:      #00E87A;
+  --color-simulation-subtle: rgba(0, 232, 122, 0.08);
+  --color-archive:         #E8A820;
+  --color-archive-subtle:  rgba(232, 168, 32, 0.12);
+
+  /* === PITCH GREENS (competition & pitch visualization) === */
+  --pitch-green:           #00B864;
+  --pitch-green-light:     #34D084;
+  --pitch-green-glow:      rgba(0, 184, 100, 0.30);
+
+  /* === CHAMPIONS / ARCHIVE GOLD === */
+  --champions-gold:        #E8A820;
+  --champions-gold-light:  #F5C842;
+  --champions-gold-glow:   rgba(232, 168, 32, 0.30);
+
+  /* === LEGACY ALIAS TOKENS (referenced by older CSS rules) === */
+  --accent-1:              var(--color-accent);
+  --accent-1-hover:        var(--color-accent-hover);
+  --accent-1-active:       var(--color-accent-active);
+  --accent-1-glow:         var(--color-accent-glow);
+  --accent-danger:         var(--color-danger);
+  --bg-surface:            var(--color-bg-elevated);
+  --bg-card:               var(--color-bg-card);
+  --surface-card:          var(--color-bg-card);
+  --surface-muted:         var(--color-bg-muted);
+  --arena-glow:            var(--color-accent-glow);
+  --floodlight-cyan:       #00E0FF;
+
+  /* === TEXT COLORS === */
+  --color-text-primary:    #EEF5F1;
+  --color-text-secondary:  #8FADA0;
+  --color-text-muted:      #53736A;
+  --color-text-inverse:    #080C0A;
+  --text-primary:          var(--color-text-primary);
+  --text-secondary:        var(--color-text-secondary);
+  --text-muted:            var(--color-text-muted);
+  --text-white:            #FFFFFF;
+  --text-main:             var(--color-text-primary);
+  --text-on-accent:        #080C0A;
+
+  /* === BORDER COLORS === */
+  --color-border-subtle:   rgba(238, 245, 241, 0.06);
+  --color-border-default:  rgba(238, 245, 241, 0.10);
+  --color-border-strong:   rgba(238, 245, 241, 0.20);
+  --color-border-focus:    var(--color-accent);
+  --border-subtle:         var(--color-border-subtle);
+  --border-default:        var(--color-border-default);
+
+  /* === CARD HOVER === */
+  --color-bg-card-hover:   #1E2B27;
+
+  /* === TYPOGRAPHY === */
+  --font-heading:  'Chakra Petch', 'Arial Black', sans-serif;
+  --font-display:  'Chakra Petch', 'Arial Black', sans-serif;
+  --font-title:    'Chakra Petch', 'Arial Black', sans-serif;
+  --font-hud:      'Chakra Petch', 'Arial Black', sans-serif;
+  --font-body:     'Outfit', system-ui, sans-serif;
+  --font-mono:     'Share Tech Mono', 'Consolas', monospace;
+
+  /* === FONT WEIGHTS === */
+  --font-weight-medium:    500;
+  --font-weight-semibold:  600;
+  --font-weight-bold:      700;
+  --font-weight-black:     800;
+
+  /* === LINE HEIGHTS === */
+  --line-height-tight:     1.2;
+  --line-height-relaxed:   1.6;
+
+  /* === TYPE SCALE === */
+  --text-xs:    0.70rem;   /* 11.2px */
+  --text-sm:    0.78rem;   /* 12.5px */
+  --text-base:  0.875rem;  /* 14px   */
+  --text-lg:    1rem;      /* 16px   */
+  --text-xl:    1.125rem;  /* 18px   */
+  --text-2xl:   1.375rem;  /* 22px   */
+  --text-4xl:   2rem;      /* 32px   */
+
+  /* === SPACING (4px base unit) === */
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   20px;
+  --space-6:   24px;
+  --space-8:   32px;
+  --space-10:  40px;
+
+  /* === BORDER RADIUS === */
+  --radius-sm:   3px;
+  --radius-md:   6px;
+  --radius-lg:   10px;
+  --radius-xl:   16px;
+  --radius-full: 9999px;
+
+  /* === SHADOWS === */
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.6);
+  --shadow-lg:  0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.5);
+
+  /* === TRANSITIONS === */
+  --transition-fast: 120ms cubic-bezier(0.25, 0, 0.25, 1);
+  --transition-base: 220ms cubic-bezier(0.25, 0, 0.25, 1);
+
+  /* === LAYOUT === */
+  --container-max:  1320px;
+  --header-height:  56px;
+}
+
+/* ==========================================================================
+   ARENA_CORE PRODUCT OVERHAUL — BROADCAST CONTROL ROOM & ANALYTICS STYLES
+   ========================================================================== */
+
+/* Universal [hidden] guard: ensures HTML5 hidden attribute is strictly respected */
+[hidden] {
+  display: none !important;
+}
+
+/* Broadcast Control Room Header — pitch track & striker runner visible */
+.header-pitch-track {opacity: 0.35;}
+
+.pitch-grass-texture-real {display: block; opacity: 0.85;}
+
+.pitch-touchline,
+.pitch-marking-center,
+.pitch-penalty-arc,
+.pitch-corner-flag,
+.pitch-floodlight {display: block;}
+
+.arena-pitch-actor {display: flex;}
+
+/* Arcad mascot / runner / particles: visible and animated in broadcast mode */
+.arena-pitch-actor,
+.arena-soccer-ball-wrap,
+.arena-action-bubble,
+.grass-kick-burst,
+.ball-fire-trail,
+.pitch-corner-flag,
+.pitch-floodlight {display: flex;}
+
+/* Broadcast Control Room Header */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(8, 12, 10, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+.header-pitch-track {
+  background: linear-gradient(180deg, rgba(0, 232, 122, 0.04) 0%, transparent 100%) !important;
+  opacity: 0.6;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.logo-ball-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: var(--color-accent);
+}
+
+.brand-ball-svg {
+  width: 24px;
+  height: 24px;
+}
+
+.logo-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #FFFFFF;
+}
+
+.logo-core {
+  color: var(--color-accent);
+}
+
+/* Navigation bar */
+.top-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.top-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  min-height: 40px;
+  min-width: 44px;
+}
+
+.top-nav-link:hover {
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.top-nav-link.active {
+  color: var(--color-accent) !important;
+  background: var(--color-accent-subtle) !important;
+  border-color: rgba(0, 232, 122, 0.3) !important;
+  box-shadow: 0 0 14px rgba(0, 232, 122, 0.15) !important;
+}
+
+/* Secondary Utility Badges in Header */
+.data-mode-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: var(--color-bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.06em;
+}
+
+.mode-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 8px var(--color-accent);
+}
+
+.audio-fx-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--color-bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.audio-fx-toggle:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--color-text-primary);
+}
+
+/* ==========================================================================
+   HOMEPAGE FIRST VIEWPORT REDESIGN
+   ========================================================================== */
+#view-product-home {
+  padding: 36px 24px 60px;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.home-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.home-hero {
+  text-align: left;
+  max-width: 880px;
+}
+
+.home-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-accent);
+  background: var(--color-accent-subtle);
+  border: 1px solid rgba(0, 232, 122, 0.25);
+  padding: 5px 12px;
+  border-radius: 999px;
+  margin-bottom: 18px;
+  text-transform: uppercase;
+}
+
+.home-hero-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 8px var(--color-accent);
+}
+
+.home-hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 4.8vw, 3.6rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #FFFFFF;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.home-hero-sub-title {
+  font-family: var(--font-body);
+  font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+  font-weight: 600;
+  color: var(--color-accent);
+  margin-bottom: 14px;
+  letter-spacing: 0.01em;
+}
+
+.home-hero-sub {
+  font-family: var(--font-body);
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  max-width: 740px;
+  margin-bottom: 24px;
+}
+
+.home-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.home-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 24px;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  background: var(--color-accent);
+  color: #040806;
+  border: 1px solid var(--color-accent);
+  box-shadow: 0 4px 20px rgba(0, 232, 122, 0.25);
+  transition: all 0.2s ease;
+  min-height: 46px;
+}
+
+.home-cta-btn:hover {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 26px rgba(0, 232, 122, 0.35);
+}
+
+.home-cta-btn-secondary {
+  background: var(--color-bg-card);
+  color: var(--color-text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.home-cta-btn-secondary:hover {
+  background: var(--color-bg-muted);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #FFFFFF;
+}
+
+/* Architectural & Mathematical 4-Pillars Section */
+.home-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1024px) {
+  .home-pillars-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .home-pillars-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.home-pillar-card {
+  background: var(--color-bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: var(--radius-lg);
+  padding: 22px 20px;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.home-pillar-card:hover {
+  border-color: rgba(0, 232, 122, 0.3);
+  background: var(--color-bg-muted);
+  transform: translateY(-2px);
+}
+
+.home-pillar-tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+  text-transform: uppercase;
+}
+
+.home-pillar-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: 0.02em;
+}
+
+.home-pillar-desc {
+  font-family: var(--font-body);
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+/* Featured Competitions Section */
+.home-section-heading {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.home-comp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.home-comp-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 22px 20px;
+  background: var(--color-bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.home-comp-card:hover {
+  border-color: var(--color-accent);
+  background: var(--color-bg-elevated);
+  box-shadow: 0 6px 20px rgba(0, 232, 122, 0.12);
+  transform: translateY(-2px);
+}
+
+.home-comp-name {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #FFFFFF;
+}
+
+.home-comp-detail {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+  text-transform: uppercase;
+}
+
+.home-view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 14px;
+  padding: 6px 0;
+  transition: color 0.15s ease;
+}
+
+.home-view-all:hover {
+  color: var(--color-accent);
+}
+
+/* ==========================================================================
+   SIMULATOR LAYOUT BUG FIXES
+   ========================================================================== */
+.sim-controls-group {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 8px !important;
+  flex-shrink: 0 !important;
+  min-width: 280px !important;
+}
+
+.sim-top-btns {
+  display: flex !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+
+.sim-top-btns .sim-action-btn {
+  flex: 1 1 auto !important;
+  white-space: nowrap !important;
+}
+
+/* ==========================================================================
+   TACTICAL TRACKER 3-COLUMN BROADCAST PITCH WORKSPACE
+   ========================================================================== */
+.tac-dialog {
+  max-width: 1240px !important;
+  width: min(96vw, 1240px) !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.95) !important;
+  background: #0e1411 !important;
+}
+
+.tac-workspace-body {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch !important;
+  width: 100% !important;
+  min-height: 520px !important;
+  background: #0e1411 !important;
+}
+
+.tac-team-panel {
+  width: 210px !important;
+  min-width: 210px !important;
+  flex-shrink: 0 !important;
+  background: #121915 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  padding: 14px 12px !important;
+}
+
+.tac-pitch-container {
+  flex: 1 1 auto !important;
+  min-width: 520px !important;
+  background: #080c0a !important;
+  padding: 14px !important;
+}
+
+.tac-pitch-board {
+  border-radius: 10px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: radial-gradient(circle at center, #115729 0%, #0c3e1e 85%, #082d15 100%) !important;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.7) !important;
+}
+
+.tac-live-action-hud {
+  background: rgba(14, 20, 17, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 8px !important;
+}
+
+.tac-score-box {
+  font-family: var(--font-display) !important;
+  font-weight: 700 !important;
+}
+
+.tac-goal-banner {
+  background: rgba(8, 12, 10, 0.95) !important;
+  border: 1px solid var(--color-accent) !important;
+  color: var(--color-accent) !important;
+  box-shadow: 0 8px 30px rgba(0, 232, 122, 0.3) !important;
+}
+
+
+
+/* Smooth baseline reset */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  color-scheme: dark;
+  scrollbar-color: var(--color-border-default) var(--color-bg-base);
+  scrollbar-width: thin;
+}
+
+body {
+  background: var(--color-bg-base);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--line-height-relaxed);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+}
+
+/* Custom scrollbars — premium signal that the page was designed, not assembled */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--color-bg-base); }
+::-webkit-scrollbar-thumb { background: var(--color-border-default); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-border-strong); }
+
+/* Text selection */
+::selection { background: var(--color-accent-subtle); color: var(--color-text-primary); }
+
+/* Focus ring system */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 .card-title {font-family: var(--font-heading);
   font-size: var(--text-lg);
   font-weight: var(--font-weight-semibold);
@@ -102,15 +795,16 @@
   inset: 0;
   background: radial-gradient(ellipse at 50% 100%, rgba(0, 212, 255, 0.08) 0%, transparent 70%);}
 
-.pitch-grass-texture-real {display: none;}
+.pitch-grass-texture-real {
+  position: absolute;
 
 .pitch-touchline,
 .pitch-marking-center,
 .pitch-penalty-arc,
 .pitch-corner-flag,
-.pitch-floodlight {display: none;}
+.pitch-floodlight {display: block;}
 
-.arena-pitch-actor {display: none;}
+.arena-pitch-actor {display: flex;}
 
 .header-left,
 .top-nav,
@@ -11086,5 +11780,207 @@ tr:hover .team-cell {color: var(--color-text-primary);}
     max-width: 100%;
     flex-shrink: 1;
     flex-basis: auto;
+  }
+}
+
+
+/* ==========================================================================
+   PRECISION LAYOUT RULES: SIM CONTROLS & TACTICAL WORKSPACE
+   ========================================================================== */
+
+.sim-controls-group {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 8px !important;
+  flex-shrink: 0 !important;
+  width: 300px !important;
+  min-width: 300px !important;
+}
+
+.sim-top-btns {
+  display: flex !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+
+#sim-draw-btn {
+  flex: 0 0 auto !important;
+  min-width: 76px !important;
+  padding: 9px 14px !important;
+}
+
+#sim-stage-action-btn {
+  flex: 1 1 auto !important;
+  font-size: 0.74rem !important;
+  padding: 9px 10px !important;
+  letter-spacing: 0.02em !important;
+  white-space: nowrap !important;
+}
+
+.tac-workspace-body {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: stretch !important;
+  width: 100% !important;
+  min-height: 520px !important;
+  background: #0e1411 !important;
+  overflow: hidden !important;
+}
+
+.tac-team-panel {
+  width: 210px !important;
+  min-width: 210px !important;
+  max-width: 210px !important;
+  flex: 0 0 210px !important;
+  background: #121915 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  padding: 14px 12px !important;
+  overflow-y: auto !important;
+}
+
+.tac-team-panel.team-2 {
+  border-left: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-right: none !important;
+}
+
+.tac-pitch-container {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  background: #080c0a !important;
+  padding: 14px !important;
+}
+
+
+/* Fix simulator top buttons */
+.sim-controls-group {
+  width: 320px !important;
+  min-width: 320px !important;
+}
+
+.sim-top-btns {
+  display: flex !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+
+.sim-top-btns .sim-action-btn {
+  width: auto !important;
+}
+
+#sim-draw-btn {
+  width: auto !important;
+  flex: 0 0 auto !important;
+  min-width: 76px !important;
+  padding: 9px 14px !important;
+}
+
+#sim-stage-action-btn {
+  width: auto !important;
+  flex: 1 1 auto !important;
+  font-size: 0.74rem !important;
+  padding: 9px 10px !important;
+  letter-spacing: 0.02em !important;
+  white-space: nowrap !important;
+}
+
+
+/* ==========================================================================
+   BROADCAST CONTROL ROOM HEADER & RESPONSIVE MOBILE PERFECTION
+   ========================================================================== */
+
+/* Completely hide arcade pitch track and Mario background from header */
+.header-pitch-track,
+.pitch-turf-stripes,
+.pitch-grass-texture-real {
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #080C0A !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6) !important;
+  padding: 10px 24px;
+}
+
+/* Mobile Responsive Optimization */
+@media (max-width: 768px) {
+  .site-header {
+    padding: 10px 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .header-left {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+  }
+
+  .top-nav {
+    display: flex !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    gap: 6px !important;
+    padding: 2px 0 4px !important;
+  }
+
+  .top-nav::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .top-nav-link {
+    flex-shrink: 0 !important;
+    padding: 6px 12px !important;
+    font-size: 0.72rem !important;
+    border-radius: 6px !important;
+  }
+
+  .header-right {
+    display: none !important;
+  }
+
+  #view-product-home {
+    padding: 24px 16px 48px !important;
+  }
+
+  .home-hero-title {
+    font-size: 2rem !important;
+  }
+
+  .home-hero-sub-title {
+    font-size: 1.05rem !important;
+  }
+
+  .home-actions {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .home-cta-btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .tac-workspace-body {
+    flex-direction: column !important;
+    min-height: auto !important;
+  }
+
+  .tac-team-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .tac-pitch-container {
+    min-width: 100% !important;
+    padding: 8px !important;
   }
 }
