@@ -7,9 +7,9 @@
   /* === BACKGROUND SURFACE LEVELS ===
      Layered dark foundation: base < elevated < card < muted */
   --color-bg-base:     #080C0A;
-  --color-bg-elevated: #0E1512;
-  --color-bg-card:     #141C19;
-  --color-bg-muted:    #1B2622;
+  --color-bg-elevated: #141C19;
+  --color-bg-card:     #F0F7F4;
+  --color-bg-muted:    #E8F4F0;
   --color-bg-overlay:  rgba(6, 10, 8, 0.94);
 
   /* === ACCENT COLORS === */
