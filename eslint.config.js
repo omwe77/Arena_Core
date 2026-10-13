@@ -9,7 +9,8 @@ module.exports = [
       'vendor/**',
       'scratch/**',
       'capture_blended.cjs',
-      'test_raw_yt.cjs'
+      'test_raw_yt.cjs',
+      'contrast.cjs'
     ]
   },
 

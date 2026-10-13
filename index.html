@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Share+Tech+Mono&family=Chivo:wght@400;700;800;900&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Share+Tech+Mono&family=JetBrains+Mono:wght@500;600;700&family=Chivo:wght@400;700;800;900&family=Work+Sans:wght@400;500;600;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -20,310 +20,178 @@
 </head>
 
 <body>
-
-  <!-- Top Broadcast Header with Interactive Stadium Pitch Strip & ARENA_CORE Striker -->
+  <!-- Top Broadcast Header of ARENA_CORE Striker -->
   <header class="site-header">
-    <!-- Header Mini Stadium Turf Pitch Track with Realistic Grass Blades -->
-    <div class="header-pitch-track" id="header-pitch-track">
-      <div class="pitch-turf-stripes"></div>
-      <div class="pitch-grass-texture-real"></div>
-      <div class="pitch-touchline top-line"></div>
-      <div class="pitch-touchline bottom-line"></div>
-      <div class="pitch-marking-center"></div>
-      <div class="pitch-penalty-arc left-arc"></div>
-      <div class="pitch-penalty-arc right-arc"></div>
-      <div class="pitch-corner-flag flag-left">🚩</div>
-      <div class="pitch-corner-flag flag-right">🚩</div>
-      <div class="pitch-floodlight left-floodlight"></div>
-      <div class="pitch-floodlight right-floodlight"></div>
-
-      <!-- Animated ARENA_CORE Striker Runner (Rigged Hands & Legs) & Dynamic Soccer Ball -->
-      <div class="arena-pitch-actor" id="arena-pitch-actor" role="button" tabindex="0" title="Click striker to trigger Power Shot" aria-label="Click striker to trigger Power Shot">
-        <div class="arena-sprite-container">
-          <!-- Rigged Animated Themed ARENA_CORE Striker SVG -->
-          <svg class="arena-svg" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <filter id="arena-glow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="var(--arena-glow, rgba(46,204,113,0.6))" />
-              </filter>
-            </defs>
-            <g filter="url(#arena-glow)">
-              
-              <!-- 1. LEFT ARM (Back Arm - Pumps opposite to left leg) -->
-              <g class="arena-limb arena-arm-left">
-                <path d="M25 38 C18 40, 14 44, 13 48 C15 50, 19 48, 22 43 Z" fill="var(--arena-kit-primary, #00D4FF)" stroke="#111" stroke-width="1.1"/>
-                <ellipse cx="12" cy="49" rx="3.5" ry="3.5" fill="#FFFFFF" stroke="#111" stroke-width="1"/>
-              </g>
-
-              <!-- 2. LEFT LEG (Back Leg - Runs & kicks) -->
-              <g class="arena-limb arena-leg-left">
-                <path d="M26 48 C23 53, 21 57, 24 59 C28 59, 29 55, 30 50 Z" fill="var(--arena-kit-secondary, #0066FF)" stroke="#111" stroke-width="1.1"/>
-                <!-- Left Cleat Boot -->
-                <path d="M22 57 C17 59, 16 63, 21 64 C25 64, 28 61, 28 57 Z" fill="#1a1a2e" stroke="#111" stroke-width="1.2"/>
-                <circle cx="18" cy="64.5" r="0.9" fill="#E0E0E0"/>
-                <circle cx="22" cy="64.5" r="0.9" fill="#E0E0E0"/>
-              </g>
-
-              <!-- 3. TORSO & HEAD (Core body) -->
-              <g class="arena-torso-head">
-                <!-- Hair Back -->
-                <path d="M22 23 C18 27, 20 34, 25 35 C23 32, 23 27, 26 24 Z" fill="#1a1a2e" stroke="#111" stroke-width="1"/>
-
-                <!-- Dynamic Overalls / Shorts -->
-                <path class="arena-shorts-fill" d="M26 46 C24 51, 26 55, 34 55 C37 55, 37 53, 40 53 C43 53, 43 55, 47 55 C50 54, 49 48, 45 46 Z" fill="var(--arena-kit-secondary, #0066FF)" stroke="#111" stroke-width="1.2"/>
-                <!-- Golden Buttons -->
-                <circle cx="30" cy="46" r="1.6" fill="#FFD700" stroke="#111" stroke-width="0.8"/>
-                <circle cx="41" cy="46" r="1.6" fill="#FFD700" stroke="#111" stroke-width="0.8"/>
-
-                <!-- Dynamic Kit Jersey (Color adapts per tournament) -->
-                <path class="arena-jersey-fill" d="M26 36 C24 40, 23 46, 27 49 C32 51, 42 50, 45 45 C47 41, 45 36, 42 36 Z" fill="var(--arena-kit-primary, #00D4FF)" stroke="#111" stroke-width="1.2"/>
-                <!-- Jersey Stripe Accent -->
-                <path class="arena-jersey-stripe" d="M31 36 C34 41, 38 41, 41 36" stroke="var(--arena-kit-secondary, #FFD700)" stroke-width="2.5" fill="none"/>
-
-                <!-- Striker Head & Face -->
-                <ellipse cx="36" cy="28" rx="11" ry="9" fill="#F5D0A9" stroke="#111" stroke-width="1.2"/>
-                <!-- Nose -->
-                <ellipse cx="44" cy="27" rx="4.5" ry="3.5" fill="#F5D0A9" stroke="#111" stroke-width="1"/>
-                <!-- Eyes -->
-                <ellipse cx="38" cy="24" rx="2.5" ry="3.5" fill="#FFFFFF" stroke="#111" stroke-width="0.9"/>
-                <circle cx="39" cy="24" r="1.6" fill="#007ACC"/>
-                <circle cx="39.5" cy="23.2" r="0.6" fill="#FFFFFF"/>
-                <!-- Moustache -->
-                <path d="M35 30 C37 32, 45 32, 48 29 C45 34, 33 34, 31 30 C33 29, 34 30, 35 30 Z" fill="#2B170B" stroke="#111" stroke-width="1.1"/>
-                <!-- Ear -->
-                <ellipse cx="27" cy="27" rx="2.8" ry="3.5" fill="#F5D0A9" stroke="#111" stroke-width="0.9"/>
-
-                <!-- ARENA Cap -->
-                <path class="arena-cap-fill" d="M18 22 C18 13, 44 11, 52 18 C56 22, 58 27, 46 27 C38 27, 24 27, 18 22 Z" fill="var(--arena-cap, #00D4FF)" stroke="#111" stroke-width="1.2"/>
-                <path class="arena-cap-visor" d="M38 24 C46 24, 60 25, 62 29 C56 31, 42 30, 36 27 Z" fill="var(--arena-cap-dark, #004466)" stroke="#111" stroke-width="1"/>
-                <circle cx="33" cy="20" r="5" fill="#FFFFFF" stroke="#111" stroke-width="0.9"/>
-                <text x="31" y="21.5" font-family="'Chakra Petch', sans-serif" font-weight="900" font-size="7" fill="var(--arena-cap, #00D4FF)">A</text>
-              </g>
-
-              <!-- 4. RIGHT LEG (Front Leg - High-knee stride) -->
-              <g class="arena-limb arena-leg-right">
-                <path d="M38 48 C41 53, 44 57, 48 57 C51 55, 49 50, 44 48 Z" fill="var(--arena-kit-secondary, #0066FF)" stroke="#111" stroke-width="1.1"/>
-                <!-- Right Cleat Boot -->
-                <path d="M42 55 C42 59, 46 63, 51 63 C55 61, 54 57, 49 55 Z" fill="#1a1a2e" stroke="#111" stroke-width="1.2"/>
-                <circle cx="49" cy="63.5" r="0.9" fill="#E0E0E0"/>
-                <circle cx="53" cy="63.5" r="0.9" fill="#E0E0E0"/>
-              </g>
-
-              <!-- 5. RIGHT ARM (Front Arm - Forward athletic balance) -->
-              <g class="arena-limb arena-arm-right">
-                <path d="M42 39 C47 41, 52 44, 55 42 C56 40, 52 37, 47 37 Z" fill="var(--arena-kit-primary, #00D4FF)" stroke="#111" stroke-width="1.1"/>
-                <ellipse cx="56" cy="42" rx="3.5" ry="3.5" fill="#FFFFFF" stroke="#111" stroke-width="1"/>
-              </g>
-
-            </g>
-          </svg>
-          <div class="arena-drop-shadow"></div>
-          <div class="grass-kick-burst" id="grass-kick-burst">
-            <span class="grass-blade b1"></span>
-            <span class="grass-blade b2"></span>
-            <span class="grass-blade b3"></span>
-          </div>
+    <!-- Header Mini Stadium Turf Pitch Strip with Realistic Grass Blades -->
+    <div class="header-pitch-track">
+      <div class="pitch-grass-track">
+        <div class="pitch-turf-stripes"></div>
+        <div class="pitch-grass-texture-real"></div>
+        <div class="pitch-pitchline top"></div>
+        <div class="pitch-pitchline bottom"></div>
+        <div class="pitch-pitchline center"></div>
+        <div class="pitch-penalty-arc left"></div>
+        <div class="pitch-penalty-arc right"></div>
+        <div class="pitch-corner-flag left">🚩</div>
+        <div class="pitch-corner-flag right">🚩</div>
+        <div class="pitch-floodlight left"></div>
+        <div class="pitch-floodlight right"></div>
+      </div>
+      <div class="pitch-stadium-actor">
+        <div class="stadium-goalkeeper">
+          <div class="stadium-goalkeeper-svg"></div>
+          <div class="stadium-goalpost"></div>
+          <div class="stadium-goalpost-back"></div>
         </div>
-
-        <!-- Soccer Ball with Spin & Shadow -->
-        <div class="arena-soccer-ball-wrap" id="arena-soccer-ball-wrap">
-          <div class="arena-ball-element">
-            <div class="ball-pentagons"></div>
-          </div>
-          <div class="ball-ground-shadow"></div>
-          <div class="ball-fire-trail" id="ball-fire-trail"></div>
+        <div class="stadium-soccer-ball">
+          <div class="stadium-soccer-ball-ball"></div>
+          <div class="stadium-soccer-ball-shadow"></div>
+          <div class="stadium-soccer-ball-fire"></div>
         </div>
-
-        <!-- Power Shot Floating Toast Text -->
-        <div class="arena-action-bubble" id="arena-action-bubble">GOAL!</div>
+        <div class="stadium-goal-bubble">GOAL!</div>
       </div>
     </div>
 
-
     <div class="header-left">
-      <div class="brand-logo" aria-label="ARENA CORE Football Nexus">
-        <span class="logo-ball-icon" aria-hidden="true">
-          <svg class="brand-ball-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8" fill="rgba(46, 204, 113, 0.15)"/>
-            <polygon points="12,7 15.5,9.5 14,14 10,14 8.5,9.5" fill="currentColor"/>
-            <line x1="12" y1="7" x2="12" y2="2" stroke="currentColor" stroke-width="1.4"/>
-            <line x1="15.5" y1="9.5" x2="20" y2="7.5" stroke="currentColor" stroke-width="1.4"/>
-            <line x1="14" y1="14" x2="18" y2="18" stroke="currentColor" stroke-width="1.4"/>
-            <line x1="10" y1="14" x2="6" y2="18" stroke="currentColor" stroke-width="1.4"/>
-            <line x1="8.5" y1="9.5" x2="4" y2="7.5" stroke="currentColor" stroke-width="1.4"/>
+      <div class="brand-logo">
+        <span class="logo-ball-icon">
+          <svg class="brand-ball-svg" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8" fill="rgba(46, 204, 113, 0.15)" />
+            <polygon points="12,7 15.5,9.5 14,14 10,14 8.5,9.5" fill="currentColor" />
+            <line x1="12" y1="7" x2="12" y2="2" stroke="currentColor" stroke-width="1.4" />
+            <line x1="15.5" y1="9.5" x2="20" y2="7.5" stroke="currentColor" stroke-width="1.4" />
+            <line x1="14" y1="14" x2="18" y2="18" stroke="currentColor" stroke-width="1.4" />
+            <line x1="10" y1="14" x2="6" y2="18" stroke="currentColor" stroke-width="1.4" />
+            <line x1="8.5" y1="9.5" x2="4" y2="7.5" stroke="currentColor" stroke-width="1.4" />
           </svg>
         </span>
         <span class="logo-title">ARENA <span class="logo-core">CORE</span></span>
       </div>
     </div>
 
-    <!-- Skip to main content for keyboard users -->
     <a href="#mainContent" class="skip-to-content">Skip to main content</a>
 
-    <!-- Main Navigation Bar -->
     <nav class="top-nav" aria-label="Main Navigation">
       <button type="button" class="top-nav-link active" data-nav="tournament-home" aria-label="Go to home">
-        <i class="fa-solid fa-house" aria-hidden="true"></i> HOME
+        <i class="fa-solid fa-house"></i> Home
       </button>
-      <button type="button" class="top-nav-link" data-nav="competitions-view" aria-label="Explore competitions">
-        <i class="fa-solid fa-trophy" aria-hidden="true"></i> COMPETITIONS
+      <button type="button" class="top-nav-link" data-nav="competitions-view" aria-label="Go to competitions">
+        <i class="fa-solid fa-trophy"></i> Competitions
       </button>
       <button type="button" class="top-nav-link" data-nav="tournament-sim" aria-label="Go to simulator">
-        <i class="fa-solid fa-bolt" aria-hidden="true"></i> SIMULATOR
+        <i class="fa-solid fa-bolt"></i> Simulator
       </button>
-      <button type="button" class="top-nav-link" data-nav="standings-view" aria-label="Go to league standings">
-        <i class="fa-solid fa-chart-simple" aria-hidden="true"></i> STANDINGS
+      <button type="button" class="top-nav-link" data-nav="standings-view" aria-label="Go to standings">
+        <i class="fa-solid fa-chart-simple"></i> Standings
       </button>
       <button type="button" class="top-nav-link" data-nav="archive-view" aria-label="Go to archive">
-        <i class="fa-solid fa-box-archive" aria-hidden="true"></i> ARCHIVE
+        <i class="fa-solid fa-box-archive"></i> Archive
       </button>
-      <button type="button" class="top-nav-link" data-nav="analytics-view" aria-label="Go to tactical analytics">
-        <i class="fa-solid fa-chart-line" aria-hidden="true"></i> ANALYTICS
+      <button type="button" class="top-nav-link" data-nav="analytics-view" aria-label="Go to analytics">
+        <i class="fa-solid fa-chart-line"></i> Analytics
       </button>
     </nav>
 
     <div class="header-right">
-      <button type="button" class="audio-fx-toggle" id="btn-audio-fx-toggle" title="Toggle Stadium & Match Audio Effects" aria-label="Toggle Match Audio FX">
-        <i class="fa-solid fa-volume-high" id="audio-fx-icon"></i>
-        <span class="audio-fx-label" id="audio-fx-label">SFX ON</span>
+      <button type="button" class="audio-toggle" id="audio-toggle" title="Toggle audio effects">
+        <i class="fa-solid fa-volume-high" id="audio-icon"></i>
+        <span class="audio-label" id="audio-label">SFX ON</span>
       </button>
-      <span class="data-mode-badge" id="global-data-mode" aria-live="polite">
-        <span class="mode-pulse"></span>
-        <span class="mode-text" id="global-data-mode-text">ARCHIVE DATA</span>
-      </span>
-      <div class="arena-status-region" id="arena-status-region" aria-live="polite" aria-atomic="true"></div>
+      <span class="data-mode-badge" id="data-mode">ARCHIVE DATA</span>
+      <div class="arena-status" id="arena-status"></div>
     </div>
   </header>
 
+  <div class="page-content">
 
-  <!-- Contextual competition control: shown only on views where competition switching is relevant -->
-  <nav class="competition-selector-bar" id="competition-selector-bar" aria-label="Competition selector" hidden>
-    <div class="comp-selector-inner">
-      <span class="comp-selector-label" id="comp-selector-label">COMPETITION</span>
-      <div class="comp-dropdown" id="comp-dropdown">
-        <button type="button" class="comp-dropdown-trigger" id="comp-dropdown-trigger" aria-haspopup="listbox"
-          aria-expanded="false" aria-controls="comp-dropdown-menu" aria-labelledby="comp-selector-label comp-current-name">
-          <span class="comp-mark" id="comp-current-mark" aria-hidden="true"></span>
-          <span class="comp-current-name" id="comp-current-name">FIFA WORLD CUP</span>
-          <i class="fa-solid fa-chevron-down comp-caret" aria-hidden="true"></i>
-        </button>
-        <div class="comp-dropdown-menu" id="comp-dropdown-menu" role="listbox" aria-label="Select competition" hidden>
-          <!-- populated by updateCompetitionSelector() -->
+    <!-- Product Home View -->
+    <section id="view-product-home" class="view-panel" hidden aria-label="Home">
+      <div class="home-shell">
+        <div class="home-hero">
+          <div class="home-hero-badge">DETERMINISTIC SIMULATION ENGINE // MULBERRY32 PRNG</div>
+          <h1 class="home-hero-title">ARENA CORE</h1>
+          <div class="home-hero-sub-title">Football Simulation Engine &amp; Match Analytics</div>
+          <p class="home-hero-sub">Pure client-side mathematical simulation platform using Mulberry32 seeded PRNG and dual-parameter Poisson distribution modeling across 15+ domestic and cup competitions.</p>
         </div>
-      </div>
-    </div>
-  </nav>
 
-  <!-- ===== PRODUCT HOME VIEW ===== -->
-  <section id="view-product-home" class="view-panel" hidden aria-label="ARENA CORE Home" role="region">
-    <div class="home-shell">
-
-      <!-- Hero: single clear focal point -->
-      <div class="home-hero">
-        <div class="home-hero-badge">DETERMINISTIC SIMULATION ENGINE // MULBERRY32 PRNG</div>
-        <h1 class="home-hero-title">ARENA CORE</h1>
-        <div class="home-hero-sub-title">Football Simulation Engine & Match Analytics</div>
-        <p class="home-hero-sub">
-          Pure client-side mathematical simulation platform using Mulberry32 seeded pseudo-random number generation and dual-parameter Poisson distribution modeling across 15+ domestic and cup competitions.
-        </p>
-      </div>
-
-      <!-- One primary + one secondary action -->
-      <div class="home-actions">
-        <button type="button" class="home-cta-btn" id="home-btn-simulate">
-          <i class="fa-solid fa-bolt" aria-hidden="true"></i>
-          <span>SIMULATE TOURNAMENT</span>
-        </button>
-        <button type="button" class="home-cta-btn home-cta-btn-secondary" id="home-btn-archive">
-          <i class="fa-solid fa-trophy" aria-hidden="true"></i>
-          <span>EXPLORE COMPETITIONS</span>
-        </button>
-      </div>
-
-      <!-- Verified Mathematical & Architectural Pillars -->
-      <div class="home-pillars-grid">
-        <div class="home-pillar-card">
-          <div class="home-pillar-tag">ENGINE ARCHITECTURE</div>
-          <div class="home-pillar-title">DETERMINISTIC PRNG</div>
-          <div class="home-pillar-desc">Mulberry32 32-bit state generator ensures bitwise reproducible outcomes for any integer seed.</div>
-        </div>
-        <div class="home-pillar-card">
-          <div class="home-pillar-tag">MATHEMATICAL MODEL</div>
-          <div class="home-pillar-title">POISSON DISTRIBUTION</div>
-          <div class="home-pillar-desc">Dual-parameter Poisson model calibrated to historical competition goals, ratings, and extra time.</div>
-        </div>
-        <div class="home-pillar-card">
-          <div class="home-pillar-tag">COMPETITION COVERAGE</div>
-          <div class="home-pillar-title">15+ TOURNAMENTS</div>
-          <div class="home-pillar-desc">Full tournament formats: 48-team FIFA World Cup, Swiss-model UCL, and European domestic leagues.</div>
-        </div>
-        <div class="home-pillar-card">
-          <div class="home-pillar-tag">PROCEDURAL DRAW</div>
-          <div class="home-pillar-title">CUSTOM DRAW ENGINE</div>
-          <div class="home-pillar-desc">Interactive pot-seeded tournament draw with confederation separation rules and live brackets.</div>
-        </div>
-      </div>
-
-      <!-- Curated competition selection -->
-      <div class="home-competitions-section">
-        <h2 class="home-section-heading">FEATURED COMPETITIONS</h2>
-        <div class="home-comp-grid" id="home-featured-grid" role="list">
-          <!-- populated by renderProductHome() -->
-        </div>
-        <button type="button" class="home-view-all" id="home-view-all">
-          <span>View all competitions</span>
-          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-        </button>
-      </div>
-
-    </div>
-  </section>
-  <!-- ===== END PRODUCT HOME VIEW ===== -->
-
-  <!-- App Main Content Container -->
-  <div class="app-layout">
-
-
-    <!-- Main Viewport -->
-    <main class="main-viewport" id="mainContent">
-
-      <!-- ============================================================
-           VIEW 1: HYPOTHETICAL TOURNAMENT SIMULATOR (WORLD B)
-           ============================================================ -->
-      <section id="view-tournament-sim" class="view-panel" hidden aria-label="Tournament Simulator" role="region">
-
-        <!-- Unified competition context bar (one bar for every competition) -->
-        <div class="sim-context-bar" id="sim-context-bar" hidden>
-          <button type="button" class="sim-context-back" id="btn-back-to-comp-home">
-            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
-            <span id="sim-context-back-label">BACK</span>
+        <div class="home-actions">
+          <button type="button" class="home-cta-btn" id="home-btn-simulate">
+            <i class="fa-solid fa-bolt"></i>
+            <span>SIMULATE TOURNAMENT</span>
           </button>
-          <div class="sim-context-title">
-            <span id="sim-context-label">SIMULATION</span>
+          <button type="button" class="home-cta-btn home-cta-btn-secondary" id="home-btn-archive">
+            <i class="fa-solid fa-trophy"></i>
+            <span>EXPLORE COMPETITIONS</span>
+          </button>
+        </div>
+
+        <div class="home-pillars-grid">
+          <div class="home-pillar-card">
+            <div class="home-pillar-tag">ENGINE ARCHITECTURE</div>
+            <div class="home-pillar-title">DETERMINISTIC PRNG</div>
+            <div class="home-pillar-desc">Mulberry32 32-bit state generator ensures bitwise reproducible outcomes for any integer seed.</div>
+          </div>
+          <div class="home-pillar-card">
+            <div class="home-pillar-tag">MATHEMATICAL MODEL</div>
+            <div class="home-pillar-title">POISSON DISTRIBUTION</div>
+            <div class="home-pillar-desc">Dual-parameter Poisson model calibrated to historical competition goals, ratings, and extra time.</div>
+          </div>
+          <div class="home-pillar-card">
+            <div class="home-pillar-tag">COMPETITION COVERAGE</div>
+            <div class="home-pillar-title">15+ TOURNAMENTS</div>
+            <div class="home-pillar-desc">Full tournament formats: 48-team FIFA World Cup, Swiss-model UCL, and European domestic leagues.</div>
+          </div>
+          <div class="home-pillar-card">
+            <div class="home-pillar-tag">PROCEDURAL DRAW</div>
+            <div class="home-pillar-title">CUSTOM DRAW ENGINE</div>
+            <div class="home-pillar-desc">Interactive pot-seeded tournament draw with confederation separation rules and live brackets.</div>
           </div>
         </div>
 
-        <!-- Tournament Hero Card -->
+        <div class="home-competitions-section">
+          <h2 class="home-section-heading">FEATURED COMPETITIONS</h2>
+          <div class="home-comp-grid" id="home-featured-grid" role="list">
+            <!-- populated by renderProductHome() -->
+          </div>
+          <button type="button" class="home-view-all" id="home-view-all">
+            <span>View all competitions</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- App Main Content Container -->
+    <div class="app-container">
+
+      <!-- View 1: Hypothetical Tournament Simulator (World B) -->
+      <section id="view-tournament-sim" class="view-panel" hidden aria-label="Tournament Simulator">
+
+        <div class="sim-breadcrumb" id="sim-breadcrumb" hidden>
+          <button type="button" class="sim-breadcrumb-back" id="btn-back-to-comp-home">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span id="sim-breadcrumb-back-label">BACK</span>
+          </button>
+          <div class="sim-breadcrumb-title">
+            <span id="sim-breadcrumb-category">SIMULATION</span>
+          </div>
+        </div>
+
         <div class="sim-header-card">
           <div class="sim-header-info">
-            <div class="data-badge-line">
-              <span class="data-badge ARCHIVE_DATA" id="hero-season-badge">SEASON: --</span>
+            <div class="season-badge-line">
+              <span class="season-badge ARCHIVE_DATA" id="season-badge">SEASON: --</span>
             </div>
             <h2 id="active-tourn-title" class="tourn-title">FIFA WORLD CUP 2026</h2>
-            <p id="active-tourn-desc" class="tourn-desc">
-              Simulate 48 global national contenders across 12 groups (A–L), 32-team knockout bracket, and crown the
-              hypothetical world champion!
-            </p>
+            <p id="active-tourn-desc" class="tourn-desc">Simulate 48 global national contenders across 12 groups (A–L), 32-team knockout bracket, and crown the hypothetical world champion!</p>
           </div>
 
-          <!-- Dynamic Stage Action Controls -->
           <div class="sim-controls-group">
             <div class="sim-top-btns">
               <button type="button" id="sim-draw-btn" class="sim-action-btn outline">RESET</button>
               <button type="button" id="sim-stage-action-btn" class="sim-action-btn primary">SIMULATE</button>
             </div>
 
-            <!-- Live Timer Control Bar (Pause, Resume, Restart, Skip) -->
             <div class="live-control-bar" id="live-control-bar" hidden>
               <button type="button" id="sim-pause-btn" class="sim-ctrl-btn">PAUSE</button>
               <button type="button" id="sim-resume-btn" class="sim-ctrl-btn" hidden>RESUME</button>
@@ -335,10 +203,9 @@
           </div>
         </div>
 
-        <!-- Simulation Progress & Live Clock HUD -->
         <div class="sim-clock-hud" id="sim-clock-hud" hidden>
           <div class="clock-display-wrap">
-            <span class="clock-icon"><i class="fa-solid fa-stopwatch" aria-hidden="true"></i></span>
+            <span class="clock-icon"><i class="fa-solid fa-stopwatch"></i></span>
             <span class="clock-stage-label" id="clock-stage-label">ROUND OF 16</span>
             <span class="clock-timer" id="clock-minute-text">45' (FIRST HALF)</span>
           </div>
@@ -347,43 +214,32 @@
           </div>
         </div>
 
-        <!-- Champion Celebration Banner -->
         <div id="champion-banner" class="champion-banner" hidden>
-          <span class="trophy-icon"><i class="fa-solid fa-trophy" aria-hidden="true"></i></span>
+          <span class="trophy-icon"><i class="fa-solid fa-trophy"></i></span>
           <div class="champion-text">
             <span class="champ-label">HYPOTHETICAL CHAMPION CROWNED!</span>
             <h3 id="champion-team-name" class="champ-name">ARGENTINA</h3>
           </div>
         </div>
 
-        <!-- Stage Filter Navigation Tabs -->
         <div class="tournament-stage-viewport">
           <div class="bracket-nav-tabs">
             <div class="bracket-tab-group" id="stage-tabs-group" role="tablist" aria-label="Tournament Stages">
-              <button type="button" class="bracket-tab active" data-stage="all" role="tab" aria-selected="true">ALL
-                STAGES</button>
-              <button type="button" class="bracket-tab" data-stage="groups" role="tab" aria-selected="false" tabindex="-1">GROUPS /
-                LEAGUE</button>
-              <button type="button" class="bracket-tab" data-stage="r32" role="tab" aria-selected="false" tabindex="-1">ROUND OF
-                32</button>
-              <button type="button" class="bracket-tab" data-stage="r16" role="tab" aria-selected="false" tabindex="-1">ROUND OF
-                16</button>
-              <button type="button" class="bracket-tab" data-stage="qf" role="tab"
-                aria-selected="false" tabindex="-1">QUARTERFINALS</button>
-              <button type="button" class="bracket-tab" data-stage="sf" role="tab"
-                aria-selected="false" tabindex="-1">SEMIFINALS</button>
-              <button type="button" class="bracket-tab" data-stage="gf" role="tab" aria-selected="false" tabindex="-1">GRAND
-                FINAL</button>
+              <button type="button" class="bracket-tab active" data-stage="all" role="tab" aria-selected="true">ALL STAGES</button>
+              <button type="button" class="bracket-tab" data-stage="groups" role="tab" aria-selected="false" tabindex="-1">GROUPS / LEAGUE</button>
+              <button type="button" class="bracket-tab" data-stage="r32" role="tab" aria-selected="false" tabindex="-1">ROUND OF 32</button>
+              <button type="button" class="bracket-tab" data-stage="r16" role="tab" aria-selected="false" tabindex="-1">ROUND OF 16</button>
+              <button type="button" class="bracket-tab" data-stage="qf" role="tab" aria-selected="false" tabindex="-1">QUARTERFINALS</button>
+              <button type="button" class="bracket-tab" data-stage="sf" role="tab" aria-selected="false" tabindex="-1">SEMIFINALS</button>
+              <button type="button" class="bracket-tab" data-stage="gf" role="tab" aria-selected="false" tabindex="-1">GRAND FINAL</button>
             </div>
             <span id="current-stage-badge" class="stage-badge">VIEW: ALL STAGES</span>
           </div>
 
-          <!-- Groups / League Stage View Container -->
           <div id="groups-grid-container" class="groups-grid-container">
             <!-- Dynamically populated by app.js -->
           </div>
 
-          <!-- Knockout Bracket Tree Container — wrapped for top scrollbar -->
           <div class="bracket-scroll-flip-outer">
             <div class="bracket-tree-container" id="bracket-tree-container">
               <!-- Bracket columns injected dynamically -->
@@ -391,28 +247,35 @@
           </div>
         </div>
 
-        <!-- Ticker Bar -->
         <div class="ticker-bar bottom-callout">
-          <span class="ticker-badge"><i class="fa-solid fa-bullhorn" aria-hidden="true"></i> ARENA CORE NEWS</span>
+          <span class="ticker-badge"><i class="fa-solid fa-bullhorn"></i> ARENA CORE NEWS</span>
           <div class="ticker-scroll" id="bracket-ticker-text">
             SELECT A COMPETITION OR PRESS SIMULATE TO ADVANCE THROUGH THE ROUNDS //
           </div>
         </div>
 
-        <!-- Footer is global (single instance at end of main) -->
+        <footer class="site-footer" role="contentinfo">
+          <div class="site-footer-inner">
+            <div class="site-footer-brand">
+              <span class="foot-logo-txt">ARENA <span class="logo-core">CORE</span></span>
+              <span class="foot-copy">© 2026 — Football simulation &amp; analytics.</span>
+            </div>
+            <div class="site-footer-links">
+              <button type="button" class="foot-link-btn" onclick="document.getElementById('methodology-modal').hidden=false;">Methodology</button>
+              <button type="button" class="foot-link-btn" data-nav="archive-view">Archive</button>
+            </div>
+          </div>
+        </footer>
       </section>
 
-      <!-- ============================================================
-           VIEW 2: REAL STANDINGS & TOP SCORERS (WORLD A)
-           ============================================================ -->
-      <section id="view-standings-view" class="view-panel" aria-label="Official Standings" role="region" hidden>
+      <!-- View 2: Real Standings & Top Scorers (World A) -->
+      <section id="view-standings-view" class="view-panel" hidden aria-label="Official Standings">
         <div class="section-banner">
           <h2 id="standings-banner-title">LEAGUE STANDINGS</h2>
           <p id="standings-banner-desc">Historical standings from bundled competition data. Simulate matches to generate projected tables.</p>
         </div>
 
-        <!-- Back to LaLiga Home (shown only when coming from LaLiga Explore Teams) -->
-        <div id="standings-laliga-back" style="margin-bottom:16px;" hidden>
+        <div class="standings-laliga-back" hidden>
           <button type="button" class="laliga-back-btn" id="btn-standings-back-laliga">
             <i class="fa-solid fa-arrow-left"></i>
             <span>BACK TO LALIGA HOME</span>
@@ -420,7 +283,6 @@
         </div>
 
         <div class="standings-grid">
-          <!-- Standings Table Card -->
           <div class="tech-card table-card">
             <div class="card-header-bar">
               <h3 class="card-title" id="standings-table-title">STANDINGS TABLE</h3>
@@ -450,7 +312,6 @@
             </div>
           </div>
 
-          <!-- Top Goalscorers Card -->
           <div class="tech-card leaders-card">
             <div class="card-header-bar">
               <h3 class="card-title" id="scorers-table-title">GOLDEN BOOT LEADERS</h3>
@@ -462,13 +323,22 @@
           </div>
         </div>
 
-        <!-- Footer is global (single instance at end of main) -->
+        <footer class="site-footer" role="contentinfo">
+          <div class="site-footer-inner">
+            <div class="site-footer-brand">
+              <span class="foot-logo-txt">ARENA <span class="logo-core">CORE</span></span>
+              <span class="foot-copy">© 2026 — Football simulation &amp; analytics.</span>
+            </div>
+            <div class="site-footer-links">
+              <button type="button" class="foot-link-btn" onclick="document.getElementById('methodology-modal').hidden=false;">Methodology</button>
+              <button type="button" class="foot-link-btn" data-nav="archive-view">Archive</button>
+            </div>
+          </div>
+        </footer>
       </section>
 
-      <!-- ============================================================
-           VIEW 3: ARCHIVE — BROWSE HISTORICAL COMPETITION DATA
-           ============================================================ -->
-      <section id="view-archive-view" class="view-panel" aria-label="Archive" role="region" hidden>
+      <!-- View 3: Archive — Browse Historical Competition Data -->
+      <section id="view-archive-view" class="view-panel" aria-label="Archive">
         <div class="section-banner">
           <h2>COMPETITION ARCHIVE</h2>
           <p>Browse historical standings, top scorers, and team rosters from bundled competition data.</p>
@@ -477,930 +347,40 @@
         <div class="archive-grid" id="archive-grid">
           <!-- Archive cards injected dynamically -->
         </div>
+
+        <footer class="site-footer" role="contentinfo">
+          <div class="site-footer-inner">
+            <div class="site-footer-brand">
+              <span class="foot-logo-txt">ARENA <span class="logo-core">CORE</span></span>
+              <span class="foot-copy">© 2026 — Football simulation &amp; analytics.</span>
+            </div>
+            <div class="site-footer-links">
+              <button type="button" class="foot-link-btn" onclick="document.getElementById('methodology-modal').hidden=false;">Methodology</button>
+              <button type="button" class="foot-link-btn" data-nav="archive-view">Archive</button>
+            </div>
+          </div>
+        </footer>
       </section>
 
 
-      <!-- Global footer (single instance) -->
-      <footer class="site-footer" role="contentinfo">
-        <div class="site-footer-inner">
-          <div class="site-footer-brand">
-            <span class="foot-logo-txt">ARENA <span class="logo-core">CORE</span></span>
-            <span class="foot-copy">© 2026 — Football simulation &amp; analytics.</span>
-          </div>
-          <div class="site-footer-links">
-            <button type="button" class="foot-link-btn" onclick="document.getElementById('methodology-modal').hidden=false;">Methodology</button>
-            <button type="button" class="foot-link-btn" data-nav="archive-view">Archive</button>
-          </div>
-        </div>
-      </footer>
-    </main>
-  </div>
-
-  <!-- Comprehensive SofaScore-Style Detailed Stats Modal (Matching Reference Broadcast Design) -->
-  <div id="detailed-stats-modal" class="modal detailed-stats-modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="dstats-home-name">
-    <div class="modal-backdrop dstats-backdrop" id="dstats-backdrop"></div>
-    <div class="modal-dialog dstats-dialog">
-      <button type="button" id="dstats-close-btn" class="dstats-close-btn" aria-label="Close details">&times;</button>
-
-      <!-- 1. Top Deep Purple Header -->
-      <div class="dstats-header-banner" id="dstats-header-banner">
-        <div class="dstats-meta-line" id="dstats-meta-line">
-          <span class="dstats-venue-text" id="dstats-venue">Match Visualizer</span>
-          <span class="dstats-comp-stage" id="dstats-comp-stage">FIFA WORLD CUP · KNOCKOUT STAGE</span>
-        </div>
-
-        <div class="dstats-status-pill-wrap">
-          <span class="dstats-status-pill" id="dstats-status-badge">FT</span>
-        </div>
-
-        <!-- 3-Column Match Scoreboard Display -->
-        <div class="dstats-match-scoreboard">
-          <!-- Home Team -->
-          <div class="dstats-team-box home-team-box">
-            <div class="dstats-shield-outer home-shield-bg" id="dstats-home-shield">
-              <div class="dstats-shield-inner" id="dstats-home-logo"></div>
-            </div>
-            <h3 class="dstats-team-name" id="dstats-home-name">Home Team</h3>
-          </div>
-
-          <!-- Center Big Score -->
-          <div class="dstats-score-center">
-            <div class="dstats-huge-score" id="dstats-score-display">0 - 0</div>
-            <div class="dstats-sub-score-info" id="dstats-pens-info"></div>
-          </div>
-
-          <!-- Away Team -->
-          <div class="dstats-team-box away-team-box">
-            <div class="dstats-shield-outer away-shield-bg" id="dstats-away-shield">
-              <div class="dstats-shield-inner" id="dstats-away-logo"></div>
-            </div>
-            <h3 class="dstats-team-name" id="dstats-away-name">Away Team</h3>
-          </div>
-        </div>
-
-        <!-- Action Icons Row Under Score -->
-        <div class="dstats-quick-actions">
-          <button type="button" class="dstats-icon-action" id="dstats-btn-restart" title="Restart match">
-            <i class="fa-solid fa-rotate-left"></i>
-            <span>Restart</span>
-          </button>
-          <button type="button" class="dstats-icon-action" id="dstats-btn-rematch" title="Simulate Rematch">
-            <i class="fa-solid fa-arrows-rotate"></i>
-            <span>Rematch</span>
-          </button>
-          <button type="button" class="dstats-icon-action" id="dstats-btn-save" title="Save match bookmark">
-            <i class="fa-regular fa-bookmark"></i>
-            <span>Save</span>
-          </button>
-          <button type="button" class="dstats-icon-action" id="dstats-btn-share" title="Share match report">
-            <i class="fa-solid fa-share-nodes"></i>
-            <span>Share</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- 2. Pill Tabs Navigation Bar -->
-      <div class="dstats-tabs-bar">
-        <button type="button" class="dstats-tab-pill active" data-tab="livepitch">
-          <i class="fa-solid fa-tower-broadcast"></i> Live 2D Pitch
-        </button>
-        <button type="button" class="dstats-tab-pill" data-tab="summary">
-          <i class="fa-solid fa-chart-pie"></i> Summary
-        </button>
-        <button type="button" class="dstats-tab-pill" data-tab="feed">
-          <i class="fa-solid fa-bolt"></i> Feed
-        </button>
-        <button type="button" class="dstats-tab-pill" data-tab="stats">
-          <i class="fa-solid fa-chart-simple"></i> Stats
-        </button>
-        <button type="button" class="dstats-tab-pill" data-tab="lineups">
-          <i class="fa-solid fa-users"></i> Lineups
-        </button>
-        
-        <button type="button" class="dstats-tab-pill" data-tab="info">
-          <i class="fa-solid fa-circle-info"></i> Info
-        </button>
-      </div>
-
-      <!-- 3. Modal Body Panels -->
-      <div class="dstats-body-wrap">
-        <!-- TAB 0: LIVE 2D PITCH BROADCAST TRACKER -->
-        <div class="dstats-panel dstats-panel-livepitch active" id="dstats-panel-livepitch">
-          <!-- Broadcast Momentum & Match Status HUD -->
-          <div class="dstats-pitch-hud-bar">
-            <div class="dstats-momentum-widget">
-              <span class="dstats-mom-team home" id="dstats-mom-home-label">HOME 52%</span>
-              <div class="dstats-mom-track">
-                <div class="dstats-mom-fill-home" id="dstats-mom-home-fill" style="width: 52%;"></div>
-                <div class="dstats-mom-fill-away" id="dstats-mom-away-fill" style="width: 48%;"></div>
-              </div>
-              <span class="dstats-mom-team away" id="dstats-mom-away-label">48% AWAY</span>
-            </div>
-
-            <div class="dstats-pitch-tactics-tag" id="dstats-pitch-tactics-tag">
-              <i class="fa-solid fa-chess-board"></i> <span id="dstats-tactics-text">TACTICAL FORMATION: 4-3-3 vs 4-2-3-1</span>
-            </div>
-          </div>
-
-          <!-- The Realistic 2D Soccer Pitch Canvas/DOM Visualizer -->
-          <div class="dstats-pitch-viewport" id="dstats-pitch-viewport">
-            <!-- 2D Grass Turf Field with Striping -->
-            <div class="dstats-pitch-field" id="dstats-pitch-field">
-              <div class="dstats-pitch-stripes"></div>
-              <div class="dstats-pitch-grass-texture"></div>
-
-              <!-- Pitch Markings -->
-              <div class="dstats-pitch-line dstats-pitch-border"></div>
-              <div class="dstats-pitch-line dstats-pitch-halfway"></div>
-              <div class="dstats-pitch-circle dstats-pitch-center-circle"></div>
-              <div class="dstats-pitch-spot dstats-pitch-center-spot"></div>
-
-              <!-- Left Penalty Area -->
-              <div class="dstats-pitch-box left-box"></div>
-              <div class="dstats-pitch-box left-goal-box"></div>
-              <div class="dstats-pitch-arc left-arc"></div>
-              <div class="dstats-pitch-spot left-pen-spot"></div>
-              <div class="dstats-pitch-goal left-goal-net"></div>
-
-              <!-- Right Penalty Area -->
-              <div class="dstats-pitch-box right-box"></div>
-              <div class="dstats-pitch-box right-goal-box"></div>
-              <div class="dstats-pitch-arc right-arc"></div>
-              <div class="dstats-pitch-spot right-pen-spot"></div>
-              <div class="dstats-pitch-goal right-goal-net"></div>
-
-              <!-- Corner Arcs -->
-              <div class="dstats-pitch-corner corner-tl"></div>
-              <div class="dstats-pitch-corner corner-tr"></div>
-              <div class="dstats-pitch-corner corner-bl"></div>
-              <div class="dstats-pitch-corner corner-br"></div>
-
-              <!-- 22 Dynamic Player Nodes Layer -->
-              <div class="dstats-pitch-players-layer" id="dstats-pitch-players">
-                <!-- 11 Home & 11 Away players injected dynamically -->
-              </div>
-
-              <!-- Dynamic Soccer Ball Node -->
-              <div class="dstats-pitch-ball-node" id="dstats-pitch-ball">
-                <div class="dstats-ball-sphere"></div>
-                <div class="dstats-ball-shadow"></div>
-                <div class="dstats-ball-trail" id="dstats-ball-trail"></div>
-              </div>
-
-              <!-- TV Broadcast Lower-Third Live Action Graphic Banner -->
-              <div class="dstats-pitch-broadcast-banner" id="dstats-pitch-banner" hidden>
-                <span class="dstats-banner-icon" id="dstats-banner-icon"><i class="fa-solid fa-bolt"></i></span>
-                <span class="dstats-banner-text" id="dstats-banner-text">DANGEROUS ATTACK</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Interactive Playback Controls & Timeline Scrubber Bar -->
-          <div class="dstats-pitch-controls-bar">
-            <div class="dstats-scrubber-actions">
-              <!-- REWATCH: resets ball tracking to 0' and auto-plays from kick-off -->
-              <button type="button" class="dstats-ctrl-btn btn-rewatch-primary" id="dstats-btn-live-sim" title="Rewatch full match simulation from kick-off">
-                <i class="fa-solid fa-rotate-left"></i> <span>REWATCH</span>
-              </button>
-              <!-- RESUME / PAUSE -->
-              <button type="button" class="dstats-ctrl-btn" id="dstats-btn-play-pause" title="Resume or pause the ball-tracking broadcast">
-                <i class="fa-solid fa-play" id="dstats-icon-play"></i> <span id="dstats-txt-play">RESUME</span>
-              </button>
-              <!-- SKIP TO END -->
-              <button type="button" class="dstats-ctrl-btn" id="dstats-btn-skip-match" title="Skip directly to full-time conclusion">
-                <i class="fa-solid fa-forward-step"></i> <span>SKIP TO END</span>
-              </button>
-              <!-- PREV EVENT (jump to previous goal/chance in the timeline) -->
-              <button type="button" class="dstats-ctrl-btn" id="dstats-btn-replay-event" title="Jump to previous key event">
-                <i class="fa-solid fa-backward-step"></i> <span>PREV EVENT</span>
-              </button>
-              <button type="button" class="dstats-ctrl-btn speed-btn" id="dstats-btn-speed" title="Toggle playback speed">1x</button>
-            </div>
-
-            <!-- Scrubber Timeline -->
-            <div class="dstats-scrubber-track-wrap">
-              <div class="dstats-scrubber-time-badge" id="dstats-scrubber-time">0'</div>
-              <div class="dstats-scrubber-track" id="dstats-scrubber-track">
-                <div class="dstats-scrubber-fill" id="dstats-scrubber-fill" style="width: 0%;"></div>
-                <div class="dstats-scrubber-thumb" id="dstats-scrubber-thumb" style="left: 0%;"></div>
-                <div class="dstats-scrubber-events" id="dstats-scrubber-events">
-                  <!-- Goal and Card event markers -->
-                </div>
-              </div>
-              <div class="dstats-scrubber-time-badge ft-badge">90'</div>
-            </div>
-          </div>
-
-          <!-- Live Tactical Action Ticker -->
-          <div class="dstats-live-ticker-wrap">
-            <span class="dstats-ticker-text" id="dstats-pitch-ticker">Match ready for kickoff. Track player movements and ball possession live on the 2D pitch!</span>
-          </div>
-        </div>
-
-        <!-- TAB 1: SUMMARY -->
-        <div class="dstats-panel dstats-panel-summary" id="dstats-panel-summary">
-          <div class="dstats-summary-grid">
-            <!-- Left Column: Match Timeline -->
-            <div class="dstats-timeline-card">
-              <div class="dstats-card-heading">Summary</div>
-              <div class="dstats-timeline-events-list" id="dstats-timeline-list">
-                <!-- Chronological goals, cards, substitutions injected here -->
-              </div>
-            </div>
-
-            <!-- Right Column: Top Performers & Chance Distribution -->
-            <div class="dstats-sidebar-col">
-              <!-- Top Performers Card -->
-              <div class="dstats-performers-card">
-                <div class="dstats-card-heading">Top performers</div>
-                <div class="dstats-performers-turf" id="dstats-performers-box">
-                  <!-- Green pitch with player cards injected here -->
-                </div>
-                <button type="button" class="dstats-view-lineups-link" id="dstats-link-lineups">
-                  <span>View lineups</span>
-                  <i class="fa-solid fa-chevron-right"></i>
-                </button>
-              </div>
-
-              <!-- Chance Distribution Card -->
-              <div class="dstats-chance-card">
-                <div class="dstats-card-heading">Chance distribution</div>
-                <div class="dstats-chance-content" id="dstats-chance-box">
-                  <!-- Team 1, Draw, Team 2 distribution bars injected here -->
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- TAB 2: FEED -->
-        <div class="dstats-panel dstats-panel-feed" id="dstats-panel-feed">
-          <div class="dstats-feed-list" id="dstats-feed-list"></div>
-        </div>
-
-        <!-- TAB 3: STATS -->
-        <div class="dstats-panel dstats-panel-stats" id="dstats-panel-stats">
-          <div class="dstats-stats-container" id="dstats-stats-container"></div>
-        </div>
-
-        <!-- TAB 4: LINEUPS -->
-        <div class="dstats-panel dstats-panel-lineups" id="dstats-panel-lineups">
-          <div class="dstats-lineups-container" id="dstats-lineups-container"></div>
-        </div>
-
-        
-
-        <!-- TAB 6: INFO -->
-        <div class="dstats-panel dstats-panel-info" id="dstats-panel-info">
-          <div class="dstats-info-container" id="dstats-info-container"></div>
-        </div>
-      </div>
-
     </div>
   </div>
 
-  <!-- Focused Match Center Modal -->
-  <div id="match-detail-modal" class="modal" hidden tabindex="-1" role="dialog" aria-modal="true"
-    aria-labelledby="modal-match-title">
-    <div class="modal-backdrop" id="modal-backdrop"></div>
-    <div class="modal-dialog">
-      <button type="button" id="modal-close" class="modal-close-btn" aria-label="Close match details">&times;</button>
-
-
-      <div class="modal-header-bar">
-        <span class="modal-tag" id="modal-match-tag">UEFA CHAMPIONS LEAGUE</span>
-        <h3 id="modal-match-title" class="modal-match-title">Match Center</h3>
-      </div>
-
-      <div class="modal-player-box" id="modal-player-box">
-        <!-- Video facade / stream injected here -->
-      </div>
-
-      <div class="modal-body-content">
-        <div id="modal-match-info" class="modal-info-panel">
-          <!-- Summary, Score & Details -->
-        </div>
-
-        <!-- Related Highlights -->
-        <div class="related-highlights-section">
-          <h4 class="related-title">RELATED REPLAYS</h4>
-          <div id="related-grid" class="related-grid">
-            <!-- Injected dynamically -->
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================================
-       CINEMATIC 3D HOLOGRAPHIC STADIUM BROADCAST STUDIO
-       ============================================================ -->
-  <div id="broadcast-hologram-modal" class="modal broadcast-modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="holo-broadcast-title">
-    <div class="modal-backdrop holo-backdrop" id="holo-modal-backdrop"></div>
-    <div class="modal-dialog holo-dialog">
-      <button type="button" id="holo-modal-close" class="holo-close-btn" aria-label="Close 3D Broadcast">&times;</button>
-
-      <!-- Broadcast Live Header HUD -->
-      <div class="holo-header-hud">
-        <div class="holo-badge-group">
-          <span class="holo-live-tag"><span class="holo-pulse-dot"></span> 3D VIEW</span>
-          <span class="holo-tourn-tag" id="holo-tourn-tag">FIFA WORLD CUP 2026</span>
-        </div>
-        <h2 class="holo-title" id="holo-broadcast-title">TACTICAL 3D VISUALIZER</h2>
-      </div>
-
-      <!-- Match Scoreboard Ribbon -->
-      <div class="holo-scoreboard-ribbon">
-        <div class="holo-team home">
-          <span class="holo-team-logo" id="holo-home-logo">🇦🇷</span>
-          <span class="holo-team-name" id="holo-home-name">ARGENTINA</span>
-        </div>
-        <div class="holo-score-center">
-          <span class="holo-score-digit" id="holo-home-score">0</span>
-          <span class="holo-score-sep">:</span>
-          <span class="holo-score-digit" id="holo-away-score">0</span>
-          <div class="holo-clock-badge" id="holo-clock-badge">⏱ 0' (KICKOFF)</div>
-        </div>
-        <div class="holo-team away">
-          <span class="holo-team-name" id="holo-away-name">FRANCE</span>
-          <span class="holo-team-logo" id="holo-away-logo">🇫🇷</span>
-        </div>
-      </div>
-
-      <!-- The 3D Holographic Stadium Stage (Reference Architecture) -->
-      <div class="holo-stage-viewport" id="holo-stage-viewport">
-        <!-- Ambient Atmospheric Spotlights -->
-        <div class="holo-spotlight-top"></div>
-        <div class="holo-ambient-glow"></div>
-
-        <div class="holo-3d-scene">
-          
-          <!-- Layer 1: Giant Levitating 3D Soccer Ball -->
-          <div class="holo-3d-ball-track" id="holo-ball-track">
-            <div class="holo-3d-ball-sphere" id="holo-3d-ball">
-              <div class="holo-ball-pentagons"></div>
-            </div>
-            <div class="holo-ball-ground-shadow" id="holo-ball-shadow"></div>
-            <div class="holo-ball-action-bubble" id="holo-action-bubble">KICKOFF</div>
-          </div>
-
-          <!-- Layer 2: Floating 3D Stadium Grass Pitch Turf -->
-          <div class="holo-floating-turf-wrapper">
-            <div class="holo-floating-turf">
-              <div class="holo-turf-stripes"></div>
-              <div class="holo-pitch-lines">
-                <div class="holo-pitch-center-circle"></div>
-                <div class="holo-pitch-center-spot"></div>
-                <div class="holo-pitch-halfway"></div>
-                <div class="holo-pitch-box left"></div>
-                <div class="holo-pitch-box right"></div>
-                <div class="holo-goal-box left"></div>
-                <div class="holo-goal-box right"></div>
-                <!-- 3D Goal Posts -->
-                <div class="holo-3d-goalpost left"></div>
-                <div class="holo-3d-goalpost right"></div>
-                <!-- Corner Flags -->
-                <div class="holo-corner-flag f-tl">🚩</div>
-                <div class="holo-corner-flag f-tr">🚩</div>
-                <div class="holo-corner-flag f-bl">🚩</div>
-                <div class="holo-corner-flag f-br">🚩</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Layer 3: Sleek White Digital Tablet Base with Holographic Projections -->
-          <div class="holo-device-tablet">
-            <div class="holo-tablet-bezel">
-              <div class="holo-digital-grid">
-                <div class="holo-grid-lines"></div>
-                <div class="holo-projection-beam"></div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Live Tactical Feed & Match Timeline -->
-      <div class="holo-tactical-footer">
-        <div class="holo-status-stream">
-          <span class="holo-status-icon">📍</span>
-          <span class="holo-status-text" id="holo-status-text">Simulation visualizer • Ball position generated by ARENA simulation</span>
-        </div>
-        
-        <div class="holo-events-ticker" id="holo-events-ticker">
-          <!-- Injected goal scorer events -->
-        </div>
-
-        <div class="holo-controls-bar">
-          <button type="button" class="holo-ctrl-btn" id="holo-btn-pause">PAUSE</button>
-          <button type="button" class="holo-ctrl-btn" id="holo-btn-speed">2x SPEED</button>
-          <button type="button" class="holo-ctrl-btn primary" id="holo-btn-skip">INSTANT RESULT</button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ============================================================
-       ARENA TACTICAL TRACKER — 2D PITCH VISUALIZER
-       ============================================================ -->
-  <div id="tactical-tracker-modal" class="modal tactical-tracker-modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="tac-header-brand">
-    <div class="modal-backdrop tac-backdrop" id="tac-modal-backdrop"></div>
-    <div class="modal-dialog tac-dialog">
-      
-      <!-- Top Tactical HUD Navigation Bar -->
-      <div class="tac-top-navbar">
-        <div class="tac-nav-left">
-          <span class="tac-window-dots">
-            <span class="tac-dot red"></span>
-            <span class="tac-dot yellow"></span>
-            <span class="tac-dot green"></span>
-          </span>
-          <span class="tac-brand-title" id="tac-header-brand">ARENA TACTICAL TRACKER</span>
-          <div class="tac-nav-tabs">
-            <button type="button" class="tac-nav-tab active">STATISTICS</button>
-            <button type="button" class="tac-nav-tab">POST</button>
-            <button type="button" class="tac-nav-tab">DEVELOP</button>
-          </div>
-        </div>
-        <div class="tac-nav-right">
-          <div class="tac-session-pill">
-            <span class="tac-status-dot"></span>
-            <span id="tac-session-status">SESSION: TACTICAL VIEW OPEN</span>
-          </div>
-          <button type="button" class="tac-back-btn" id="tac-modal-close" aria-label="Close Tactical Tracker">
-            ❮ Back to tournament
-          </button>
-        </div>
-      </div>
-
-      <!-- Top Tactical Filter / Option Bar -->
-      <div class="tac-controls-bar">
-        <div class="tac-ctrl-left">
-          <div class="tac-select-players-badge">
-            <span class="tac-badge-icon">👥 11</span>
-            <span id="tac-tactic-name">Tactics 1 (4-3-3)</span>
-          </div>
-          <div class="tac-dropdown-item">⚙ Options</div>
-          <div class="tac-dropdown-item">Formations <span class="tac-arrow">▼</span></div>
-        </div>
-        <div class="tac-ctrl-right">
-          <div class="tac-replay-badge">
-            <span>🎥 SESSION IS REPLAYING</span>
-            <span class="tac-phase-tag" id="tac-phase-tag">Phase 1 (First Half)</span>
-          </div>
-          <div class="tac-dropdown-item">Phases <span class="tac-arrow">▼</span></div>
-        </div>
-      </div>
-
-      <!-- Main Tactical Workspace: Left Roster, Center Pitch, Right Roster -->
-      <div class="tac-workspace-body">
-        
-        <!-- LEFT PANEL: TEAM 1 (Home - Coral / Red) -->
-        <aside class="tac-team-panel team-1">
-          <div class="tac-team-header home-header">
-            <span class="tac-team-badge-icon">👥</span>
-            <span class="tac-team-header-name" id="tac-team1-name">TEAM 1</span>
-          </div>
-
-          <div class="tac-roster-group">
-            <div class="tac-pos-heading">GOALKEEPER</div>
-            <div class="tac-player-list" id="tac-t1-gk">
-              <!-- Dynamically injected -->
-            </div>
-          </div>
-
-          <div class="tac-roster-group">
-            <div class="tac-pos-heading">DEFENSE</div>
-            <div class="tac-player-list" id="tac-t1-def">
-              <!-- Dynamically injected -->
-            </div>
-          </div>
-
-          <div class="tac-roster-group">
-            <div class="tac-pos-heading">MIDFIELD</div>
-            <div class="tac-player-list" id="tac-t1-mid">
-              <!-- Dynamically injected -->
-            </div>
-          </div>
-
-          <div class="tac-roster-group">
-            <div class="tac-pos-heading">ATTACK</div>
-            <div class="tac-player-list" id="tac-t1-fwd">
-              <!-- Dynamically injected -->
-            </div>
-          </div>
-        </aside>
-
-        <!-- CENTER PANEL: TACTICAL PITCH WITH LIVE 22 PLAYERS + POLYGON MESH + BALL -->
-        <main class="tac-pitch-container">
-          <div class="tac-pitch-board" id="tac-pitch-board">
-            
-            <!-- Pitch Markings SVG -->
-            <svg class="tac-pitch-svg" viewBox="0 0 800 520" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- Turf background -->
-              <rect x="0" y="0" width="800" height="520" fill="#1e7e34" />
-              <!-- Border line -->
-              <rect x="25" y="20" width="750" height="480" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2.5" />
-              <!-- Halfway line -->
-              <line x1="400" y1="20" x2="400" y2="500" stroke="rgba(255,255,255,0.75)" stroke-width="2.5" />
-              <!-- Center circle -->
-              <circle cx="400" cy="260" r="65" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2.5" />
-              <circle cx="400" cy="260" r="3.5" fill="#ffffff" />
-              <!-- Penalty Areas Left & Right -->
-              <rect x="25" y="125" width="130" height="270" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2.5" />
-              <rect x="25" y="195" width="45" height="130" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2.5" />
-              <rect x="645" y="125" width="130" height="270" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2.5" />
-              <rect x="730" y="195" width="45" height="130" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2.5" />
-              <!-- Penalty spots -->
-              <circle cx="115" cy="260" r="3" fill="#ffffff" />
-              <circle cx="685" cy="260" r="3" fill="#ffffff" />
-              <!-- Penalty Arcs -->
-              <path d="M 155 215 A 65 65 0 0 1 155 305" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2.5" />
-              <path d="M 645 215 A 65 65 0 0 0 645 305" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2.5" />
-
-              <!-- Tactical Shape Connecting Polygon Mesh & Distances -->
-              <g id="tac-mesh-group" class="tac-mesh-group"></g>
-            </svg>
-
-            <!-- Dynamic Player Tracking Nodes Layer -->
-            <div class="tac-nodes-layer" id="tac-nodes-layer">
-              <!-- 22 Player tracking nodes injected here -->
-            </div>
-
-            <!-- Dynamic Tactical Soccer Ball Node -->
-            <div class="tac-ball-node" id="tac-ball-node" style="left: 50%; top: 50%;">
-              <div class="tac-ball-dot"></div>
-              <div class="tac-ball-shadow"></div>
-              <div class="tac-ball-pulse"></div>
-            </div>
-
-            <!-- Floating Goal Action Banner -->
-            <div class="tac-goal-banner" id="tac-goal-banner" hidden>
-              <span class="tac-goal-icon"><i class="fa-solid fa-futbol"></i></span>
-              <span class="tac-goal-text" id="tac-goal-text">GOAL! L. Messi 34'</span>
-            </div>
-
-          </div>
-
-          <!-- Bottom Live Match Match Score & Playback Action Toolbar -->
-          <div class="tac-live-action-hud">
-            <div class="tac-score-box">
-              <span class="tac-team1-label" id="tac-hud-t1">ARGENTINA</span>
-              <span class="tac-live-score" id="tac-hud-score">0 - 0</span>
-              <span class="tac-team2-label" id="tac-hud-t2">FRANCE</span>
-              <span class="tac-clock-pill" id="tac-hud-clock">⏱ 0'</span>
-            </div>
-
-            <div class="tac-action-feed" id="tac-hud-action">
-              📍 ARENA TACTICAL VIEW • Ball position generated by simulation
-            </div>
-
-            <div class="tac-playback-btns">
-              <button type="button" class="tac-btn-playback" id="tac-btn-pause">PAUSE</button>
-              <button type="button" class="tac-btn-playback" id="tac-btn-speed">1x SPEED</button>
-              <button type="button" class="tac-btn-playback primary" id="tac-btn-skip">INSTANT RESULT</button>
-            </div>
-          </div>
-        </main>
-
-        <!-- RIGHT PANEL: TEAM 2 (Away - Cyan / Blue) & BALL STATUS -->
-        <aside class="tac-team-panel team-2">
-          <div class="tac-team-header away-header">
-            <span class="tac-team-badge-icon">👥</span>
-            <span class="tac-team-header-name" id="tac-team2-name">TEAM 2</span>
-          </div>
-
-          <div class="tac-roster-group">
-            <div class="tac-pos-heading">GOALKEEPER</div>
-            <div class="tac-player-list" id="tac-t2-gk">
-              <!-- Dynamically injected -->
-            </div>
-          </div>
-
-          <div class="tac-roster-group">
-            <div class="tac-pos-heading">DEFENSE</div>
-            <div class="tac-player-list" id="tac-t2-def">
-              <!-- Dynamically injected -->
-            </div>
-          </div>
-
-          <div class="tac-roster-group">
-            <div class="tac-pos-heading">MIDFIELD</div>
-            <div class="tac-player-list" id="tac-t2-mid">
-              <!-- Dynamically injected -->
-            </div>
-          </div>
-
-          <div class="tac-roster-group">
-            <div class="tac-pos-heading">ATTACK</div>
-            <div class="tac-player-list" id="tac-t2-fwd">
-              <!-- Dynamically injected -->
-            </div>
-          </div>
-
-          <!-- Bottom Ball Status Box (From Image) -->
-          <div class="tac-ball-box">
-            <div class="tac-ball-box-header">
-              <span>👥 Ball</span>
-            </div>
-            <div class="tac-ball-status-row">
-              <span class="tac-ball-status-num">99</span>
-              <span class="tac-ball-status-text" id="tac-ball-status-text">Ball (simulated position)</span>
-            </div>
-          </div>
-        </aside>
-
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Majestic Grand Championship Celebration Modal -->
-  <div id="champion-modal" class="modal celebration-modal" hidden tabindex="-1" role="dialog" aria-modal="true"
-    aria-labelledby="champ-modal-name">
-    <div class="modal-backdrop" id="champ-modal-backdrop" onclick="document.getElementById('champion-modal').hidden=true;"></div>
-    <div class="modal-dialog champ-dialog">
-      <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
-      <button type="button" id="champ-modal-close" class="modal-close-btn" aria-label="Close celebration" onclick="document.getElementById('champion-modal').hidden=true;">&times;</button>
-
-      <div class="champ-modal-content">
-        <div class="trophy-sparkle-wrap">
-          <div class="gold-aura"></div>
-          <div class="trophy-3d-stage">
-            <div class="trophy-3d-pedestal"></div>
-            <div class="trophy-3d-orbital-ring"></div>
-            <div class="trophy-3d-orbital-ring ring-secondary"></div>
-            <span class="champ-giant-trophy" id="champ-modal-trophy"><i class="fa-solid fa-trophy" aria-hidden="true"></i></span>
-          </div>
-        </div>
-        <div class="champ-headline" id="champ-modal-headline">CHAMPIONS CROWNED!</div>
-        <div class="champ-tourn-name" id="champ-modal-tourn">FIFA WORLD CUP 2026</div>
-
-        <div class="champ-team-card" id="champ-modal-team-card">
-          <div class="champ-team-flag" id="champ-modal-flag"></div>
-          <h2 class="champ-team-title" id="champ-modal-name">ARGENTINA</h2>
-          <div class="champ-tagline" id="champ-modal-tagline">GLORIOUS CHAMPIONS</div>
-          <div class="champ-hero-stats" id="champ-hero-stats">
-            <!-- Injected dynamically: Avg Goals/Match & Team Top Scorer -->
-          </div>
-        </div>
-
-        <div class="champ-stats-row" id="champ-stats-row">
-          <!-- Injected dynamically -->
-        </div>
-
-        <div class="champ-sim-receipt" id="champ-sim-receipt">
-          <div class="sim-receipt-title">SIMULATION RUN RECORD</div>
-          <div class="sim-receipt-row"><span>Competition</span><span id="champ-sim-competition">--</span></div>
-          <div class="sim-receipt-row"><span>Model</span><span>Poisson v1.0.0</span></div>
-          <div class="sim-receipt-row"><span>Seed</span><span id="champ-sim-seed">--</span></div>
-          <div class="sim-receipt-row"><span>Run ID</span><span id="champ-sim-runid">--</span></div>
-          <div class="sim-receipt-row"><span>Timestamp</span><span id="champ-sim-timestamp">--</span></div>
-          <div class="sim-receipt-row"><span>Result</span><span id="champ-sim-result">--</span></div>
-        </div>
-        <div class="champ-modal-actions">
-          <button type="button" class="champ-btn-secondary" id="champ-export-btn">EXPORT JSON</button>
-          <button type="button" class="champ-btn-secondary" id="champ-view-bracket-btn" onclick="document.getElementById('champion-modal').hidden=true;">BACK TO TOURNAMENT</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Stage Advancement Toast Notification -->
-  <div id="stage-advance-toast" class="stage-advance-toast" hidden>
-    <div class="toast-icon"><i class="fa-solid fa-bolt"></i></div>
-    <div class="toast-content">
-      <div class="toast-title" id="toast-title">STAGE COMPLETED!</div>
-      <div class="toast-desc" id="toast-desc">4 Titans advance to the Semifinals!</div>
-    </div>
-    <button type="button" class="toast-close" id="toast-close" aria-label="Dismiss toast">✕</button>
-  </div>
-
-  <!-- ============================================================
-       WORLD CUP CUSTOM DRAW MODAL (PRO HIGH-TECH FIFA EDITION)
-       ============================================================ -->
-  <div id="wc-draw-modal" class="modal wc-draw-modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="wc-draw-title">
-    <div class="modal-backdrop wc-draw-backdrop" id="wc-draw-backdrop" onclick="window.closeCustomDrawModal &amp;&amp; window.closeCustomDrawModal()"></div>
-    <div class="modal-dialog wc-draw-dialog">
-
-      <!-- Header -->
-      <div class="wc-draw-header">
-        <div class="wc-draw-header-left">
-          <div class="wc-draw-trophy-badge">🏆</div>
-          <div>
-            <div class="wc-draw-gold-tag">FIFA WORLD CUP 2026</div>
-            <h2 class="wc-draw-title" id="wc-draw-title">CUSTOM TOURNAMENT DRAW</h2>
-          </div>
-        </div>
-        <button type="button" class="wc-draw-close-btn" id="wc-draw-close" aria-label="Close draw" onclick="window.closeCustomDrawModal &amp;&amp; window.closeCustomDrawModal()">&times;</button>
-      </div>
-
-      <!-- Top HUD Toolbar: Progress Bar + Presets -->
-      <div class="wc-draw-progress-wrap">
-        <div class="wc-draw-count-row">
-          <div class="wc-draw-counter-box">
-            <span class="wc-draw-count-label">SELECTED CONTENDERS</span>
-            <span class="wc-draw-count-val"><span id="wc-draw-selected-count">0</span> <span class="wc-draw-of">/ 48</span></span>
-          </div>
-          
-          <!-- Preset Buttons -->
-          <div class="wc-draw-preset-actions">
-            <button type="button" class="wc-draw-preset-btn gold" id="wc-draw-preset-real" title="Load real FIFA 2026 Confederation Allocation">
-              <i class="fa-solid fa-globe"></i> REAL 2026
-            </button>
-            <button type="button" class="wc-draw-preset-btn" id="wc-draw-preset-elite" title="Select Top 48 Highest Rated Global Nations">
-              <i class="fa-solid fa-star"></i> TOP 48 ELITE
-            </button>
-            <button type="button" class="wc-draw-preset-btn" id="wc-draw-btn-random" title="Randomly shuffle 48 global contenders">
-              <i class="fa-solid fa-shuffle"></i> RANDOM 48
-            </button>
-            <button type="button" class="wc-draw-preset-btn danger" id="wc-draw-btn-reset" title="Clear all selections">
-              <i class="fa-solid fa-rotate-left"></i> CLEAR
-            </button>
-          </div>
-
-          <span class="wc-draw-count-tip" id="wc-draw-tip">Select 48 nations to launch</span>
-        </div>
-
-        <div class="wc-draw-progress-track">
-          <div class="wc-draw-progress-fill" id="wc-draw-progress-fill" style="width:0%"></div>
-        </div>
-      </div>
-
-      <!-- Search & Confederation Tabs Filter Bar -->
-      <div class="wc-draw-filter-bar">
-        <div class="wc-draw-search-box">
-          <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input type="text" id="wc-draw-search" class="wc-draw-search-input" placeholder="Search country (e.g. Brazil, France, Japan, USA)..." autocomplete="off" />
-        </div>
-
-        <div class="wc-draw-tabs" role="tablist" aria-label="Confederation tabs">
-          <button type="button" class="wc-draw-tab active" data-conf="all" role="tab">
-            🌐 ALL <span class="conf-pill" id="pill-all">48</span>
-          </button>
-          <button type="button" class="wc-draw-tab" data-conf="UEFA" role="tab">
-            🇪🇺 UEFA <span class="conf-pill" id="pill-uefa">0</span>
-          </button>
-          <button type="button" class="wc-draw-tab" data-conf="CONMEBOL" role="tab">
-            <i class="fa-solid fa-earth-americas" aria-hidden="true"></i> CONMEBOL <span class="conf-pill" id="pill-conmebol">0</span>
-          </button>
-          <button type="button" class="wc-draw-tab" data-conf="CONCACAF" role="tab">
-            <i class="fa-solid fa-earth-americas" aria-hidden="true"></i> CONCACAF <span class="conf-pill" id="pill-concacaf">0</span>
-          </button>
-          <button type="button" class="wc-draw-tab" data-conf="CAF" role="tab">
-            <i class="fa-solid fa-earth-africa" aria-hidden="true"></i> CAF <span class="conf-pill" id="pill-caf">0</span>
-          </button>
-          <button type="button" class="wc-draw-tab" data-conf="AFC" role="tab">
-            <i class="fa-solid fa-earth-asia" aria-hidden="true"></i> AFC <span class="conf-pill" id="pill-afc">0</span>
-          </button>
-          <button type="button" class="wc-draw-tab" data-conf="OFC" role="tab">
-            <i class="fa-solid fa-earth-oceania" aria-hidden="true"></i> OFC <span class="conf-pill" id="pill-ofc">0</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Nation Cards Grid Viewport -->
-      <div class="wc-draw-grid-wrap">
-        <div class="wc-draw-grid" id="wc-draw-grid">
-          <!-- Injected dynamically -->
-        </div>
-      </div>
-
-      <!-- Footer Actions & Simulation Launch Bar -->
-      <div class="wc-draw-footer">
-        <div class="wc-draw-footer-meta">
-          <span class="wc-hud-tag"><i class="fa-solid fa-layer-group"></i> 12 GROUPS (A–L)</span>
-          <span class="wc-hud-tag"><i class="fa-solid fa-trophy"></i> 32-TEAM KNOCKOUT</span>
-          <span class="wc-hud-tag"><i class="fa-solid fa-chart-line"></i> POISSON SIMULATION</span>
-        </div>
-
-        <button type="button" class="wc-draw-btn-start" id="wc-draw-btn-start" disabled>
-          <i class="fa-solid fa-play"></i>
-          <span>LAUNCH SIMULATION</span>
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ============================================================
-       UCL QUALIFICATION GATEWAY MODAL (DOMESTIC LEAGUES REQUIRED)
-       ============================================================ -->
-  <div id="ucl-gate-modal" class="modal ucl-gate-modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="ucl-gate-title">
-    <div class="modal-backdrop ucl-gate-backdrop" id="ucl-gate-backdrop"></div>
-    <div class="modal-dialog ucl-gate-dialog">
-      <button type="button" id="ucl-gate-close" class="modal-close-btn" aria-label="Close modal">&times;</button>
-
-      <!-- Header -->
-      <div class="ucl-gate-header">
-        <div class="ucl-gate-starball"><i class="fa-solid fa-star"></i></div>
-        <div class="ucl-gate-header-text">
-          <span class="ucl-gate-tag"><i class="fa-solid fa-lock"></i> UEFA CHAMPIONS LEAGUE // QUALIFICATION GATEWAY</span>
-          <h2 id="ucl-gate-title" class="ucl-gate-title">DOMESTIC LEAGUE SEASONS REQUIRED</h2>
-        </div>
-      </div>
-
-      <!-- Description / Explanation -->
-      <div class="ucl-gate-notice">
-        <p>
-          The <strong>UEFA Champions League</strong> features Europe's top clubs who earn qualification through their domestic league standings.
-        </p>
-        <p class="ucl-gate-subnotice">
-          To simulate the Champions League with authentic qualifiers, <strong>all domestic league seasons must conclude first</strong>.
-        </p>
-      </div>
-
-      <!-- Progress Meter -->
-      <div class="ucl-gate-progress-wrap">
-        <div class="ucl-gate-progress-header">
-          <span class="ucl-gate-progress-label"><i class="fa-solid fa-list-check"></i> DOMESTIC LEAGUES STATUS</span>
-          <span class="ucl-gate-progress-count" id="ucl-gate-progress-count">0 / 9 COMPLETED</span>
-        </div>
-        <div class="ucl-gate-progress-bar">
-          <div class="ucl-gate-progress-fill" id="ucl-gate-progress-fill" style="width: 0%;"></div>
-        </div>
-      </div>
-
-      <!-- 9 Leagues Status Grid -->
-      <div class="ucl-gate-leagues-grid" id="ucl-gate-leagues-grid">
-        <!-- Injected dynamically with league cards -->
-      </div>
-
-      <!-- Action Footer -->
-      <div class="ucl-gate-actions">
-        <button type="button" class="ucl-gate-btn-auto" id="btn-ucl-gate-auto-sim">
-          <i class="fa-solid fa-bolt"></i>
-          <span>AUTO-SIMULATE ALL LEAGUES &amp; PROCEED TO UCL</span>
-        </button>
-        <div class="ucl-gate-actions-row">
-          <button type="button" class="ucl-gate-btn-manual" id="btn-ucl-gate-go-league">
-            <i class="fa-solid fa-play"></i>
-            <span>SIMULATE PENDING LEAGUE (<span id="ucl-gate-next-league-name">PREMIER LEAGUE</span>)</span>
-          </button>
-          <button type="button" class="ucl-gate-btn-cancel" id="btn-ucl-gate-cancel">
-            <span>BACK TO UCL HOME</span>
-          </button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ============================================================
-       METHODOLOGY & DATA PROVENANCE MODAL (/data & /methodology)
-       ============================================================ -->
+  <!-- Methodology Modal -->
   <div id="methodology-modal" class="modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="methodology-modal-title">
-    <div class="modal-backdrop" id="methodology-modal-backdrop" onclick="document.getElementById('methodology-modal').hidden=true;"></div>
-    <div class="modal-dialog methodology-dialog">
-      <div class="methodology-header">
-        <div class="methodology-header-left">
-          <span class="methodology-icon"><i class="fa-solid fa-scale-balanced" aria-hidden="true"></i></span>
-          <div>
-            <h2 id="methodology-modal-title" class="methodology-title">DATA PROVENANCE &amp; SIMULATION METHODOLOGY</h2>
-            <div class="methodology-meta">MODEL: POISSON v1.0.0 // DATASET: 2024.11</div>
-          </div>
-        </div>
-        <button type="button" class="modal-close methodology-close" aria-label="Close methodology" onclick="document.getElementById('methodology-modal').hidden=true;">&times;</button>
+    <div class="modal-backdrop" id="methodology-modal-backdrop"></div>
+    <div class="modal-dialog">
+      <button type="button" class="modal-close" id="methodology-modal-close" aria-label="Close methodology">&times;</button>
+      <div class="modal-header">
+        <span class="modal-tag">METHODOLOGY</span>
+        <h2 class="modal-title" id="methodology-modal-title">Tournament Simulation Methodology</h2>
       </div>
-      <div class="methodology-body">
-        <h3 class="methodology-heading"><i class="fa-solid fa-database"></i> 1. Data Provenance &amp; Normalization</h3>
-        <p>ARENA_CORE bundles <strong>historical competition snapshots</strong> — final standings, top scorers, and team rosters from completed seasons. This data is statically embedded in the application and requires no external API.</p>
-        <p>All archived data is clearly labeled <span class="data-badge ARCHIVE_DATA">ARCHIVE DATA</span> throughout the UI. Simulated results are labeled <span class="data-badge SIMULATION">SIMULATION</span>.</p>
-        <h3 class="methodology-heading"><i class="fa-solid fa-calculator"></i> 2. Mathematical Simulation Engine</h3>
-        <p>The simulation uses a <strong>Poisson goal-distribution model</strong>. For each match, expected goals (lambda) are calculated from team attack/defense ratings, then goals are sampled independently for each team.</p>
-        <p>Knockout matches tied after 90 minutes proceed to extra time, then a penalty shootout if necessary.</p>
-        <div class="methodology-params">
-          <div class="methodology-param"><span>Distribution</span><span>Poisson</span></div>
-          <div class="methodology-param"><span>Home advantage</span><span>1.15x multiplier</span></div>
-          <div class="methodology-param"><span>Extra time</span><span>30 min (0.75x lambda)</span></div>
-          <div class="methodology-param"><span>Penalty conversion</span><span>78% success rate</span></div>
-          <div class="methodology-param"><span>Knockout tiebreaker</span><span>Extra time → Penalties</span></div>
-        </div>
-        <h3 class="methodology-heading"><i class="fa-solid fa-shield-halved"></i> 3. State Provenance Integrity</h3>
-        <p>Every simulated result is a <strong>hypothetical outcome</strong>. The model does not predict real football results. It is a mathematical simulation for educational and entertainment purposes.</p>
-      </div>
-      <div class="methodology-footer">
-        <button type="button" class="methodology-close-btn" onclick="document.getElementById('methodology-modal').hidden=true;">CLOSE</button>
+      <div class="modal-content">
+        <p>ARENA_CORE generates tournament outcomes using a Poisson goal-distribution model parameterized by team attack/defense ratings and home advantage. The simulation runs deterministically from a seeded random number generator (Mulberry32 PRNG), so identical seeds reproduce identical brackets and match scores.</p>
+        <p>Tournament formats follow official competition structures: FIFA World Cup 48-team group + knockout, UEFA Champions League Swiss league + playoffs, and standard domestic league double round-robin. Results are generated client-side only, with no external data feeds.</p>
+        <p>ARENA_CORE does not provide betting advice, live predictions, or real-time stadium tracking. All historical standings and data represent packaged snapshots.</p>
       </div>
     </div>
   </div>
-
-  <!-- Vendor Libraries: Anime.js for Spring & Stagger Animations & Canvas-Confetti for Celebrations -->
-  <script src="vendor/anime.min.js"></script>
-  <script src="vendor/confetti.browser.js"></script>
-  <!-- Real Data Layer & Application Script -->
-  <script src="data/real-tournaments.js" defer></script>
-  <script src="data/hero-videos.js" defer></script>
-  <!-- Seeded PRNG (mulberry32). Must load before state.js/app.js so that
-       window.ArenaRandom is the real implementation, not the Math.random stub. -->
-  <script src="js/random.js" defer></script>
-  <script src="js/state.js" defer></script>
-  <script src="js/router.js" defer></script>
-  <script src="js/audio-fx.js" defer></script>
-  <script src="js/motion-fx.js" defer></script>
-  <script src="app.js" defer></script>
 </body>
-
 </html>
