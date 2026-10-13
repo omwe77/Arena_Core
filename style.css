@@ -137,6 +137,112 @@
 }
 
 /* ==========================================================================
+   COMPETITION THEME TOKENS — each competition redefines --theme-* values only.
+   All themed surfaces consume these tokens, so branding stays consistent.
+   ========================================================================== */
+
+:root {
+  --theme-accent:          var(--color-accent);
+  --theme-accent-hover:    var(--color-accent-hover);
+  --theme-accent-active:   var(--color-accent-active);
+  --theme-accent-deep:     #0B8A4B;
+  --theme-accent-2:        var(--theme-accent);
+  --theme-accent-contrast: var(--text-on-accent);
+  --theme-glow:            var(--color-accent-glow);
+}
+
+/* FIFA World Cup — trophy gold with broadcast-blue secondary */
+[data-theme="wc"] {
+  --theme-accent: #F5C842; --theme-accent-hover: #FFD75E; --theme-accent-active: #D9A61F;
+  --theme-accent-deep: #8A6D1F; --theme-accent-2: #38BDF8;
+  --theme-accent-contrast: #080C0A; --theme-glow: rgba(245, 200, 66, 0.28);
+}
+
+/* UEFA Champions League — starball indigo with cyan secondary */
+[data-theme="ucl"] {
+  --theme-accent: #4361EE; --theme-accent-hover: #6472FF; --theme-accent-active: #2F49C9;
+  --theme-accent-deep: #2B3FB3; --theme-accent-2: #00E0FF;
+  --theme-accent-contrast: #FFFFFF; --theme-glow: rgba(67, 97, 238, 0.30);
+}
+
+/* Premier League — official purple */
+[data-theme="pl"] {
+  --theme-accent: #A855F7; --theme-accent-hover: #C084FC; --theme-accent-active: #8B3DE0;
+  --theme-accent-deep: #6B21A8; --theme-accent-2: #D8B4FE;
+  --theme-accent-contrast: #FFFFFF; --theme-glow: rgba(168, 85, 247, 0.28);
+}
+
+/* La Liga — red with gold secondary */
+[data-theme="laliga"] {
+  --theme-accent: #FF2B44; --theme-accent-hover: #FF5368; --theme-accent-active: #D81F35;
+  --theme-accent-deep: #C21F30; --theme-accent-2: #FFB627;
+  --theme-accent-contrast: #FFFFFF; --theme-glow: rgba(255, 43, 68, 0.28);
+}
+
+/* Serie A — broadcast blue */
+[data-theme="serieA"] {
+  --theme-accent: #00A6FF; --theme-accent-hover: #33BFFF; --theme-accent-active: #008BD6;
+  --theme-accent-deep: #0062B8; --theme-accent-2: #66CCFF;
+  --theme-accent-contrast: #FFFFFF; --theme-glow: rgba(0, 166, 255, 0.28);
+}
+
+/* Bundesliga — official red with gold secondary */
+[data-theme="bundesliga"] {
+  --theme-accent: #E30613; --theme-accent-hover: #FF1F30; --theme-accent-active: #C00513;
+  --theme-accent-deep: #A30000; --theme-accent-2: #FFCC00;
+  --theme-accent-contrast: #FFFFFF; --theme-glow: rgba(227, 6, 19, 0.28);
+}
+
+/* Ligue 1 — electric cyan */
+[data-theme="ligue1"] {
+  --theme-accent: #00E5FF; --theme-accent-hover: #4FEFFB; --theme-accent-active: #00C2DB;
+  --theme-accent-deep: #007E96; --theme-accent-2: #7FFAFF;
+  --theme-accent-contrast: #080C0A; --theme-glow: rgba(0, 229, 255, 0.28);
+}
+
+/* Liga Portugal — pitch green */
+[data-theme="ligaPortugal"] {
+  --theme-accent: #00E07E; --theme-accent-hover: #3EFF9F; --theme-accent-active: #00C368;
+  --theme-accent-deep: #009E57; --theme-accent-2: #66FFB0;
+  --theme-accent-contrast: #080C0A; --theme-glow: rgba(0, 224, 126, 0.28);
+}
+
+/* Eredivisie — orange */
+[data-theme="eredivisie"] {
+  --theme-accent: #FF8A00; --theme-accent-hover: #FFA63D; --theme-accent-active: #E07400;
+  --theme-accent-deep: #B85C00; --theme-accent-2: #FFAA44;
+  --theme-accent-contrast: #080C0A; --theme-glow: rgba(255, 138, 0, 0.28);
+}
+
+/* Süper Lig — crimson */
+[data-theme="superLig"] {
+  --theme-accent: #FF4655; --theme-accent-hover: #FF6B77; --theme-accent-active: #E02A3A;
+  --theme-accent-deep: #C2182B; --theme-accent-2: #FF8A98;
+  --theme-accent-contrast: #FFFFFF; --theme-glow: rgba(255, 70, 85, 0.28);
+}
+
+/* Scottish Premiership — azure with sky secondary */
+[data-theme="scottishPrem"] {
+  --theme-accent: #00A3E0; --theme-accent-hover: #2FB9F2; --theme-accent-active: #0086BE;
+  --theme-accent-deep: #0072A8; --theme-accent-2: #60A5FA;
+  --theme-accent-contrast: #FFFFFF; --theme-glow: rgba(0, 163, 224, 0.28);
+}
+
+/* UEFA EURO — official navy blue */
+[data-theme="euro"] {
+  --theme-accent: #1E88E5; --theme-accent-hover: #45A0F0; --theme-accent-active: #1670C7;
+  --theme-accent-deep: #005CA9; --theme-accent-2: #6EB7FF;
+  --theme-accent-contrast: #FFFFFF; --theme-glow: rgba(30, 136, 229, 0.28);
+}
+
+/* Copa América — CONMEBOL vermilion */
+[data-theme="copa"] {
+  --theme-accent: #FF6D3B; --theme-accent-hover: #FF8A5E; --theme-accent-active: #E5561F;
+  --theme-accent-deep: #B8450F; --theme-accent-2: #FFA07A;
+  --theme-accent-contrast: #080C0A; --theme-glow: rgba(255, 109, 59, 0.28);
+}
+
+/* ==========================================================================
    ARENA_CORE PRODUCT OVERHAUL — BROADCAST CONTROL ROOM & ANALYTICS STYLES
    ========================================================================== */
 
@@ -706,75 +812,42 @@ body {
   margin: 0;
   line-height: var(--line-height-tight);}
 
-[data-theme="ucl"] .sim-header-card {background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
-  border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
+/* ==========================================================================
+   COMPETITION THEME SURFACES — one rule set for all 13 competitions: every
+   themed surface consumes the --theme-* tokens redefined per competition.
+   ========================================================================== */
+
+/* Simulator hero card gets the competition tint */
+[data-theme] .sim-header-card {background: linear-gradient(135deg, color-mix(in srgb, var(--theme-accent) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
+  border-color: color-mix(in srgb, var(--theme-accent) 40%, transparent);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);}
 
-[data-theme="ucl"] .bracket-tab.active {background: var(--pitch-green) !important;
-  color: var(--color-text-inverse) !important;
-  border-color: var(--pitch-green) !important;
+[data-theme] .group-card {background: color-mix(in srgb, var(--theme-accent) 5%, var(--color-bg-card));
+  border-color: color-mix(in srgb, var(--theme-accent) 30%, transparent);}
+
+[data-theme] .group-title {color: var(--theme-accent-deep);
+  border-bottom-color: color-mix(in srgb, var(--theme-accent) 25%, transparent);}
+
+/* Active stage tab wears the competition brand */
+[data-theme] .bracket-tab.active {background: var(--theme-accent) !important;
+  color: var(--theme-accent-contrast) !important;
+  border-color: var(--theme-accent) !important;
   font-weight: var(--font-weight-black) !important;}
 
-[data-theme="ucl"] .group-card {background: color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card));
-  border-color: color-mix(in srgb, var(--pitch-green) 30%, transparent);}
+/* Primary sim action & competition dropdown follow the brand */
+[data-theme] .sim-action-btn.primary {background: var(--theme-accent);
+  color: var(--theme-accent-contrast);
+  box-shadow: 0 4px 18px var(--theme-glow);}
 
-[data-theme="ucl"] .group-title {color: var(--pitch-green);
-  border-bottom-color: color-mix(in srgb, var(--pitch-green) 25%, transparent);}
+[data-theme] .sim-action-btn.primary:hover:not(:disabled) {background: var(--theme-accent-hover);}
 
-[data-theme="laliga"] .sim-header-card {background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
-  border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);}
+[data-theme] .sim-action-btn.primary:active:not(:disabled) {background: var(--theme-accent-active);}
 
-[data-theme="laliga"] .bracket-tab.active {background: var(--pitch-green) !important;
-  color: #FFFFFF !important;
-  border-color: var(--pitch-green) !important;}
+[data-theme] .comp-dropdown-trigger[aria-expanded="true"] {border-color: var(--theme-accent);}
 
-[data-theme="pl"] .sim-header-card {background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
-  border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);}
+[data-theme] .comp-option[aria-selected="true"] {color: var(--theme-accent-deep);}
 
-[data-theme="ligue1"] .sim-header-card {background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
-  border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);}
-
-[data-theme="ligue1"] .bracket-tab.active {background: var(--pitch-green) !important;
-  color: var(--color-text-inverse) !important;
-  border-color: var(--pitch-green) !important;}
-
-[data-theme="ligaPortugal"] .sim-header-card {background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
-  border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);}
-
-[data-theme="ligaPortugal"] .bracket-tab.active {background: var(--pitch-green) !important;
-  color: var(--color-text-inverse) !important;
-  border-color: var(--pitch-green) !important;
-  font-weight: var(--font-weight-black) !important;}
-
-[data-theme="eredivisie"] .sim-header-card {background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
-  border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);}
-
-[data-theme="eredivisie"] .bracket-tab.active {background: var(--pitch-green) !important;
-  color: #FFFFFF !important;
-  border-color: var(--pitch-green) !important;
-  font-weight: var(--font-weight-black) !important;}
-
-[data-theme="superLig"] .sim-header-card {background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
-  border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);}
-
-[data-theme="superLig"] .bracket-tab.active {background: var(--pitch-green) !important;
-  color: #FFFFFF !important;
-  border-color: var(--pitch-green) !important;
-  font-weight: var(--font-weight-black) !important;}
-
-[data-theme="scottishPrem"] .sim-header-card {background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-green) 5%, var(--color-bg-card)) 0%, var(--color-bg-card) 100%);
-  border-color: color-mix(in srgb, var(--pitch-green) 40%, transparent);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);}
-
-[data-theme="scottishPrem"] .bracket-tab.active {background: var(--pitch-green) !important;
-  color: #FFFFFF !important;
-  border-color: var(--pitch-green) !important;
-  font-weight: var(--font-weight-black) !important;}
+[data-theme] .comp-option[aria-selected="true"] .comp-option-mark {background: var(--theme-accent);}
 
 .site-header {background: var(--color-bg-elevated);
   border-bottom: 1px solid var(--color-border-default);
@@ -10719,9 +10792,9 @@ border-color: #facc15;
 .group-table tbody td,
 .tech-table tbody td {transition: background 0.22s cubic-bezier(0.16, 1, 0.3, 1), color 0.22s ease, border-color 0.22s ease !important;}
 
-.copa-cyber-table tbody tr:hover td {background: rgba(220, 38, 38, 0.24) !important;}
+.copa-cyber-table tbody tr:hover td {background: color-mix(in srgb, var(--theme-accent) 24%, transparent) !important;}
 
-.copa-cyber-table tbody tr:hover td:first-child {border-left: 3.5px solid #EF4444 !important;
+.copa-cyber-table tbody tr:hover td:first-child {border-left: 3.5px solid var(--theme-accent) !important;
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;}
 
@@ -10729,11 +10802,11 @@ border-color: #facc15;
   border-bottom-right-radius: 6px;}
 
 .copa-cyber-table tbody tr:hover td.team-col strong {color: #FFFFFF !important;
-  text-shadow: 0 0 10px rgba(245, 158, 11, 0.9);}
+  text-shadow: 0 0 10px color-mix(in srgb, var(--theme-accent) 85%, transparent);}
 
-.euro-cyber-table tbody tr:hover td {background: rgba(0, 102, 255, 0.24) !important;}
+.euro-cyber-table tbody tr:hover td {background: color-mix(in srgb, var(--theme-accent) 24%, transparent) !important;}
 
-.euro-cyber-table tbody tr:hover td:first-child {border-left: 3.5px solid #0099FF !important;
+.euro-cyber-table tbody tr:hover td:first-child {border-left: 3.5px solid var(--theme-accent) !important;
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;}
 
@@ -10741,11 +10814,11 @@ border-color: #facc15;
   border-bottom-right-radius: 6px;}
 
 .euro-cyber-table tbody tr:hover td.team-col strong {color: #FFFFFF !important;
-  text-shadow: 0 0 10px rgba(0, 153, 255, 0.9);}
+  text-shadow: 0 0 10px color-mix(in srgb, var(--theme-accent) 85%, transparent);}
 
-.ucl-cyber-table tbody tr:hover td {background: rgba(0, 240, 255, 0.18) !important;}
+.ucl-cyber-table tbody tr:hover td {background: color-mix(in srgb, var(--theme-accent) 20%, transparent) !important;}
 
-.ucl-cyber-table tbody tr:hover td:first-child {border-left: 3.5px solid #00F0FF !important;
+.ucl-cyber-table tbody tr:hover td:first-child {border-left: 3.5px solid var(--theme-accent) !important;
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;}
 
@@ -10753,13 +10826,13 @@ border-color: #facc15;
   border-bottom-right-radius: 6px;}
 
 .ucl-cyber-table tbody tr:hover .team-col {color: #FFFFFF !important;
-  text-shadow: 0 0 10px rgba(0, 240, 255, 0.9);}
+  text-shadow: 0 0 10px color-mix(in srgb, var(--theme-accent) 85%, transparent);}
 
 .pl-widget-table tbody tr:hover td,
-.pl-widget-table tbody tr[class*="pl-row-pos"]:hover td {background: rgba(0, 255, 135, 0.16) !important;}
+.pl-widget-table tbody tr[class*="pl-row-pos"]:hover td {background: color-mix(in srgb, var(--theme-accent) 20%, transparent) !important;}
 
 .pl-widget-table tbody tr:hover td:first-child,
-.pl-widget-table tbody tr[class*="pl-row-pos"]:hover td:first-child {border-left: 3.5px solid #00FF87 !important;
+.pl-widget-table tbody tr[class*="pl-row-pos"]:hover td:first-child {border-left: 3.5px solid var(--theme-accent) !important;
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;}
 
@@ -10767,16 +10840,14 @@ border-color: #facc15;
 .pl-widget-table tbody tr[class*="pl-row-pos"]:hover td:last-child {border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;}
 
-.pl-widget-table tbody tr:hover td:nth-child(2) span {color: #00FF87 !important;
-  text-shadow: 0 0 10px rgba(0, 255, 135, 0.8);}
+.pl-widget-table tbody tr:hover td:nth-child(2) span {color: var(--theme-accent-2) !important;
+  text-shadow: 0 0 10px color-mix(in srgb, var(--theme-accent-2) 80%, transparent);}
 
 .seriea-widget-table tbody tr:hover td,
-.seriea-widget-table tbody tr[class*="sa-row-pos"]:hover td,
-[data-theme="serieA"] .widget-table tbody tr:hover td {background: rgba(0, 166, 255, 0.18) !important;}
+.seriea-widget-table tbody tr[class*="sa-row-pos"]:hover td {background: color-mix(in srgb, var(--theme-accent) 20%, transparent) !important;}
 
 .seriea-widget-table tbody tr:hover td:first-child,
-.seriea-widget-table tbody tr[class*="sa-row-pos"]:hover td:first-child,
-[data-theme="serieA"] .widget-table tbody tr:hover td:first-child {border-left: 3.5px solid #00A6FF !important;
+.seriea-widget-table tbody tr[class*="sa-row-pos"]:hover td:first-child {border-left: 3.5px solid var(--theme-accent) !important;
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;}
 
@@ -10785,17 +10856,14 @@ border-color: #facc15;
 [data-theme="serieA"] .widget-table tbody tr:hover td:last-child {border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;}
 
-.seriea-widget-table tbody tr:hover td:nth-child(2) span,
-[data-theme="serieA"] .widget-table tbody tr:hover td:nth-child(2) span {color: #00A6FF !important;
-  text-shadow: 0 0 10px rgba(0, 166, 255, 0.8);}
+.seriea-widget-table tbody tr:hover td:nth-child(2) span {color: var(--theme-accent-2) !important;
+  text-shadow: 0 0 10px color-mix(in srgb, var(--theme-accent-2) 80%, transparent);}
 
 .bundesliga-widget-table tbody tr:hover td,
-.bundesliga-widget-table tbody tr[class*="bl-row-pos"]:hover td,
-[data-theme="bundesliga"] .widget-table tbody tr:hover td {background: rgba(210, 5, 29, 0.22) !important;}
+.bundesliga-widget-table tbody tr[class*="bl-row-pos"]:hover td {background: color-mix(in srgb, var(--theme-accent) 20%, transparent) !important;}
 
 .bundesliga-widget-table tbody tr:hover td:first-child,
-.bundesliga-widget-table tbody tr[class*="bl-row-pos"]:hover td:first-child,
-[data-theme="bundesliga"] .widget-table tbody tr:hover td:first-child {border-left: 3.5px solid #D2051E !important;
+.bundesliga-widget-table tbody tr[class*="bl-row-pos"]:hover td:first-child {border-left: 3.5px solid var(--theme-accent) !important;
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;}
 
@@ -10804,17 +10872,14 @@ border-color: #facc15;
 [data-theme="bundesliga"] .widget-table tbody tr:hover td:last-child {border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;}
 
-.bundesliga-widget-table tbody tr:hover td:nth-child(2) span,
-[data-theme="bundesliga"] .widget-table tbody tr:hover td:nth-child(2) span {color: #FFCC00 !important;
-  text-shadow: 0 0 10px rgba(255, 204, 0, 0.8);}
+.bundesliga-widget-table tbody tr:hover td:nth-child(2) span {color: var(--theme-accent-2) !important;
+  text-shadow: 0 0 10px color-mix(in srgb, var(--theme-accent-2) 80%, transparent);}
 
 .ligue1-widget-table tbody tr:hover td,
-.ligue1-widget-table tbody tr[class*="l1-row-pos"]:hover td,
-[data-theme="ligue1"] .widget-table tbody tr:hover td {background: rgba(0, 240, 255, 0.18) !important;}
+.ligue1-widget-table tbody tr[class*="l1-row-pos"]:hover td {background: color-mix(in srgb, var(--theme-accent) 20%, transparent) !important;}
 
 .ligue1-widget-table tbody tr:hover td:first-child,
-.ligue1-widget-table tbody tr[class*="l1-row-pos"]:hover td:first-child,
-[data-theme="ligue1"] .widget-table tbody tr:hover td:first-child {border-left: 3.5px solid #00F0FF !important;
+.ligue1-widget-table tbody tr[class*="l1-row-pos"]:hover td:first-child {border-left: 3.5px solid var(--theme-accent) !important;
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;}
 
@@ -10823,17 +10888,14 @@ border-color: #facc15;
 [data-theme="ligue1"] .widget-table tbody tr:hover td:last-child {border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;}
 
-.ligue1-widget-table tbody tr:hover td:nth-child(2) span,
-[data-theme="ligue1"] .widget-table tbody tr:hover td:nth-child(2) span {color: #00F0FF !important;
-  text-shadow: 0 0 10px rgba(0, 240, 255, 0.8);}
+.ligue1-widget-table tbody tr:hover td:nth-child(2) span {color: var(--theme-accent-2) !important;
+  text-shadow: 0 0 10px color-mix(in srgb, var(--theme-accent-2) 80%, transparent);}
 
 .ligaportugal-widget-table tbody tr:hover td,
-.ligaportugal-widget-table tbody tr[class*="lp-row-pos"]:hover td,
-[data-theme="ligaPortugal"] .widget-table tbody tr:hover td {background: rgba(0, 255, 133, 0.18) !important;}
+.ligaportugal-widget-table tbody tr[class*="lp-row-pos"]:hover td {background: color-mix(in srgb, var(--theme-accent) 20%, transparent) !important;}
 
 .ligaportugal-widget-table tbody tr:hover td:first-child,
-.ligaportugal-widget-table tbody tr[class*="lp-row-pos"]:hover td:first-child,
-[data-theme="ligaPortugal"] .widget-table tbody tr:hover td:first-child {border-left: 3.5px solid #00FF85 !important;
+.ligaportugal-widget-table tbody tr[class*="lp-row-pos"]:hover td:first-child {border-left: 3.5px solid var(--theme-accent) !important;
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;}
 
@@ -10842,17 +10904,14 @@ border-color: #facc15;
 [data-theme="ligaPortugal"] .widget-table tbody tr:hover td:last-child {border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;}
 
-.ligaportugal-widget-table tbody tr:hover td:nth-child(2) span,
-[data-theme="ligaPortugal"] .widget-table tbody tr:hover td:nth-child(2) span {color: #00FF85 !important;
-  text-shadow: 0 0 10px rgba(0, 255, 133, 0.8);}
+.ligaportugal-widget-table tbody tr:hover td:nth-child(2) span {color: var(--theme-accent-2) !important;
+  text-shadow: 0 0 10px color-mix(in srgb, var(--theme-accent-2) 80%, transparent);}
 
 .eredivisie-widget-table tbody tr:hover td,
-.eredivisie-widget-table tbody tr[class*="ed-row-pos"]:hover td,
-[data-theme="eredivisie"] .widget-table tbody tr:hover td {background: rgba(255, 119, 0, 0.22) !important;}
+.eredivisie-widget-table tbody tr[class*="ed-row-pos"]:hover td {background: color-mix(in srgb, var(--theme-accent) 20%, transparent) !important;}
 
 .eredivisie-widget-table tbody tr:hover td:first-child,
-.eredivisie-widget-table tbody tr[class*="ed-row-pos"]:hover td:first-child,
-[data-theme="eredivisie"] .widget-table tbody tr:hover td:first-child {border-left: 3.5px solid #FF7700 !important;
+.eredivisie-widget-table tbody tr[class*="ed-row-pos"]:hover td:first-child {border-left: 3.5px solid var(--theme-accent) !important;
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;}
 
@@ -10861,17 +10920,14 @@ border-color: #facc15;
 [data-theme="eredivisie"] .widget-table tbody tr:hover td:last-child {border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;}
 
-.eredivisie-widget-table tbody tr:hover td:nth-child(2) span,
-[data-theme="eredivisie"] .widget-table tbody tr:hover td:nth-child(2) span {color: #FFAA44 !important;
-  text-shadow: 0 0 10px rgba(255, 170, 68, 0.8);}
+.eredivisie-widget-table tbody tr:hover td:nth-child(2) span {color: var(--theme-accent-2) !important;
+  text-shadow: 0 0 10px color-mix(in srgb, var(--theme-accent-2) 80%, transparent);}
 
 .superlig-widget-table tbody tr:hover td,
-.superlig-widget-table tbody tr[class*="sl-row-pos"]:hover td,
-[data-theme="superLig"] .widget-table tbody tr:hover td {background: rgba(227, 10, 23, 0.22) !important;}
+.superlig-widget-table tbody tr[class*="sl-row-pos"]:hover td {background: color-mix(in srgb, var(--theme-accent) 20%, transparent) !important;}
 
 .superlig-widget-table tbody tr:hover td:first-child,
-.superlig-widget-table tbody tr[class*="sl-row-pos"]:hover td:first-child,
-[data-theme="superLig"] .widget-table tbody tr:hover td:first-child {border-left: 3.5px solid #E30A17 !important;
+.superlig-widget-table tbody tr[class*="sl-row-pos"]:hover td:first-child {border-left: 3.5px solid var(--theme-accent) !important;
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;}
 
@@ -10880,17 +10936,14 @@ border-color: #facc15;
 [data-theme="superLig"] .widget-table tbody tr:hover td:last-child {border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;}
 
-.superlig-widget-table tbody tr:hover td:nth-child(2) span,
-[data-theme="superLig"] .widget-table tbody tr:hover td:nth-child(2) span {color: #FF4D58 !important;
-  text-shadow: 0 0 10px rgba(255, 77, 88, 0.8);}
+.superlig-widget-table tbody tr:hover td:nth-child(2) span {color: var(--theme-accent-2) !important;
+  text-shadow: 0 0 10px color-mix(in srgb, var(--theme-accent-2) 80%, transparent);}
 
 .scottishprem-widget-table tbody tr:hover td,
-.scottishprem-widget-table tbody tr[class*="row-pos"]:hover td,
-[data-theme="scottishPrem"] .widget-table tbody tr:hover td {background: rgba(0, 148, 255, 0.20) !important;}
+.scottishprem-widget-table tbody tr[class*="row-pos"]:hover td {background: color-mix(in srgb, var(--theme-accent) 20%, transparent) !important;}
 
 .scottishprem-widget-table tbody tr:hover td:first-child,
-.scottishprem-widget-table tbody tr[class*="row-pos"]:hover td:first-child,
-[data-theme="scottishPrem"] .widget-table tbody tr:hover td:first-child {border-left: 3.5px solid #0094FF !important;
+.scottishprem-widget-table tbody tr[class*="row-pos"]:hover td:first-child {border-left: 3.5px solid var(--theme-accent) !important;
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;}
 
@@ -10899,19 +10952,14 @@ border-color: #facc15;
 [data-theme="scottishPrem"] .widget-table tbody tr:hover td:last-child {border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;}
 
-.scottishprem-widget-table tbody tr:hover td:nth-child(2) span,
-[data-theme="scottishPrem"] .widget-table tbody tr:hover td:nth-child(2) span {color: #60A5FA !important;
-  text-shadow: 0 0 10px rgba(96, 165, 250, 0.8);}
+.scottishprem-widget-table tbody tr:hover td:nth-child(2) span {color: var(--theme-accent-2) !important;
+  text-shadow: 0 0 10px color-mix(in srgb, var(--theme-accent-2) 80%, transparent);}
 
-.widget-table tbody tr:hover td,
-.widget-table tbody tr[class*="row-pos"]:hover td,
 [data-theme="laliga"] .widget-table tbody tr:hover td,
-[data-theme="laliga"] .widget-table tbody tr[class*="row-pos"]:hover td {background: rgba(255, 43, 68, 0.20) !important;}
+.widget-table tbody tr[class*="row-pos"]:hover td {background: color-mix(in srgb, var(--theme-accent) 20%, transparent) !important;}
 
-.widget-table tbody tr:hover td:first-child,
-.widget-table tbody tr[class*="row-pos"]:hover td:first-child,
 [data-theme="laliga"] .widget-table tbody tr:hover td:first-child,
-[data-theme="laliga"] .widget-table tbody tr[class*="row-pos"]:hover td:first-child {border-left: 3.5px solid #FF2B44 !important;
+.widget-table tbody tr[class*="row-pos"]:hover td:first-child {border-left: 3.5px solid var(--theme-accent) !important;
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;}
 
@@ -10921,9 +10969,8 @@ border-color: #facc15;
 [data-theme="laliga"] .widget-table tbody tr[class*="row-pos"]:hover td:last-child {border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;}
 
-.widget-table tbody tr:hover td:nth-child(2) span,
-[data-theme="laliga"] .widget-table tbody tr:hover td:nth-child(2) span {color: #FF6B81 !important;
-  text-shadow: 0 0 10px rgba(255, 107, 129, 0.8);}
+[data-theme="laliga"] .widget-table tbody tr:hover td:nth-child(2) span {color: var(--theme-accent-2) !important;
+  text-shadow: 0 0 10px color-mix(in srgb, var(--theme-accent-2) 80%, transparent);}
 
 .group-table tbody tr:hover td,
 .tech-table tbody tr:hover td {background: rgba(0, 230, 118, 0.16) !important;}
