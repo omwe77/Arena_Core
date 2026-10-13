@@ -145,18 +145,18 @@
   display: none !important;
 }
 
-/* Broadcast Control Room Header — pitch track & striker runner visible */
-.header-pitch-track {opacity: 0.35;}
+/* Broadcast Control Room Header — fully visible pitch track & striker runner */
+.header-pitch-track { opacity: 1.0 !important; filter: drop-shadow(0 8px 24px rgba(0, 232, 122, 0.5)); }
 
-.pitch-grass-texture-real {display: block; opacity: 0.85;}
+.pitch-grass-texture-real { display: block; opacity: 0.95; }
 
 .pitch-touchline,
 .pitch-marking-center,
 .pitch-penalty-arc,
 .pitch-corner-flag,
-.pitch-floodlight {display: block;}
+.pitch-floodlight { display: block; }
 
-.arena-pitch-actor {display: flex;}
+.arena-pitch-actor { display: flex; }
 
 /* Arcad mascot / runner / particles: visible and animated in broadcast mode */
 .arena-pitch-actor,
@@ -329,50 +329,58 @@
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: var(--color-accent);
-  background: var(--color-accent-subtle);
-  border: 1px solid rgba(0, 232, 122, 0.25);
-  padding: 5px 12px;
+  color: #00E87A;
+  background: rgba(0, 232, 122, 0.12);
+  border: 1px solid rgba(0, 232, 122, 0.4);
+  padding: 6px 14px;
   border-radius: 999px;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
   text-transform: uppercase;
 }
 
 .home-hero-badge::before {
   content: '';
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: var(--color-accent);
-  box-shadow: 0 0 8px var(--color-accent);
+  background: #00E87A;
+  box-shadow: 0 0 12px #00E87A;
 }
 
 .home-hero-title {
   font-family: var(--font-display);
-  font-size: clamp(2.4rem, 4.8vw, 3.6rem);
+  font-size: clamp(2.8rem, 5.2vw, 4.2rem);
   font-weight: 800;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   color: #FFFFFF;
-  line-height: 1.1;
-  margin-bottom: 6px;
+  line-height: 1.05;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
 }
 
 .home-hero-sub-title {
   font-family: var(--font-body);
-  font-size: clamp(1.15rem, 2.2vw, 1.45rem);
-  font-weight: 600;
-  color: var(--color-accent);
-  margin-bottom: 14px;
+  font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+  font-weight: 700;
+  color: #00E87A;
+  margin-bottom: 16px;
   letter-spacing: 0.01em;
 }
 
 .home-hero-sub {
   font-family: var(--font-body);
-  font-size: 0.98rem;
-  line-height: 1.65;
+  font-size: 1.05rem;
+  line-height: 1.7;
   color: var(--color-text-secondary);
   max-width: 740px;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
+}
+
+.home-cta-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
 }
 
 .home-actions {
