@@ -1595,6 +1595,8 @@ function setupNavigation() {
         if (tournamentKeys[keyIndex]) {
           e.preventDefault();
           selectTournament(tournamentKeys[keyIndex]);
+          // Land on the newly selected competition's home, not the previous tab.
+          switchView('tournament-home');
         }
       }
 
@@ -1696,6 +1698,9 @@ function setupNavigation() {
       menu.querySelectorAll('.comp-option').forEach(opt => {
         opt.addEventListener('click', () => {
           selectTournament(opt.dataset.tourn);
+          // Take the user straight to the selected competition's home page
+          // instead of leaving them on whatever tab they were viewing.
+          switchView('tournament-home');
           closeCompetitionDropdown();
         });
       });

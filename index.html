@@ -22,33 +22,75 @@
 <body>
   <!-- Top Broadcast Header of ARENA_CORE Striker -->
   <header class="site-header">
-    <!-- Header Mini Stadium Turf Pitch Strip with Realistic Grass Blades -->
-    <div class="header-pitch-track">
-      <div class="pitch-grass-track">
-        <div class="pitch-turf-stripes"></div>
-        <div class="pitch-grass-texture-real"></div>
-        <div class="pitch-pitchline top"></div>
-        <div class="pitch-pitchline bottom"></div>
-        <div class="pitch-pitchline center"></div>
-        <div class="pitch-penalty-arc left"></div>
-        <div class="pitch-penalty-arc right"></div>
-        <div class="pitch-corner-flag left">🚩</div>
-        <div class="pitch-corner-flag right">🚩</div>
-        <div class="pitch-floodlight left"></div>
-        <div class="pitch-floodlight right"></div>
-      </div>
-      <div class="pitch-stadium-actor">
-        <div class="stadium-goalkeeper">
-          <div class="stadium-goalkeeper-svg"></div>
-          <div class="stadium-goalpost"></div>
-          <div class="stadium-goalpost-back"></div>
+    <!-- Header Mini Stadium Turf Pitch Track with Realistic Grass Blades -->
+    <div class="header-pitch-track" id="header-pitch-track">
+      <div class="pitch-turf-stripes"></div>
+      <div class="pitch-grass-texture-real"></div>
+      <div class="pitch-touchline top-line"></div>
+      <div class="pitch-touchline bottom-line"></div>
+      <div class="pitch-marking-center"></div>
+      <div class="pitch-penalty-arc left-arc"></div>
+      <div class="pitch-penalty-arc right-arc"></div>
+      <div class="pitch-corner-flag flag-left">🚩</div>
+      <div class="pitch-corner-flag flag-right">🚩</div>
+      <div class="pitch-floodlight left-floodlight"></div>
+      <div class="pitch-floodlight right-floodlight"></div>
+
+      <!-- Animated ARENA_CORE Striker Runner & Dynamic Soccer Ball -->
+      <div class="arena-pitch-actor" id="arena-pitch-actor" role="button" tabindex="0" title="Click striker to trigger Power Shot" aria-label="Click striker to trigger Power Shot">
+        <div class="arena-sprite-container">
+          <svg class="arena-svg" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="arena-glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="var(--arena-glow, rgba(46,204,113,0.6))" />
+              </filter>
+            </defs>
+            <g filter="url(#arena-glow)">
+              <g class="arena-limb arena-arm-left">
+                <path d="M25 38 C18 40, 14 44, 13 48 C15 50, 19 48, 22 43 Z" fill="var(--arena-kit-primary, #00D4FF)" stroke="#111" stroke-width="1.1"/>
+                <ellipse cx="12" cy="49" rx="3.5" ry="3.5" fill="#FFFFFF" stroke="#111" stroke-width="1"/>
+              </g>
+              <g class="arena-limb arena-leg-left">
+                <path d="M26 48 C23 53, 21 57, 24 59 C28 59, 29 55, 30 50 Z" fill="var(--arena-kit-secondary, #0066FF)" stroke="#111" stroke-width="1.1"/>
+                <path d="M22 57 C17 59, 16 63, 21 64 C25 64, 28 61, 28 57 Z" fill="#1a1a2e" stroke="#111" stroke-width="1.2"/>
+              </g>
+              <g class="arena-torso-head">
+                <path d="M22 23 C18 27, 20 34, 25 35 C23 32, 23 27, 26 24 Z" fill="#1a1a2e" stroke="#111" stroke-width="1"/>
+                <path class="arena-shorts-fill" d="M26 46 C24 51, 26 55, 34 55 C37 55, 37 53, 40 53 C43 53, 43 55, 47 55 C50 54, 49 48, 45 46 Z" fill="var(--arena-kit-secondary, #0066FF)" stroke="#111" stroke-width="1.2"/>
+                <circle cx="30" cy="46" r="1.6" fill="#FFD700" stroke="#111" stroke-width="0.8"/>
+                <circle cx="41" cy="46" r="1.6" fill="#FFD700" stroke="#111" stroke-width="0.8"/>
+                <path class="arena-jersey-fill" d="M26 36 C24 40, 23 46, 27 49 C32 51, 42 50, 45 45 C47 41, 45 36, 42 36 Z" fill="var(--arena-kit-primary, #00D4FF)" stroke="#111" stroke-width="1.2"/>
+                <path class="arena-jersey-stripe" d="M31 36 C34 41, 38 41, 41 36" stroke="var(--arena-kit-secondary, #FFD700)" stroke-width="2.5" fill="none"/>
+                <ellipse cx="36" cy="28" rx="11" ry="9" fill="#F5D0A9" stroke="#111" stroke-width="1.2"/>
+                <ellipse cx="44" cy="27" rx="4.5" ry="3.5" fill="#F5D0A9" stroke="#111" stroke-width="1"/>
+                <ellipse cx="38" cy="24" rx="2.5" ry="3.5" fill="#FFFFFF" stroke="#111" stroke-width="0.9"/>
+                <circle cx="39" cy="24" r="1.6" fill="#007ACC"/>
+                <ellipse cx="27" cy="27" rx="2.8" ry="3.5" fill="#F5D0A9" stroke="#111" stroke-width="0.9"/>
+                <path class="arena-cap-fill" d="M18 22 C18 13, 44 11, 52 18 C56 22, 58 27, 46 27 C38 27, 24 27, 18 22 Z" fill="var(--arena-cap, #00D4FF)" stroke="#111" stroke-width="1.2"/>
+                <path class="arena-cap-visor" d="M38 24 C46 24, 60 25, 62 29 C56 31, 42 30, 36 27 Z" fill="var(--arena-cap-dark, #004466)" stroke="#111" stroke-width="1"/>
+                <circle cx="33" cy="20" r="5" fill="#FFFFFF" stroke="#111" stroke-width="0.9"/>
+                <text x="31" y="21.5" font-family="'Chakra Petch', sans-serif" font-weight="900" font-size="7" fill="var(--arena-cap, #00D4FF)">A</text>
+              </g>
+              <g class="arena-limb arena-leg-right">
+                <path d="M38 48 C41 53, 44 57, 48 57 C51 55, 49 50, 44 48 Z" fill="var(--arena-kit-secondary, #0066FF)" stroke="#111" stroke-width="1.1"/>
+                <path d="M42 55 C42 59, 46 63, 51 63 C55 61, 54 57, 49 55 Z" fill="#1a1a2e" stroke="#111" stroke-width="1.2"/>
+              </g>
+              <g class="arena-limb arena-arm-right">
+                <path d="M45 38 C50 38, 55 41, 56 45 C54 47, 50 46, 46 43 Z" fill="var(--arena-kit-primary, #00D4FF)" stroke="#111" stroke-width="1.1"/>
+                <ellipse cx="57" cy="46" rx="3.5" ry="3.5" fill="#FFFFFF" stroke="#111" stroke-width="1"/>
+              </g>
+            </g>
+          </svg>
+          <div class="arena-drop-shadow"></div>
+          <div class="grass-blade b1"></div>
+          <div class="grass-blade b2"></div>
+          <div class="grass-blade b3"></div>
+          <div class="arena-soccer-ball-wrap">
+            <div class="arena-ball-element"></div>
+            <div class="ball-fire-trail"></div>
+          </div>
+          <div class="arena-action-bubble">POWER SHOT!</div>
         </div>
-        <div class="stadium-soccer-ball">
-          <div class="stadium-soccer-ball-ball"></div>
-          <div class="stadium-soccer-ball-shadow"></div>
-          <div class="stadium-soccer-ball-fire"></div>
-        </div>
-        <div class="stadium-goal-bubble">GOAL!</div>
       </div>
     </div>
 
@@ -97,10 +139,31 @@
         <i class="fa-solid fa-volume-high" id="audio-icon"></i>
         <span class="audio-label" id="audio-label">SFX ON</span>
       </button>
-      <span class="data-mode-badge" id="data-mode">ARCHIVE DATA</span>
+      <span class="data-mode-badge" id="global-data-mode" aria-live="polite">
+        <span class="mode-pulse"></span>
+        <span class="mode-text" id="global-data-mode-text">ARCHIVE DATA</span>
+      </span>
       <div class="arena-status" id="arena-status"></div>
     </div>
   </header>
+
+  <!-- Contextual competition selector (shown on competition-scoped views) -->
+  <nav class="competition-selector-bar" id="competition-selector-bar" aria-label="Competition selector" hidden>
+    <div class="comp-selector-inner">
+      <span class="comp-selector-label" id="comp-selector-label">COMPETITION</span>
+      <div class="comp-dropdown" id="comp-dropdown">
+        <button type="button" class="comp-dropdown-trigger" id="comp-dropdown-trigger" aria-haspopup="listbox"
+          aria-expanded="false" aria-controls="comp-dropdown-menu" aria-labelledby="comp-selector-label comp-current-name">
+          <span class="comp-mark" id="comp-current-mark" aria-hidden="true"></span>
+          <span class="comp-current-name" id="comp-current-name">FIFA WORLD CUP</span>
+          <i class="fa-solid fa-chevron-down comp-caret" aria-hidden="true"></i>
+        </button>
+        <div class="comp-dropdown-menu" id="comp-dropdown-menu" role="listbox" aria-label="Select competition" hidden>
+          <!-- populated by updateCompetitionSelector() -->
+        </div>
+      </div>
+    </div>
+  </nav>
 
   <div class="page-content">
 
@@ -179,8 +242,8 @@
 
         <div class="sim-header-card">
           <div class="sim-header-info">
-            <div class="season-badge-line">
-              <span class="season-badge ARCHIVE_DATA" id="season-badge">SEASON: --</span>
+            <div class="data-badge-line">
+              <span class="data-badge ARCHIVE_DATA" id="hero-season-badge">SEASON: --</span>
             </div>
             <h2 id="active-tourn-title" class="tourn-title">FIFA WORLD CUP 2026</h2>
             <p id="active-tourn-desc" class="tourn-desc">Simulate 48 global national contenders across 12 groups (A–L), 32-team knockout bracket, and crown the hypothetical world champion!</p>
@@ -367,6 +430,109 @@
   </div>
 
   <!-- Methodology Modal -->
+  <div id="wc-draw-modal" class="modal wc-draw-modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="wc-draw-title">
+    <div class="modal-backdrop wc-draw-backdrop" id="wc-draw-backdrop" onclick="window.closeCustomDrawModal &amp;&amp; window.closeCustomDrawModal()"></div>
+    <div class="modal-dialog wc-draw-dialog">
+
+      <!-- Header -->
+      <div class="wc-draw-header">
+        <div class="wc-draw-header-left">
+          <div class="wc-draw-trophy-badge">🏆</div>
+          <div>
+            <div class="wc-draw-gold-tag">FIFA WORLD CUP 2026</div>
+            <h2 class="wc-draw-title" id="wc-draw-title">CUSTOM TOURNAMENT DRAW</h2>
+          </div>
+        </div>
+        <button type="button" class="wc-draw-close-btn" id="wc-draw-close" aria-label="Close draw" onclick="window.closeCustomDrawModal &amp;&amp; window.closeCustomDrawModal()">&times;</button>
+      </div>
+
+      <!-- Top HUD Toolbar: Progress Bar + Presets -->
+      <div class="wc-draw-progress-wrap">
+        <div class="wc-draw-count-row">
+          <div class="wc-draw-counter-box">
+            <span class="wc-draw-count-label">SELECTED CONTENDERS</span>
+            <span class="wc-draw-count-val"><span id="wc-draw-selected-count">0</span> <span class="wc-draw-of">/ 48</span></span>
+          </div>
+          
+          <!-- Preset Buttons -->
+          <div class="wc-draw-preset-actions">
+            <button type="button" class="wc-draw-preset-btn gold" id="wc-draw-preset-real" title="Load real FIFA 2026 Confederation Allocation">
+              <i class="fa-solid fa-globe"></i> REAL 2026
+            </button>
+            <button type="button" class="wc-draw-preset-btn" id="wc-draw-preset-elite" title="Select Top 48 Highest Rated Global Nations">
+              <i class="fa-solid fa-star"></i> TOP 48 ELITE
+            </button>
+            <button type="button" class="wc-draw-preset-btn" id="wc-draw-btn-random" title="Randomly shuffle 48 global contenders">
+              <i class="fa-solid fa-shuffle"></i> RANDOM 48
+            </button>
+            <button type="button" class="wc-draw-preset-btn danger" id="wc-draw-btn-reset" title="Clear all selections">
+              <i class="fa-solid fa-rotate-left"></i> CLEAR
+            </button>
+          </div>
+
+          <span class="wc-draw-count-tip" id="wc-draw-tip">Select 48 nations to launch</span>
+        </div>
+
+        <div class="wc-draw-progress-track">
+          <div class="wc-draw-progress-fill" id="wc-draw-progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- Search & Confederation Tabs Filter Bar -->
+      <div class="wc-draw-filter-bar">
+        <div class="wc-draw-search-box">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="wc-draw-search" class="wc-draw-search-input" placeholder="Search country (e.g. Brazil, France, Japan, USA)..." autocomplete="off" />
+        </div>
+
+        <div class="wc-draw-tabs" role="tablist" aria-label="Confederation tabs">
+          <button type="button" class="wc-draw-tab active" data-conf="all" role="tab">
+            🌐 ALL <span class="conf-pill" id="pill-all">48</span>
+          </button>
+          <button type="button" class="wc-draw-tab" data-conf="UEFA" role="tab">
+            🇪🇺 UEFA <span class="conf-pill" id="pill-uefa">0</span>
+          </button>
+          <button type="button" class="wc-draw-tab" data-conf="CONMEBOL" role="tab">
+            <i class="fa-solid fa-earth-americas" aria-hidden="true"></i> CONMEBOL <span class="conf-pill" id="pill-conmebol">0</span>
+          </button>
+          <button type="button" class="wc-draw-tab" data-conf="CONCACAF" role="tab">
+            <i class="fa-solid fa-earth-americas" aria-hidden="true"></i> CONCACAF <span class="conf-pill" id="pill-concacaf">0</span>
+          </button>
+          <button type="button" class="wc-draw-tab" data-conf="CAF" role="tab">
+            <i class="fa-solid fa-earth-africa" aria-hidden="true"></i> CAF <span class="conf-pill" id="pill-caf">0</span>
+          </button>
+          <button type="button" class="wc-draw-tab" data-conf="AFC" role="tab">
+            <i class="fa-solid fa-earth-asia" aria-hidden="true"></i> AFC <span class="conf-pill" id="pill-afc">0</span>
+          </button>
+          <button type="button" class="wc-draw-tab" data-conf="OFC" role="tab">
+            <i class="fa-solid fa-earth-oceania" aria-hidden="true"></i> OFC <span class="conf-pill" id="pill-ofc">0</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Nation Cards Grid Viewport -->
+      <div class="wc-draw-grid-wrap">
+        <div class="wc-draw-grid" id="wc-draw-grid">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+
+      <!-- Footer Actions & Simulation Launch Bar -->
+      <div class="wc-draw-footer">
+        <div class="wc-draw-footer-meta">
+          <span class="wc-hud-tag"><i class="fa-solid fa-layer-group"></i> 12 GROUPS (A–L)</span>
+          <span class="wc-hud-tag"><i class="fa-solid fa-trophy"></i> 32-TEAM KNOCKOUT</span>
+          <span class="wc-hud-tag"><i class="fa-solid fa-chart-line"></i> POISSON SIMULATION</span>
+        </div>
+
+        <button type="button" class="wc-draw-btn-start" id="wc-draw-btn-start" disabled>
+          <i class="fa-solid fa-play"></i>
+          <span>LAUNCH SIMULATION</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
   <div id="methodology-modal" class="modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="methodology-modal-title">
     <div class="modal-backdrop" id="methodology-modal-backdrop"></div>
     <div class="modal-dialog">
@@ -382,5 +548,20 @@
       </div>
     </div>
   </div>
+
+  <!-- Vendor Libraries: Anime.js for Spring & Stagger Animations & Canvas-Confetti for Celebrations -->
+  <script src="vendor/anime.min.js"></script>
+  <script src="vendor/confetti.browser.js"></script>
+  <!-- Real Data Layer & Application Script -->
+  <script src="data/real-tournaments.js" defer></script>
+  <script src="data/hero-videos.js" defer></script>
+  <!-- Seeded PRNG (mulberry32). Must load before state.js/app.js so that
+       window.ArenaRandom is the real implementation, not the Math.random stub. -->
+  <script src="js/random.js" defer></script>
+  <script src="js/state.js" defer></script>
+  <script src="js/router.js" defer></script>
+  <script src="js/audio-fx.js" defer></script>
+  <script src="js/motion-fx.js" defer></script>
+  <script src="app.js" defer></script>
 </body>
 </html>
