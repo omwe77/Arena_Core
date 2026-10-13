@@ -789,7 +789,7 @@ body {
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
-  opacity: 0.18;}
+  opacity: 0.6;}
 
 .pitch-turf-stripes {position: absolute;
   inset: 0;
