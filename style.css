@@ -11933,11 +11933,27 @@ tr:hover .team-cell {color: #040806 !important;}
    BROADCAST CONTROL ROOM HEADER & RESPONSIVE MOBILE PERFECTION
    ========================================================================== */
 
-/* Completely hide arcade pitch track and Mario background from header */
-.header-pitch-track,
-.pitch-turf-stripes,
-.pitch-grass-texture-real {
-  display: none !important;
+/* Broadcast pitch strip behind header content — visible on desktop,
+   hidden on mobile to keep the compact responsive header */
+.pitch-touchline,
+.pitch-marking-center,
+.pitch-penalty-arc,
+.pitch-corner-flag,
+.pitch-floodlight { display: block; }
+
+.arena-pitch-actor,
+.arena-soccer-ball-wrap,
+.arena-action-bubble,
+.grass-kick-burst,
+.ball-fire-trail { display: flex; }
+
+.header-pitch-track {
+  display: block;
+  opacity: 0.45;
+}
+
+@media (max-width: 768px) {
+  .header-pitch-track { display: none !important; }
 }
 
 .site-header {
@@ -12028,4 +12044,295 @@ tr:hover .team-cell {color: #040806 !important;}
     min-width: 100% !important;
     padding: 8px !important;
   }
+}
+
+/* ==========================================================================
+   UI OVERHAUL V2 — MIDNIGHT BROADCAST
+   ========================================================================== */
+
+/* --- Home stage backdrop: pitch grid + glow + vignette --- */
+#view-product-home { position: relative; overflow: hidden; }
+
+#view-product-home::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 45% at 18% -8%, rgba(0, 232, 122, 0.16) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 35% at 92% 12%, rgba(0, 224, 255, 0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 90% 60% at 50% 115%, rgba(0, 0, 0, 0.55) 0%, transparent 75%),
+    repeating-linear-gradient(90deg, rgba(0, 232, 122, 0.035) 0px, rgba(0, 232, 122, 0.035) 1px, transparent 1px, transparent 72px),
+    repeating-linear-gradient(0deg, rgba(0, 232, 122, 0.03) 0px, rgba(0, 232, 122, 0.03) 1px, transparent 1px, transparent 72px);
+}
+
+.home-shell { position: relative; z-index: 1; }
+
+/* --- Hero: gradient headline + stencil kicker --- */
+.home-hero { position: relative; padding-left: 22px; }
+
+.home-hero::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 118px;
+  width: 3px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, var(--color-accent) 0%, rgba(0, 232, 122, 0.05) 100%);
+  box-shadow: 0 0 18px rgba(0, 232, 122, 0.45);
+}
+
+.home-hero-title {
+  font-size: clamp(3rem, 6.4vw, 4.8rem);
+  letter-spacing: -0.015em;
+  background: linear-gradient(105deg, #FFFFFF 0%, #C9FFE4 55%, var(--color-accent) 115%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 4px 26px rgba(0, 232, 122, 0.18));
+}
+
+.home-hero-sub-title {
+  font-family: var(--font-mono);
+  font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.home-hero-sub-title::after {
+  content: '';
+  display: block;
+  width: 64px;
+  height: 2px;
+  margin-top: 12px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--color-accent), transparent);
+}
+
+/* --- Primary CTA: sheen sweep --- */
+.home-cta-btn {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(120deg, #00FF92 0%, #00E87A 45%, #00C05E 100%);
+  padding: 13px 28px;
+  border-radius: 8px;
+  letter-spacing: 0.06em;
+}
+
+.home-cta-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -70%;
+  width: 42%;
+  height: 100%;
+  transform: skewX(-22deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.36), transparent);
+  transition: left 0.45s ease;
+}
+
+.home-cta-btn:hover::after { left: 130%; }
+
+.home-cta-btn-secondary { background: rgba(255, 255, 255, 0.04); color: #FFFFFF; backdrop-filter: blur(6px); }
+
+.home-cta-btn-secondary:hover { background: rgba(255, 255, 255, 0.09); color: #FFFFFF; }
+
+/* --- Pillars: dark glass --- */
+.home-pillars-grid { gap: 14px; }
+
+.home-pillar-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, rgba(18, 26, 22, 0.92) 0%, rgba(9, 15, 12, 0.88) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  padding: 24px 20px;
+}
+
+.home-pillar-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 38px;
+  height: 3px;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(90deg, var(--color-accent), transparent);
+}
+
+.home-pillar-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 232, 122, 0.35);
+  background: linear-gradient(160deg, rgba(18, 26, 22, 0.98) 0%, rgba(11, 18, 14, 0.94) 100%);
+  box-shadow: 0 14px 34px rgba(0, 232, 122, 0.14);
+}
+
+.home-pillar-title { color: #FFFFFF; }
+
+.home-pillar-desc { color: #9BB8AB; }
+
+/* --- Featured competition cards: dark glass + per-card brand --- */
+.home-comp-card {
+  --card-accent: var(--color-accent);
+  position: relative;
+  overflow: hidden;
+  gap: 10px;
+  padding: 26px 44px 26px 22px;
+  background: linear-gradient(160deg, rgba(18, 26, 22, 0.92) 0%, rgba(9, 15, 12, 0.88) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+}
+
+.home-comp-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--card-accent), transparent 65%);
+  opacity: 0.9;
+}
+
+.home-comp-card::after {
+  content: '\f061';
+  position: absolute;
+  right: 18px;
+  bottom: 20px;
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  font-size: 0.8rem;
+  color: var(--card-accent);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.home-comp-card:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--card-accent) 55%, transparent);
+  background: linear-gradient(160deg, rgba(18, 26, 22, 0.98) 0%, rgba(11, 18, 14, 0.94) 100%);
+  box-shadow: 0 14px 34px color-mix(in srgb, var(--card-accent) 22%, transparent);
+}
+
+.home-comp-card:hover::after { opacity: 1; transform: translateX(0); }
+
+.home-comp-name { color: #FFFFFF; font-size: 1.14rem; }
+
+.home-comp-detail { color: var(--card-accent); font-weight: 700; }
+
+/* Brand per competition (matches the data-theme palette) */
+.home-comp-card[data-tourn="wc"] { --card-accent: #F5C842; }
+.home-comp-card[data-tourn="ucl"] { --card-accent: #7E96FF; }
+.home-comp-card[data-tourn="pl"] { --card-accent: #C084FC; }
+.home-comp-card[data-tourn="laliga"] { --card-accent: #FF5368; }
+.home-comp-card[data-tourn="serieA"] { --card-accent: #33BFFF; }
+.home-comp-card[data-tourn="bundesliga"] { --card-accent: #FF1F30; }
+.home-comp-card[data-tourn="ligue1"] { --card-accent: #4FEFFB; }
+.home-comp-card[data-tourn="ligaPortugal"] { --card-accent: #3EFF9F; }
+.home-comp-card[data-tourn="eredivisie"] { --card-accent: #FFA63D; }
+.home-comp-card[data-tourn="superLig"] { --card-accent: #FF6B77; }
+.home-comp-card[data-tourn="scottishPrem"] { --card-accent: #2FB9F2; }
+.home-comp-card[data-tourn="euro"] { --card-accent: #45A0F0; }
+.home-comp-card[data-tourn="copa"] { --card-accent: #FF8A5E; }
+
+/* --- Section heading: tick + hairline --- */
+.home-section-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #FFFFFF;
+  margin-bottom: 18px;
+}
+
+.home-section-heading::before {
+  content: '';
+  width: 4px;
+  height: 14px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--color-accent), rgba(0, 232, 122, 0.1));
+  box-shadow: 0 0 10px rgba(0, 232, 122, 0.5);
+}
+
+.home-section-heading::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), transparent);
+}
+
+.home-view-all { color: rgba(255, 255, 255, 0.72); }
+
+.home-view-all:hover { color: var(--color-accent); text-decoration: underline; text-underline-offset: 4px; }
+
+/* --- Header: brand glow, accent nav underline, bottom hairline --- */
+.logo-ball-icon { filter: drop-shadow(0 0 8px rgba(0, 232, 122, 0.55)); }
+
+.logo-title { text-shadow: 0 1px 12px rgba(0, 232, 122, 0.25); }
+
+.top-nav-link { position: relative; border-radius: 8px; }
+
+.top-nav-link::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 2px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+  transform: scaleX(0);
+  transition: transform 0.22s ease;
+}
+
+.top-nav-link:hover::after { transform: scaleX(1); }
+
+.top-nav-link.active::after { transform: scaleX(1); box-shadow: 0 0 10px rgba(0, 232, 122, 0.55); }
+
+.data-mode-badge { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(6px); }
+
+/* --- Simulator hero card: competition-facing broadcast frame --- */
+[data-theme] .sim-header-card {
+  position: relative;
+  overflow: hidden;
+  border-top: 3px solid var(--theme-accent, var(--color-accent));
+}
+
+.sim-header-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 190px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--theme-accent, #00E87A) 16%, transparent), transparent);
+}
+
+.sim-header-card::after {
+  content: '';
+  position: absolute;
+  top: -18px;
+  left: 0;
+  width: 3px;
+  height: 92px;
+  border-radius: 0 3px 3px 0;
+  background: var(--theme-accent, var(--color-accent));
+  box-shadow: 0 0 16px var(--theme-glow, rgba(0, 232, 122, 0.3));
+}
+
+.tourn-title {
+  font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+  letter-spacing: 0.02em;
+}
+
+/* --- Mobile guard: keep the new decorations from widening the page --- */
+@media (max-width: 600px) {
+  .home-hero { padding-left: 14px; }
+  .home-comp-card { padding: 24px 36px 24px 18px; }
+  .top-nav-link::after { display: none; }
 }
