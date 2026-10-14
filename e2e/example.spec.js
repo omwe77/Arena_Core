@@ -316,21 +316,42 @@ test.describe('ARENA_CORE Platform Tests', () => {
   // Regression: the TEAM-vs-TEAM match cards in the simulator must follow the
   // light design system. A midnight-era rule gave the card a dark surface
   // while team names used near-black ink, producing unreadable names.
+  //
+  // Knockout rounds R32/R16 now render compact bracket cards (one per fixture,
+  // each with its own individually-wired Simulate button). Full detail `.sfc-card`
+  // is still used for the later, smaller rounds (QF/SF/GF), so this test drives the
+  // simulation all the way through to the Grand Final and asserts there.
   test('match cards render team names with light surface and dark navy text', async ({ page }) => {
-    test.setTimeout(45_000);
+    test.setTimeout(90_000);
 
     await page.goto('/');
     await page.click('.top-nav-link[data-nav="tournament-sim"]');
 
-    // Reach the knockout fixture view (sfc cards) by simulating the group
-    // stage; be tolerant of additional stage clicks being needed.
-    for (let i = 0; i < 4; i++) {
-      const visible = await page.locator('.sfc-card').count();
-      if (visible > 0) break;
-      const btn = page.locator('#sim-stage-action-btn');
-      if (await btn.isDisabled()) break;
-      await btn.click();
-      await page.waitForTimeout(800);
+    // Run the full tournament so we end up on the Grand Final, which still renders
+    // a full `.sfc-card` for the single championship fixture.
+    const instantBtn = page.locator('#sim-instant-btn');
+    if (await instantBtn.count() && !(await instantBtn.isDisabled())) {
+      await instantBtn.click();
+      await page.waitForFunction(
+        () => {
+          const banner = document.getElementById('champion-banner');
+          const btn = document.getElementById('sim-stage-action-btn');
+          const btnText = btn ? btn.textContent : '';
+          return banner && !banner.hidden && !btnText.includes('RUNNING');
+        },
+        null,
+        { timeout: 60_000 }
+      );
+    } else {
+      // Fallback: step through with the main action button if Instant isn't available.
+      for (let i = 0; i < 6; i++) {
+        const btn = page.locator('#sim-stage-action-btn');
+        if (await btn.count() === 0 || (await btn.isDisabled())) break;
+        await btn.click();
+        await page.waitForTimeout(1200);
+        const gfCard = await page.locator('.sfc-card').count();
+        if (gfCard > 0) break;
+      }
     }
 
     await expect(page.locator('.sfc-card').first()).toBeVisible();

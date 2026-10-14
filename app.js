@@ -2049,6 +2049,51 @@ function setupNavigation() {
     }
   }
 
+  /**
+   * Compact bracket card for a single knockout match. Contains only the two teams,
+   * their scores, a single per-card Simulate button, and a status badge.
+   * This button is wired to ONLY simulate this one fixture (by stage + index);
+   * it never touches any other match on the card, the stage, or the tournament.
+   */
+  function renderCompactBracketCard(m, stage, idx, isFinal = false) {
+    const homeScore = m.isSimulated ? m.scoreHome : (m.isLive ? m.currentDisplayScoreHome : '–');
+    const awayScore = m.isSimulated ? m.scoreAway : (m.isLive ? m.currentDisplayScoreAway : '–');
+    const isWinnerHome = m.isSimulated && m.winner === m.home;
+    const isWinnerAway = m.isSimulated && m.winner === m.away;
+
+    let statusHtml = '';
+    if (m.isLive) {
+      statusHtml = `<span class="sfc-status-badge live">🔴 LIVE ${m.currentSimMinute || 0}'</span>`;
+    } else if (m.isSimulated) {
+      const ftBadgeText = m.hadPenalties ? `FT (PENS ${m.penHome}-${m.penAway})` : (m.hadExtraTime ? 'AET' : 'FT');
+      statusHtml = `<span class="sfc-status-badge ft">${ftBadgeText}</span>`;
+    } else {
+      statusHtml = `<span class="sfc-status-badge upcoming">UPCOMING</span>`;
+    }
+
+    return `
+      <div class="bracket-match-card compact-bracket-card ${isFinal ? 'final-match' : ''} ${stage === 'qf' ? 'stage-qf' : ''} ${stage === 'sf' ? 'stage-sf' : ''} ${stage === 'gf' ? 'stage-gf' : ''} ${m.isSimulated && m.winner ? (isWinnerHome ? 'winner-card-home' : 'winner-card-away') : ''}" data-stage="${stage}" data-idx="${idx}">
+        <div class="bracket-team-row ${isWinnerHome ? 'winner-row' : ''}">
+          <span class="b-team-name">${getTeamLogoHtml(m.home)}${m.home}</span>
+          <span class="b-team-score">${homeScore}</span>
+        </div>
+        <div class="bracket-team-row ${isWinnerAway ? 'winner-row' : ''}">
+          <span class="b-team-name">${getTeamLogoHtml(m.away)}${m.away}</span>
+          <span class="b-team-score">${awayScore}</span>
+        </div>
+        <div class="match-card-actions">
+          ${!m.isSimulated && !m.isLive ? `
+            <button type="button" class="btn-sim-match" data-stage="${stage}" data-idx="${idx}" title="Simulate this match only" aria-label="Simulate ${m.home} vs ${m.away}"><i class="fa-solid fa-play"></i> Simulate</button>
+          ` : ''}
+          ${statusHtml}
+          ${m.isSimulated ? `
+            <button type="button" class="btn-card-open-details" data-stage="${stage}" data-idx="${idx}" title="Open full match details" aria-label="Open detailed stats for ${m.home} vs ${m.away}"><i class="fa-solid fa-chart-simple"></i> Details</button>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  }
+
   function renderKnockoutStage(stageKey, state, isSingleStage) {
     const meta = STAGE_META[stageKey] || { title: stageKey.toUpperCase(), count: 0, prevStage: 'Previous Stage' };
     const matches = state[stageKey] || [];
@@ -2058,14 +2103,28 @@ function setupNavigation() {
     let contentHtml = '';
 
     if (isPopulated) {
-      const matchCards = matches.map((m, idx) => renderMatchCard(m, stageKey, idx, isFinal)).join('');
+      // Use compact bracket cards for the big rounds so every fixture has a
+      // visible, individually-wired Simulate button; keep the full detail card for
+      // the small rounds (QF/SF/GF) where there are only a handful of matches.
+      const useCompact = (stageKey === 'r32' || stageKey === 'r16');
+      const matchCards = matches.map((m, idx) =>
+        useCompact ? renderCompactBracketCard(m, stageKey, idx, isFinal)
+                  : renderMatchCard(m, stageKey, idx, isFinal)
+      ).join('');
+
+      const headerBar = `
+          <div class="bracket-column-header-bar">
+            <div class="column-header">🏆 ${meta.title} (${matches.length} FIXTURES)</div>
+            <button type="button" class="btn-sim-stage-all" data-stage="${stageKey}" title="Simulate every unsimulated fixture in this stage">
+              <i class="fa-solid fa-bolt"></i> Simulate All (${matches.filter(m => !m.isSimulated).length} left)
+            </button>
+          </div>
+        `;
 
       if (isSingleStage) {
         contentHtml = `
           <div class="bracket-column expanded-stage" id="col-${stageKey}">
-            <div class="bracket-column-header-bar">
-              <div class="column-header">🏆 ${meta.title} (${matches.length} FIXTURES)</div>
-            </div>
+            ${headerBar}
             <div class="bracket-cards-grid">
               ${matchCards}
             </div>
@@ -2074,7 +2133,7 @@ function setupNavigation() {
       } else {
         contentHtml = `
           <div class="bracket-column" id="col-${stageKey}">
-            <div class="column-header">${meta.title}</div>
+            ${headerBar}
             ${matchCards}
           </div>
         `;
@@ -2207,12 +2266,71 @@ function setupNavigation() {
     bracketContainer.innerHTML = html;
 
     // Attach simulation listeners
-    bracketContainer.querySelectorAll('.btn-sim-single').forEach(btn => {
+    // Per-card Simulate button: each one is wired to its OWN fixture only
+    // (by stage key + match index). It never simulates any other match.
+    bracketContainer.querySelectorAll('.btn-sim-single, .btn-sim-match').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         const stage = btn.dataset.stage;
         const idx = parseInt(btn.dataset.idx, 10);
+        if (!stage || !Number.isFinite(idx)) return;
+        // simulateSingleMatch already returns immediately if the match is
+        // missing, already simulated, or already live — so this can only EVER
+        // start a simulation for this single fixture.
         simulateSingleMatch(stage, idx);
+      });
+    });
+
+    // Stage-level "Simulate All": simulates every unsimulated fixture IN THIS
+    // STAGE ONLY (e.g. all of Round of 32). It does not touch other stages or
+    // the group phase.
+    bracketContainer.querySelectorAll('.btn-sim-stage-all').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const stage = btn.dataset.stage;
+        if (stage && !btn.classList.contains('is-disabled')) {
+          simulateStageWithClock(stage);
+        }
+      });
+    });
+
+    // Keyboard activation for stage-level Simulate All buttons.
+    // This mirrors the click wiring so keyboard users can activate the stage-level
+    // action from the button or any focusable child inside its header bar.
+    bracketContainer.querySelectorAll('.btn-sim-stage-all').forEach(btn => {
+      btn.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        e.preventDefault();
+        const stage = btn.dataset.stage;
+        if (stage && !btn.classList.contains('is-disabled')) {
+          simulateStageWithClock(stage);
+        }
+      });
+    });
+
+    // Card-level detail buttons are live after simulation. Pressing Enter/Space on
+    // them opens the existing detailed-stats modal so the detail affordance is
+    // reachable by keyboard without adding a second prominent button.
+    bracketContainer.querySelectorAll('.btn-card-open-details').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const stage = btn.dataset.stage;
+        const idx = parseInt(btn.dataset.idx, 10);
+        if (!stage || !Number.isFinite(idx)) return;
+        const state = tournamentState[activeTournKey];
+        const match = state && state[stage] ? state[stage][idx] : null;
+        openDetailedStatsModal(
+          match ? match.home : btn.dataset.home || 'Home',
+          match ? match.away : btn.dataset.away || 'Away',
+          match,
+          stage,
+          idx
+        );
+      });
+      btn.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        e.preventDefault();
+        btn.click();
       });
     });
 
@@ -6943,7 +7061,7 @@ function getUclFeederStatus() {
         });
         progressToNextStage('qf');
       }
-    } else if (stageKey === 'gf') {
+    } else    if (stageKey === 'gf') {
       ensureStagePrerequisites('sf');
       if (!state.sf || state.sf.some(m => !m.isSimulated)) {
         (state.sf || []).forEach(m => {
@@ -6957,13 +7075,127 @@ function getUclFeederStatus() {
     }
   }
 
-  function simulateStageWithClock(stageKey) {
+  function simulateStageWithClockCore(stageKey, options = {}) {
+    const state = tournamentState[activeTournKey];
+    if (!state) return;
+
+    if (state.subView !== 'sim') {
+      state.subView = 'sim';
+    }
+
+    let matches = state[stageKey] || [];
+    if (matches.length === 0) return;
+
+    const stillUnsimulated = matches.filter(m => !m.isSimulated && !m.isLive);
+    if (stillUnsimulated.length === 0) {
+      renderStageViewport();
+      return;
+    }
+
+    stillUnsimulated.forEach(m => {
+      if (!m.winner) {
+        const outcome = precomputeMatchResult(m.home, m.away, true);
+        Object.assign(m, outcome);
+      }
+      m.isLive = true;
+      m.isSimulated = false;
+      m.currentSimMinute = 0;
+      m.currentDisplayScoreHome = 0;
+      m.currentDisplayScoreAway = 0;
+    });
+
+    const stageMeta = STAGE_META[stageKey] || { title: stageKey.toUpperCase() };
+    activeSimulationClock.isRunning = true;
+    activeSimulationClock.isPaused = false;
+    activeSimulationClock.stageKey = stageKey;
+    activeSimulationClock.currentSimMinute = 0;
+    activeSimulationClock.activeMatches = matches;
+    activeSimulationClock.totalSimMinutes = 90;
+    activeSimulationClock.realDurationMs = 30000;
+    activeSimulationClock.startTime = Date.now();
+    activeSimulationClock.elapsedBeforePause = 0;
+
+    const clockHud = document.getElementById('sim-clock-hud');
+    const liveControlBar = document.getElementById('live-control-bar');
+    const stageLabel = document.getElementById('clock-stage-label');
+    const pauseBtn = document.getElementById('sim-pause-btn');
+    const resumeBtn = document.getElementById('sim-resume-btn');
+    const stageActionBtn = document.getElementById('sim-stage-action-btn');
+
+    if (clockHud) clockHud.hidden = false;
+    if (liveControlBar) liveControlBar.hidden = false;
+    if (stageLabel) {
+      stageLabel.textContent = stageMeta.title;
+      stageLabel.dataset.stageKey = stageKey;
+    }
+    if (pauseBtn) pauseBtn.hidden = false;
+    if (resumeBtn) resumeBtn.hidden = true;
+    if (stageActionBtn) {
+      stageActionBtn.textContent = `🔴 SIMULATING ${stageMeta.title}...`;
+      stageActionBtn.disabled = true;
+    }
+
+    renderStageViewport();
+
+    if (activeSimulationInterval) {
+      clearInterval(activeSimulationInterval);
+      activeSimulationInterval = null;
+    }
+
+    activeSimulationInterval = setInterval(() => {
+      if (activeSimulationClock.isPaused) return;
+
+      activeSimulationClock.currentSimMinute += 3.75;
+      const curMin = Math.floor(activeSimulationClock.currentSimMinute);
+
+      const minText = document.getElementById('clock-minute-text');
+      const progressFill = document.getElementById('clock-progress-fill');
+      if (minText) {
+        let halfText = 'FIRST HALF';
+        if (curMin >= 45 && curMin < 90) halfText = 'SECOND HALF';
+        else if (curMin >= 90) halfText = 'FULL TIME';
+        minText.textContent = `${Math.min(90, curMin)}' (${halfText})`;
+      }
+      if (progressFill) progressFill.style.width = `${Math.min(100, (curMin / 90) * 100)}%`;
+
+      matches.forEach(m => {
+        if (m.isLive) {
+          m.currentSimMinute = curMin;
+          m.currentDisplayScoreHome = m.events.filter(e => e.team === 'home' && e.minute <= curMin).length;
+          m.currentDisplayScoreAway = m.events.filter(e => e.team === 'away' && e.minute <= curMin).length;
+        }
+      });
+
+      const currentGoals = [];
+      matches.forEach(m => {
+        const ev = m.events.find(e => e.minute >= curMin - 3 && e.minute <= curMin);
+        if (ev) currentGoals.push(`GOAL! ${ev.teamName}: ${ev.player} (${ev.minute}')`);
+      });
+      if (currentGoals.length > 0) {
+        const tickerEl = document.getElementById('bracket-ticker-text');
+        if (tickerEl) tickerEl.textContent = `${stageMeta.title}: ${currentGoals.join(' | ')} // `;
+      }
+
+      renderStageViewport();
+
+      if (curMin >= 90) {
+        finalizeStageSimulation(stageKey);
+      }
+    }, 250);
+  }
+
+  function simulateStageWithClock(stageKey, options = {}) {
     if (activeTournKey === 'ucl') {
       const feederInfo = getUclFeederStatus();
       if (!feederInfo.allFinished) {
         openUclGateModal();
         return;
       }
+    }
+    if (options.perCardSim) {
+      // Per-card Simulate All should only animate the selected stage.
+      simulateStageWithClockCore(stageKey, options);
+      return;
     }
     cancelAllActiveSimulationTimers();
     const state = tournamentState[activeTournKey];
@@ -7014,6 +7246,7 @@ function getUclFeederStatus() {
     const stageLabel = document.getElementById('clock-stage-label');
     const pauseBtn = document.getElementById('sim-pause-btn');
     const resumeBtn = document.getElementById('sim-resume-btn');
+    const stageActionBtn = document.getElementById('sim-stage-action-btn');
 
     if (clockHud) clockHud.hidden = false;
     if (liveControlBar) liveControlBar.hidden = false;
@@ -7023,12 +7256,20 @@ function getUclFeederStatus() {
     }
     if (pauseBtn) pauseBtn.hidden = false;
     if (resumeBtn) resumeBtn.hidden = true;
-
-    const stageActionBtn = document.getElementById('sim-stage-action-btn');
     if (stageActionBtn) {
       stageActionBtn.textContent = `🔴 SIMULATING ${stageMeta.title}...`;
       stageActionBtn.disabled = true;
     }
+
+    // Keep Simulate All disabled while any match in this stage is still live.
+    // This prevents a double click from triggering a second simultaneous stage run.
+    const maybeDisableSimAll = () => {
+      const simAllBtn = bracketContainer.querySelector(`.btn-sim-stage-all[data-stage="${stageKey}"]`);
+      if (!simAllBtn) return;
+      const anyLive = matches.some(m => m.isLive);
+      simAllBtn.classList.toggle('is-disabled', anyLive);
+    };
+    maybeDisableSimAll();
 
     renderStageViewport();
 
@@ -7195,6 +7436,13 @@ function getUclFeederStatus() {
     const tickerEl = document.getElementById('bracket-ticker-text');
     if (tickerEl) {
       tickerEl.textContent = `COMPLETED: ${stageMeta.title} fixtures resolved! // `;
+    }
+
+    const bracketContainer = document.getElementById('bracket-tree-container');
+    if (bracketContainer) {
+      const sel = '.btn-sim-stage-all[data-stage="' + stageKey + '"]';
+      const simAllBtn = bracketContainer.querySelector(sel);
+      if (simAllBtn) simAllBtn.classList.remove('is-disabled');
     }
 
     progressToNextStage(stageKey);
