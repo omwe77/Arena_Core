@@ -2116,7 +2116,7 @@ function setupNavigation() {
           <div class="bracket-column-header-bar">
             <div class="column-header">🏆 ${meta.title} (${matches.length} FIXTURES)</div>
             <button type="button" class="btn-sim-stage-all" data-stage="${stageKey}" title="Simulate every unsimulated fixture in this stage">
-              <i class="fa-solid fa-bolt"></i> Simulate All (${matches.filter(m => !m.isSimulated).length} left)
+              <i class="fa-solid fa-bolt"></i> Simulate All (${matches.filter(m => !m.isSimulated && !m.isLive).length} left)
             </button>
           </div>
         `;
@@ -7194,7 +7194,11 @@ function getUclFeederStatus() {
     }
     if (options.perCardSim) {
       // Per-card Simulate All should only animate the selected stage.
-      simulateStageWithClockCore(stageKey, options);
+      if (options.perCardSim) {
+        simulateStageWithClockCore(stageKey, options);
+      } else {
+        simulateStageWithClock(stageKey);
+      }
       return;
     }
     cancelAllActiveSimulationTimers();
@@ -7263,7 +7267,9 @@ function getUclFeederStatus() {
 
     // Keep Simulate All disabled while any match in this stage is still live.
     // This prevents a double click from triggering a second simultaneous stage run.
+    const bracketContainer = document.getElementById('bracket-tree-container');
     const maybeDisableSimAll = () => {
+      if (!bracketContainer) return;
       const simAllBtn = bracketContainer.querySelector(`.btn-sim-stage-all[data-stage="${stageKey}"]`);
       if (!simAllBtn) return;
       const anyLive = matches.some(m => m.isLive);
