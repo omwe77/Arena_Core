@@ -269,4 +269,43 @@ test.describe('ARENA_CORE Platform Tests', () => {
 
     expect(errors).toEqual([]);
   });
+
+  // Regression: a completed World Cup simulation must survive a page reload.
+  // Previously, tournament state was only saved at init, so a full sim was
+  // silently reset to its zeroed pre-simulation snapshot after reloading.
+  test('completed full simulation state persists across page reload', async ({ page }) => {
+    test.setTimeout(60_000);
+
+    await page.goto('/');
+    await page.evaluate(() => localStorage.removeItem('arena_tournament_state_wc'));
+    await page.reload();
+    await page.waitForTimeout(600);
+
+    await page.click('.top-nav-link[data-nav="tournament-sim"]');
+    await page.click('#sim-instant-btn');
+
+    // Wait for the instant full simulation to settle on a champion.
+    await page.waitForFunction(() => {
+      const banner = document.getElementById('champion-banner');
+      const btn = document.getElementById('sim-stage-action-btn')?.textContent || '';
+      return banner && !banner.hidden && !btn.includes('RUNNING');
+    }, null, { timeout: 45_000 });
+
+    const championBefore = await page.evaluate(() => {
+      const saved = JSON.parse(localStorage.getItem('arena_tournament_state_wc') || 'null');
+      return saved?.champion || null;
+    });
+    expect(championBefore).not.toBeNull();
+
+    await page.goto('/');
+    await page.waitForTimeout(800);
+    await page.click('.top-nav-link[data-nav="tournament-sim"]');
+
+    await expect(page.locator('#champion-banner')).toBeVisible();
+    const championAfter = await page.evaluate(() => {
+      const saved = JSON.parse(localStorage.getItem('arena_tournament_state_wc') || 'null');
+      return saved?.champion || null;
+    });
+    expect(championAfter).toBe(championBefore);
+  });
 });

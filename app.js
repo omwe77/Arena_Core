@@ -1424,6 +1424,18 @@
     tournamentState[key] = state;
   }
 
+  /**
+   * Persist a tournament state snapshot after a meaningful completion point
+   * (group stage resolved, knockout stage finalized, full simulation run).
+   * Without this, only initTournamentState ever saves, and a completed
+   * simulation silently reverts to its pre-simulation state on page reload.
+   */
+  function persistTournamentState(key = activeTournKey) {
+    const state = tournamentState[key];
+    if (!state || !TOURNAMENTS_CONFIG[key]) return;
+    try { localStorage.setItem('arena_tournament_state_' + key, JSON.stringify(state)); } catch (e) {}
+  }
+
   // Initialize isolated states for all 10 competitions
   Object.keys(TOURNAMENTS_CONFIG).forEach(k => initTournamentState(k));
 
@@ -2276,6 +2288,7 @@ function setupNavigation() {
     const allDone = allMatches.length > 0 && allMatches.every(m => m.isSimulated);
     if (allDone) {
       state.champion = state.leagueTable[0].club;
+      persistTournamentState();
     }
   }
 
@@ -6458,6 +6471,7 @@ function getUclFeederStatus() {
       cancelAllActiveSimulationTimers();
       if (instantBtn) { instantBtn.textContent = '🏆 FULL SIM'; instantBtn.classList.remove('active-full-sim'); }
       renderActiveTournament();
+      persistTournamentState();
       if (state.champion) triggerChampionCelebration(state.champion);
     }
 
@@ -6790,6 +6804,8 @@ function getUclFeederStatus() {
         state.qf.push({ home: shuffled[i * 2], away: shuffled[i * 2 + 1], scoreHome: '–', scoreAway: '–', isSimulated: false });
       }
     }
+
+    persistTournamentState();
   }
 
   function triggerNextSimulationStep() {
@@ -7167,6 +7183,7 @@ function getUclFeederStatus() {
     }
 
     progressToNextStage(stageKey);
+    persistTournamentState();
 
     let nextStage = null;
     if (stageKey === 'r32') nextStage = 'r16';
@@ -7951,6 +7968,7 @@ function getUclFeederStatus() {
         state.champion = finalMatch.winner;
 
         state.subView = 'sim';
+        persistTournamentState();
         renderActiveTournament();
         if (state.champion) {
           triggerChampionCelebration(state.champion);
