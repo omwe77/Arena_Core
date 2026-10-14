@@ -308,4 +308,72 @@ test.describe('ARENA_CORE Platform Tests', () => {
     });
     expect(championAfter).toBe(championBefore);
   });
+
+  // Regression: the TEAM-vs-TEAM match cards in the simulator must follow the
+  // light design system. A midnight-era rule gave the card a dark surface
+  // while team names used near-black ink, producing unreadable names.
+  test('match cards render team names with light surface and dark navy text', async ({ page }) => {
+    test.setTimeout(45_000);
+
+    await page.goto('/');
+    await page.click('.top-nav-link[data-nav="tournament-sim"]');
+
+    // Reach the knockout fixture view (sfc cards) by simulating the group
+    // stage; be tolerant of additional stage clicks being needed.
+    for (let i = 0; i < 4; i++) {
+      const visible = await page.locator('.sfc-card').count();
+      if (visible > 0) break;
+      const btn = page.locator('#sim-stage-action-btn');
+      if (await btn.isDisabled()) break;
+      await btn.click();
+      await page.waitForTimeout(800);
+    }
+
+    await expect(page.locator('.sfc-card').first()).toBeVisible();
+    await expect(page.locator('.sfc-card .sfc-team-name').first()).toBeVisible();
+
+    const styles = await page.evaluate(() => {
+      const card = document.querySelector('.sfc-card');
+      const name = card.querySelector('.sfc-team-name');
+      const nameStyle = getComputedStyle(name);
+      // Effective card surface: nearest opaque background colour.
+      let surface = 'rgb(255, 255, 255)';
+      let node = name;
+      while (node) {
+        const bg = getComputedStyle(node).backgroundColor;
+        if (!/rgba\(.*,\s*0\)/.test(bg)) { surface = bg; break; }
+        node = node.parentElement;
+      }
+      const rgb = (c) => (c.match(/rgba?\((\d+), (\d+), (\d+)/) || []).slice(1, 4).map(Number);
+      const [r, g, b] = rgb(nameStyle.color);
+      const [surfR, surfG, surfB] = rgb(surface);
+      const lum = (arr) => {
+        const lin = arr.map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+        return 0.2126 * lin[0] + 0.7152 * lin[1] + 0.0722 * lin[2];
+      };
+      const L1 = lum([r, g, b]) + 0.05;
+      const L2 = lum([surfR, surfG, surfB]) + 0.05;
+      return {
+        color: nameStyle.color,
+        surface,
+        contrast: (Math.max(L1, L2) / Math.min(L1, L2)),
+      };
+    });
+
+    // Team-name text must be dark navy ink on a light card surface and meet
+    // AA contrast for normal text.
+    expect(styles.contrast).toBeGreaterThanOrEqual(4.5);
+    const rgb = (c) => (c.match(/rgba?\((\d+), (\d+), (\d+)/) || []).slice(1, 4).map(Number);
+    const [r, g, b] = rgb(styles.color);
+    expect(r).toBeLessThan(80);
+    expect(g).toBeLessThan(80);
+    expect(b).toBeLessThan(100);
+    const [sr, sg, sb] = rgb(styles.surface);
+    expect(sr).toBeGreaterThan(200);
+    expect(sg).toBeGreaterThan(200);
+    expect(sb).toBeGreaterThan(200);
+
+    // Screenshot evidence for the light card rendering.
+    await page.screenshot({ path: 'test-results/match-card-contrast.png' });
+  });
 });

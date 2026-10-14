@@ -14692,28 +14692,28 @@ body {
 .sfc-match-wrapper {display: block;
   width: 100%;
   margin-bottom: 20px;
-  font-family: 'Inter', 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-body, 'Work Sans', system-ui, sans-serif);
   animation: sfcFadeIn 0.3s ease;}
 
 .unified-match-card {width: 100%;
-  background: #141829;
-  border-radius: 14px;
+  background: #FFFFFF;
+  border-radius: 8px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(99, 102, 241, 0.12);}
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.02);}
 
 .sfc-card-header {display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  background: linear-gradient(90deg, rgba(20, 10, 38, 0.95), rgba(15, 23, 42, 0.95));
+  background: #F1F5F9;
   padding: 10px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);}
+  border-bottom: 1px solid #E2E8F0;}
 
 .sfc-comp-label {font-size: 0.68rem;
   letter-spacing: 1px;
-  color: #a5b4fc;
+  color: #565E74;
   text-transform: uppercase;
   font-weight: 700;}
 
@@ -14724,25 +14724,26 @@ body {
   border-radius: 20px;
   text-transform: uppercase;}
 
-.sfc-status-badge.live {background: #e53935;
-  color: #fff;
+.sfc-status-badge.live {background: #FEF2F2;
+  color: #B91C1C;
+  border: 1px solid rgba(220, 38, 38, 0.35);
   animation: sfcLivePulse 1.2s ease-in-out infinite;}
 
-.sfc-status-badge.ft {background: rgba(46, 204, 113, 0.2);
-  color: #2ECC71;
-  border: 1px solid rgba(46, 204, 113, 0.35);}
+.sfc-status-badge.ft {background: #F0FDF4;
+  color: #16A34A;
+  border: 1px solid rgba(22, 163, 74, 0.35);}
 
-.sfc-status-badge.upcoming {background: rgba(99, 102, 241, 0.2);
-  color: #818cf8;
-  border: 1px solid rgba(99, 102, 241, 0.3);}
+.sfc-status-badge.upcoming {background: #F1F5F9;
+  color: #475569;
+  border: 1px solid #CBD5E1;}
 
 .sfc-hero-matchup {display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   gap: 14px;
   padding: 16px 20px;
-  background: linear-gradient(180deg, rgba(26, 13, 51, 0.45) 0%, rgba(13, 20, 38, 0.65) 100%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);}
+  background: #FFFFFF;
+  border-bottom: 1px solid #E2E8F0;}
 
 .sfc-hero-team {display: flex;
   align-items: center;
@@ -14757,9 +14758,9 @@ body {
 
 .sfc-team-crest {width: 50px;
   height: 50px;
-  background: rgba(255, 255, 255, 0.06);
+  background: #F1F5F9;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.15);
+  border: 2px solid #E2E8F0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14771,8 +14772,8 @@ body {
   height: 34px !important;
   object-fit: contain;}
 
-.sfc-team-crest.winner-crest {border-color: #FFD700;
-  box-shadow: 0 0 16px rgba(255, 215, 0, 0.4);}
+.sfc-team-crest.winner-crest {border-color: #F59E0B;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);}
 
 .sfc-winner-badge {position: absolute;
   top: -7px;
@@ -14788,7 +14789,7 @@ body {
 
 .sfc-team-name {font-size: 0.95rem;
   font-weight: 800;
-  color: #040806;
+  color: var(--color-text-primary, #0F172A);
   letter-spacing: 0.4px;
   white-space: nowrap;
   overflow: hidden;
@@ -14798,24 +14799,24 @@ body {
   align-items: center;
   gap: 4px;
   font-size: 0.62rem;
-  color: rgba(255, 255, 255, 0.45);
+  color: #565E74;
   font-weight: 600;}
 
 .home-side .sfc-tactic-tag {justify-content: flex-start;}
 
 .away-side .sfc-tactic-tag {justify-content: flex-end;}
 
-.tac-form {color: #60a5fa;
+.tac-form {color: #2563EB;
   font-weight: 700;
-  background: rgba(37, 99, 235, 0.2);
+  background: rgba(37, 99, 235, 0.1);
   padding: 1px 5px;
   border-radius: 4px;}
 
-.tac-style {color: rgba(255, 255, 255, 0.5);}
+.tac-style {color: #64748B;}
 
 .sfc-score-box {font-size: 2.2rem;
   font-weight: 900;
-  color: #040806;
+  color: #0F172A;
   font-family: 'Space Grotesk', 'Outfit', sans-serif;
   line-height: 1;
   flex-shrink: 0;
@@ -14824,8 +14825,8 @@ body {
   padding: 0 4px;
   z-index: 1;}
 
-.sfc-score-box.winner-score {color: #FFD700;
-  text-shadow: 0 0 16px rgba(255, 215, 0, 0.5);}
+.sfc-score-box.winner-score {color: #0F7A2E;
+  text-shadow: none;}
 
 .sfc-hero-center-broadcast {display: flex;
   flex-direction: column;
@@ -14838,11 +14839,11 @@ body {
 .sfc-mini-pitch-broadcast {width: 96px;
   height: 52px;
   border-radius: 8px;
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border: 1.5px solid rgba(22, 163, 74, 0.35);
   overflow: hidden;
   position: relative;
-  background: linear-gradient(135deg, #14532d 0%, #166534 100%);
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(135deg, #DCFCE7 0%, #F0FDF4 100%);
+  box-shadow: inset 0 0 8px rgba(22, 163, 74, 0.08);
   flex-shrink: 0;}
 
 .sfc-pitch-turf {width: 100%;
@@ -14855,7 +14856,7 @@ body {
 .sfc-pitch-center-circle {position: absolute;
   width: 32px;
   height: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(22, 163, 74, 0.3);
   border-radius: 50%;}
 
 .sfc-pitch-halfway {position: absolute;
@@ -14863,17 +14864,17 @@ body {
   top: 0;
   bottom: 0;
   width: 1px;
-  background: rgba(255, 255, 255, 0.25);}
+  background: rgba(22, 163, 74, 0.3);}
 
 .sfc-pitch-vs-pill {position: relative;
   z-index: 2;
   font-size: 0.7rem;
   font-weight: 900;
-  color: #040806;
-  background: rgba(0, 0, 0, 0.6);
+  color: #0F172A;
+  background: #FFFFFF;
   padding: 2px 7px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid #CBD5E1;
   letter-spacing: 1px;}
 
 .sfc-live-progress-box {width: 100%;
@@ -14884,25 +14885,25 @@ body {
 
 .sfc-live-text {font-size: 0.62rem;
   font-weight: 800;
-  color: #ff4d4f;
+  color: #B91C1C;
   letter-spacing: 0.5px;}
 
 .sfc-live-bar-track {width: 90px;
   height: 4px;
-  background: rgba(255, 255, 255, 0.12);
+  background: #E2E8F0;
   border-radius: 2px;
   overflow: hidden;}
 
 .sfc-live-bar-fill {height: 100%;
-  background: linear-gradient(90deg, #ff4d4f, #ff7875);
+  background: linear-gradient(90deg, #DC2626, #EF4444);
   border-radius: 2px;
   transition: width 0.3s;}
 
 .sfc-pens-tag, .sfc-aet-tag {font-size: 0.62rem;
   font-weight: 800;
-  color: #fbbf24;
-  background: rgba(245, 158, 11, 0.15);
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #92400E;
+  background: #FFFBEA;
+  border: 1px solid rgba(245, 158, 11, 0.45);
   border-radius: 4px;
   padding: 2px 6px;
   text-align: center;}
@@ -14912,12 +14913,12 @@ body {
   justify-content: center;
   flex-wrap: wrap;
   padding: 10px 16px;
-  background: rgba(0, 0, 0, 0.3);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);}
+  background: transparent;
+  border-top: 1px solid #E2E8F0;}
 
-.sfc-action-btn {background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  color: #040806;
+.sfc-action-btn {background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  color: #0F172A;
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 0.72rem;
@@ -14930,27 +14931,27 @@ body {
   align-items: center;
   gap: 5px;}
 
-.sfc-action-btn:hover {background: rgba(255, 255, 255, 0.16);
-  border-color: rgba(255, 255, 255, 0.35);
+.sfc-action-btn:hover {background: #F1F5F9;
+  border-color: #94A3B8;
   transform: translateY(-1px);}
 
-.sfc-action-btn.btn-card-fast-sim {background: linear-gradient(135deg, #2ECC71, #27AE60);
-  border-color: #2ECC71;
-  color: #0A1912;
+.sfc-action-btn.btn-card-fast-sim {background: #16A34A;
+  border-color: #15803D;
+  color: #FFFFFF;
   font-weight: 800;}
 
 .sfc-action-btn.btn-card-fast-sim:hover {filter: brightness(1.15);}
 
 .sfc-tabs {display: flex;
-  background: rgba(0, 0, 0, 0.45);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);}
+  background: #F1F5F9;
+  border-top: 1px solid #E2E8F0;
+  border-bottom: 1px solid #E2E8F0;}
 
 .sfc-tab {flex: 1;
   padding: 10px 8px;
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.5);
+  color: #565E74;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.6px;
@@ -14962,13 +14963,13 @@ body {
   text-align: center;
   border-bottom: 2px solid transparent;}
 
-.sfc-tab.active {color: #2ECC71;
-  border-bottom-color: #2ECC71;
-  background: rgba(46, 204, 113, 0.06);}
+.sfc-tab.active {color: #16A34A;
+  border-bottom-color: #16A34A;
+  background: rgba(22, 163, 74, 0.08);}
 
-.sfc-tab:hover:not(.active) {color: rgba(255, 255, 255, 0.8);}
+.sfc-tab:hover:not(.active) {color: #0F172A;}
 
-.sfc-tab-body {background: #0e1222;
+.sfc-tab-body {background: #FFFFFF;
   min-height: 120px;}
 
 .sfc-panel {padding: 14px 16px;}
@@ -14988,7 +14989,7 @@ body {
   font-weight: 800;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
+  color: #565E74;
   margin-bottom: 8px;}
 
 .sfc-timeline {display: flex;
@@ -15010,23 +15011,23 @@ body {
 
 .sfc-ev-player {font-size: 0.72rem;
   font-weight: 600;
-  color: #040806;}
+  color: #0F172A;}
 
 .sfc-ev-icon {font-size: 0.9rem;}
 
 .sfc-ev-minute {font-size: 0.62rem;
   font-weight: 800;
-  color: rgba(255, 255, 255, 0.6);
+  color: #565E74;
   min-width: 30px;
   text-align: center;
-  background: rgba(255, 255, 255, 0.08);
+  background: #F1F5F9;
   border-radius: 4px;
   padding: 2px 5px;}
 
 .sfc-ev-spacer {flex: 1;}
 
 .sfc-no-events {font-size: 0.72rem;
-  color: rgba(255, 255, 255, 0.35);
+  color: #94A3B8;
   font-style: italic;
   text-align: center;
   padding: 16px 0;}
@@ -15039,8 +15040,8 @@ body {
 .sfc-performer {display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
   border-radius: 8px;
   padding: 6px 10px;}
 
@@ -15048,21 +15049,21 @@ body {
 
 .sfc-perf-info {display: flex; flex-direction: column; gap: 1px;}
 
-.sfc-perf-name {font-size: 0.72rem; font-weight: 700; color: #040806;}
+.sfc-perf-name {font-size: 0.72rem; font-weight: 700; color: #0F172A;}
 
-.sfc-perf-team {font-size: 0.6rem; color: rgba(255, 255, 255, 0.45);}
+.sfc-perf-team {font-size: 0.6rem; color: #64748B;}
 
 .sfc-chance-row {display: flex;
   align-items: center;
   justify-content: space-between;
   font-size: 0.62rem;
   font-weight: 700;
-  color: #040806;
+  color: #0F172A;
   margin-bottom: 5px;}
 
-.sfc-chance-label {color: rgba(255, 255, 255, 0.65); font-size: 0.62rem;}
+.sfc-chance-label {color: #565E74; font-size: 0.62rem;}
 
-.sfc-chance-draw {color: rgba(255, 255, 255, 0.45); font-size: 0.6rem;}
+.sfc-chance-draw {color: #94A3B8; font-size: 0.6rem;}
 
 .sfc-chance-bar {display: flex;
   height: 6px;
@@ -15080,11 +15081,11 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 7px 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid #F1F5F9;
   font-size: 0.72rem;
-  color: #040806;}
+  color: #0F172A;}
 
-.sfc-stat-row span:nth-child(2) {color: rgba(255, 255, 255, 0.45);
+.sfc-stat-row span:nth-child(2) {color: #94A3B8;
   font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.8px;}
@@ -15099,23 +15100,28 @@ body {
   text-transform: uppercase;
   padding: 4px 0;
   margin-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  color: #040806;}
+  border-bottom: 1px solid #E2E8F0;
+  color: #0F172A;}
 
-.sfc-lineup-head.home-lh {color: #60a5fa; border-color: rgba(37, 99, 235, 0.4);}
+.sfc-lineup-head.home-lh {color: #2563EB; border-color: rgba(37, 99, 235, 0.4);}
 
-.sfc-lineup-head.away-lh {color: #f87171; border-color: rgba(220, 38, 38, 0.4); text-align: right;}
+.sfc-lineup-head.away-lh {color: #DC2626; border-color: rgba(220, 38, 38, 0.4); text-align: right;}
 
 .sfc-lineup-grid {display: flex; flex-wrap: wrap; gap: 6px;}
 
-.sfc-player-chip {background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.sfc-player-chip {background: #F1F5F9;
+  border: 1px solid #E2E8F0;
   border-radius: 20px;
   padding: 4px 10px;
   font-size: 0.65rem;
   font-weight: 600;
-  color: #040806;
+  color: #0F172A;
   white-space: nowrap;}
+
+/* Respect reduced-motion preference for live status pulse */
+@media (prefers-reduced-motion: reduce) {
+  .sfc-status-badge.live { animation: none; }
+}
 
 .hidden {display: none !important;}
 
