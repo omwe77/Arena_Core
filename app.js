@@ -1459,29 +1459,19 @@
   }
 
   function switchView(targetViewId, syncUrl = true) {
-    if (targetViewId === 'competitions-view') {
-      targetViewId = 'archive-view';
-    } else if (targetViewId === 'analytics-view') {
-      targetViewId = 'tactical-tracker';
-    }
-
-    if (targetViewId === 'tactical-tracker') {
-      const state = tournamentState[activeTournKey];
-      const match = (state?.gf?.[0]) || (state?.sf?.[0]) || (state?.r16?.[0]) || (state?.groupMatches?.[0]) || (state?.matchdays?.[0]?.[0]);
-      const hTeam = match?.home || (activeTournKey === 'wc' ? 'ARGENTINA' : 'REAL MADRID');
-      const aTeam = match?.away || (activeTournKey === 'wc' ? 'FRANCE' : 'MAN CITY');
-      openProTacticalTracker(hTeam, aTeam, match);
-      return;
+    // Compatibility alias: deep links to the former /archive route land here.
+    if (targetViewId === 'archive-view') {
+      targetViewId = 'competitions-view';
     }
 
     const simPanel = document.getElementById('view-tournament-sim');
     const standingsPanel = document.getElementById('view-standings-view');
-    const archivePanel = document.getElementById('view-archive-view');
+    const competitionsPanel = document.getElementById('view-competitions-view');
     const homePanel = document.getElementById('view-product-home');
 
     // Exactly one top-level panel is visible at a time.
     function showPanel(panel) {
-      [simPanel, standingsPanel, archivePanel, homePanel].forEach(p => {
+      [simPanel, standingsPanel, competitionsPanel, homePanel].forEach(p => {
         if (!p) return;
         const on = p === panel;
         p.hidden = !on;
@@ -1493,10 +1483,10 @@
       showPanel(standingsPanel);
       updateDataModeBadge('ARCHIVE DATA');
       renderRealStandings();
-    } else if (targetViewId === 'archive-view') {
-      showPanel(archivePanel);
+    } else if (targetViewId === 'competitions-view') {
+      showPanel(competitionsPanel);
       updateDataModeBadge('ARCHIVE DATA');
-      renderArchiveView();
+      renderCompetitionsView();
     } else if (targetViewId === 'product-home') {
       showPanel(homePanel);
       updateDataModeBadge('SIMULATION');
@@ -1670,7 +1660,7 @@ function setupNavigation() {
 
     const viewAllBtn = document.getElementById('home-view-all');
     if (viewAllBtn) {
-      viewAllBtn.addEventListener('click', () => switchView('archive-view'));
+      viewAllBtn.addEventListener('click', () => switchView('competitions-view'));
     }
 
     const simBtn = document.getElementById('home-btn-simulate');
@@ -1680,7 +1670,7 @@ function setupNavigation() {
 
     const archiveBtn = document.getElementById('home-btn-archive');
     if (archiveBtn) {
-      archiveBtn.addEventListener('click', () => switchView('archive-view'));
+      archiveBtn.addEventListener('click', () => switchView('competitions-view'));
     }
   }
 
@@ -1750,7 +1740,7 @@ function setupNavigation() {
       targetViewId === 'tournament-home' ||
       targetViewId === 'tournament-sim' ||
       targetViewId === 'standings-view' ||
-      targetViewId === 'archive-view';
+      targetViewId === 'competitions-view';
     bar.hidden = !relevant;
     if (!relevant) closeCompetitionDropdown();
   }
@@ -5738,7 +5728,7 @@ function getUclFeederStatus() {
         <div class="group-card">
           <div class="group-title">
             <span><i class="fa-solid fa-layer-group" style="color:var(--champions-gold);margin-right:6px;"></i> GROUP ${letter}</span>
-            ${state.groupsPlayed ? '<span class="group-status-done"><i class="fa-solid fa-check"></i> PLAYED</span>' : `<button type="button" class="btn-quick-group-sim" data-group="${letter}"><i class="fa-solid fa-play"></i> Sim Group</button>`}
+            ${teams.every(t => t.mp > 0) ? '<span class="group-status-done"><i class="fa-solid fa-check"></i> PLAYED</span>' : `<button type="button" class="btn-quick-group-sim" data-group="${letter}" title="Simulate this group only"><i class="fa-solid fa-play"></i> Sim Group</button>`}
           </div>
           <table class="group-table">
             <thead>
@@ -5858,7 +5848,13 @@ function getUclFeederStatus() {
         teams.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
         // Mark that this group has been played; if ALL groups are played, set global flag
         const allPlayed = Object.keys(groups).every(lg => groups[lg].every(t => t.mp > 0));
-        if (allPlayed) state.groupsPlayed = true;
+        if (allPlayed) {
+          state.groupsPlayed = true;
+          // All groups played one-by-one: generate the knockout draw from
+          // these results immediately (no hidden re-simulation of the groups).
+          buildKnockoutFixtures();
+          persistTournamentState();
+        }
         renderActiveTournament();
       });
     });
@@ -6727,7 +6723,6 @@ function getUclFeederStatus() {
 
   function resolveGroupStage() {
     const state = tournamentState[activeTournKey];
-    const config = TOURNAMENTS_CONFIG[activeTournKey];
     if (!state || !state.groups) return;
 
     state.groupMatches = [];
@@ -6768,8 +6763,21 @@ function getUclFeederStatus() {
       teams.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
     });
     state.groupsPlayed = true;
+    buildKnockoutFixtures();
+    persistTournamentState();
+  }
 
-    // Qualify teams to first knockout round
+  /**
+   * Build the first knockout round from the CURRENT group standings without
+   * simulating anything. Used when groups were played group-by-group so the
+   * user's hand-played results are preserved instead of being re-simulated.
+   */
+  function buildKnockoutFixtures() {
+    const state = tournamentState[activeTournKey];
+    const config = TOURNAMENTS_CONFIG[activeTournKey];
+    if (!state || !state.groups) return;
+
+    // Qualify teams to first knockout round from current standings
     const qualified = [];
     Object.keys(state.groups).forEach(letter => {
       qualified.push(state.groups[letter][0].name, state.groups[letter][1].name);
@@ -6804,8 +6812,6 @@ function getUclFeederStatus() {
         state.qf.push({ home: shuffled[i * 2], away: shuffled[i * 2 + 1], scoreHome: '–', scoreAway: '–', isSimulated: false });
       }
     }
-
-    persistTournamentState();
   }
 
   function triggerNextSimulationStep() {
@@ -6880,7 +6886,12 @@ function getUclFeederStatus() {
     if (!state) return;
 
     if (stageKey === 'r32') {
-      if (!state.groupsPlayed || !state.r32 || state.r32.length === 0) {
+      if (state.groupsPlayed && (!state.r32 || state.r32.length === 0)) {
+        // Groups already played (e.g. group-by-group via the group cards):
+        // build the knockout draw from those results instead of re-simulating
+        // the whole group stage and discarding the user's results.
+        buildKnockoutFixtures();
+      } else if (!state.groupsPlayed) {
         resolveGroupStage();
       }
     } else if (stageKey === 'r16') {
@@ -6896,13 +6907,17 @@ function getUclFeederStatus() {
           progressToNextStage('r32');
         }
       } else {
-        if (!state.groupsPlayed || !state.r16 || state.r16.length === 0) {
+        if (state.groupsPlayed && (!state.r16 || state.r16.length === 0)) {
+          buildKnockoutFixtures();
+        } else if (!state.groupsPlayed) {
           resolveGroupStage();
         }
       }
     } else if (stageKey === 'qf') {
       if (config.format === 'copa16' || config.format === 'genericCup') {
-        if (!state.groupsPlayed || !state.qf || state.qf.length === 0) {
+        if (state.groupsPlayed && (!state.qf || state.qf.length === 0)) {
+          buildKnockoutFixtures();
+        } else if (!state.groupsPlayed) {
           resolveGroupStage();
         }
       } else {
@@ -8204,8 +8219,8 @@ function getUclFeederStatus() {
   // ---------------------------------------------------------------------------
   // 10b. ARCHIVE VIEW — BROWSE HISTORICAL COMPETITION DATA
   // ---------------------------------------------------------------------------
-  function renderArchiveView() {
-    const grid = document.getElementById('archive-grid');
+  function renderCompetitionsView() {
+    const grid = document.getElementById('competitions-grid');
     if (!grid) return;
 
     const realData = window.REAL_TOURNAMENTS_DATA || {};
@@ -8237,8 +8252,22 @@ function getUclFeederStatus() {
         </div>
       `).join('');
 
+      // Assist leaderboard from the same official snapshot (no invented data).
+      const assisters = (data.topScorers || [])
+        .filter(s => typeof s.assists === 'number')
+        .slice()
+        .sort((a, b) => b.assists - a.assists)
+        .slice(0, 3);
+      const assistsPreview = assisters.map(s => `
+        <div class="archive-scorer-row">
+          <span class="archive-scorer-name">${s.name}</span>
+          <span class="archive-scorer-team">${s.team}</span>
+          <span class="archive-scorer-goals archive-assists-val">${s.assists} A</span>
+        </div>
+      `).join('');
+
       return `
-        <article class="archive-card" data-competition="${key}">
+        <article class="archive-card" data-competition="${key}" role="button" tabindex="0" aria-label="Open ${data.name || cfg.name} showcase">
           <div class="archive-card-header">
             <h3 class="archive-card-title">${data.name || cfg.name}</h3>
             <span class="archive-card-format">${isLeague ? 'LEAGUE' : 'CUP'}</span>
@@ -8263,21 +8292,46 @@ function getUclFeederStatus() {
               <div class="archive-standings-list">${standingsPreview}</div>
             </div>
           ` : ''}
-          ${scorersCount > 0 ? `
-            <div class="archive-section">
-              <h4 class="archive-section-title">TOP SCORERS</h4>
-              <div class="archive-scorers-list">${scorersPreview}</div>
+          ${(scorersPreview || assistsPreview) ? `
+            <div class="archive-leaders-wrap">
+              ${scorersCount > 0 ? `
+                <div class="archive-section archive-leaders-board">
+                  <h4 class="archive-section-title">TOP SCORERS</h4>
+                  <div class="archive-scorers-list">${scorersPreview}</div>
+                </div>
+              ` : ''}
+              ${assisters.length > 0 ? `
+                <div class="archive-section archive-leaders-board">
+                  <h4 class="archive-section-title">TOP ASSISTS</h4>
+                  <div class="archive-scorers-list">${assistsPreview}</div>
+                </div>
+              ` : ''}
             </div>
           ` : ''}
           <div class="archive-card-footer">
-            <span class="archive-season">${data.actualSeason || data.requestedSeason || ''}</span>
-            <span class="archive-badge">ARCHIVE</span>
+            <span class="archive-season">${data.actualSeason || data.requestedSeason || ''} SNAPSHOT</span>
+            <span class="archive-badge">HISTORICAL DATA</span>
           </div>
         </article>
       `;
     }).join('');
 
     grid.innerHTML = cards || '<div class="archive-empty">No archive data available.</div>';
+
+    // Competition cards open the selected competition's showcase.
+    grid.querySelectorAll('.archive-card').forEach(cardEl => {
+      const open = () => {
+        selectTournament(cardEl.dataset.competition);
+        switchView('tournament-home');
+      };
+      cardEl.addEventListener('click', open);
+      cardEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          open();
+        }
+      });
+    });
 
     if (window.ArenaMotion) {
       window.ArenaMotion.staggerArchive();
@@ -10422,6 +10476,8 @@ function getUclFeederStatus() {
     // Register client-side routes
     if (window.ArenaRouter) {
       window.ArenaRouter.addRoute('/', () => switchView('product-home'));
+      window.ArenaRouter.addRoute('/competitions', () => switchView('competitions-view'));
+      // Compatibility alias for deep links to the former Archive tab.
       window.ArenaRouter.addRoute('/archive', () => switchView('archive-view'));
       window.ArenaRouter.addRoute('/competition/:competitionId', (params) => {
         selectTournament(params.competitionId);

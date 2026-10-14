@@ -18414,6 +18414,25 @@ tr:hover .team-cell {color: #040806 !important;}
   font-weight: var(--font-weight-bold);
   color: var(--champions-gold);}
 
+.archive-assists-val {color: var(--color-accent);}
+
+/* Top-scorer / top-assist leader boards share an equal-width two-column layout */
+.archive-leaders-wrap {display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);}
+
+.archive-leaders-board {min-width: 0;
+  padding: var(--space-2);
+  background: var(--color-bg-muted);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);}
+
+.archive-leaders-board .archive-scorer-row {background: var(--color-bg-card);}
+
+@media (max-width: 600px) {
+  .archive-leaders-wrap {grid-template-columns: 1fr;}
+}
+
 .archive-card-footer {display: flex;
   justify-content: space-between;
   align-items: center;

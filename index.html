@@ -126,12 +126,6 @@
       <button type="button" class="top-nav-link" data-nav="standings-view" aria-label="Go to standings">
         <i class="fa-solid fa-chart-simple"></i> Standings
       </button>
-      <button type="button" class="top-nav-link" data-nav="archive-view" aria-label="Go to archive">
-        <i class="fa-solid fa-box-archive"></i> Archive
-      </button>
-      <button type="button" class="top-nav-link" data-nav="analytics-view" aria-label="Go to analytics">
-        <i class="fa-solid fa-chart-line"></i> Analytics
-      </button>
     </nav>
 
     <div class="header-right">
@@ -325,7 +319,7 @@
             </div>
             <div class="site-footer-links">
               <button type="button" class="foot-link-btn" onclick="document.getElementById('methodology-modal').hidden=false;">Methodology</button>
-              <button type="button" class="foot-link-btn" data-nav="archive-view">Archive</button>
+              <button type="button" class="foot-link-btn" data-nav="competitions-view">Competitions</button>
             </div>
           </div>
         </footer>
@@ -394,20 +388,20 @@
             </div>
             <div class="site-footer-links">
               <button type="button" class="foot-link-btn" onclick="document.getElementById('methodology-modal').hidden=false;">Methodology</button>
-              <button type="button" class="foot-link-btn" data-nav="archive-view">Archive</button>
+              <button type="button" class="foot-link-btn" data-nav="competitions-view">Competitions</button>
             </div>
           </div>
         </footer>
       </section>
 
       <!-- View 3: Archive — Browse Historical Competition Data -->
-      <section id="view-archive-view" class="view-panel" aria-label="Archive">
+      <section id="view-competitions-view" class="view-panel" aria-label="Competitions">
         <div class="section-banner">
-          <h2>COMPETITION ARCHIVE</h2>
-          <p>Browse historical standings, top scorers, and team rosters from bundled competition data.</p>
+          <h2>COMPETITIONS</h2>
+          <p>Browse every competition with archived standings, season top scorers, and top assist providers. Open a competition for its showcase and simulation controls.</p>
         </div>
 
-        <div class="archive-grid" id="archive-grid">
+        <div class="archive-grid" id="competitions-grid">
           <!-- Archive cards injected dynamically -->
         </div>
 
@@ -419,7 +413,7 @@
             </div>
             <div class="site-footer-links">
               <button type="button" class="foot-link-btn" onclick="document.getElementById('methodology-modal').hidden=false;">Methodology</button>
-              <button type="button" class="foot-link-btn" data-nav="archive-view">Archive</button>
+              <button type="button" class="foot-link-btn" data-nav="competitions-view">Competitions</button>
             </div>
           </div>
         </footer>

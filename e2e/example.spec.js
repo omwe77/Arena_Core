@@ -163,8 +163,8 @@ test.describe('ARENA_CORE Platform Tests', () => {
     await page.evaluate(() => document.querySelector('.top-nav-link[data-nav="standings-view"]')?.click());
     await expect(page.locator('#view-standings-view')).toBeVisible();
 
-    await page.evaluate(() => document.querySelector('.top-nav-link[data-nav="archive-view"]')?.click());
-    await expect(page.locator('#view-archive-view')).toBeVisible();
+    await page.evaluate(() => document.querySelector('.top-nav-link[data-nav="competitions-view"]')?.click());
+    await expect(page.locator('#view-competitions-view')).toBeVisible();
   });
 
   test('data mode badge updates based on active view', async ({ page }) => {
@@ -178,16 +178,20 @@ test.describe('ARENA_CORE Platform Tests', () => {
     await expect(badge).toHaveText('SIMULATION');
   });
 
-  test('archive view renders competition cards', async ({ page }) => {
+  test('competitions view renders detailed competition cards', async ({ page }) => {
     await page.goto('/');
 
-    await page.click('.top-nav-link[data-nav="archive-view"]');
-    const grid = page.locator('#archive-grid');
+    await page.click('.top-nav-link[data-nav="competitions-view"]');
+    const grid = page.locator('#competitions-grid');
     await expect(grid).toBeVisible();
 
     const cards = page.locator('.archive-card');
     const count = await cards.count();
     expect(count).toBeGreaterThan(0);
+
+    // The old dedicated Archive/Analytics tabs are gone from the header.
+    await expect(page.locator('.top-nav-link[data-nav="archive-view"]')).toHaveCount(0);
+    await expect(page.locator('.top-nav-link[data-nav="analytics-view"]')).toHaveCount(0);
   });
 
   test('standings view renders table structure', async ({ page }) => {

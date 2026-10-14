@@ -2,6 +2,26 @@
 
 All notable changes to ARENA_CORE are documented in this file.
 
+## [Unreleased] — 2026-10-14
+
+### Navigation Restructure: Competitions Consolidation
+
+- **Archive tab removed**: its competition browser now lives in the
+  **Competitions** tab, upgraded with per-competition leaderboard boards
+  (top 3 scorers and top 3 assist providers straight from the bundled
+  official snapshot — no invented stats), historical standings preview and
+  season badges. Cards are now actionable: click/Enter opens that
+  competition's showcase. Deep links to `/archive` still resolve.
+- **Analytics tab removed**: tournament-level analytics duplicated what the
+  per-match analytics already provide. The tactical tracker, detailed stats
+  and broadcast views remain available per match.
+- **World Cup simulation scoping fixed**: playing groups one-by-one,
+  then reaching the Round of 32, no longer silently re-simulates the whole
+  group stage and discards hand-played results. Knockout fixtures are built
+  from the current standings as soon as all groups are played, per-group
+  PLAYED chips replace the accidental "Sim Group" re-run, and single
+  group/match simulations stay scoped to the clicked item.
+
 ## [v1.2.0] — 2026-10-04
 
 ### UI De-clutter & Theme Consolidation
