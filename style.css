@@ -19487,10 +19487,48 @@ html { scrollbar-color: #CBD5E1 #F8FAFC; }
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-/* Depth hooks (JS parallax moves these by --px/--py) */
-.hero-scene [data-depth] {
-  will-change: transform;
+/* ==========================================================================
+   P1b: HEADER CONTROL COVERAGE — the striker sprite (role=button, z-index 5)
+   patrolled the full header on top of the SFX toggle, data badge, and nav
+   links, stealing clicks and focus at every viewport. Paint + hit it BELOW
+   all header content (DOM order already puts it first); it stays visible as
+   a background runner and, at reduced motion, is parked by app.js.
+   ========================================================================== */
+.arena-pitch-actor {
+  z-index: 0;
 }
+
+/* ==========================================================================
+   Hero copy protection: on narrow screens the stand/pitch layers sit under
+   the sub-copy (66-84% overlap), reducing contrast. Fade a white scrim in
+   the copy zone instead of shrinking the scene.
+   ========================================================================== */
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(253, 255, 255, 0) 34%, rgba(253, 255, 255, 0.72) 62%, rgba(253, 255, 255, 0.94) 88%),
+    linear-gradient(90deg, rgba(253, 255, 255, 0.55) 0%, rgba(253, 255, 255, 0) 55%);
+}
+
+@media (max-width: 640px) {
+  .hero-scrim {
+    background:
+      linear-gradient(180deg, rgba(253, 255, 255, 0) 24%, rgba(253, 255, 255, 0.80) 52%, rgba(253, 255, 255, 0.96) 84%),
+      linear-gradient(90deg, rgba(253, 255, 255, 0.65) 0%, rgba(253, 255, 255, 0) 62%);
+  }
+  .hero-stand-a, .hero-stand-b { opacity: 0.72; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header-pitch-track, .arena-pitch-actor { animation: none !important; }
+  .arena-pitch-actor .grass-blade, .arena-pitch-actor .arena-limb, .arena-pitch-actor .arena-drop-shadow {
+    animation: none !important;
+  }
+}
+
 
 /* Mobile scene tuning: keep it compact, fewer layers dominate */
 @media (max-width: 640px) {
@@ -19508,15 +19546,15 @@ html { scrollbar-color: #CBD5E1 #F8FAFC; }
    ========================================================================== */
 html.js-reveal .reveal {
   opacity: 0;
-  transform: translateY(22px);
+  transform: translateY(30px) scale(0.985);
   transition:
-    opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms),
-    transform 0.65s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
   will-change: opacity, transform;
 }
 html.js-reveal .reveal.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 html.js-reveal .reveal.is-visible { will-change: auto; }
 

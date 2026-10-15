@@ -10576,6 +10576,11 @@ function getUclFeederStatus() {
     let powerShotProgress = 0;
     let isPaused = false;
 
+    // Respect reduced motion: keep the header striker parked and static
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
     const phrases = [
       'GOAL!', 'SUPER STRIKE!', 'HAT-TRICK!',
       'MAMA MIA! 🍄', 'ITS-A ME, SCORER! 🎉',

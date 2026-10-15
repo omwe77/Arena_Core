@@ -183,6 +183,7 @@
               </div>
             </div>
             <span class="hero-ball" data-depth="18"></span>
+            <span class="hero-scrim"></span>
           </div>
           <div class="home-hero-badge">DETERMINISTIC SIMULATION ENGINE // MULBERRY32 PRNG</div>
           <h1 class="home-hero-title">ARENA CORE</h1>
@@ -668,6 +669,13 @@ document.addEventListener('DOMContentLoaded', function () {
       sec.classList.add('reveal');
       sec.style.setProperty('--reveal-delay', Math.round(delayBase) + 'ms');
       targets.push(sec);
+      const heading = sec.querySelector('.home-section-heading');
+      if (heading && !heading._arenaRevealHooked) {
+        heading._arenaRevealHooked = true;
+        heading.classList.add('reveal');
+        heading.style.setProperty('--reveal-delay', Math.round(60) + 'ms');
+        targets.push(heading);
+      }
       const kids = sec.querySelectorAll('.home-pillar-card, .home-comp-card');
       Array.prototype.forEach.call(kids, function (kid, k) {
         kid.classList.add('reveal');
