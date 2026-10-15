@@ -171,6 +171,28 @@
           <div class="home-hero-badge">DETERMINISTIC SIMULATION ENGINE // MULBERRY32 PRNG</div>
           <h1 class="home-hero-title">ARENA CORE</h1>
           <div class="home-hero-sub-title">Football Simulation Engine &amp; Match Analytics</div>
+          <!-- 3D Football Hero Entrance -->
+          <div class="home-hero-3d-ball-wrapper" aria-hidden="true" style="position: relative; width: 180px; height: 180px; margin: 0 auto 2rem; pointer-events: none;">
+            <div class="home-hero-3d-perspective" style="width: 100%; height: 100%; perspective: 600px; overflow: visible;">
+              <!-- Stadium lighting gradient base -->
+              <div class="home-hero-3d-stadium" style="position: absolute; width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #1a1a2e 0%, #0f0f23 50%, #1a1a2e 100%); box-shadow: inset 0 0 100px rgba(0,0,0,0.5); z-index: 1;"></div>
+              <!-- 3D football with subtle depth -->
+              <div class="home-hero-3d-ball" style="position: absolute; width: 120px; height: 120px; top: 50%; left: 50%; transform: translate3d(-50%, -50%, 0) rotateX(-20deg); border-radius: 50%; background: linear-gradient(135deg, #fff4e6 0%, #ffebc9 100%); box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.2); z-index: 2; transition: transform 0.1s ease-out;">
+                <!-- Football panel lines -->
+                <div style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 40px; height: 2px; background: #cbd5e1;"></div>
+                <div style="position: absolute; top: 50%; left: 10px; width: 2px; height: 40px; background: #cbd5e1; transform: rotate(-30deg);"></div>
+                <div style="position: absolute; top: 50%; left: 90%; width: 2px; height: 40px; background: #cbd5e1; transform: rotate(30deg);"></div>
+                <div style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); width: 30px; height: 2px; background: #cbd5e1;"></div>
+                <!-- Stitch detail -->
+                <div style="position: absolute; top: 30%; left: 30%; width: 14px; height: 14px; border-radius: 50%; background: #e2e8f0;"></div>
+                <div style="position: absolute; top: 70%; left: 70%; width: 10px; height: 10px; border-radius: 50%; background: #e2e8f0;"></div>
+              </div>
+              <!-- Glow effect -->
+              <div class="home-hero-3d-glow" style="position: absolute; width: 200%; height: 200%; top: 50%; left: 50%; transform: translate3d(-50%, -50%, 100px) rotateY(45deg); border-radius: 50%; opacity: 0.4; background: radial-gradient(circle, rgba(0,242,254,0.3) 0%, transparent 70%); pointer-events: none; z-index: 0;"></div>
+            </div>
+            <!-- Mouse parallax overlay -->
+            <div class="home-hero-3d-mouse-overlay" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; cursor: grab; pointer-events: all;"></div>
+          </div>
           <p class="home-hero-sub">Pure client-side mathematical simulation platform using Mulberry32 seeded PRNG and dual-parameter Poisson distribution modeling across 15+ domestic and cup competitions.</p>
         </div>
 
@@ -560,5 +582,168 @@
   <script src="js/audio-fx.js" defer></script>
   <script src="js/motion-fx.js" defer></script>
   <script src="app.js" defer></script>
+  <script>
+/* ARENA_CORE — Home 3D hero, scroll reveals, draw/bracket stagger, champion banner.
+   All decorative motion is gated on prefers-reduced-motion; content stays visible
+   without JS or when animation fails (initial states are set via JS only). */
+document.addEventListener('DOMContentLoaded', function () {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) return; // no decorative motion; default styles remain readable
+
+  const EASE = 'cubic-bezier(0.16, 1, 0.3, 1)';
+
+  function enterIn(el, delay, dy) {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(' + (dy || 18) + 'px)';
+    el.style.willChange = 'opacity, transform';
+    requestAnimationFrame(function () {
+      el.style.transition = 'opacity ' + (0.55 + (delay || 0)) + 's ' + EASE + ' ' + (delay || 0) + 's, transform ' + (0.55 + (delay || 0)) + 's ' + EASE + ' ' + (delay || 0) + 's';
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
+    });
+  }
+
+  /* ---- A. Hero entrance choreography + pointer parallax ---------------- */
+  const hero = document.querySelector('.home-hero');
+  if (hero) {
+    const heroBits = [
+      hero.querySelector('.home-hero-badge'),
+      hero.querySelector('.home-hero-title'),
+      hero.querySelector('.home-hero-sub-title'),
+      hero.querySelector('.home-hero-sub'),
+    ].filter(Boolean);
+    heroBits.forEach(function (el, i) { enterIn(el, i * 0.07, 14); });
+
+    const ballWrap = hero.querySelector('.home-hero-3d-ball-wrapper');
+    const ball = ballWrap && ballWrap.querySelector('.home-hero-3d-ball');
+    const overlay = ballWrap && ballWrap.querySelector('.home-hero-3d-mouse-overlay');
+    if (ball) {
+      // Spring entrance (once)
+      ball.style.transform = 'translate3d(-50%, -50%, 0) rotateX(-20deg) scale(0.6)';
+      ball.style.opacity = '0';
+      requestAnimationFrame(function () {
+        ball.style.transition = 'transform 0.9s ' + EASE + ', opacity 0.9s ' + EASE;
+        ball.style.opacity = '1';
+        ball.style.transform = 'translate3d(-50%, -50%, 0) rotateX(-20deg) scale(1)';
+      });
+    }
+    // Desktop pointer parallax with clamped range; touch devices skip (no hover)
+    if (ball && overlay && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      let raf = null, mx = 0, my = 0;
+      function flush() {
+        raf = null;
+        const dx = Math.max(-1, Math.min(1, mx / 220));
+        const dy = Math.max(-1, Math.min(1, my / 220));
+        ball.style.transform = 'translate3d(calc(-50% + ' + (dx * 14).toFixed(1) + 'px), calc(-50% + ' + (dy * 10).toFixed(1) + 'px), 0) rotateX(' + (-20 + dy * 6).toFixed(1) + 'deg) rotateY(' + (dx * 8).toFixed(1) + 'deg) scale(1)';
+      }
+      overlay.addEventListener('mousemove', function (e) {
+        const r = ballWrap.getBoundingClientRect();
+        mx = e.clientX - (r.left + r.width / 2);
+        my = e.clientY - (r.top + r.height / 2);
+        if (!raf) raf = requestAnimationFrame(flush);
+      });
+      overlay.addEventListener('mouseleave', function () {
+        mx = my = 0;
+        if (raf) { cancelAnimationFrame(raf); raf = null; }
+        ball.style.transition = 'transform 0.5s ' + EASE;
+        ball.style.transform = 'translate3d(-50%, -50%, 0) rotateX(-20deg) scale(1)';
+      });
+      window.addEventListener('pagehide', function cleanup() {
+        if (raf) cancelAnimationFrame(raf);
+      }, { once: true });
+    }
+  }
+
+  /* ---- B. Scroll-triggered section reveals (home sections only)--------- */
+  const shell = document.querySelector('#view-product-home .home-shell');
+  if (shell && 'IntersectionObserver' in window) {
+    const sections = Array.prototype.slice.call(
+      shell.querySelectorAll(':scope > .home-actions, :scope > .home-pillars-grid, :scope > .home-competitions-section')
+    );
+    const obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        obs.unobserve(el);
+        const i = sections.indexOf(el);
+        enterIn(el, Math.max(0, i) * 0.06, 22);
+        // Stagger direct children of grids for depth without animating every node
+        const kids = el.querySelectorAll('.home-pillar-card, .home-comp-card');
+        Array.prototype.forEach.call(kids, function (kid, k) { enterIn(kid, 0.05 + k * 0.06, 20); });
+      });
+    }, { threshold: 0.12 });
+    sections.forEach(function (s) { obs.observe(s); });
+  }
+
+  /* ---- C. Draw modal + bracket stagger (real rendered state only) ------ */
+  function staggerChildren(container, selector, initial, step) {
+    if (!container) return;
+    const els = Array.prototype.filter.call(container.querySelectorAll(selector), function (el) {
+      return !el._arenaMotionPresented;
+    });
+    els.forEach(function (el, i) {
+      el._arenaMotionPresented = true;
+      if (window.ArenaMotion && window.ArenaMotion.runAnime) {
+        window.ArenaMotion.runAnime({
+          targets: el,
+          opacity: [0, 1],
+          translateY: [initial, 0],
+          duration: 420,
+          delay: i * step,
+          easing: 'easeOutCubic'
+        });
+      } else {
+        // Fallback: CSS transition
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(' + initial + 'px)';
+        requestAnimationFrame(function () {
+          el.style.transition = 'opacity .42s ' + EASE + ' ' + (i * step) + 's, transform .42s ' + EASE + ' ' + (i * step) + 's';
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        });
+      }
+    });
+  }
+
+  // Stagger nation/bracket cards whenever the app (re)renders real content.
+  // Observe the specific render containers, not the whole document.
+  function observeContainer(id, selector, initial, step, guard) {
+    const node = document.getElementById(id);
+    if (!node) return;
+    new MutationObserver(function () {
+      if (guard && !guard()) return;
+      staggerChildren(node, selector, initial, step);
+    }).observe(node, { childList: true });
+  }
+  const drawModal = document.getElementById('wc-draw-modal');
+  observeContainer('wc-draw-grid', '.wc-nation-card', 22, 12, function () {
+    return drawModal && !drawModal.hidden;
+  });
+  observeContainer('bracket-tree-container', '.bracket-column', 24, 60);
+
+  /* ---- D. Champion banner presentation on real reveal ------------------- */
+  const champBanner = document.getElementById('champion-banner');
+  if (champBanner) {
+    new MutationObserver(function () {
+      if (champBanner.hidden) {
+        champBanner._arenaMotionCelebrated = false;
+        return;
+      }
+      if (!champBanner.hidden && !champBanner._arenaMotionCelebrated) {
+        champBanner._arenaMotionCelebrated = true;
+        champBanner.style.opacity = '0';
+        champBanner.style.transform = 'translateY(-14px)';
+        requestAnimationFrame(function () {
+          champBanner.style.transition = 'opacity .6s ' + EASE + ', transform .6s ' + EASE;
+          champBanner.style.opacity = '1';
+          champBanner.style.transform = 'translateY(0)';
+        });
+        const trophy = champBanner.querySelector('.trophy-icon');
+        if (trophy && window.ArenaMotion) window.ArenaMotion.animateTrophyPresentation(trophy);
+      }
+    }).observe(champBanner, { attributes: true, attributeFilter: ['hidden'] });
+  }
+});
+  </script>
 </body>
 </html>
