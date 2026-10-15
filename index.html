@@ -168,31 +168,25 @@
     <section id="view-product-home" class="view-panel" hidden aria-label="Home">
       <div class="home-shell">
         <div class="home-hero">
+          <div class="hero-scene" aria-hidden="true">
+            <span class="hero-sky"></span>
+            <span class="hero-flood fl-l"></span>
+            <span class="hero-flood fl-r"></span>
+            <div class="hero-stand hero-stand-a" data-depth="4"></div>
+            <div class="hero-stand hero-stand-b" data-depth="7"></div>
+            <div class="hero-pitch-wrap" data-depth="12">
+              <div class="hero-pitch">
+                <span class="hero-pitch-line mid"></span>
+                <span class="hero-pitch-line center-circle"></span>
+                <span class="hero-pitch-line penalty"></span>
+                <span class="hero-shadow-ball"></span>
+              </div>
+            </div>
+            <span class="hero-ball" data-depth="18"></span>
+          </div>
           <div class="home-hero-badge">DETERMINISTIC SIMULATION ENGINE // MULBERRY32 PRNG</div>
           <h1 class="home-hero-title">ARENA CORE</h1>
           <div class="home-hero-sub-title">Football Simulation Engine &amp; Match Analytics</div>
-          <!-- 3D Football Hero Entrance -->
-          <div class="home-hero-3d-ball-wrapper" aria-hidden="true" style="position: relative; width: 180px; height: 180px; margin: 0 auto 2rem; pointer-events: none;">
-            <div class="home-hero-3d-perspective" style="width: 100%; height: 100%; perspective: 600px; overflow: visible;">
-              <!-- Stadium lighting gradient base -->
-              <div class="home-hero-3d-stadium" style="position: absolute; width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #1a1a2e 0%, #0f0f23 50%, #1a1a2e 100%); box-shadow: inset 0 0 100px rgba(0,0,0,0.5); z-index: 1;"></div>
-              <!-- 3D football with subtle depth -->
-              <div class="home-hero-3d-ball" style="position: absolute; width: 120px; height: 120px; top: 50%; left: 50%; transform: translate3d(-50%, -50%, 0) rotateX(-20deg); border-radius: 50%; background: linear-gradient(135deg, #fff4e6 0%, #ffebc9 100%); box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.2); z-index: 2; transition: transform 0.1s ease-out;">
-                <!-- Football panel lines -->
-                <div style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 40px; height: 2px; background: #cbd5e1;"></div>
-                <div style="position: absolute; top: 50%; left: 10px; width: 2px; height: 40px; background: #cbd5e1; transform: rotate(-30deg);"></div>
-                <div style="position: absolute; top: 50%; left: 90%; width: 2px; height: 40px; background: #cbd5e1; transform: rotate(30deg);"></div>
-                <div style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); width: 30px; height: 2px; background: #cbd5e1;"></div>
-                <!-- Stitch detail -->
-                <div style="position: absolute; top: 30%; left: 30%; width: 14px; height: 14px; border-radius: 50%; background: #e2e8f0;"></div>
-                <div style="position: absolute; top: 70%; left: 70%; width: 10px; height: 10px; border-radius: 50%; background: #e2e8f0;"></div>
-              </div>
-              <!-- Glow effect -->
-              <div class="home-hero-3d-glow" style="position: absolute; width: 200%; height: 200%; top: 50%; left: 50%; transform: translate3d(-50%, -50%, 100px) rotateY(45deg); border-radius: 50%; opacity: 0.4; background: radial-gradient(circle, rgba(0,242,254,0.3) 0%, transparent 70%); pointer-events: none; z-index: 0;"></div>
-            </div>
-            <!-- Mouse parallax overlay -->
-            <div class="home-hero-3d-mouse-overlay" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; cursor: grab; pointer-events: all;"></div>
-          </div>
           <p class="home-hero-sub">Pure client-side mathematical simulation platform using Mulberry32 seeded PRNG and dual-parameter Poisson distribution modeling across 15+ domestic and cup competitions.</p>
         </div>
 
@@ -582,100 +576,117 @@
   <script src="js/audio-fx.js" defer></script>
   <script src="js/motion-fx.js" defer></script>
   <script src="app.js" defer></script>
-  <script>
-/* ARENA_CORE — Home 3D hero, scroll reveals, draw/bracket stagger, champion banner.
-   All decorative motion is gated on prefers-reduced-motion; content stays visible
-   without JS or when animation fails (initial states are set via JS only). */
+    <script>
+/* ARENA_CORE — Hero scene choreography, scroll reveals, draw/bracket stagger,
+   champion banner. Decorative motion gates on prefers-reduced-motion and is
+   JS-projected: without JS or with animation failures all content is visible. */
 document.addEventListener('DOMContentLoaded', function () {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduceMotion) return; // no decorative motion; default styles remain readable
+  if (reduceMotion) return;
 
+  document.documentElement.classList.add('js-reveal');
   const EASE = 'cubic-bezier(0.16, 1, 0.3, 1)';
 
-  function enterIn(el, delay, dy) {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(' + (dy || 18) + 'px)';
-    el.style.willChange = 'opacity, transform';
-    requestAnimationFrame(function () {
-      el.style.transition = 'opacity ' + (0.55 + (delay || 0)) + 's ' + EASE + ' ' + (delay || 0) + 's, transform ' + (0.55 + (delay || 0)) + 's ' + EASE + ' ' + (delay || 0) + 's';
-      el.style.opacity = '1';
-      el.style.transform = 'translateY(0)';
-    });
-  }
-
-  /* ---- A. Hero entrance choreography + pointer parallax ---------------- */
+  /* ---- A. Hero scene entrance + layered parallax ------------------------ */
   const hero = document.querySelector('.home-hero');
   if (hero) {
-    const heroBits = [
+    // Entrance: copy rises first, then the scene layers settle, ball drops last
+    const copy = [
       hero.querySelector('.home-hero-badge'),
       hero.querySelector('.home-hero-title'),
       hero.querySelector('.home-hero-sub-title'),
       hero.querySelector('.home-hero-sub'),
     ].filter(Boolean);
-    heroBits.forEach(function (el, i) { enterIn(el, i * 0.07, 14); });
-
-    const ballWrap = hero.querySelector('.home-hero-3d-ball-wrapper');
-    const ball = ballWrap && ballWrap.querySelector('.home-hero-3d-ball');
-    const overlay = ballWrap && ballWrap.querySelector('.home-hero-3d-mouse-overlay');
-    if (ball) {
-      // Spring entrance (once)
-      ball.style.transform = 'translate3d(-50%, -50%, 0) rotateX(-20deg) scale(0.6)';
-      ball.style.opacity = '0';
+    copy.forEach(function (el, i) {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(14px)';
+      el.style.willChange = 'opacity, transform';
       requestAnimationFrame(function () {
-        ball.style.transition = 'transform 0.9s ' + EASE + ', opacity 0.9s ' + EASE;
-        ball.style.opacity = '1';
-        ball.style.transform = 'translate3d(-50%, -50%, 0) rotateX(-20deg) scale(1)';
+        el.style.transition = 'opacity .55s ' + EASE + ' ' + (0.05 + i * 0.08) + 's, transform .55s ' + EASE + ' ' + (0.05 + i * 0.08) + 's';
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+        el.style.willChange = 'auto';
+      });
+    });
+    const pitch = hero.querySelector('.hero-pitch');
+    if (pitch) {
+      const from = getComputedStyle(pitch).transform;
+      pitch.style.transform = 'rotateX(72deg) translateY(28px) scale(1.02)';
+      pitch.style.opacity = '0';
+      requestAnimationFrame(function () {
+        pitch.style.transition = 'transform 1.0s ' + EASE + ', opacity 0.8s ' + EASE;
+        pitch.style.opacity = '1';
+        pitch.style.transform = from === 'none' ? '' : from;
       });
     }
-    // Desktop pointer parallax with clamped range; touch devices skip (no hover)
-    if (ball && overlay && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-      let raf = null, mx = 0, my = 0;
+
+    // Pointer + scroll parallax on depth-tagged layers (desktop pointers only)
+    const layers = Array.prototype.map.call(hero.querySelectorAll('[data-depth]'), function (el) {
+      return { el: el, d: parseFloat(el.getAttribute('data-depth')) || 0 };
+    });
+    const interactive = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (layers.length && (interactive || true)) {
+      let mx = 0, my = 0, sy = 0, raf = null, lastMX = 0, lastMY = 0, lastSY = -1;
       function flush() {
         raf = null;
-        const dx = Math.max(-1, Math.min(1, mx / 220));
-        const dy = Math.max(-1, Math.min(1, my / 220));
-        ball.style.transform = 'translate3d(calc(-50% + ' + (dx * 14).toFixed(1) + 'px), calc(-50% + ' + (dy * 10).toFixed(1) + 'px), 0) rotateX(' + (-20 + dy * 6).toFixed(1) + 'deg) rotateY(' + (dx * 8).toFixed(1) + 'deg) scale(1)';
+        if (interactive) {
+          const nx = Math.max(-1, Math.min(1, mx / (hero.clientWidth / 2)));
+          const ny = Math.max(-1, Math.min(1, my / (hero.clientHeight / 2)));
+          if (nx === lastMX && ny === lastMY && sy === lastSY) return;
+          lastMX = nx; lastMY = ny; lastSY = sy;
+          layers.forEach(function (l) {
+            l.el.style.transform = 'translate3d(' + (-nx * l.d * 1.6).toFixed(1) + 'px, ' + (-ny * l.d * 0.9 + sy * l.d * 0.05).toFixed(1) + 'px, 0)';
+          });
+        } else {
+          if (sy === lastSY) return;
+          lastSY = sy;
+          layers.forEach(function (l) {
+            l.el.style.transform = 'translate3d(0, ' + (sy * l.d * 0.05).toFixed(1) + 'px, 0)';
+          });
+        }
       }
-      overlay.addEventListener('mousemove', function (e) {
-        const r = ballWrap.getBoundingClientRect();
+      function queue() { if (!raf) raf = requestAnimationFrame(flush); }
+      if (interactive) hero.addEventListener('mousemove', function (e) {
+        const r = hero.getBoundingClientRect();
         mx = e.clientX - (r.left + r.width / 2);
         my = e.clientY - (r.top + r.height / 2);
-        if (!raf) raf = requestAnimationFrame(flush);
-      });
-      overlay.addEventListener('mouseleave', function () {
-        mx = my = 0;
-        if (raf) { cancelAnimationFrame(raf); raf = null; }
-        ball.style.transition = 'transform 0.5s ' + EASE;
-        ball.style.transform = 'translate3d(-50%, -50%, 0) rotateX(-20deg) scale(1)';
-      });
-      window.addEventListener('pagehide', function cleanup() {
-        if (raf) cancelAnimationFrame(raf);
-      }, { once: true });
+        queue();
+      }, { passive: true });
+      window.addEventListener('scroll', function () { sy = window.scrollY || 0; queue(); }, { passive: true });
+      window.addEventListener('pagehide', function () { if (raf) cancelAnimationFrame(raf); }, { once: true });
     }
   }
 
-  /* ---- B. Scroll-triggered section reveals (home sections only)--------- */
+  /* ---- B. Scroll-triggered section/card reveals ------------------------- */
   const shell = document.querySelector('#view-product-home .home-shell');
   if (shell && 'IntersectionObserver' in window) {
-    const sections = Array.prototype.slice.call(
-      shell.querySelectorAll(':scope > .home-actions, :scope > .home-pillars-grid, :scope > .home-competitions-section')
-    );
+    const targets = [];
+    let delayBase = 0;
+    ['.home-actions', '.home-pillars-grid', '.home-competitions-section'].forEach(function (sel) {
+      const sec = shell.querySelector(sel);
+      if (!sec) return;
+      sec.classList.add('reveal');
+      sec.style.setProperty('--reveal-delay', Math.round(delayBase) + 'ms');
+      targets.push(sec);
+      const kids = sec.querySelectorAll('.home-pillar-card, .home-comp-card');
+      Array.prototype.forEach.call(kids, function (kid, k) {
+        kid.classList.add('reveal');
+        kid.style.setProperty('--reveal-delay', Math.round(90 + k * 70) + 'ms');
+        targets.push(kid);
+      });
+      delayBase += 60;
+    });
     const obs = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (!entry.isIntersecting) return;
-        const el = entry.target;
-        obs.unobserve(el);
-        const i = sections.indexOf(el);
-        enterIn(el, Math.max(0, i) * 0.06, 22);
-        // Stagger direct children of grids for depth without animating every node
-        const kids = el.querySelectorAll('.home-pillar-card, .home-comp-card');
-        Array.prototype.forEach.call(kids, function (kid, k) { enterIn(kid, 0.05 + k * 0.06, 20); });
+        entry.target.classList.add('is-visible');
+        obs.unobserve(entry.target);
       });
     }, { threshold: 0.12 });
-    sections.forEach(function (s) { obs.observe(s); });
+    targets.forEach(function (t) { obs.observe(t); });
   }
 
-  /* ---- C. Draw modal + bracket stagger (real rendered state only) ------ */
+  /* ---- C. Draw + bracket stagger on real renders ------------------------ */
   function staggerChildren(container, selector, initial, step) {
     if (!container) return;
     const els = Array.prototype.filter.call(container.querySelectorAll(selector), function (el) {
@@ -685,15 +696,10 @@ document.addEventListener('DOMContentLoaded', function () {
       el._arenaMotionPresented = true;
       if (window.ArenaMotion && window.ArenaMotion.runAnime) {
         window.ArenaMotion.runAnime({
-          targets: el,
-          opacity: [0, 1],
-          translateY: [initial, 0],
-          duration: 420,
-          delay: i * step,
-          easing: 'easeOutCubic'
+          targets: el, opacity: [0, 1], translateY: [initial, 0],
+          duration: 420, delay: i * step, easing: 'easeOutCubic'
         });
       } else {
-        // Fallback: CSS transition
         el.style.opacity = '0';
         el.style.transform = 'translateY(' + initial + 'px)';
         requestAnimationFrame(function () {
@@ -704,37 +710,28 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
-
-  // Stagger nation/bracket cards whenever the app (re)renders real content.
-  // Observe the specific render containers, not the whole document.
-  function observeContainer(id, selector, initial, step, guard) {
-    const node = document.getElementById(id);
+  const drawModal = document.getElementById('wc-draw-modal');
+  [['wc-draw-grid', '.wc-nation-card', 22, 12, function () { return drawModal && !drawModal.hidden; }],
+   ['bracket-tree-container', '.bracket-column', 24, 60]].forEach(function (def) {
+    const node = document.getElementById(def[0]);
     if (!node) return;
     new MutationObserver(function () {
-      if (guard && !guard()) return;
-      staggerChildren(node, selector, initial, step);
+      if (def[4] && !def[4]()) return;
+      staggerChildren(node, def[1], def[2], def[3]);
     }).observe(node, { childList: true });
-  }
-  const drawModal = document.getElementById('wc-draw-modal');
-  observeContainer('wc-draw-grid', '.wc-nation-card', 22, 12, function () {
-    return drawModal && !drawModal.hidden;
   });
-  observeContainer('bracket-tree-container', '.bracket-column', 24, 60);
 
-  /* ---- D. Champion banner presentation on real reveal ------------------- */
+  /* ---- D. Champion banner on real state reveal -------------------------- */
   const champBanner = document.getElementById('champion-banner');
   if (champBanner) {
     new MutationObserver(function () {
-      if (champBanner.hidden) {
-        champBanner._arenaMotionCelebrated = false;
-        return;
-      }
-      if (!champBanner.hidden && !champBanner._arenaMotionCelebrated) {
+      if (champBanner.hidden) { champBanner._arenaMotionCelebrated = false; return; }
+      if (!champBanner._arenaMotionCelebrated) {
         champBanner._arenaMotionCelebrated = true;
         champBanner.style.opacity = '0';
         champBanner.style.transform = 'translateY(-14px)';
+        champBanner.style.transition = 'opacity .6s ' + EASE + ', transform .6s ' + EASE;
         requestAnimationFrame(function () {
-          champBanner.style.transition = 'opacity .6s ' + EASE + ', transform .6s ' + EASE;
           champBanner.style.opacity = '1';
           champBanner.style.transform = 'translateY(0)';
         });
