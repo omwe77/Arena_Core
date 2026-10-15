@@ -1,0 +1,103 @@
+  <div id="wc-draw-modal" class="modal wc-draw-modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="wc-draw-title">
+    <div class="modal-backdrop wc-draw-backdrop" id="wc-draw-backdrop" onclick="window.closeCustomDrawModal &amp;&amp; window.closeCustomDrawModal()"></div>
+    <div class="modal-dialog wc-draw-dialog">
+
+      <!-- Header -->
+      <div class="wc-draw-header">
+        <div class="wc-draw-header-left">
+          <div class="wc-draw-trophy-badge">🏆</div>
+          <div>
+            <div class="wc-draw-gold-tag">FIFA WORLD CUP 2026</div>
+            <h2 class="wc-draw-title" id="wc-draw-title">CUSTOM TOURNAMENT DRAW</h2>
+          </div>
+        </div>
+        <button type="button" class="wc-draw-close-btn" id="wc-draw-close" aria-label="Close draw" onclick="window.closeCustomDrawModal &amp;&amp; window.closeCustomDrawModal()">&times;</button>
+      </div>
+
+      <!-- Top HUD Toolbar: Progress Bar + Presets -->
+      <div class="wc-draw-progress-wrap">
+        <div class="wc-draw-count-row">
+          <div class="wc-draw-counter-box">
+            <span class="wc-draw-count-label">SELECTED CONTENDERS</span>
+            <span class="wc-draw-count-val"><span id="wc-draw-selected-count">0</span> <span class="wc-draw-of">/ 48</span></span>
+          </div>
+          
+          <!-- Preset Buttons -->
+          <div class="wc-draw-preset-actions">
+            <button type="button" class="wc-draw-preset-btn gold" id="wc-draw-preset-real" title="Load real FIFA 2026 Confederation Allocation">
+              <i class="fa-solid fa-globe"></i> REAL 2026
+            </button>
+            <button type="button" class="wc-draw-preset-btn" id="wc-draw-preset-elite" title="Select Top 48 Highest Rated Global Nations">
+              <i class="fa-solid fa-star"></i> TOP 48 ELITE
+            </button>
+            <button type="button" class="wc-draw-preset-btn" id="wc-draw-btn-random" title="Randomly shuffle 48 global contenders">
+              <i class="fa-solid fa-shuffle"></i> RANDOM 48
+            </button>
+            <button type="button" class="wc-draw-preset-btn danger" id="wc-draw-btn-reset" title="Clear all selections">
+              <i class="fa-solid fa-rotate-left"></i> CLEAR
+            </button>
+          </div>
+
+          <span class="wc-draw-count-tip" id="wc-draw-tip">Select 48 nations to launch</span>
+        </div>
+
+        <div class="wc-draw-progress-track">
+          <div class="wc-draw-progress-fill" id="wc-draw-progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- Search & Confederation Tabs Filter Bar -->
+      <div class="wc-draw-filter-bar">
+        <div class="wc-draw-search-box">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="wc-draw-search" class="wc-draw-search-input" placeholder="Search country (e.g. Brazil, France, Japan, USA)..." autocomplete="off" />
+        </div>
+
+        <div class="wc-draw-tabs" role="tablist" aria-label="Confederation tabs">
+          <button type="button" class="wc-draw-tab active" data-conf="all" role="tab">
+            🌐 ALL <span class="conf-pill" id="pill-all">48</span>
+          </button>
+          <button type="button" class="wc-draw-tab" data-conf="UEFA" role="tab">
+            🇪🇺 UEFA <span class="conf-pill" id="pill-uefa">0</span>
+          </button>
+          <button type="button" class="wc-draw-tab" data-conf="CONMEBOL" role="tab">
+            <i class="fa-solid fa-earth-americas" aria-hidden="true"></i> CONMEBOL <span class="conf-pill" id="pill-conmebol">0</span>
+          </button>
+          <button type="button" class="wc-draw-tab" data-conf="CONCACAF" role="tab">
+            <i class="fa-solid fa-earth-americas" aria-hidden="true"></i> CONCACAF <span class="conf-pill" id="pill-concacaf">0</span>
+          </button>
+          <button type="button" class="wc-draw-tab" data-conf="CAF" role="tab">
+            <i class="fa-solid fa-earth-africa" aria-hidden="true"></i> CAF <span class="conf-pill" id="pill-caf">0</span>
+          </button>
+          <button type="button" class="wc-draw-tab" data-conf="AFC" role="tab">
+            <i class="fa-solid fa-earth-asia" aria-hidden="true"></i> AFC <span class="conf-pill" id="pill-afc">0</span>
+          </button>
+          <button type="button" class="wc-draw-tab" data-conf="OFC" role="tab">
+            <i class="fa-solid fa-earth-oceania" aria-hidden="true"></i> OFC <span class="conf-pill" id="pill-ofc">0</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Nation Cards Grid Viewport -->
+      <div class="wc-draw-grid-wrap">
+        <div class="wc-draw-grid" id="wc-draw-grid">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+
+      <!-- Footer Actions & Simulation Launch Bar -->
+      <div class="wc-draw-footer">
+        <div class="wc-draw-footer-meta">
+          <span class="wc-hud-tag"><i class="fa-solid fa-layer-group"></i> 12 GROUPS (A–L)</span>
+          <span class="wc-hud-tag"><i class="fa-solid fa-trophy"></i> 32-TEAM KNOCKOUT</span>
+          <span class="wc-hud-tag"><i class="fa-solid fa-chart-line"></i> POISSON SIMULATION</span>
+        </div>
+
+        <button type="button" class="wc-draw-btn-start" id="wc-draw-btn-start" disabled>
+          <i class="fa-solid fa-play"></i>
+          <span>LAUNCH SIMULATION</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
