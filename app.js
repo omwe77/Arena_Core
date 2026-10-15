@@ -2289,7 +2289,10 @@ function setupNavigation() {
         e.stopPropagation();
         const stage = btn.dataset.stage;
         if (stage && !btn.classList.contains('is-disabled')) {
-          simulateStageWithClock(stage);
+          // This control lives on a specific bracket column. Keep its effect
+          // scoped to that column; the primary stage action is the only path
+          // allowed to prepare prerequisite rounds automatically.
+          simulateStageWithClock(stage, { perCardSim: true });
         }
       });
     });
@@ -2303,7 +2306,7 @@ function setupNavigation() {
         e.preventDefault();
         const stage = btn.dataset.stage;
         if (stage && !btn.classList.contains('is-disabled')) {
-          simulateStageWithClock(stage);
+          simulateStageWithClock(stage, { perCardSim: true });
         }
       });
     });
@@ -7939,7 +7942,13 @@ function getUclFeederStatus() {
         const toast = document.getElementById('stage-advance-toast');
         if (toast) toast.hidden = true;
 
-        // Clean state reset
+        // Clean state reset. initTournamentState deliberately restores a saved
+        // tournament snapshot during normal startup; remove only this
+        // competition's snapshot first so Reset cannot resurrect old fixtures.
+        // Other competitions and user preferences remain untouched.
+        try {
+          localStorage.removeItem('arena_tournament_state_' + activeTournKey);
+        } catch (e) {}
         initTournamentState(activeTournKey);
         setStageTab('all', false);
 

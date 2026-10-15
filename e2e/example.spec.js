@@ -210,6 +210,67 @@ test.describe('ARENA_CORE Platform Tests', () => {
     await expect(simControls.first()).toBeVisible();
   });
 
+  test('a bracket-column Simulate All action does not resolve earlier rounds', async ({ page }) => {
+    const fixture = (round, count) => Array.from({ length: count }, (_, index) => ({
+      home: `${round} Home ${index + 1}`,
+      away: `${round} Away ${index + 1}`,
+      scoreHome: '–',
+      scoreAway: '–',
+      isSimulated: false,
+      isLive: false,
+      events: []
+    }));
+
+    // Persist a legitimate in-progress cup shape before the app initialises.
+    // This lets the UI expose a later-round column without waiting through a
+    // full tournament animation.
+    await page.addInitScript((state) => {
+      localStorage.setItem('arena_tournament_state_wc', JSON.stringify(state));
+    }, {
+      subView: 'sim', groupsPlayed: true, groups: {},
+      r32: fixture('R32', 16), r16: fixture('R16', 8),
+      qf: fixture('QF', 4), sf: [], gf: [], champion: null
+    });
+
+    await page.goto('/');
+    await page.click('.top-nav-link[data-nav="tournament-sim"]');
+
+    const qfSimAll = page.locator('.btn-sim-stage-all[data-stage="qf"]');
+    await expect(qfSimAll).toBeVisible();
+    await qfSimAll.click();
+
+    // The QF may be live, but R32 remains untouched. Previously this click
+    // entered the generic stage path and synchronously resolved R32/R16.
+    await expect(page.locator('.btn-sim-match[data-stage="r32"]')).toHaveCount(16);
+    await expect(page.locator('.btn-sim-match[data-stage="r16"]')).toHaveCount(8);
+  });
+
+  test('tournament reset clears only the active competition snapshot', async ({ page }) => {
+    const completedMatch = {
+      home: 'Reset Home', away: 'Reset Away', scoreHome: 2, scoreAway: 1,
+      winner: 'Reset Home', isSimulated: true, isLive: false, events: []
+    };
+    await page.addInitScript((state) => {
+      localStorage.setItem('arena_tournament_state_wc', JSON.stringify(state));
+      localStorage.setItem('arena_tournament_state_pl', JSON.stringify({ subView: 'home', sentinel: 'keep' }));
+    }, {
+      subView: 'sim', groupsPlayed: true, groups: {}, r32: [completedMatch],
+      r16: [], qf: [], sf: [], gf: [], champion: null
+    });
+
+    await page.goto('/');
+    await page.click('.top-nav-link[data-nav="tournament-sim"]');
+    await page.locator('#sim-draw-btn').click();
+
+    const saved = await page.evaluate(() => ({
+      wc: JSON.parse(localStorage.getItem('arena_tournament_state_wc') || 'null'),
+      pl: JSON.parse(localStorage.getItem('arena_tournament_state_pl') || 'null')
+    }));
+    expect(saved.wc.groupsPlayed).toBe(false);
+    expect(saved.wc.r32).toEqual([]);
+    expect(saved.pl.sentinel).toBe('keep');
+  });
+
   test('keyboard navigation works for main nav', async ({ page }) => {
     await page.goto('/');
 
@@ -253,6 +314,35 @@ test.describe('ARENA_CORE Platform Tests', () => {
       await navLinks.nth(i).click({ force: true });
       await page.waitForTimeout(300);
     }
+  });
+
+  test('desktop and mobile key views render without viewport overflow', async ({ page }) => {
+    const failures = [];
+    page.on('pageerror', error => failures.push(error.message));
+
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    await page.click('.top-nav-link[data-nav="tournament-sim"]');
+    await expect(page.locator('#view-tournament-sim')).toBeVisible();
+    await page.screenshot({ path: 'test-results/arena-core-simulator-desktop.png', fullPage: true });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.click('.top-nav-link[data-nav="product-home"]');
+    await expect(page.locator('#view-product-home')).toBeVisible();
+    await page.screenshot({ path: 'test-results/arena-core-home-mobile.png', fullPage: true });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    expect(failures).toEqual([]);
+  });
+
+  test('reduced-motion mode keeps simulator content immediately usable', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    await page.click('.top-nav-link[data-nav="tournament-sim"]');
+
+    await expect(page.locator('#view-tournament-sim')).toBeVisible();
+    await expect(page.locator('#sim-stage-action-btn')).toBeVisible();
+    await expect(page.locator('#sim-stage-action-btn')).toBeEnabled();
   });
 
   test('no console errors during full navigation', async ({ page }) => {
