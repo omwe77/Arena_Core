@@ -2360,15 +2360,14 @@ function setupNavigation() {
         const stage = btn.dataset.stage;
         const idx = parseInt(btn.dataset.idx, 10);
         if (!stage || !Number.isFinite(idx)) return;
-        const state = tournamentState[activeTournKey];
-        const match = state && state[stage] ? state[stage][idx] : null;
-        openDetailedStatsModal(
-          match ? match.home : btn.dataset.home || 'Home',
-          match ? match.away : btn.dataset.away || 'Away',
-          match,
-          stage,
-          idx
-        );
+        const stageTab = document.querySelector(`.bracket-tab[data-stage="${stage}"]`);
+        if (stageTab) {
+          stageTab.click();
+          setTimeout(() => {
+            const targetCard = document.querySelector(`.sofascore-match-card[data-card-id="${stage}_${idx}"], .bracket-match-card[data-stage="${stage}"][data-idx="${idx}"]`);
+            if (targetCard) targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 80);
+        }
       });
       btn.addEventListener('keydown', (e) => {
         if (e.key !== 'Enter' && e.key !== ' ') return;
