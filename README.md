@@ -87,6 +87,11 @@ Arena Core uses a stochastic simulation framework calibrated against real-world 
 * **Domestic Leagues (38 / 34 Matchdays):**
   * Double round-robin format with full home and away fixture generation, real-time goal difference updates, and relegation/European spot qualification trackers.
 
+* **Custom World Cup Draw Engine:**
+  * **Confederation Allocation:** Supports custom team selection respecting FIFA continental quotas (UEFA: 16, CAF: 9, AFC: 8, CONCACAF: 6, CONMEBOL: 6, OFC: 1, Intercontinental Playoff: 2).
+  * **Real-time Validation:** Live badge indicators display required vs. selected nations per confederation, preventing tournament corruption before bracket compilation.
+  * **Draw Seeding Pots:** Teams are seeded into Pots 1 through 4 according to global strength rankings, preventing group over-clustering.
+
 ---
 
 ## 🛠️ Tech Stack
