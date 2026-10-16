@@ -71,6 +71,15 @@ Arena Core uses a stochastic simulation framework calibrated against real-world 
 
 ---
 
+## 🏆 Tournament Formats & Bracket Rules
+
+* **FIFA World Cup (Expanded 48-Team Format):**
+  * **Group Stage:** 48 nations arranged into 12 groups of 4 (Groups A through L).
+  * **Advancement Criteria:** Top 2 nations from each group (24 teams) plus the 8 best third-placed nations automatically qualify for the knockout stage.
+  * **Single-Elimination Knockout:** 32 teams contest the Round of 32, followed by Round of 16, Quarterfinals, Semifinals, 3rd Place Playoff, and the Final.
+
+---
+
 ## 🛠️ Tech Stack
 
 | Layer | Technology | Purpose |
