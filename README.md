@@ -4,7 +4,6 @@
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Azure%20Static%20Web%20Apps-2ecc71?style=for-the-badge&logo=microsoftazure)](https://lemon-ocean-06aede400.5.azurestaticapps.net)
 [![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions)](https://github.com/omwe77/Arena_Core/actions)
-[![Tests](https://img.shields.io/badge/Tests-39%2F39%20Passing-4EA140?style=for-the-badge)](https://github.com/omwe77/Arena_Core/tree/main/e2e)
 [![License](https://img.shields.io/badge/License-ISC-blue?style=for-the-badge)](https://github.com/omwe77/Arena_Core/blob/main/LICENSE)
 
 ---
@@ -142,7 +141,7 @@ npm run lint
 
 ### Test Suite Coverage Breakdown
 
-The automated test suite runs 39 end-to-end tests across Chromium, verifying:
+The automated test suite runs comprehensive end-to-end tests across Chromium, verifying:
 * **Tournament Progression:** Group stage calculations, tie-breakers, knockout bracket advancement, and championship coronation.
 * **State Persistence:** LocalStorage serialization preserving simulated tournament states and user configurations across browser refreshes.
 * **Deterministic Seeds:** PRNG consistency ensuring reproducible simulation brackets with matching seed parameters.
