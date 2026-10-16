@@ -10715,13 +10715,6 @@ function getUclFeederStatus() {
 
     function launchTacticalRadarFromBall() {
       triggerSuperShot();
-      const state = tournamentState[activeTournKey];
-      const match = state?.gf?.[0] || state?.sf?.[0] || state?.qf?.[0] || state?.r16?.[0] || state?.r32?.[0] || { home: 'Argentina', away: 'France', scoreHome: 3, scoreAway: 3 };
-      const hTeam = match.home || 'Argentina';
-      const aTeam = match.away || 'France';
-      setTimeout(() => {
-        openProTacticalTracker(hTeam, aTeam, match);
-      }, 400);
     }
 
     // Click on Striker or Ball triggers super strike & opens ARENA Tactical Radar
