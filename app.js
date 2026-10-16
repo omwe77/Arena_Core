@@ -6038,7 +6038,6 @@ function getUclFeederStatus() {
         </div>
         <div class="match-card-actions">
           <span class="empty-stage-hint-tag">QUALIFICATION PENDING</span>
-          <button type="button" class="sfc-action-btn btn-open-detailed-stats" data-stage="${stage}" data-idx="${idx}" data-home="${p.home}" data-away="${p.away}" style="font-size:0.65rem;padding:3px 8px;">Detailed Stats</button>
         </div>
       </div>
 
