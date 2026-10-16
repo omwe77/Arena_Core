@@ -140,6 +140,16 @@ npm test
 npm run lint
 ```
 
+### Test Suite Coverage Breakdown
+
+The automated test suite runs 39 end-to-end tests across Chromium, verifying:
+* **Tournament Progression:** Group stage calculations, tie-breakers, knockout bracket advancement, and championship coronation.
+* **State Persistence:** LocalStorage serialization preserving simulated tournament states and user configurations across browser refreshes.
+* **Deterministic Seeds:** PRNG consistency ensuring reproducible simulation brackets with matching seed parameters.
+* **Accessibility:** Skip-to-content target resolution, semantic landmark tags, and modal keyboard trap dismissals (`Escape`).
+* **Visual & Responsive Layouts:** Verification across desktop (1440px), tablet (1024px), and mobile (390px) screen boundaries without horizontal clipping.
+* **WebAudio API Safety:** Silent fallback gracefully handling restricted browser audio autoplay policies.
+
 ---
 
 ## 📄 License
