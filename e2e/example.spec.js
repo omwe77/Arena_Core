@@ -684,4 +684,226 @@ test.describe('ARENA_CORE Platform Tests', () => {
       expect(isFit).toBe(true);
     }
   });
+  // ---------------------------------------------------------------------------
+  // Regression: champion modal appears on simulation completion
+  // ---------------------------------------------------------------------------
+  test('champion modal becomes visible after instant World Cup simulation', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForTimeout(400);
+
+    // Spy on confetti invocation
+    await page.evaluate(() => {
+      window.__confettiCalls = 0;
+      const orig = window.confetti;
+      if (typeof orig === 'function') {
+        window.confetti = function(...args) {
+          window.__confettiCalls = (window.__confettiCalls || 0) + 1;
+          return orig.apply(this, args);
+        };
+      }
+    });
+
+    // Navigate to WC simulator via top nav
+    await page.click('.top-nav-link[data-nav="tournament-sim"]');
+    await page.waitForTimeout(500);
+
+    // Dismiss UCL gate modal if it appears (not relevant here)
+    const uclGate = page.locator('#ucl-gate-modal');
+    if (await uclGate.isVisible()) {
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(200);
+    }
+
+    // Trigger instant/full simulation
+    const instantBtn = page.locator('#sim-instant-btn');
+    await expect(instantBtn).toBeVisible();
+    await instantBtn.click();
+
+    // Wait up to 15 s for champion modal to appear
+    const modal = page.locator('#champion-modal');
+    await modal.waitFor({ state: 'visible', timeout: 15000 });
+
+    // Modal must show a non-empty champion name
+    const name = await page.locator('#champ-modal-name').textContent();
+    expect(name && name.trim().length).toBeGreaterThan(0);
+
+    // Competition name appears
+    const tourn = await page.locator('#champ-modal-tourn').textContent();
+    expect(tourn && tourn.trim().length).toBeGreaterThan(0);
+
+    // Confetti canvas exists in DOM
+    await expect(page.locator('#confetti-canvas')).toBeAttached();
+
+    // Verify confetti animation was triggered
+    const confettiCount = await page.evaluate(() => window.__confettiCalls);
+    expect(confettiCount).toBeGreaterThan(0);
+  });
+
+  test('champion modal close button hides modal and stops confetti', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForTimeout(400);
+    await page.click('.top-nav-link[data-nav="tournament-sim"]');
+    await page.waitForTimeout(500);
+
+    const instantBtn = page.locator('#sim-instant-btn');
+    await expect(instantBtn).toBeVisible();
+    await instantBtn.click();
+
+    const modal = page.locator('#champion-modal');
+    await modal.waitFor({ state: 'visible', timeout: 15000 });
+
+    // Close via close button
+    await page.locator('#champ-modal-close').click();
+    await expect(modal).toBeHidden();
+  });
+
+  test('champion modal backdrop click hides modal', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForTimeout(400);
+    await page.click('.top-nav-link[data-nav="tournament-sim"]');
+    await page.waitForTimeout(500);
+
+    const instantBtn = page.locator('#sim-instant-btn');
+    await expect(instantBtn).toBeVisible();
+    await instantBtn.click();
+
+    const modal = page.locator('#champion-modal');
+    await modal.waitFor({ state: 'visible', timeout: 15000 });
+
+    // Click the backdrop outside the centered dialog
+    await page.locator('#champ-modal-backdrop').click({ position: { x: 10, y: 10 } });
+    await expect(modal).toBeHidden();
+  });
+
+  // ---------------------------------------------------------------------------
+  // Regression: mute button ID fix — audio-fx.js could not find the button
+  // ---------------------------------------------------------------------------
+  test('mute button has correct IDs matching audio-fx.js selectors', async ({ page }) => {
+    await page.goto('/');
+
+    // The button must exist with the ID audio-fx.js looks for
+    await expect(page.locator('#btn-audio-fx-toggle')).toBeVisible();
+    await expect(page.locator('#audio-fx-icon')).toBeVisible();
+    await expect(page.locator('#audio-fx-label')).toBeAttached();
+  });
+
+  test('mute button toggles SFX state, aria-pressed, label and icon', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForTimeout(300);
+
+    const btn = page.locator('#btn-audio-fx-toggle');
+
+    // Initial state: SFX ON
+    await expect(btn).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('#audio-fx-label')).toHaveText('SFX ON');
+
+    // Click to mute
+    await btn.click();
+    await expect(btn).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.locator('#audio-fx-label')).toHaveText('MUTED');
+    const iconClass = await page.locator('#audio-fx-icon').getAttribute('class');
+    expect(iconClass).toContain('volume-xmark');
+
+    // Click to unmute
+    await btn.click();
+    await expect(btn).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('#audio-fx-label')).toHaveText('SFX ON');
+  });
+
+  test('mute preference persists across page reload', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForTimeout(300);
+
+    // Mute
+    await page.locator('#btn-audio-fx-toggle').click();
+    await expect(page.locator('#audio-fx-label')).toHaveText('MUTED');
+
+    // Reload
+    await page.reload();
+    await page.waitForTimeout(500);
+
+    // Should still be muted
+    await expect(page.locator('#audio-fx-label')).toHaveText('MUTED');
+    await expect(page.locator('#btn-audio-fx-toggle')).toHaveAttribute('aria-pressed', 'false');
+
+    // Restore for subsequent tests
+    await page.locator('#btn-audio-fx-toggle').click();
+  });
+
+  test('audio is genuinely muted: no oscillators or delayed fanfare sounds play when muted', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForTimeout(300);
+
+    // Mute via toggle
+    await page.locator('#btn-audio-fx-toggle').click();
+    await expect(page.locator('#btn-audio-fx-toggle')).toHaveAttribute('aria-pressed', 'false');
+
+    // Instrument AudioContext to track any created oscillators
+    await page.evaluate(() => {
+      window.__oscillatorCount = 0;
+      const originalCreateOsc = window.AudioContext ? window.AudioContext.prototype.createOscillator : null;
+      if (originalCreateOsc) {
+        window.AudioContext.prototype.createOscillator = function(...args) {
+          window.__oscillatorCount = (window.__oscillatorCount || 0) + 1;
+          return originalCreateOsc.apply(this, args);
+        };
+      }
+      // Trigger all sound functions while muted
+      window.ArenaAudio.playFanfare();
+      window.ArenaAudio.playGoalHorn();
+      window.ArenaAudio.playWhistle('triple');
+      window.ArenaAudio.playKick();
+      window.ArenaAudio.playClick();
+      if (window.ArenaMotion) {
+        window.ArenaMotion.celebrateChampion('TEST_CHAMPION', 'TEST_TOURNAMENT');
+      }
+    });
+
+    // Wait 900ms to allow any delayed timers (e.g. 700ms delayed goal horn in celebrateChampion) to fire
+    await page.waitForTimeout(900);
+
+    const result = await page.evaluate(() => ({
+      enabled: window.ArenaAudio.isAudioEnabled(),
+      oscCount: window.__oscillatorCount || 0
+    }));
+
+    // Must be genuinely disabled and zero sound oscillators created
+    expect(result.enabled).toBe(false);
+    expect(result.oscCount).toBe(0);
+
+    // Unmute and restore
+    await page.locator('#btn-audio-fx-toggle').click();
+    await expect(page.locator('#btn-audio-fx-toggle')).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  // ---------------------------------------------------------------------------
+  // Regression: competition switch + completion produces no JS errors
+  // ---------------------------------------------------------------------------
+  test('switching to Copa and running instant sim has no console errors', async ({ page }) => {
+    const jsErrors = [];
+    page.on('pageerror', err => jsErrors.push(err.message));
+
+    await page.goto('/');
+    await page.waitForTimeout(400);
+
+    // Switch to Copa
+    await page.evaluate(() => {
+      const btn = document.querySelector('[data-tourn="copa"]') ||
+                  document.querySelector('[data-key="copa"]');
+      if (btn) btn.click();
+    });
+    await page.waitForTimeout(600);
+
+    // Try instant sim if available
+    const instantBtn = page.locator('#sim-instant-btn');
+    if (await instantBtn.isVisible()) {
+      await instantBtn.click();
+      await page.waitForTimeout(3000);
+    }
+
+    // Filter out known non-fatal warnings; only hard errors matter
+    const fatal = jsErrors.filter(e => !e.includes('ResizeObserver') && !e.includes('Non-Error'));
+    expect(fatal).toHaveLength(0);
+  });
+
 });

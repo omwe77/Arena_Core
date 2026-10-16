@@ -129,9 +129,9 @@
     </nav>
 
     <div class="header-right">
-      <button type="button" class="audio-toggle" id="audio-toggle" title="Toggle audio effects">
-        <i class="fa-solid fa-volume-high" id="audio-icon"></i>
-        <span class="audio-label" id="audio-label">SFX ON</span>
+      <button type="button" class="audio-toggle" id="btn-audio-fx-toggle" title="Toggle audio effects" aria-pressed="true">
+        <i class="fa-solid fa-volume-high" id="audio-fx-icon"></i>
+        <span class="audio-label" id="audio-fx-label">SFX ON</span>
       </button>
       <span class="data-mode-badge" id="global-data-mode" aria-live="polite">
         <span class="mode-pulse"></span>
@@ -823,5 +823,51 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
   </script>
+
+  <!-- Champion Celebration Modal -->
+  <div class="modal celebration-modal" id="champion-modal" hidden role="dialog" aria-modal="true" aria-labelledby="champ-modal-headline">
+    <div class="modal-backdrop" id="champ-modal-backdrop"></div>
+    <div class="champ-dialog">
+      <canvas class="confetti-canvas" id="confetti-canvas"></canvas>
+      <button type="button" class="modal-close-btn" id="champ-modal-close" aria-label="Close champion celebration">&times;</button>
+      <div class="champ-modal-content">
+        <div class="trophy-sparkle-wrap">
+          <div class="gold-aura"></div>
+          <span class="champ-giant-trophy">🏆</span>
+        </div>
+        <div class="champ-headline" id="champ-modal-headline">CHAMPIONS CROWNED!</div>
+        <div class="champ-tourn-name" id="champ-modal-tourn"></div>
+        <div class="champ-team-card">
+          <div class="champ-team-flag" id="champ-modal-flag"></div>
+          <div class="champ-team-title" id="champ-modal-name"></div>
+          <div class="champ-tagline" id="champ-modal-tagline"></div>
+          <div class="champ-hero-stats" id="champ-hero-stats-row">
+            <!-- populated by JS -->
+          </div>
+        </div>
+        <div class="champ-stats-row" id="champ-stats-row">
+          <!-- populated by JS -->
+        </div>
+        <!-- Simulation receipt (hidden visually but readable for export) -->
+        <div class="champ-receipt" style="display:none">
+          <span id="champ-modal-trophy"></span>
+          <span id="champ-sim-timestamp"></span>
+          <span id="champ-sim-competition"></span>
+          <span id="champ-sim-runid"></span>
+          <span id="champ-sim-seed"></span>
+          <span id="champ-sim-result"></span>
+        </div>
+        <div class="champ-modal-actions">
+          <button type="button" class="champ-btn-secondary" id="champ-view-bracket-btn">
+            <i class="fa-solid fa-sitemap"></i> VIEW BRACKET
+          </button>
+          <button type="button" class="champ-btn-secondary" id="champ-export-btn">
+            <i class="fa-solid fa-download"></i> EXPORT
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
