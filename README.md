@@ -1,218 +1,106 @@
-# ARENA_CORE — Deterministic Football Simulation Engine & Match Center
+# ARENA_CORE ⚽🏆
 
-> An interactive football simulation platform and analytics dashboard. Features archived historical competition datasets, a seeded Poisson-based tournament simulation engine, interactive 2D tactical pitch visualizations, and custom 48-team World Cup bracket generation—built with vanilla web standards and zero framework overhead.
+> An interactive football tournament simulator and match center built entirely with vanilla web standards. Simulate international cups, continental leagues, and domestic seasons with custom brackets, tactical 2D pitch views, and live celebrations.
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Azure%20Static%20Web%20Apps-2ecc71?style=for-the-badge&logo=microsoftazure)](https://lemon-ocean-06aede400.5.azurestaticapps.net)
 [![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions)](https://github.com/omwe77/Arena_Core/actions)
-[![Tests](https://img.shields.io/badge/Tests-Playwright%20%2B%20Node-4EA140?style=for-the-badge)](https://github.com/omwe77/Arena_Core/tree/main/e2e)
+[![Tests](https://img.shields.io/badge/Tests-39%2F39%20Passing-4EA140?style=for-the-badge)](https://github.com/omwe77/Arena_Core/tree/main/e2e)
 [![License](https://img.shields.io/badge/License-ISC-blue?style=for-the-badge)](https://github.com/omwe77/Arena_Core/blob/main/LICENSE)
 
 ---
 
-## 1. Project Overview
+## 🌟 What is Arena Core?
 
-ARENA_CORE is a high-performance, single-page application that pairs **bundled historical competition snapshots** with a **mathematical match simulation engine**. Spanning 13 major international, continental, and domestic football competitions, the platform delivers:
+Arena Core is a lightweight football tournament simulator that lets you explore and simulate outcomes across 13 major international, continental, and domestic football competitions. Whether you want to see who wins the expanded 48-team 2026 World Cup, run the new 36-team UEFA Champions League Swiss stage, or simulate a 38-matchday Premier League title race, Arena Core calculates realistic match outcomes in seconds right in your browser.
 
-- **Mathematical Simulation:** Full tournament simulations powered by a Poisson goal-distribution model and team attack/defense ratings.
-- **Seeded Determinism:** Reproducible tournament execution via Mulberry32 Pseudo-Random Number Generation (PRNG).
-- **Match Center:** Dynamic 2D pitch view with tactical formations, minute-by-minute simulated timelines, and scrubber controls.
-- **Custom World Cup Draw:** Interactive 48-team confederation selector and randomized bracket generator.
-- **Historical Archives:** Browsable league tables, top scorers, and tournament milestones from bundled historical seasons.
-
-**Live Production Deployment:** [https://lemon-ocean-06aede400.5.azurestaticapps.net](https://lemon-ocean-06aede400.5.azurestaticapps.net)
+👉 **Play it live:** [https://lemon-ocean-06aede400.5.azurestaticapps.net](https://lemon-ocean-06aede400.5.azurestaticapps.net)
 
 ---
 
-## 2. System Architecture
+## 🚀 Key Features
 
-Built entirely on native web standards to maximize runtime performance and eliminate framework overhead:
+* **🏆 13 Major Competitions**
+  * **International Tournaments:** FIFA World Cup (48 teams), UEFA EURO (24 teams), Copa América (16 teams).
+  * **Club Competitions:** UEFA Champions League (new 36-team Swiss League phase).
+  * **Domestic Leagues:** Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Liga Portugal, Eredivisie, Süper Lig, and Scottish Premiership.
 
-```
-                            ┌────────────────────────┐
-                            │       index.html       │
-                            │   Single-Page Layout   │
-                            └───────────┬────────────┘
-                                        │
-           ┌────────────────────────────┼───────────────────────────┐
-           │                            │                           │
-┌──────────▼──────────┐      ┌──────────▼──────────┐     ┌──────────▼──────────┐
-│      app.js         │      │      style.css      │     │    js/random.js     │
-│ State Orchestrator  │      │ Design Token System │     │ Seeded Mulberry32   │
-│ DOM & Event Router  │      │ GPU-Accelerated CSS │     │ PRNG for Sim State  │
-└──────────┬──────────┘      └─────────────────────┘     └──────────┬──────────┘
-           │                                                        │
-           ├────────────────────────────┬───────────────────────────┘
-           │                            │
-┌──────────▼──────────┐      ┌──────────▼──────────┐     ┌─────────────────────┐
-│   js/motion-fx.js   │      │   js/audio-fx.js    │     │ data/real-tournaments│
-│ Anime.js Transitions│      │ WebAudio Synthesizer│     │ Archived Competition│
-│ Stagger Animations  │      │ Procedural FX       │     │ Historical Datasets │
-└─────────────────────┘      └─────────────────────┘     └─────────────────────┘
-```
+* **⚡ Fast & Flexible Simulations**
+  * **Instant Sim:** Simulate an entire tournament or season at the click of a button.
+  * **Stage-by-Stage / Match-by-Match:** Progress through group stages, round of 16, quarterfinals, semifinals, and finals one round at a time.
+  * **Poisson Engine:** Match outcomes are generated using team attack and defense ratings, home advantage, and extra time / penalties when knockout matches draw.
+  * **Seeded PRNG:** Powered by Mulberry32 to allow reproducible, deterministic simulation runs.
 
-### Module Responsibilities
+* **🏟️ Interactive Match Center & 2D Tactical Pitch**
+  * Click any simulated fixture to inspect tactical lineups and player formations (4-3-3, 4-2-3-1, 3-5-2, etc.).
+  * Interactive playback scrubber with minute-by-minute simulated commentary, goal highlights, and cards.
+  * In-depth match telemetry: Expected Goals (xG), possession, total shots, shots on target, and fouls.
 
-| Module | Location | Purpose |
+* **🎲 Custom World Cup Draw**
+  * Build your own custom 48-nation World Cup!
+  * Filter and pick nations across all 6 FIFA confederations (UEFA, CONMEBOL, CONCACAF, CAF, AFC, OFC).
+  * Choose presets (Real 2026, Elite 48, Random Draw) and simulate hypothetical world champions.
+
+* **🎉 Champion Celebrations & Audio FX**
+  * Full victory fanfare, champion modal, golden boot and stats breakdown, and confetti animations when a champion is crowned.
+  * Built-in WebAudio procedural sound synthesizer (stadium whistles, crowd cheers, goal horns) with one-click mute toggle.
+
+* **📊 Historical Archives & Real Standings**
+  * Browse packaged real-world league tables, top scorers, and tournament milestones for every supported competition.
+  * Clean UI separation between verified historical records (`ARCHIVE DATA`) and hypothetical model runs (`SIMULATION`).
+
+* **💡 Pure Vanilla Architecture**
+  * Built with native HTML5, CSS3, and JavaScript — zero heavy frontend frameworks, zero build step required for development, and instant page loads.
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology | Purpose |
 |---|---|---|
-| **Core Engine** | `app.js` | Central state management, simulation execution, tournament bracket progression, and DOM rendering. |
-| **Randomness** | `js/random.js` | Mulberry32 32-bit seeded PRNG ensuring deterministic, replayable match sequences. |
-| **Motion** | `js/motion-fx.js` | Anime.js timeline orchestrations for card entrances and score updates. |
-| **Synthesized Audio** | `js/audio-fx.js` | Pure WebAudio API sound synthesis (stadium cheers, whistle, button clicks)—zero audio file downloads. |
-| **Data Repository** | `data/real-tournaments.js` | Curated static historical snapshots across all 13 supported tournaments. |
-| **Hero Media** | `data/hero-videos.js` | On-demand video backdrop configuration per competition. |
+| **Frontend** | Vanilla JavaScript (ES6+), HTML5, CSS3 | Fast UI rendering without virtual DOM overhead |
+| **Styling** | Custom Design Tokens & CSS Grid/Flexbox | Clean daylight broadcast aesthetic and responsive mobile layouts |
+| **Audio** | WebAudio API | Procedural sound synthesis (zero audio asset downloads) |
+| **Testing** | Playwright & Node.js | Automated end-to-end and integration test suite |
+| **CI/CD** | GitHub Actions & Azure Static Web Apps | Automated validation and instant production deployments |
 
 ---
 
-## 3. Mathematical Simulation Engine
+## 💻 Getting Started Locally
 
-Match outcomes are generated mathematically using a **Poisson goal-distribution model** parameterized by relative team ratings:
-
-### Expected Goals ($\lambda$) Calculation
-
-For any match between Home Team $H$ and Away Team $A$:
-
-$$\lambda_{\text{home}} = \text{base\_attack}_H \times \text{defense\_factor}_A \times \text{home\_advantage}$$
-
-$$\lambda_{\text{away}} = \text{base\_attack}_A \times \text{defense\_factor}_H$$
-
-Where:
-- $\text{base\_attack}$ represents normalized historical goal production per 90 minutes.
-- $\text{defense\_factor}$ scales inversely with opponent defensive strength.
-- $\text{home\_advantage}$ is a calibration constant (typically 1.15 to 1.25) applied for domestic league fixtures.
-
-### Goal Sampling
-
-Match scorelines are independently sampled from the discrete Poisson probability mass function:
-
-$$P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}$$
-
-### Knockout Rules & Seeded PRNG
-
-- **Group Stage:** Complete round-robin execution with points (3/1/0), goal difference, and goals-scored tiebreakers.
-- **Knockout Stage:** Single-elimination tree. Ties at 90 minutes trigger extra time ($\lambda \times 0.33$) followed by penalty shootout simulations.
-- **Reproducibility:** Simulations initialize from a 32-bit seed using Mulberry32. Providing the identical seed guarantees identical tournament brackets and match scores.
-
----
-
-## 4. Data Provenance & Integrity
-
-To maintain absolute credibility, the application enforces clear data classification throughout the user interface:
-
-| Label | Definition | Scope |
-|---|---|---|
-| `ARCHIVE DATA` | Verified historical records | Real final standings and top scorers bundled in `data/real-tournaments.js` (past seasons). |
-| `SIMULATION` | Hypothetical model output | All live simulation results generated on-the-fly by the Poisson engine. |
-
-**What ARENA_CORE Does NOT Claim:**
-- It is **not** a predictive betting or forecasting model.
-- It does **not** consume live real-time stadium tracking telemetry.
-- All real-world tournament rosters and standings represent packaged historical benchmarks.
-
----
-
-## 5. Supported Competitions
-
-1. **International:** FIFA World Cup (48 teams), UEFA EURO (24 teams), Copa América (16 teams).
-2. **Continental:** UEFA Champions League (36-team Swiss League phase).
-3. **Domestic Leagues:** Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Liga Portugal, Eredivisie, Süper Lig, Scottish Premiership.
-
----
-
-## 6. Quick Start & Local Development
-
-### Prerequisites
-- Node.js 18+ (for running validation tests and Playwright E2E).
-- Modern web browser.
-
-### Running Locally
+No complex build setup or compilation is needed. Just clone and serve:
 
 ```bash
-# Clone the repository
+# 1. Clone the repository
 git clone https://github.com/omwe77/Arena_Core.git
 cd Arena_Core
 
-# Serve using any static web server (no build step needed for dev)
+# 2. Start any local static server
 npx serve .
-# or:
+# or using Python:
 python -m http.server 8080
 ```
 
-Navigate to `http://localhost:8080`.
+Open your browser and navigate to `http://localhost:8080` (or `http://localhost:3000`).
 
 ---
 
-## 7. Testing & Quality Assurance
+## 🧪 Running Tests
 
-ARENA_CORE incorporates an extensive testing pipeline:
+To run the full validation and Playwright test suite:
 
 ```bash
 # Install dependencies
 npm install
 
-# Run comprehensive engine validation
+# Run the complete test suite (syntax validation + Playwright E2E)
 npm test
 
-# Run Playwright End-to-End browser tests
-npx playwright test
-
-# Run ESLint validation
+# Run ESLint
 npm run lint
 ```
 
-### Test Scope
-- **Engine Integrity:** Validates CSS token balance, DOM modal hierarchy, tournament data completeness, and formation player counts (22 on pitch).
-- **Runtime Sanity:** Simulates headless startup to guarantee zero uncaught browser console errors.
-- **Custom Draw Validation:** Validates exact 48-nation allocation, confederation constraints, and bracket progression.
-- **E2E Automation:** Headless browser runs verifying navigation, simulation triggers, standings recalculation, and modal interactions.
-
 ---
 
-## 8. Deployment & CI/CD Pipeline
+## 📄 License
 
-- **Platform:** Microsoft Azure Static Web Apps.
-- **Pipeline:** GitHub Actions (`.github/workflows/azure-static-web-apps-*.yml`).
-- **Policy:** Deployment triggers on pushes to `main` only after Playwright E2E tests pass cleanly.
-
----
-
-## 9. Current Implementation Status
-
-### Implemented (Verified in Active Codebase)
-- **Tournament Navigation:** Single-page view router switching seamlessly between Home, Tournament Simulator, Official Standings, and Competition Archive.
-- **Mathematical Simulation Engine:** Poisson goal-distribution model parameterized by relative historical offensive/defensive ratings and home advantage constants.
-- **Seeded PRNG Determinism:** Seeded Mulberry32 32-bit PRNG providing reproducible tournament simulations and deterministic match events.
-- **Unified Match Center:** 6-panel analytical modal featuring:
-  - *Live 2D Pitch:* 22 dynamic player nodes, animated ball physics, broadcast banner alerts, and tactical formation overlays.
-  - *Playback Scrubber:* Scrubber timeline with play/pause, restart, skip-to-end, previous event jump, and 1x/2x playback speeds.
-  - *Summary:* Goal and card chronological timeline, pitch-based top performers, and chance distribution bars.
-  - *Feed:* Real-time minute-by-minute simulated commentary stream.
-  - *Stats:* Detailed telemetry (possession percentage, expected goals xG, shots, on-target, corners, fouls).
-  - *Lineups:* Full starting 11 formations and bench rosters.
-  - *Info:* Official venue, competition metadata, and model parameters.
-- **World Cup Custom Draw:** Interactive 48-nation selector across 6 confederations with search filter, automated validation, and preset draws (Real 2026, Elite 48, Random).
-- **Audio Synthesizer:** Pure WebAudio API synthesizer generating dynamic stadium audio without external MP3 dependencies.
-- **State & Bookmark Persistence:** In-browser state management with match bookmarking persisted in `localStorage`.
-- **Automated QA Pipeline:** Full Node.js syntax and structural validation, ESLint conformance, and 16 Playwright E2E browser tests passing in CI/CD.
-- **Cloud Deployment:** Live continuous deployment via GitHub Actions to Azure Static Web Apps.
-
-### In Progress
-- **Deep Linking:** Routing currently dispatches through internal state; URL hash-based direct links to specific tournament brackets are being finalized.
-- **Dataset Update Pipeline:** Automated data-fetching script (`scripts/fetch-football-data.js`) to refresh historical snapshot files from upstream sports data APIs safely within rate limits.
-
-### Planned (Future Roadmap)
-- **Dixon-Coles Model Upgrade:** Enhancing the Poisson model to account for low-score correlation parameters ($\tau$).
-- **Data Export:** Downloadable JSON and CSV exports for generated tournament brackets and final standings.
-- **PWA Capabilities:** Progressive Web App manifest and service worker caching for standalone mobile installation and offline operation.
-
----
-## 10. Known Limitations
-
-- **Dataset Snapshots:** Tournament data represents historical baselines rather than a live-polling API feed.
-- **State Persistence:** Custom draws and simulation results persist within browser `localStorage`; no cloud account sync.
-- **Statistical Model:** Poisson sampling assumes independence between goals, serving as a clean computational simulation rather than a commercial betting predictor.
-
----
-
-## 11. License
-
-ISC License © [Om Dangol](https://github.com/omwe77) & Contributors.
+This project is licensed under the [ISC License](LICENSE) © [Om Dangol](https://github.com/omwe77).
