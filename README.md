@@ -51,6 +51,11 @@ Arena Core is a lightweight football tournament simulator that lets you explore 
 * **💡 Pure Vanilla Architecture**
   * Built with native HTML5, CSS3, and JavaScript — zero heavy frontend frameworks, zero build step required for development, and instant page loads.
 
+* **♿ Accessibility & Keyboard Navigation**
+  * Fully compliant semantic HTML5 landmarks (`<main id="mainContent">`, `<nav>`, `<header>`) and skip-to-content navigation for screen readers.
+  * Universal keyboard shortcuts: press `Escape` anytime to dismiss active dialogs (`Methodology`, `Custom Draw`, `Champions Modal`).
+  * Full tab order and ARIA role definitions across tournament tabs, fixtures, and action buttons.
+
 ---
 
 ## 🛠️ Tech Stack
