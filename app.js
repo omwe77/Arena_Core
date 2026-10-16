@@ -6324,11 +6324,10 @@ function getUclFeederStatus() {
             ${!m.isSimulated && !m.isLive ? `
               <button type="button" class="sfc-action-btn btn-card-fast-sim" data-stage="${stage}" data-idx="${idx}"><i class="fa-solid fa-play"></i> Simulate</button>
               <button type="button" class="sfc-action-btn btn-sim-single" data-stage="${stage}" data-idx="${idx}"><i class="fa-solid fa-crosshairs"></i> Track Live</button>
-              <button type="button" class="sfc-action-btn btn-open-detailed-stats" data-stage="${stage}" data-idx="${idx}" data-home="${m.home}" data-away="${m.away}"><i class="fa-solid fa-chart-column"></i> Detailed Stats</button>
             ` : m.isSimulated ? `
-              <button type="button" class="sfc-action-btn btn-open-detailed-stats btn-match-report" data-stage="${stage}" data-idx="${idx}" data-home="${m.home}" data-away="${m.away}" data-rewatch="true"><i class="fa-solid fa-film"></i> Match Report &amp; Replay</button>
+              <button type="button" class="sfc-action-btn btn-sim-single" data-stage="${stage}" data-idx="${idx}"><i class="fa-solid fa-rotate-left"></i> Re-Simulate Live</button>
             ` : `
-              <button type="button" class="sfc-action-btn btn-open-detailed-stats" data-stage="${stage}" data-idx="${idx}" data-home="${m.home}" data-away="${m.away}"><i class="fa-solid fa-chart-column"></i> Detailed Stats</button>
+              <span class="sfc-live-badge-pulse"><i class="fa-solid fa-circle-dot"></i> Live Simulation</span>
             `}
           </div>
 
