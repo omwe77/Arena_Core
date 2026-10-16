@@ -1,6 +1,6 @@
 {
   "name": "arena-core",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "ARENA_CORE — Global Football Platform & Multi-Tournament Simulator with Poisson-based simulation, archived competition data, and interactive match center.",
   "main": "app.js",
   "scripts": {
@@ -12,8 +12,17 @@
     "format": "prettier --write .",
     "format-check": "prettier --check ."
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "football",
+    "soccer",
+    "tournament-simulator",
+    "world-cup-2026",
+    "champions-league",
+    "poisson-distribution",
+    "tactical-pitch",
+    "vanilla-js"
+  ],
+  "author": "Om Dangol <omdangol68@gmail.com>",
   "license": "ISC",
   "type": "commonjs",
   "repository": {
