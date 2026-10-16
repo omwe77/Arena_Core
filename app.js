@@ -10163,7 +10163,7 @@ function getUclFeederStatus() {
         return;
       }
 
-      // 2. Tactical Tracker Modal Simulation
+      // 2. Single Match Live Simulation
       const simBtn = e.target.closest('.btn-sim-single, .btn-sim-league-match');
       if (simBtn) {
         e.preventDefault();
@@ -10172,46 +10172,12 @@ function getUclFeederStatus() {
         const mdIdx = simBtn.dataset.md !== undefined ? parseInt(simBtn.dataset.md, 10) : undefined;
         const midx = simBtn.dataset.midx !== undefined ? parseInt(simBtn.dataset.midx, 10) : undefined;
 
-        const state = tournamentState[activeTournKey];
-        let match = null;
-
         if (stageKey && matchIdx !== undefined) {
-          match = state?.[stageKey]?.[matchIdx];
-          if (match) {
-            openProTacticalTracker(match.home, match.away, match, stageKey, matchIdx);
-          }
+          simulateSingleMatch(stageKey, matchIdx);
         } else if (mdIdx !== undefined && midx !== undefined) {
-          match = state?.matchdays?.[mdIdx]?.[midx];
-          if (match) {
-            openProTacticalTracker(match.home, match.away, match, `md_${mdIdx}`, midx);
-          }
+          simulateSingleLeagueMatch(mdIdx, midx);
         }
         return;
-      }
-
-      // btn-reopen-tactical is now merged into Match Report & Replay — redirect to detailed stats
-      const replayBtn = e.target.closest('.btn-reopen-tactical');
-      if (replayBtn) {
-        e.preventDefault();
-        const stageKey = replayBtn.dataset.stage;
-        const matchIdx = parseInt(replayBtn.dataset.idx, 10);
-        const state = tournamentState[activeTournKey];
-        const match = state?.[stageKey]?.[matchIdx];
-        if (match) {
-          openDetailedStatsModal(match.home, match.away, match, stageKey, matchIdx);
-        }
-      }
-
-      const holoBtn = e.target.closest('.btn-open-holo-broadcast');
-      if (holoBtn) {
-        e.preventDefault();
-        const stageKey = holoBtn.dataset.stage;
-        const matchIdx = parseInt(holoBtn.dataset.idx, 10);
-        const state = tournamentState[activeTournKey];
-        const match = state?.[stageKey]?.[matchIdx];
-        if (match) {
-          open3DHolographicBroadcast(match.home, match.away, match, stageKey, matchIdx);
-        }
       }
 
       // SofaScore tab switching
