@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    ARENA_CORE — GLOBAL FOOTBALL PLATFORM & MULTI-TOURNAMENT SIMULATION ENGINE
    - Dual Worlds: World A (Archived Football Data) & World B (Hypothetical Simulation)
    - 13 Competitions: World Cup, UCL, Premier League, La Liga, Serie A, Bundesliga,
@@ -7823,7 +7823,7 @@ function getUclFeederStatus() {
     }
 
     // Inject champion-specific stats inside the hero logo container
-    const heroStatsEl = document.getElementById('champ-hero-stats');
+    const heroStatsEl = document.getElementById('champ-hero-stats') || document.getElementById('champ-hero-stats-row');
     if (heroStatsEl) {
       heroStatsEl.innerHTML = `
         <div class="champ-hero-stat-badge">
@@ -8312,6 +8312,16 @@ function getUclFeederStatus() {
       }
     }
 
+    function handleViewBracket(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      closeChampModal(e);
+      switchView('tournament-sim');
+      const bracketEl = document.getElementById('bracket-tree-container') || document.getElementById('view-tournament-sim');
+      if (bracketEl && typeof bracketEl.scrollIntoView === 'function') {
+        bracketEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
     if (champCloseBtn) {
       champCloseBtn.addEventListener('click', closeChampModal);
       champCloseBtn.addEventListener('pointerdown', closeChampModal);
@@ -8321,8 +8331,8 @@ function getUclFeederStatus() {
       champBackdrop.addEventListener('pointerdown', closeChampModal);
     }
     if (champViewBracketBtn) {
-      champViewBracketBtn.addEventListener('click', closeChampModal);
-      champViewBracketBtn.addEventListener('pointerdown', closeChampModal);
+      champViewBracketBtn.addEventListener('click', handleViewBracket);
+      champViewBracketBtn.addEventListener('pointerdown', handleViewBracket);
     }
     const champExportBtn = document.getElementById('champ-export-btn');
     if (champExportBtn) {
@@ -8354,7 +8364,9 @@ function getUclFeederStatus() {
 
     // Global modal close fallback listener
     document.addEventListener('click', (e) => {
-      if (e.target && (e.target.id === 'champ-modal-close' || e.target.closest('#champ-modal-close') || e.target.id === 'champ-view-bracket-btn' || e.target.id === 'champ-modal-backdrop')) {
+      if (e.target && (e.target.id === 'champ-view-bracket-btn' || e.target.closest('#champ-view-bracket-btn'))) {
+        handleViewBracket(e);
+      } else if (e.target && (e.target.id === 'champ-modal-close' || e.target.closest('#champ-modal-close') || e.target.id === 'champ-modal-backdrop')) {
         closeChampModal(e);
       }
     });

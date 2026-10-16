@@ -737,6 +737,14 @@ test.describe('ARENA_CORE Platform Tests', () => {
     // Verify confetti animation was triggered
     const confettiCount = await page.evaluate(() => window.__confettiCalls);
     expect(confettiCount).toBeGreaterThan(0);
+
+    // Verify champion-specific hero stats populate (AVG GOALS / MATCH and TEAM TOP SCORER)
+    const heroStats = page.locator('#champ-hero-stats');
+    await expect(heroStats).toBeVisible();
+    await expect(heroStats.locator('.champ-hero-stat-badge')).toHaveCount(2);
+    const heroStatsText = await heroStats.textContent();
+    expect(heroStatsText).toContain('AVG GOALS / MATCH');
+    expect(heroStatsText).toContain('TEAM TOP SCORER');
   });
 
   test('champion modal close button hides modal and stops confetti', async ({ page }) => {
@@ -773,6 +781,38 @@ test.describe('ARENA_CORE Platform Tests', () => {
     // Click the backdrop outside the centered dialog
     await page.locator('#champ-modal-backdrop').click({ position: { x: 10, y: 10 } });
     await expect(modal).toBeHidden();
+  });
+
+  test('VIEW BRACKET button closes champion modal and displays active competition bracket', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForTimeout(400);
+    await page.click('.top-nav-link[data-nav="tournament-sim"]');
+    await page.waitForTimeout(500);
+
+    const instantBtn = page.locator('#sim-instant-btn');
+    await expect(instantBtn).toBeVisible();
+    await instantBtn.click();
+
+    const modal = page.locator('#champion-modal');
+    await modal.waitFor({ state: 'visible', timeout: 15000 });
+
+    // Click VIEW BRACKET button inside modal
+    const viewBracketBtn = page.locator('#champ-view-bracket-btn');
+    await expect(viewBracketBtn).toBeVisible();
+    await viewBracketBtn.click();
+
+    // Modal must be hidden
+    await expect(modal).toBeHidden();
+
+    // Must be on tournament simulator view showing bracket
+    const simPanel = page.locator('#view-tournament-sim');
+    await expect(simPanel).toBeVisible();
+
+    // Bracket container must be visible and populated with bracket matches
+    const bracketTree = page.locator('#bracket-tree-container');
+    await expect(bracketTree).toBeVisible();
+    const bracketCards = bracketTree.locator('.bracket-match-card, .bracket-column');
+    expect(await bracketCards.count()).toBeGreaterThan(0);
   });
 
   // ---------------------------------------------------------------------------
