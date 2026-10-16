@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    ARENA_CORE — GLOBAL FOOTBALL PLATFORM & MULTI-TOURNAMENT SIMULATION ENGINE
    - Dual Worlds: World A (Archived Football Data) & World B (Hypothetical Simulation)
    - 13 Competitions: World Cup, UCL, Premier League, La Liga, Serie A, Bundesliga,
@@ -1368,7 +1368,10 @@
     } else if (config.format === 'uclLeaguePhase') {
       const pool = [...teamList];
       const groups = {};
-      const groupLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+      // 36-team UCL Swiss League Phase: 9 groups of 4
+      const groupLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
+      // Pad to 36 if data is short
+      while (pool.length < 36) pool.push(`UCL Club ${pool.length + 1}`);
       groupLetters.forEach((letter, idx) => {
         groups[letter] = pool.slice(idx * 4, idx * 4 + 4).map(name => ({
           name, mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0
@@ -1395,6 +1398,24 @@
         champion: null,
         groups,
         r32: [], r16: [], qf: [], sf: [], gf: []
+      };
+    } else if (config.format === 'copa16') {
+      // 16 CONMEBOL nations, 4 groups of 4, knockout from QF
+      const pool = ArenaRandom.shuffle([...teamList]);
+      // Pad to 16 if real data is somehow short (shouldn't happen)
+      while (pool.length < 16) pool.push(`Nation ${pool.length + 1}`);
+      const copaGroups = {};
+      ['A', 'B', 'C', 'D'].forEach((letter, idx) => {
+        copaGroups[letter] = pool.slice(idx * 4, idx * 4 + 4).map(name => ({
+          name, mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0
+        }));
+      });
+      state = {
+        groupsPlayed: false,
+        champion: null,
+        subView: 'home',
+        groups: copaGroups,
+        qf: [], sf: [], gf: []
       };
     } else {
       // 20-Team or 18-Team League Season (PL, La Liga, Serie A, Bundesliga)
@@ -1438,6 +1459,25 @@
 
   // Initialize isolated states for all 10 competitions
   Object.keys(TOURNAMENTS_CONFIG).forEach(k => initTournamentState(k));
+
+  // Migration: wipe any malformed copa snapshot saved before the copa16 branch was added.
+  // A valid copa state has `groups`; old broken snapshots have `leagueTable` instead.
+  (function migrateCopa() {
+    const copaState = tournamentState.copa;
+    if (copaState && !copaState.groups) {
+      try { localStorage.removeItem('arena_tournament_state_copa'); } catch (_) {}
+      initTournamentState('copa');
+    }
+  })();
+
+  // Migration: wipe UCL state saved with old 8-group (32-team) format so 9-group (36-team) takes effect.
+  (function migrateUcl() {
+    const uclState = tournamentState.ucl;
+    if (uclState && uclState.groups && !uclState.groups['I']) {
+      try { localStorage.removeItem('arena_tournament_state_ucl'); } catch (_) {}
+      initTournamentState('ucl');
+    }
+  })();
 
   // ---------------------------------------------------------------------------
   // 6. UI VIEW SWITCHING & NAVIGATION
@@ -3439,13 +3479,14 @@ function setupNavigation() {
       </div>
     `;
 
-    // Event listeners
+    // Event listeners — use tournamentState[activeTournKey] (not the stale `state` param)
     const simNowBtn = container.querySelector('#btn-copa-sim-now');
     if (simNowBtn) {
       simNowBtn.addEventListener('click', () => {
         initTournamentState(activeTournKey);
-        state.subView = 'sim';
-        state.groupsPlayed = false;
+        const freshState = tournamentState[activeTournKey];
+        freshState.subView = 'sim';
+        freshState.groupsPlayed = false;
         activeStageFilter = 'all';
         renderActiveTournament();
         setTimeout(() => {
@@ -3461,7 +3502,8 @@ function setupNavigation() {
     if (enterBtn) {
       enterBtn.addEventListener('click', () => {
         initTournamentState(activeTournKey);
-        state.subView = 'sim';
+        const freshState = tournamentState[activeTournKey];
+        freshState.subView = 'sim';
         activeStageFilter = 'all';
         renderActiveTournament();
       });
@@ -3634,14 +3676,15 @@ function getUclFeederStatus() {
 
     const continentalGiants = [
       'REAL MADRID', 'MAN CITY', 'BAYERN MUNICH', 'PSG', 'BARCELONA',
-      'INTER MILAN', 'ARSENAL', 'LIVERPOOL', 'BORUSSIA DORTMUND', 'ATLETICO MADRID',
+      'INTER MILAN', 'ARSENAL', 'LIVERPOOL', 'DORTMUND', 'ATLETICO MADRID',
       'BAYER LEVERKUSEN', 'JUVENTUS', 'BENFICA', 'SPORTING CP', 'PORTO',
       'PSV', 'FEYENOORD', 'CELTIC', 'MONACO', 'LILLE', 'GALATASARAY',
-      'FENERBAHÇE', 'TRABZONSPOR', 'BEŞİKTAŞ', 'DINAMO ZAGREB', 'YOUNG BOYS',
-      'ASTON VILLA', 'ATALANTA', 'STUTTGART', 'BREST', 'BOLOGNA', 'GIRONA'
+      'CLUB BRUGGE', 'SLAVIA PRAHA', 'RED STAR BELGRADE', 'STURM GRAZ',
+      'DINAMO ZAGREB', 'YOUNG BOYS', 'ASTON VILLA', 'ATALANTA', 'STUTTGART',
+      'BREST', 'BOLOGNA', 'GIRONA', 'SHAKHTAR DONETSK', 'SALZBURG', 'SPARTA PRAHA'
     ];
 
-    const groupLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+    const groupLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']; // 9×4 = 36
     const groups = {};
     const usedTeams = new Set();
 

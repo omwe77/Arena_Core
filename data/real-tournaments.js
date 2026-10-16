@@ -121,7 +121,12 @@
         { name: 'SALZBURG', code: 'RBS', country: 'Austria', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/10251.png' },
         { name: 'YOUNG BOYS', code: 'YB', country: 'Switzerland', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/10192.png' },
         { name: 'SPARTA PRAHA', code: 'SPA', country: 'Czechia', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8697.png' },
-        { name: 'DINAMO ZAGREB', code: 'DZG', country: 'Croatia', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8493.png' }
+        { name: 'DINAMO ZAGREB', code: 'DZG', country: 'Croatia', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8493.png' },
+        { name: 'SLAVIA PRAHA', code: 'SLV', country: 'Czechia', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8614.png' },
+        { name: 'CLUB BRUGGE', code: 'CLU', country: 'Belgium', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8513.png' },
+        { name: 'GALATASARAY', code: 'GAL', country: 'Turkey', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8688.png' },
+        { name: 'STURM GRAZ', code: 'STU', country: 'Austria', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8706.png' },
+        { name: 'RED STAR BELGRADE', code: 'RSB', country: 'Serbia', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8700.png' }
       ],
       topScorers: [
         { rank: 1, name: 'Harry Kane', team: 'BAYERN MUNICH', goals: 8, assists: 4 },
