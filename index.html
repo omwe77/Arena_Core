@@ -548,9 +548,9 @@
     </div>
   </div>
   <div id="methodology-modal" class="modal" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="methodology-modal-title">
-    <div class="modal-backdrop" id="methodology-modal-backdrop"></div>
+    <div class="modal-backdrop" id="methodology-modal-backdrop" onclick="document.getElementById('methodology-modal').hidden=true;"></div>
     <div class="modal-dialog">
-      <button type="button" class="modal-close" id="methodology-modal-close" aria-label="Close methodology">&times;</button>
+      <button type="button" class="modal-close" id="methodology-modal-close" aria-label="Close methodology" onclick="document.getElementById('methodology-modal').hidden=true;">&times;</button>
       <div class="modal-header">
         <span class="modal-tag">METHODOLOGY</span>
         <h2 class="modal-title" id="methodology-modal-title">Tournament Simulation Methodology</h2>
