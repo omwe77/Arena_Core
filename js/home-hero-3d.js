@@ -79,7 +79,7 @@
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.domElement.className = 'home-hero-3d-canvas';
   renderer.domElement.setAttribute('aria-hidden', 'true');
   container.appendChild(renderer.domElement);
@@ -567,7 +567,7 @@
   let currentTiltY = 0;
 
   const isFinePointer = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  if (isFinePointer) {
+  if (!prefersReduced && isFinePointer) {
     container.addEventListener('mousemove', (e) => {
       const rect = container.getBoundingClientRect();
       const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
@@ -663,7 +663,7 @@
      6. Visibility, Lifecycle & Performance Optimization
      -------------------------------------------------------------------------- */
   function startLoop() {
-    if (isRunning) return;
+    if (prefersReduced || isRunning) return;
     isRunning = true;
     animStartTime = performance.now();
     rafId = requestAnimationFrame(animate);
@@ -680,7 +680,7 @@
 
   const io = new IntersectionObserver(([entry]) => {
     if (entry.isIntersecting) {
-      if (isHomeViewActive()) startLoop();
+      if (!prefersReduced && isHomeViewActive()) startLoop();
     } else {
       stopLoop();
     }
@@ -695,7 +695,7 @@
   const homePanel = document.getElementById('view-product-home');
   if (homePanel) {
     const mutObs = new MutationObserver(() => {
-      if (isHomeViewActive()) {
+      if (!prefersReduced && isHomeViewActive()) {
         const rect = container.getBoundingClientRect();
         if (rect.bottom > 0 && rect.top < window.innerHeight) {
           startLoop();
@@ -714,6 +714,9 @@
       camera.aspect = newW / newH;
       camera.updateProjectionMatrix();
       renderer.setSize(newW, newH);
+      if (prefersReduced) {
+        renderer.render(scene, camera);
+      }
       updatePins();
     }
   }

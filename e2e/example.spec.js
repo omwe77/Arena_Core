@@ -593,6 +593,63 @@ test.describe('ARENA_CORE Platform Tests', () => {
     expect(revealStyle).toBe('1');
   });
 
+  test('reduced-motion mode does not continuously schedule animation frames', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+
+    // Track requestAnimationFrame invocations
+    await page.addInitScript(() => {
+      window.__rafCount = 0;
+      const originalRaf = window.requestAnimationFrame;
+      window.requestAnimationFrame = function(cb) {
+        window.__rafCount++;
+        return originalRaf.call(window, cb);
+      };
+    });
+
+    await page.goto('/');
+    // Wait for initial load and one-time static render to complete
+    await page.waitForTimeout(1000);
+
+    const initialRafCount = await page.evaluate(() => window.__rafCount);
+
+    // Idle for 500ms; if a loop were running at 60fps it would add ~30 rAF calls
+    await page.waitForTimeout(500);
+    const idleRafCount = await page.evaluate(() => window.__rafCount);
+    expect(idleRafCount - initialRafCount).toBe(0);
+
+    // Calling ArenaHero3D.start() directly must be a no-op when prefersReduced is true
+    await page.evaluate(() => {
+      if (window.ArenaHero3D && window.ArenaHero3D.start) {
+        window.ArenaHero3D.start();
+      }
+    });
+    await page.waitForTimeout(300);
+    const afterStartRafCount = await page.evaluate(() => window.__rafCount);
+    expect(afterStartRafCount - idleRafCount).toBe(0);
+
+    // Trigger IntersectionObserver by scrolling down and returning
+    await page.evaluate(() => window.scrollTo(0, 300));
+    await page.waitForTimeout(150);
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(150);
+    const afterScrollRafCount = await page.evaluate(() => window.__rafCount);
+    expect(afterScrollRafCount - afterStartRafCount).toBe(0);
+
+    // Mouse movement over container must not trigger continuous frames or tilt
+    const container = page.locator('#home-hero-3d-container');
+    if (await container.isVisible()) {
+      const box = await container.boundingBox();
+      if (box) {
+        await page.mouse.move(box.x + box.width / 4, box.y + box.height / 4);
+        await page.waitForTimeout(100);
+        await page.mouse.move(box.x + (box.width * 3) / 4, box.y + (box.height * 3) / 4);
+        await page.waitForTimeout(100);
+      }
+    }
+    const finalRafCount = await page.evaluate(() => window.__rafCount);
+    expect(finalRafCount - afterScrollRafCount).toBe(0);
+  });
+
   test('hero CTAs navigate cleanly to simulator and competitions', async ({ page }) => {
     await page.goto('/');
     await page.waitForTimeout(500);
