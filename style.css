@@ -19351,10 +19351,179 @@ html { scrollbar-color: #CBD5E1 #F8FAFC; }
   background:
     radial-gradient(120% 90% at 50% -10%, rgba(22, 163, 74, 0.10) 0%, rgba(22, 163, 74, 0) 60%),
     linear-gradient(180deg, #FDFEFF 0%, #F2F7FA 62%, #E9F4EE 100%);
-  padding: clamp(28px, 5vw, 60px) clamp(20px, 4.5vw, 56px) clamp(140px, 22vw, 230px);
+  padding: clamp(28px, 4vw, 48px) clamp(20px, 4vw, 48px);
   margin-bottom: var(--space-6);
 }
 .home-hero::before { content: none; } /* pitch-line accent superseded by the scene */
+
+/* Split Hero on Desktop: Left copy & CTAs, Right 3D centerpiece */
+.home-hero--split {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  align-items: center;
+  gap: clamp(24px, 3.5vw, 44px);
+  min-height: 480px;
+}
+
+.home-hero-left {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.home-hero-left .home-actions {
+  margin-top: var(--space-5);
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.home-hero-right {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 440px;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  perspective: 1000px;
+}
+
+.home-hero-3d-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  pointer-events: auto;
+  border-radius: var(--radius-lg);
+}
+
+/* Fallback CSS stadium inside hero-right if WebGL is unavailable */
+.hero-scene--fallback {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: opacity 0.4s ease;
+}
+.hero-scene--fallback.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 3D Pinned Analytics Annotations */
+.hero-3d-pins {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  overflow: visible;
+}
+
+.hero-3d-pin {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 11px 5px 8px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(22, 163, 74, 0.35);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 20px;
+  font-family: var(--font-mono, 'Chakra Petch', monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  color: #0f172a;
+  pointer-events: auto;
+  transform-origin: center center;
+  transition: opacity 0.3s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.hero-3d-pin:hover {
+  background: #ffffff;
+  border-color: #16a34a;
+  box-shadow: 0 6px 20px rgba(22, 163, 74, 0.18);
+  transform: scale(1.05);
+}
+
+.hero-3d-pin .pin-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #16a34a;
+  box-shadow: 0 0 8px #22c55e;
+  animation: pinPulse 2.4s infinite ease-in-out;
+}
+
+@keyframes pinPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.65; }
+}
+
+.hero-3d-pin .pin-tag {
+  font-weight: 800;
+  color: #15803d;
+  font-size: 0.68rem;
+}
+
+.hero-3d-pin .pin-val {
+  font-weight: 600;
+  color: #334155;
+}
+
+/* Card 3D tilt hover enhancement */
+.home-pillar-card,
+.home-comp-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.home-pillar-card:hover,
+.home-comp-card:hover {
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.10), 0 2px 6px rgba(15, 23, 42, 0.04);
+  border-color: rgba(22, 163, 74, 0.45);
+}
+
+/* Responsive breakdown on tablets and mobile */
+@media (max-width: 959px) {
+  .home-hero--split {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: clamp(24px, 5vw, 40px) clamp(18px, 4vw, 32px);
+    min-height: auto;
+  }
+
+  .home-hero-right {
+    height: 320px;
+    min-height: 280px;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .home-hero-right {
+    height: 260px;
+    min-height: 240px;
+  }
+  .hero-3d-pin {
+    padding: 3px 8px;
+    font-size: 0.65rem;
+  }
+  .hero-3d-pin .pin-val {
+    display: none;
+  }
+}
 
 .hero-scene {
   position: absolute;
@@ -19384,6 +19553,7 @@ html { scrollbar-color: #CBD5E1 #F8FAFC; }
 /* Grandstand tiers (light, descriptive silhouettes) */
 .hero-stand {
   position: absolute; left: -2%; right: -2%; border-radius: 8px;
+  transform: translate3d(var(--parallax-x, 0px), var(--parallax-y, 0px), 0);
 }
 .hero-stand-a {
   top: 30%; height: 26%;
@@ -19403,6 +19573,7 @@ html { scrollbar-color: #CBD5E1 #F8FAFC; }
   position: absolute; left: -10%; right: -10%; bottom: -4%; height: 64%;
   perspective: 700px;
   perspective-origin: 50% 0%;
+  transform: translate3d(var(--parallax-x, 0px), var(--parallax-y, 0px), 0);
 }
 .hero-pitch {
   position: absolute; inset: 0;
@@ -19449,10 +19620,10 @@ html { scrollbar-color: #CBD5E1 #F8FAFC; }
   border-radius: 50%;
 }
 
-/* Ball resting on the pitch near the shadow */
+/* Ball resting on the pitch near the shadow - preserved centering transform */
 .hero-ball {
   position: absolute; left: 50%; top: calc(2% - 14px); width: 34px; height: 34px;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translate3d(var(--parallax-x, 0px), var(--parallax-y, 0px), 0);
   border-radius: 50%;
   background:
     radial-gradient(circle at 32% 28%, #FFFFFF 0%, #F2F5FA 46%, #DCE4EC 82%, #C9D3DD 100%);
@@ -19565,4 +19736,6 @@ html.js-reveal .reveal.is-visible { will-change: auto; }
     transition: none !important;
   }
   .hero-scene, .hero-scene * { animation: none !important; }
+  .hero-3d-pin .pin-dot { animation: none !important; }
+  .home-pillar-card, .home-comp-card { transform: none !important; transition: none !important; }
 }

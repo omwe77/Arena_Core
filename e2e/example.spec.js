@@ -491,4 +491,140 @@ test.describe('ARENA_CORE Platform Tests', () => {
     // Screenshot evidence for the light card rendering.
     await page.screenshot({ path: 'test-results/match-card-contrast.png' });
   });
+
+  /* -------------------------------------------------------------------------
+     Targeted Regression Coverage: Premium 3D Hero & Scroll Motion Upgrade
+     ------------------------------------------------------------------------- */
+  test('hero 3D container mounts canvas and renders analytics pins', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForTimeout(1000);
+
+    const heroContainer = page.locator('#home-hero-3d-container');
+    await expect(heroContainer).toBeVisible();
+
+    // Verify 3D canvas or fallback is present
+    const canvas = page.locator('.home-hero-3d-canvas');
+    const fallback = page.locator('#hero-fallback-scene');
+    const hasCanvas = await canvas.count() > 0;
+    const hasFallback = await fallback.count() > 0;
+    expect(hasCanvas || hasFallback).toBe(true);
+
+    if (hasCanvas) {
+      await expect(canvas).toBeVisible();
+      // Verify analytical pins exist
+      await expect(page.locator('#pin-prng')).toBeAttached();
+      await expect(page.locator('#pin-poisson')).toBeAttached();
+      await expect(page.locator('#pin-draw')).toBeAttached();
+    }
+  });
+
+  test('hero fallback scene displays if WebGL is unavailable', async ({ page }) => {
+    // Simulate WebGL failure
+    await page.addInitScript(() => {
+      HTMLCanvasElement.prototype.getContext = function (type) {
+        if (type === 'webgl' || type === 'experimental-webgl') return null;
+        return null;
+      };
+    });
+
+    await page.goto('/');
+    await page.waitForTimeout(600);
+
+    const fallback = page.locator('#hero-fallback-scene');
+    await expect(fallback).toBeVisible();
+    await expect(page.locator('#hero-fallback-scene .hero-pitch')).toBeVisible();
+    await expect(page.locator('#hero-fallback-scene .hero-ball')).toBeVisible();
+  });
+
+  test('hero parallax remains bounded during scroll and preserves football centering', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForTimeout(600);
+
+    const ball = page.locator('#hero-fallback-scene .hero-ball');
+    if (await ball.count() > 0) {
+      // In CSS, hero-ball must have translateX(-50%)
+      const transformBefore = await ball.evaluate(el => getComputedStyle(el).transform);
+      expect(transformBefore).not.toBe('none');
+
+      // Scroll page down past hero
+      await page.evaluate(() => window.scrollTo(0, 400));
+      await page.waitForTimeout(300);
+
+      // Verify custom properties remain bounded
+      const px = await ball.evaluate(el => el.style.getPropertyValue('--parallax-x') || '0');
+      const py = await ball.evaluate(el => el.style.getPropertyValue('--parallax-y') || '0');
+      const numX = parseFloat(px) || 0;
+      const numY = parseFloat(py) || 0;
+      expect(Math.abs(numX)).toBeLessThanOrEqual(50);
+      expect(Math.abs(numY)).toBeLessThanOrEqual(50);
+    }
+  });
+
+  test('football preserves horizontal centering before and after pointer movement', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    await page.waitForTimeout(600);
+
+    const ball = page.locator('#hero-fallback-scene .hero-ball');
+    if (await ball.count() > 0) {
+      // Dispatch mousemove over hero
+      await page.mouse.move(720, 250);
+      await page.waitForTimeout(200);
+      await page.mouse.move(800, 300);
+      await page.waitForTimeout(200);
+
+      // Verify style attribute does NOT overwrite transform directly with translate3d
+      const inlineTransform = await ball.evaluate(el => el.style.transform);
+      expect(inlineTransform.includes('translate3d') && !inlineTransform.includes('translateX(-50%)')).toBe(false);
+    }
+  });
+
+  test('reduced-motion mode respects accessibility and disables motion loop', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    await page.waitForTimeout(800);
+
+    // Hero title and CTAs are immediately visible
+    await expect(page.locator('.home-hero-title')).toBeVisible();
+    await expect(page.locator('#home-btn-simulate')).toBeVisible();
+
+    // Verify reveal elements have opacity 1 and no ongoing transitions
+    const revealStyle = await page.locator('.home-hero-title').evaluate(el => getComputedStyle(el).opacity);
+    expect(revealStyle).toBe('1');
+  });
+
+  test('hero CTAs navigate cleanly to simulator and competitions', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForTimeout(500);
+
+    // Click Simulate Tournament CTA
+    await page.click('#home-btn-simulate');
+    await expect(page.locator('#view-tournament-sim')).toBeVisible();
+    await expect(page.locator('#view-product-home')).toBeHidden();
+
+    // Navigate back to Home
+    await page.click('.top-nav-link[data-nav="product-home"]');
+    await expect(page.locator('#view-product-home')).toBeVisible();
+
+    // Click Explore Competitions CTA
+    await page.click('#home-btn-archive');
+    await expect(page.locator('#view-competitions-view')).toBeVisible();
+    await expect(page.locator('#view-product-home')).toBeHidden();
+  });
+
+  test('homepage has no horizontal overflow across 1440px, 1024px, and 390px', async ({ page }) => {
+    const viewports = [
+      { width: 1440, height: 900 },
+      { width: 1024, height: 768 },
+      { width: 390, height: 844 }
+    ];
+
+    for (const vp of viewports) {
+      await page.setViewportSize(vp);
+      await page.goto('/');
+      await page.waitForTimeout(600);
+      const isFit = await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth);
+      expect(isFit).toBe(true);
+    }
+  });
 });

@@ -4,7 +4,7 @@
   "description": "ARENA_CORE — Global Football Platform & Multi-Tournament Simulator with Poisson-based simulation, archived competition data, and interactive match center.",
   "main": "app.js",
   "scripts": {
-    "test": "node --check app.js && node --check data/hero-videos.js && node --check data/real-tournaments.js && node --check js/random.js && node --check js/state.js && node --check js/router.js && node --check js/audio-fx.js && node --check js/motion-fx.js && playwright test --workers=2 --reporter=line",
+    "test": "node --check app.js && node --check data/hero-videos.js && node --check data/real-tournaments.js && node --check js/random.js && node --check js/state.js && node --check js/router.js && node --check js/audio-fx.js && node --check js/motion-fx.js && node --check js/home-hero-3d.js && playwright test --workers=2 --reporter=line",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
@@ -28,6 +28,7 @@
     "animejs": "^4.5.0",
     "canvas-confetti": "^1.9.4",
     "dotenv": "^17.4.2",
+    "three": "^0.186.1",
     "vite": "^8.3.0"
   },
   "devDependencies": {

@@ -167,39 +167,42 @@
     <!-- Product Home View -->
     <section id="view-product-home" class="view-panel" hidden aria-label="Home">
       <div class="home-shell">
-        <div class="home-hero">
-          <div class="hero-scene" aria-hidden="true">
-            <span class="hero-sky"></span>
-            <span class="hero-flood fl-l"></span>
-            <span class="hero-flood fl-r"></span>
-            <div class="hero-stand hero-stand-a" data-depth="4"></div>
-            <div class="hero-stand hero-stand-b" data-depth="7"></div>
-            <div class="hero-pitch-wrap" data-depth="12">
-              <div class="hero-pitch">
-                <span class="hero-pitch-line mid"></span>
-                <span class="hero-pitch-line center-circle"></span>
-                <span class="hero-pitch-line penalty"></span>
-                <span class="hero-shadow-ball"></span>
-              </div>
+        <div class="home-hero home-hero--split">
+          <div class="home-hero-left">
+            <div class="home-hero-badge">DETERMINISTIC SIMULATION ENGINE // MULBERRY32 PRNG</div>
+            <h1 class="home-hero-title">ARENA CORE</h1>
+            <div class="home-hero-sub-title">Football Simulation Engine &amp; Match Analytics</div>
+            <p class="home-hero-sub">Pure client-side mathematical simulation platform using Mulberry32 seeded PRNG and dual-parameter Poisson distribution modeling across 15+ domestic and cup competitions.</p>
+            <div class="home-actions">
+              <button type="button" class="home-cta-btn" id="home-btn-simulate">
+                <i class="fa-solid fa-bolt"></i>
+                <span>SIMULATE TOURNAMENT</span>
+              </button>
+              <button type="button" class="home-cta-btn home-cta-btn-secondary" id="home-btn-archive">
+                <i class="fa-solid fa-trophy"></i>
+                <span>EXPLORE COMPETITIONS</span>
+              </button>
             </div>
-            <span class="hero-ball" data-depth="18"></span>
-            <span class="hero-scrim"></span>
           </div>
-          <div class="home-hero-badge">DETERMINISTIC SIMULATION ENGINE // MULBERRY32 PRNG</div>
-          <h1 class="home-hero-title">ARENA CORE</h1>
-          <div class="home-hero-sub-title">Football Simulation Engine &amp; Match Analytics</div>
-          <p class="home-hero-sub">Pure client-side mathematical simulation platform using Mulberry32 seeded PRNG and dual-parameter Poisson distribution modeling across 15+ domestic and cup competitions.</p>
-        </div>
-
-        <div class="home-actions">
-          <button type="button" class="home-cta-btn" id="home-btn-simulate">
-            <i class="fa-solid fa-bolt"></i>
-            <span>SIMULATE TOURNAMENT</span>
-          </button>
-          <button type="button" class="home-cta-btn home-cta-btn-secondary" id="home-btn-archive">
-            <i class="fa-solid fa-trophy"></i>
-            <span>EXPLORE COMPETITIONS</span>
-          </button>
+          <div class="home-hero-right" id="home-hero-3d-container">
+            <div class="hero-scene hero-scene--fallback" aria-hidden="true" id="hero-fallback-scene">
+              <span class="hero-sky"></span>
+              <span class="hero-flood fl-l"></span>
+              <span class="hero-flood fl-r"></span>
+              <div class="hero-stand hero-stand-a" data-depth="4"></div>
+              <div class="hero-stand hero-stand-b" data-depth="7"></div>
+              <div class="hero-pitch-wrap" data-depth="12">
+                <div class="hero-pitch">
+                  <span class="hero-pitch-line mid"></span>
+                  <span class="hero-pitch-line center-circle"></span>
+                  <span class="hero-pitch-line penalty"></span>
+                  <span class="hero-shadow-ball"></span>
+                </div>
+              </div>
+              <span class="hero-ball" data-depth="18"></span>
+              <span class="hero-scrim"></span>
+            </div>
+          </div>
         </div>
 
         <div class="home-pillars-grid">
@@ -577,6 +580,8 @@
   <script src="js/audio-fx.js" defer></script>
   <script src="js/motion-fx.js" defer></script>
   <script src="app.js" defer></script>
+  <!-- Procedural 3D Stadium Hero Centerpiece (dynamically loaded for homepage) -->
+  <script type="module" src="js/home-hero-3d.js"></script>
     <script>
 /* ARENA_CORE — Hero scene choreography, scroll reveals, draw/bracket stagger,
    champion banner. Decorative motion gates on prefers-reduced-motion and is
@@ -588,74 +593,145 @@ document.addEventListener('DOMContentLoaded', function () {
   document.documentElement.classList.add('js-reveal');
   const EASE = 'cubic-bezier(0.16, 1, 0.3, 1)';
 
-  /* ---- A. Hero scene entrance + layered parallax ------------------------ */
+  /* ---- A. Hero entrance choreography + bounded parallax ---------------- */
   const hero = document.querySelector('.home-hero');
   if (hero) {
-    // Entrance: copy rises first, then the scene layers settle, ball drops last
+    // 1. Entrance: Left copy & CTAs stagger in with short intentional delays
     const copy = [
       hero.querySelector('.home-hero-badge'),
       hero.querySelector('.home-hero-title'),
       hero.querySelector('.home-hero-sub-title'),
       hero.querySelector('.home-hero-sub'),
+      hero.querySelector('.home-actions'),
     ].filter(Boolean);
+
     copy.forEach(function (el, i) {
       el.style.opacity = '0';
       el.style.transform = 'translateY(14px)';
       el.style.willChange = 'opacity, transform';
       requestAnimationFrame(function () {
-        el.style.transition = 'opacity .55s ' + EASE + ' ' + (0.05 + i * 0.08) + 's, transform .55s ' + EASE + ' ' + (0.05 + i * 0.08) + 's';
+        el.style.transition = 'opacity .55s ' + EASE + ' ' + (0.04 + i * 0.08) + 's, transform .55s ' + EASE + ' ' + (0.04 + i * 0.08) + 's';
         el.style.opacity = '1';
         el.style.transform = 'translateY(0)';
         el.style.willChange = 'auto';
       });
     });
-    const pitch = hero.querySelector('.hero-pitch');
-    if (pitch) {
-      const from = getComputedStyle(pitch).transform;
-      pitch.style.transform = 'rotateX(72deg) translateY(28px) scale(1.02)';
-      pitch.style.opacity = '0';
+
+    // 2. Right centerpiece entrance
+    const heroRight = hero.querySelector('.home-hero-right');
+    if (heroRight) {
+      heroRight.style.opacity = '0';
+      heroRight.style.transform = 'translateY(22px) scale(0.96)';
+      heroRight.style.willChange = 'opacity, transform';
       requestAnimationFrame(function () {
-        pitch.style.transition = 'transform 1.0s ' + EASE + ', opacity 0.8s ' + EASE;
-        pitch.style.opacity = '1';
-        pitch.style.transform = from === 'none' ? '' : from;
+        heroRight.style.transition = 'opacity .85s ' + EASE + ' 0.12s, transform .85s ' + EASE + ' 0.12s';
+        heroRight.style.opacity = '1';
+        heroRight.style.transform = 'translateY(0) scale(1)';
+        heroRight.style.willChange = 'auto';
       });
     }
 
-    // Pointer + scroll parallax on depth-tagged layers (desktop pointers only)
+    // 3. Fallback CSS pitch entrance (if active)
+    const pitch = hero.querySelector('.hero-pitch');
+    if (pitch) {
+      pitch.style.opacity = '0';
+      requestAnimationFrame(function () {
+        pitch.style.transition = 'opacity 0.8s ' + EASE;
+        pitch.style.opacity = '1';
+      });
+    }
+
+    // 4. Bounded Parallax: Normalized relative to hero's own bounding rectangle
     const layers = Array.prototype.map.call(hero.querySelectorAll('[data-depth]'), function (el) {
       return { el: el, d: parseFloat(el.getAttribute('data-depth')) || 0 };
     });
     const interactive = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-    if (layers.length && (interactive || true)) {
-      let mx = 0, my = 0, sy = 0, raf = null, lastMX = 0, lastMY = 0, lastSY = -1;
-      function flush() {
-        raf = null;
-        if (interactive) {
-          const nx = Math.max(-1, Math.min(1, mx / (hero.clientWidth / 2)));
-          const ny = Math.max(-1, Math.min(1, my / (hero.clientHeight / 2)));
-          if (nx === lastMX && ny === lastMY && sy === lastSY) return;
-          lastMX = nx; lastMY = ny; lastSY = sy;
-          layers.forEach(function (l) {
-            l.el.style.transform = 'translate3d(' + (-nx * l.d * 1.6).toFixed(1) + 'px, ' + (-ny * l.d * 0.9 + sy * l.d * 0.05).toFixed(1) + 'px, 0)';
-          });
-        } else {
-          if (sy === lastSY) return;
-          lastSY = sy;
-          layers.forEach(function (l) {
-            l.el.style.transform = 'translate3d(0, ' + (sy * l.d * 0.05).toFixed(1) + 'px, 0)';
-          });
-        }
+
+    let mx = 0, my = 0, raf = null;
+    let lastNX = 0, lastNY = 0, lastProgress = -1;
+    let heroRect = hero.getBoundingClientRect();
+
+    function updateHeroRect() {
+      heroRect = hero.getBoundingClientRect();
+    }
+
+    function flush() {
+      raf = null;
+      const inView = heroRect.bottom > 0 && heroRect.top < window.innerHeight;
+      if (!inView) return;
+
+      // Normalized scroll progress: 0 when hero top is in view, 1 as it scrolls away
+      const scrollProgress = Math.max(0, Math.min(1, (window.innerHeight - heroRect.top) / (window.innerHeight + heroRect.height)));
+      const scrollDelta = scrollProgress - 0.5; // -0.5 .. +0.5
+
+      // Let the stadium centerpiece rise approximately 20-28px and scale down slightly
+      if (heroRight) {
+        const stadiumRise = scrollProgress * 24;
+        const stadiumScale = 1 - scrollProgress * 0.025;
+        heroRight.style.transform = 'translate3d(0, -' + stadiumRise.toFixed(1) + 'px, 0) scale(' + stadiumScale.toFixed(3) + ')';
       }
-      function queue() { if (!raf) raf = requestAnimationFrame(flush); }
-      if (interactive) hero.addEventListener('mousemove', function (e) {
-        const r = hero.getBoundingClientRect();
-        mx = e.clientX - (r.left + r.width / 2);
-        my = e.clientY - (r.top + r.height / 2);
+
+      // Pointer displacement (only on fine-pointer desktop devices)
+      let nx = 0, ny = 0;
+      if (interactive && heroRect.width > 0 && heroRect.height > 0) {
+        nx = Math.max(-1, Math.min(1, mx / (heroRect.width / 2)));
+        ny = Math.max(-1, Math.min(1, my / (heroRect.height / 2)));
+      }
+
+      if (nx === lastNX && ny === lastNY && Math.abs(scrollProgress - lastProgress) < 0.005) return;
+      lastNX = nx; lastNY = ny; lastProgress = scrollProgress;
+
+      // Update CSS custom properties on layers without overwriting base transforms
+      layers.forEach(function (l) {
+        const px = (-nx * l.d * 1.2).toFixed(1);
+        const py = (-ny * l.d * 0.8 + scrollDelta * l.d * 1.0).toFixed(1);
+        l.el.style.setProperty('--parallax-x', px + 'px');
+        l.el.style.setProperty('--parallax-y', py + 'px');
+      });
+    }
+
+    function queue() { if (!raf) raf = requestAnimationFrame(flush); }
+
+    if (interactive) {
+      hero.addEventListener('mousemove', function (e) {
+        mx = e.clientX - (heroRect.left + heroRect.width / 2);
+        my = e.clientY - (heroRect.top + heroRect.height / 2);
         queue();
       }, { passive: true });
-      window.addEventListener('scroll', function () { sy = window.scrollY || 0; queue(); }, { passive: true });
-      window.addEventListener('pagehide', function () { if (raf) cancelAnimationFrame(raf); }, { once: true });
     }
+
+    window.addEventListener('scroll', function () {
+      updateHeroRect();
+      queue();
+    }, { passive: true });
+
+    window.addEventListener('resize', function () {
+      updateHeroRect();
+      queue();
+    }, { passive: true });
+
+    window.addEventListener('pagehide', function () {
+      if (raf) cancelAnimationFrame(raf);
+    }, { once: true });
+  }
+
+  /* ---- B. Card 3D tilt hover (restrained 4-6 degrees) ------------------- */
+  const interactivePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (interactivePointer) {
+    document.querySelectorAll('.home-pillar-card, .home-comp-card').forEach(function (card) {
+      card.addEventListener('mousemove', function (e) {
+        const r = card.getBoundingClientRect();
+        const dx = ((e.clientX - r.left) / r.width) * 2 - 1; // -1 .. 1
+        const dy = ((e.clientY - r.top) / r.height) * 2 - 1; // -1 .. 1
+        const tiltX = (-dy * 4.5).toFixed(1);
+        const tiltY = (dx * 5.0).toFixed(1);
+        card.style.transform = 'perspective(800px) rotateX(' + tiltX + 'deg) rotateY(' + tiltY + 'deg) translateZ(4px)';
+      }, { passive: true });
+
+      card.addEventListener('mouseleave', function () {
+        card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateZ(0)';
+      });
+    });
   }
 
   /* ---- B. Scroll-triggered section/card reveals ------------------------- */
