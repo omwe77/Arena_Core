@@ -78,6 +78,15 @@ Arena Core uses a stochastic simulation framework calibrated against real-world 
   * **Advancement Criteria:** Top 2 nations from each group (24 teams) plus the 8 best third-placed nations automatically qualify for the knockout stage.
   * **Single-Elimination Knockout:** 32 teams contest the Round of 32, followed by Round of 16, Quarterfinals, Semifinals, 3rd Place Playoff, and the Final.
 
+* **UEFA Champions League (New 36-Team Swiss League Phase):**
+  * **Unified Table:** All 36 clubs compete in a single comprehensive league table across 8 matchdays.
+  * **Direct Qualification:** Clubs finishing in positions 1 through 8 directly advance to the Round of 16.
+  * **Knockout Play-off Phase:** Clubs finishing 9 through 24 enter a seeded two-legged playoff to secure the remaining 8 Round of 16 berths.
+  * **Elimination:** Clubs ranked 25 to 36 are eliminated from European competition.
+
+* **Domestic Leagues (38 / 34 Matchdays):**
+  * Double round-robin format with full home and away fixture generation, real-time goal difference updates, and relegation/European spot qualification trackers.
+
 ---
 
 ## 🛠️ Tech Stack
