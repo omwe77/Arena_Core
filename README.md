@@ -34,6 +34,8 @@ Arena Core is a lightweight football tournament simulator that lets you explore 
   * Click any simulated fixture to inspect tactical lineups and player formations (4-3-3, 4-2-3-1, 3-5-2, etc.).
   * Interactive playback scrubber with minute-by-minute simulated commentary, goal highlights, and cards.
   * In-depth match telemetry: Expected Goals (xG), possession, total shots, shots on target, and fouls.
+  * Seamless bracket navigation: click "Details" on any compact knockout card to instantly switch to that tournament stage and smoothly scroll to the fixture.
+  * On-card simulation controls: run instant simulations directly from match cards with real-time score badges and live stage updating.
 
 * **🎲 Custom World Cup Draw**
   * Build your own custom 48-nation World Cup!
