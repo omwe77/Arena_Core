@@ -8368,6 +8368,21 @@ function getUclFeederStatus() {
         handleViewBracket(e);
       } else if (e.target && (e.target.id === 'champ-modal-close' || e.target.closest('#champ-modal-close') || e.target.id === 'champ-modal-backdrop')) {
         closeChampModal(e);
+      } else if (e.target && (e.target.id === 'methodology-modal-close' || e.target.closest('#methodology-modal-close') || e.target.id === 'methodology-modal-backdrop')) {
+        const methModal = document.getElementById('methodology-modal');
+        if (methModal) methModal.hidden = true;
+      }
+    });
+
+    // Escape key modal dismissal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const methModal = document.getElementById('methodology-modal');
+        if (methModal && !methModal.hidden) methModal.hidden = true;
+        const champModal = document.getElementById('champion-modal');
+        if (champModal && !champModal.hidden) closeChampModal(e);
+        const drawModal = document.getElementById('wc-draw-modal');
+        if (drawModal && !drawModal.hidden && window.closeCustomDrawModal) window.closeCustomDrawModal();
       }
     });
 
