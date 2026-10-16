@@ -5664,7 +5664,6 @@ function getUclFeederStatus() {
 
             <div class="match-card-actions">
               ${actionBtnHtml}
-              <button type="button" class="sfc-action-btn btn-open-detailed-stats" data-md="${selectedMdIdx}" data-midx="${mIdx}" data-home="${m.home}" data-away="${m.away}">📊 Detailed Stats</button>
             </div>
           </div>
 
