@@ -60,6 +60,17 @@ Arena Core is a lightweight football tournament simulator that lets you explore 
 
 ---
 
+## 📐 Simulation Engine & Mathematical Model
+
+Arena Core uses a stochastic simulation framework calibrated against real-world football outcomes:
+
+1. **Rating Calibration:** Every club and national team possesses granular attack, defense, and overall strength ratings.
+2. **Expected Goals ($\lambda$):** Match goal rates are modeled as independent Poisson distributions with parameters $\lambda_{\text{home}}$ and $\lambda_{\text{away}}$ derived from team offensive power vs. opponent defensive resilience, adjusted for home advantage and competition stage tension.
+3. **Deterministic PRNG:** Simulations use the `Mulberry32` pseudo-random number generator. Seeds can be configured to produce bit-exact, deterministic results across browser environments.
+4. **Knockout Tie-Breaking:** Draws in knockout rounds trigger extra time simulation (30 minutes) followed by a 5-round sudden-death penalty shootout model factoring in penalty conversion probabilities.
+
+---
+
 ## 🛠️ Tech Stack
 
 | Layer | Technology | Purpose |
