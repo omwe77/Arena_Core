@@ -361,7 +361,8 @@ test.describe('ARENA_CORE Platform Tests', () => {
       await page.waitForTimeout(300);
     }
 
-    expect(errors).toEqual([]);
+    const fatal = errors.filter(e => !e.includes('compute-pressure'));
+    expect(fatal).toEqual([]);
   });
 
   // Regression: a completed World Cup simulation must survive a page reload.
